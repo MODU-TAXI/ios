@@ -28,27 +28,12 @@ type SectionProps = PropsWithChildren<{
 }>;
 
 function Section({ children, title }: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}
-      >
+    <View className="mt-8 px-2">
+      <Text className="text-2xl text-black dark:text-white">
         {title}
       </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}
-      >
+      <Text className="mt-2 text-lg text-black dark:text-white">
         {children}
       </Text>
     </View>
@@ -67,14 +52,10 @@ function App(): React.JSX.Element {
       />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}
+        className={backgroundStyle}
       >
         <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}
-        >
+        <View className="bg-white dark:bg-black">
           <Section title="Step One">
             Edit <Text className="font-bold">App.js</Text> to change this
             screen and then come back to see your edits.
