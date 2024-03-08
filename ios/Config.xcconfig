@@ -1,0 +1,11 @@
+//
+//  Config.xcconfig
+//  modutaxi
+//
+//  Created by 김민우 on 3/8/24.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include? "tmp.xcconfig"

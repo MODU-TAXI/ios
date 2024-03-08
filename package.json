@@ -3,19 +3,19 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios:dev": "react-native run-ios --scheme Develop --simulator=\"iPhone 15 Pro\"",
+    "ios:prod": "react-native run-ios --scheme Production --simulator=\"iPhone 15 Pro\"",
     "lint": "eslint .",
     "format": "prettier --cache --write .",
     "tsc": "tsc -p tsconfig.json --noEmit",
     "start": "react-native start",
-    "test": "jest",
     "prepare": "husky"
   },
   "dependencies": {
     "nativewind": "^2.0.11",
     "react": "18.2.0",
-    "react-native": "0.73.5"
+    "react-native": "0.73.5",
+    "react-native-config": "^1.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
