@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
 import type { PropsWithChildren } from 'react';
 import {
@@ -22,6 +15,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import Config from 'react-native-config';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -52,6 +47,7 @@ function App(): React.JSX.Element {
       >
         <Header />
         <View className="bg-white dark:bg-black">
+          <Text>ENV {Config.TEST}</Text>
           <Section title="Step One">
             Edit <Text className="font-bold">App.js</Text> to change this screen
             and then come back to see your edits.
