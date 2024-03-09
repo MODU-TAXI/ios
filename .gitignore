@@ -2,6 +2,8 @@
 env/
 .env
 ios/tmp.xcconfig
+Info.plist
+
 
 # OSX
 #

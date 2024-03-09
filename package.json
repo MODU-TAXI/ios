@@ -12,6 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@react-native-seoul/kakao-login": "^5.3.1",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-native": "0.73.5",

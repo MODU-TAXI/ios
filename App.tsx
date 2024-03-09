@@ -1,69 +1,43 @@
-import React from 'react';
-import type { PropsWithChildren } from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React, { useState } from 'react';
 
-import {
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
-import Config from 'react-native-config';
+import { login } from '@react-native-seoul/kakao-login';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({ children, title }: SectionProps): React.JSX.Element {
-  return (
-    <View className="mt-8 px-2">
-      <Text className="text-2xl text-black dark:text-white">{title}</Text>
-      <Text className="mt-2 text-lg text-black dark:text-white">
-        {children}
-      </Text>
-    </View>
-  );
-}
+type KakaoLoginResponse = {
+  accessToken: string;
+  refreshToken: string;
+  idToken: string;
+  accessTokenExpiresAt: Date;
+  refreshTokenExpiresAt: Date;
+  scopes: string[];
+};
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [result, setResult] = useState<string>('');
 
-  const backgroundStyle = 'bg-neutral-300 dark:bg-slate-900';
+  const kakaoLogin = async (): Promise<void> => {
+    try {
+      const token: KakaoLoginResponse = await login();
+
+      setResult(JSON.stringify(token));
+    } catch (err) {
+      console.error('login err', err);
+    }
+  };
 
   return (
-    <SafeAreaView className={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        className={backgroundStyle}
-      >
-        <Header />
-        <View className="bg-white dark:bg-black">
-          <Text>ENV {Config.TEST}</Text>
-          <Section title="Step One">
-            Edit <Text className="font-bold">App.js</Text> to change this screen
-            and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView className="flex-1 justify-center items-center">
+      <View>
+        <Pressable
+          className="bg-[#FEE500] p-4 rounded-[12px]"
+          onPress={() => {
+            kakaoLogin();
+          }}
+        >
+          <Text className="text-[40px]">카카오 로그인</Text>
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 }
