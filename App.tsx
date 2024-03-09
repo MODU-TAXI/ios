@@ -1,44 +1,15 @@
-import React, { useState } from 'react';
-
-import { Pressable, SafeAreaView, Text, View } from 'react-native';
-
-import { login } from '@react-native-seoul/kakao-login';
-
-type KakaoLoginResponse = {
-  accessToken: string;
-  refreshToken: string;
-  idToken: string;
-  accessTokenExpiresAt: Date;
-  refreshTokenExpiresAt: Date;
-  scopes: string[];
-};
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native';
+import AppInner from './AppInner';
 
 function App(): React.JSX.Element {
-  const [result, setResult] = useState<string>('');
-
-  const kakaoLogin = async (): Promise<void> => {
-    try {
-      const token: KakaoLoginResponse = await login();
-
-      setResult(JSON.stringify(token));
-    } catch (err) {
-      console.error('login err', err);
-    }
-  };
-
   return (
-    <SafeAreaView className="flex-1 justify-center items-center">
-      <View>
-        <Pressable
-          className="bg-[#FEE500] p-4 rounded-[12px]"
-          onPress={() => {
-            kakaoLogin();
-          }}
-        >
-          <Text className="text-[40px]">카카오 로그인</Text>
-        </Pressable>
-      </View>
-    </SafeAreaView>
+    <NavigationContainer>
+      <SafeAreaView>
+        <AppInner />
+      </SafeAreaView>
+    </NavigationContainer>
   );
 }
 
