@@ -1,15 +1,16 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 import AppInner from './AppInner';
 
 function App(): React.JSX.Element {
   return (
-    <NavigationContainer>
-      <SafeAreaView>
+    <SafeAreaProvider>
+      <NavigationContainer>
         <AppInner />
-      </SafeAreaView>
-    </NavigationContainer>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 

@@ -6,7 +6,11 @@ const Stack = createNativeStackNavigator();
 
 function AppInner() {
   return (
-    <Stack.Navigator initialRouteName="LandingScreen">
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Stack.Screen name="LandingScreen" component={LandingScreen} />
     </Stack.Navigator>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
 import { login } from '@react-native-seoul/kakao-login';
 
@@ -27,16 +27,18 @@ const LandingScreen = () => {
   };
 
   return (
-    <View className="flex justify-center align-middle">
-      <Pressable
-        className="bg-[#FEE500] p-4 rounded-[12px]"
-        onPress={() => {
-          kakaoLogin();
-        }}
-      >
-        <Text className="text-[40px]">카카오 로그인</Text>
-      </Pressable>
-    </View>
+    <SafeAreaView>
+      <View className="flex-1 justify-center items-center">
+        <Pressable
+          className="bg-[#FEE500] p-4 rounded-[12px]"
+          onPress={() => {
+            kakaoLogin();
+          }}
+        >
+          <Text className="text-[40px]">카카오 로그인</Text>
+        </Pressable>
+      </View>
+    </SafeAreaView>
   );
 };
 
