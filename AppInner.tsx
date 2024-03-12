@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LandingScreen from './src/screens/Landing';
-import KakaoMapScreen from './src/screens/KakaoMap';
+import NaverMapScreen from './src/screens/NaverMap';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +14,7 @@ function AppInner() {
       initialRouteName="LandingScreen"
     >
       <Stack.Screen name="LandingScreen" component={LandingScreen} />
-      <Stack.Screen name="KakaoMapScreen" component={KakaoMapScreen} />
+      <Stack.Screen name="NaverMapScreen" component={NaverMapScreen} />
     </Stack.Navigator>
   );
 }

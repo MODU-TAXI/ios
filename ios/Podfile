@@ -52,4 +52,8 @@ target 'modutaxi' do
       :mac_catalyst_enabled => false
     )
   end
+
+  target 'NaverMapDemo' do
+    pod 'NMapsMap'
+  end
 end

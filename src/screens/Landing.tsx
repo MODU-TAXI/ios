@@ -42,7 +42,7 @@ const LandingScreen = () => {
         </Pressable>
         <Pressable
           className="bg-[#FEE500] p-4 rounded-[12px]"
-          onPress={() => navigation.navigate('KakaoMapScreen')}
+          onPress={() => navigation.navigate('NaverMapScreen')}
         >
           <Text className="text-[40px]">카카오맵</Text>
         </Pressable>
