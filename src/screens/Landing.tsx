@@ -22,12 +22,13 @@ const LandingScreen = () => {
 
       setResult(JSON.stringify(token));
     } catch (err) {
+      // TODO: 취소 에러시에 다른 조치 취해주기
       console.error('login err', err);
     }
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="flex-1">
       <View className="flex-1 justify-center items-center">
         <Pressable
           className="bg-[#FEE500] p-4 rounded-[12px]"
@@ -35,7 +36,7 @@ const LandingScreen = () => {
             kakaoLogin();
           }}
         >
-          <Text className="text-[40px]">카카오 로그인</Text>
+          <Text className="text-black">카카오 로그인</Text>
         </Pressable>
       </View>
     </SafeAreaView>
