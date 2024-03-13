@@ -29,22 +29,22 @@ function usePermissions() {
         .catch(console.error);
     }
 
-    if (Platform.OS === 'ios') {
-      check(PERMISSIONS.IOS.CAMERA)
-        .then((result) => {
-          if (
-            result === RESULTS.DENIED ||
-            result === RESULTS.LIMITED ||
-            result === RESULTS.GRANTED
-          ) {
-            return request(PERMISSIONS.IOS.CAMERA);
-          } else {
-            console.log(result);
-            throw new Error('카메라 지원 안 함');
-          }
-        })
-        .catch(console.error);
-    }
+    // if (Platform.OS === 'ios') {
+    //   check(PERMISSIONS.IOS.CAMERA)
+    //     .then((result) => {
+    //       if (
+    //         result === RESULTS.DENIED ||
+    //         result === RESULTS.LIMITED ||
+    //         result === RESULTS.GRANTED
+    //       ) {
+    //         return request(PERMISSIONS.IOS.CAMERA);
+    //       } else {
+    //         console.log(result);
+    //         throw new Error('카메라 지원 안 함');
+    //       }
+    //     })
+    //     .catch(console.error);
+    // }
   }, []);
 }
 
