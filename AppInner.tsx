@@ -2,12 +2,13 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LandingScreen from './src/screens/Landing';
 import NaverMapScreen from './src/screens/NaverMap';
+import PermissionScreen from './src/screens/Permission';
 import usePermissions from './src/hooks/usePermissions';
 
 const Stack = createNativeStackNavigator();
 
 function AppInner() {
-  usePermissions();
+  //usePermissions();
 
   return (
     <Stack.Navigator
@@ -18,6 +19,7 @@ function AppInner() {
     >
       <Stack.Screen name="LandingScreen" component={LandingScreen} />
       <Stack.Screen name="NaverMapScreen" component={NaverMapScreen} />
+      <Stack.Screen name="PermissionScreen" component={PermissionScreen} />
     </Stack.Navigator>
   );
 }

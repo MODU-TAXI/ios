@@ -44,7 +44,13 @@ const LandingScreen = () => {
           className="bg-[#FEE500] p-4 rounded-[12px]"
           onPress={() => navigation.navigate('NaverMapScreen')}
         >
-          <Text className="text-[40px]">카카오맵</Text>
+          <Text className="text-black">네이버맵</Text>
+        </Pressable>
+        <Pressable
+          className="bg-[#FEE500] p-4 rounded-[12px]"
+          onPress={() => navigation.navigate('PermissionScreen')}
+        >
+          <Text className="text-black">권한얻기</Text>
         </Pressable>
       </View>
     </SafeAreaView>
