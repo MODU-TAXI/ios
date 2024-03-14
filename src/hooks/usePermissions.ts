@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { Alert, Linking, Platform } from 'react-native';
 import {
   check,
   checkNotifications,
+  checkMultiple,
   PERMISSIONS,
   request,
+  requestMultiple,
   requestNotifications,
   RESULTS,
 } from 'react-native-permissions';
@@ -12,82 +13,66 @@ import {
 function usePermissions() {
   // 권한 관련
   useEffect(() => {
-    // 추적 금지 요청
-    // check(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY)
-    // .then(result => {
-    //   if (
-    //     result === RESULTS.DENIED ||
-    //     result === RESULTS.LIMITED ||
-    //     result === RESULTS.GRANTED
-    //   ) {
-    //     return request(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY);
-    //   } else {
-    //     console.log(result);
-    //     throw new Error('추적 금지 요청 에러');
-    //   }
-    // })
-    // .catch(console.error);
-
     // 알림
-    checkNotifications().then(({ status, settings }) => {
-      if (
-        status === RESULTS.DENIED ||
-        status === RESULTS.LIMITED ||
-        status === RESULTS.GRANTED
-      ) {
-        console.log('알림: ' + status);
-        return requestNotifications(['alert', 'sound']);
-      } else {
-        console.log('알림: ' + status);
-        throw new Error('알림 에러');
-      }
-    });
 
     // 카메라 권한 요청
-    check(PERMISSIONS.IOS.CAMERA)
-      .then((result) => {
+    checkMultiple([
+      PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY,
+      PERMISSIONS.IOS.CAMERA,
+      PERMISSIONS.IOS.PHOTO_LIBRARY,
+      PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+    ])
+      .then((results) => {
         if (
-          result === RESULTS.DENIED ||
-          result === RESULTS.LIMITED ||
-          result === RESULTS.GRANTED
+          results[PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY] ===
+            RESULTS.DENIED ||
+          results[PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY] ===
+            RESULTS.LIMITED ||
+          results[PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY] ===
+            RESULTS.GRANTED ||
+          results[PERMISSIONS.IOS.CAMERA] === RESULTS.DENIED ||
+          results[PERMISSIONS.IOS.CAMERA] === RESULTS.LIMITED ||
+          results[PERMISSIONS.IOS.CAMERA] === RESULTS.GRANTED ||
+          results[PERMISSIONS.IOS.PHOTO_LIBRARY] === RESULTS.DENIED ||
+          results[PERMISSIONS.IOS.PHOTO_LIBRARY] === RESULTS.LIMITED ||
+          results[PERMISSIONS.IOS.PHOTO_LIBRARY] === RESULTS.GRANTED ||
+          results[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.DENIED ||
+          results[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.LIMITED ||
+          results[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.GRANTED
         ) {
-          console.log('카메라: ' + result);
-          return request(PERMISSIONS.IOS.CAMERA);
+          checkNotifications().then(({ status, settings }) => {
+            if (
+              status === RESULTS.DENIED ||
+              status === RESULTS.LIMITED ||
+              status === RESULTS.GRANTED
+            ) {
+              console.log('알림: ' + status);
+              return requestNotifications(['alert', 'sound']);
+            } else {
+              console.log('알림: ' + status);
+              throw new Error('알림 에러');
+            }
+          });
+          console.log(
+            '추적허용: ' + results[PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY],
+          );
+          console.log('카메라: ' + results[PERMISSIONS.IOS.CAMERA]);
+          console.log('갤러리: ' + results[PERMISSIONS.IOS.PHOTO_LIBRARY]);
+          console.log('위치: ' + results[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE]);
+          return requestMultiple([
+            PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY,
+            PERMISSIONS.IOS.CAMERA,
+            PERMISSIONS.IOS.PHOTO_LIBRARY,
+            PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+          ]);
         } else {
-          console.log('카메라: ' + result);
+          console.log(
+            '추적허용: ' + results[PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY],
+          );
+          console.log('카메라: ' + results[PERMISSIONS.IOS.CAMERA]);
+          console.log('갤러리: ' + results[PERMISSIONS.IOS.PHOTO_LIBRARY]);
+          console.log('위치: ' + results[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE]);
           throw new Error('카메라 지원 안 함');
-        }
-      })
-      .catch(console.error);
-
-    // 위치 권한 요청
-    check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
-      .then((result) => {
-        if (
-          result === RESULTS.BLOCKED ||
-          result === RESULTS.DENIED ||
-          result === RESULTS.GRANTED
-        ) {
-          console.log('위치: ' + result);
-          return request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-          // Alert.alert(
-          //   '이 앱은 백그라운드 위치 권한 허용이 필요합니다.',
-          //   '앱 설정 화면을 열어서 항상 허용으로 바꿔주세요.',
-          //   [
-          //     {
-          //       text: '네',
-          //       onPress: () => Linking.openSettings(),
-          //     },
-          //     {
-          //       text: '아니오',
-          //       onPress: () => console.log('No Pressed'),
-          //       style: 'cancel',
-          //     },
-          //   ],
-          // );
-        } else {
-          console.log('위치: ' + result);
-          throw new Error('위치 지원 안 함');
         }
       })
       .catch(console.error);
