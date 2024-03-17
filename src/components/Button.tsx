@@ -15,7 +15,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   onPress,
 }) => {
   return (
-    <View className="w-full px-10 my-2">
+    <View className="w-full my-2">
       <Pressable className={`bg-${color} p-4 rounded-[12px]`} onPress={onPress}>
         <Text className={`text-${textColor} text-center`}>{text}</Text>
       </Pressable>
