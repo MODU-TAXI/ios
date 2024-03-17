@@ -5,7 +5,7 @@ import { login } from '@react-native-seoul/kakao-login';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 import ButtonComponent from '@components/Button';
-import { RootStackParamList } from '@types/ParamLists';
+import { RootStackParamList } from '../../types/ParamLists';
 
 type KakaoLoginResponse = {
   accessToken: string;
