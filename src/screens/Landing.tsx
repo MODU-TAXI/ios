@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
 import { login } from '@react-native-seoul/kakao-login';
+import { useNavigation } from '@react-navigation/native';
 
 type KakaoLoginResponse = {
   accessToken: string;
@@ -15,6 +16,7 @@ type KakaoLoginResponse = {
 
 const LandingScreen = () => {
   const [result, setResult] = useState<string>('');
+  const navigation = useNavigation();
 
   const kakaoLogin = async (): Promise<void> => {
     try {
@@ -37,6 +39,18 @@ const LandingScreen = () => {
           }}
         >
           <Text className="text-black">카카오 로그인</Text>
+        </Pressable>
+        <Pressable
+          className="bg-[#FEE500] p-4 rounded-[12px]"
+          onPress={() => navigation.navigate('NaverMapScreen')}
+        >
+          <Text className="text-black">네이버맵</Text>
+        </Pressable>
+        <Pressable
+          className="bg-[#FEE500] p-4 rounded-[12px]"
+          onPress={() => navigation.navigate('PermissionScreen')}
+        >
+          <Text className="text-black">권한얻기</Text>
         </Pressable>
       </View>
     </SafeAreaView>
