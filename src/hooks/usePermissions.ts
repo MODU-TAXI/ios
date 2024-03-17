@@ -10,12 +10,12 @@ import {
   RESULTS,
 } from 'react-native-permissions';
 
+/** 초기 온보딩 화면에서의 권한 요청 */
 function usePermissions() {
   // 권한 관련
   useEffect(() => {
-    // 알림
-
-    // 카메라 권한 요청
+    // 추적, 카메라, 라이브러리, 위치(사용할 때만) 권한 요청
+    // 추가로 알림권한 요청
     checkMultiple([
       PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY,
       PERMISSIONS.IOS.CAMERA,
