@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
 import { login } from '@react-native-seoul/kakao-login';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+
+import { RootStackParamList } from './../types/ParamLists';
 
 type KakaoLoginResponse = {
   accessToken: string;
@@ -16,7 +18,7 @@ type KakaoLoginResponse = {
 
 const LandingScreen = () => {
   const [result, setResult] = useState<string>('');
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const kakaoLogin = async (): Promise<void> => {
     try {

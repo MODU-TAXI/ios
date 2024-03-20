@@ -1,11 +1,18 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LandingScreen from './src/screens/Landing';
 import NaverMapScreen from './src/screens/NaverMap';
 import PermissionScreen from './src/screens/Permission';
-import usePermissions from './src/hooks/usePermissions';
+import SignInScreen from './src/screens/signIn/SignIn';
+import CheckPermissionScreen from './src/screens/signUp/CheckPermission';
+import NicknameValidationScreen from './src/screens/signUp/NicknameValidation';
+import SchoolAuthenticationScreen from './src/screens/signUp/SchoolAuthentication';
+import AuthenticationCodeScreen from './src/screens/signUp/AuthenticationCode';
+import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
 
-const Stack = createNativeStackNavigator();
+import usePermissions from './src/hooks/usePermissions';
+import { RootStackParamList } from './src/types/ParamLists';
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function AppInner() {
   //usePermissions();
@@ -15,11 +22,30 @@ function AppInner() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="LandingScreen"
     >
-      <Stack.Screen name="LandingScreen" component={LandingScreen} />
+      <Stack.Screen name="SignInScreen" component={SignInScreen} />
       <Stack.Screen name="NaverMapScreen" component={NaverMapScreen} />
       <Stack.Screen name="PermissionScreen" component={PermissionScreen} />
+      <Stack.Screen
+        name="CheckPermissionScreen"
+        component={CheckPermissionScreen}
+      />
+      <Stack.Screen
+        name="NicknameValidationScreen"
+        component={NicknameValidationScreen}
+      />
+      <Stack.Screen
+        name="SchoolAuthenticationScreen"
+        component={SchoolAuthenticationScreen}
+      />
+      <Stack.Screen
+        name="AuthenticationCodeScreen"
+        component={AuthenticationCodeScreen}
+      />
+      <Stack.Screen
+        name="CompleteSignUpScreen"
+        component={CompleteSignUpScreen}
+      />
     </Stack.Navigator>
   );
 }
