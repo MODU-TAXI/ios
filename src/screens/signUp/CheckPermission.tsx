@@ -1,11 +1,13 @@
 import React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import ButtonComponent from '@components/Button';
+import { RootStackParamList } from '../../types/ParamLists';
 
 import TraySvg from '../../assets/images/signIn/SignIn/tray.svg';
 import BellSvg from '../../assets/images/signIn/SignIn/bell.svg';
 import CameraSvg from '../../assets/images/signIn/SignIn/camera.svg';
 import LocationSvg from '../../assets/images/signIn/SignIn/location.svg';
-import ButtonComponent from '@components/Button';
 
 interface PermissionItemProps {
   icon: React.FC;
@@ -13,9 +15,11 @@ interface PermissionItemProps {
   description: string;
 }
 
-const AuthenticationScreen = () => {
+const CheckPermissionScreen = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const toNext = async (): Promise<void> => {
-    return;
+    navigation.navigate('NicknameValidationScreen');
   };
 
   // 권한 component
@@ -92,4 +96,4 @@ const AuthenticationScreen = () => {
   );
 };
 
-export default AuthenticationScreen;
+export default CheckPermissionScreen;

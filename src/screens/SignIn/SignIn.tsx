@@ -33,37 +33,38 @@ const SignInScreen = () => {
   };
 
   const appleLogin = async (): Promise<void> => {
-    navigation.navigate('AuthenticationScreen');
+    navigation.navigate('CheckPermissionScreen');
   };
 
   return (
     <SafeAreaView className="flex-1">
-      {/* 모두의 택시 로고*/}
-      <View className="flex-1 justify-center items-center">
-        <Text className="text-5xl">모두의 택시</Text>
-      </View>
-
-      <View className="flex-1 justify-center items-center">
-        {/* 모두의 택시 이미지 */}
-        <View className="flex-1 w-full bg-black justify-center items-center">
-          <Text className="text-white">모택 이미지</Text>
+      <View className="flex-1 mx-12">
+        {/* 모두의 택시 로고*/}
+        <View className="flex-1 justify-center items-center">
+          <Text className="text-5xl">모두의 택시</Text>
         </View>
+        <View className="flex-1 justify-center items-center">
+          {/* 모두의 택시 이미지 */}
+          <View className="flex-1 w-full bg-black justify-center items-center">
+            <Text className="text-white">모택 이미지</Text>
+          </View>
 
-        {/* 카카오 로그인 버튼 */}
-        <ButtonComponent
-          color={'kakaoyellow'}
-          text={'카카오 로그인'}
-          textColor={'black'}
-          onPress={kakaoLogin}
-        />
+          {/* 카카오 로그인 버튼 */}
+          <ButtonComponent
+            color={'kakaoyellow'}
+            text={'카카오 로그인'}
+            textColor={'black'}
+            onPress={kakaoLogin}
+          />
 
-        {/* 애플 로그인 버튼 */}
-        <ButtonComponent
-          color={'black'}
-          text={'애플 로그인'}
-          textColor={'white'}
-          onPress={appleLogin}
-        />
+          {/* 애플 로그인 버튼 */}
+          <ButtonComponent
+            color={'black'}
+            text={'애플 로그인'}
+            textColor={'white'}
+            onPress={appleLogin}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
