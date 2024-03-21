@@ -20,7 +20,7 @@ const CheckPermissionScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const toNext = async (): Promise<void> => {
-    checkPermissions();
+    await checkPermissions();
     navigation.navigate('NicknameValidationScreen');
   };
 
