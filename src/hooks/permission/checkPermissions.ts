@@ -1,14 +1,17 @@
 import {
   checkMultiple,
   checkNotifications,
+  IOSPermission,
+  Permission,
   PERMISSIONS,
+  PermissionStatus,
   requestMultiple,
   requestNotifications,
   RESULTS,
 } from 'react-native-permissions';
 
 /** 초기 온보딩 화면에서의 권한 요청 */
-async function checkPermissions() {
+async function checkPermissions(): Promise<any> {
   try {
     const results = await checkMultiple([
       PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY,
