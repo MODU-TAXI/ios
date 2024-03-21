@@ -8,6 +8,7 @@ import TraySvg from '../../assets/images/signIn/SignIn/tray.svg';
 import BellSvg from '../../assets/images/signIn/SignIn/bell.svg';
 import CameraSvg from '../../assets/images/signIn/SignIn/camera.svg';
 import LocationSvg from '../../assets/images/signIn/SignIn/location.svg';
+import checkPermissions from '@hooks/permission/checkPermissions';
 
 interface PermissionItemProps {
   icon: React.FC;
@@ -19,6 +20,7 @@ const CheckPermissionScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const toNext = async (): Promise<void> => {
+    checkPermissions();
     navigation.navigate('NicknameValidationScreen');
   };
 

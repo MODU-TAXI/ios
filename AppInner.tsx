@@ -1,7 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import NaverMapScreen from './src/screens/NaverMap';
-import PermissionScreen from './src/screens/Permission';
 import SignInScreen from './src/screens/signIn/SignIn';
 import CheckPermissionScreen from './src/screens/signUp/CheckPermission';
 import NicknameValidationScreen from './src/screens/signUp/NicknameValidation';
@@ -11,14 +10,11 @@ import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
 
-import usePermissions from './src/hooks/usePermissions';
 import { RootStackParamList } from './src/types/ParamLists';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function AppInner() {
-  //usePermissions();
-
   return (
     <Stack.Navigator
       screenOptions={{
@@ -27,7 +23,6 @@ function AppInner() {
     >
       <Stack.Screen name="SignInScreen" component={SignInScreen} />
       <Stack.Screen name="NaverMapScreen" component={NaverMapScreen} />
-      <Stack.Screen name="PermissionScreen" component={PermissionScreen} />
       <Stack.Screen
         name="CheckPermissionScreen"
         component={CheckPermissionScreen}
