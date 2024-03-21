@@ -8,7 +8,6 @@ import TraySvg from '../../assets/images/signIn/SignIn/tray.svg';
 import BellSvg from '../../assets/images/signIn/SignIn/bell.svg';
 import CameraSvg from '../../assets/images/signIn/SignIn/camera.svg';
 import LocationSvg from '../../assets/images/signIn/SignIn/location.svg';
-import usePermissions from '@hooks/usePermissions';
 
 interface PermissionItemProps {
   icon: React.FC;
@@ -17,8 +16,6 @@ interface PermissionItemProps {
 }
 
 const CheckPermissionScreen = () => {
-  usePermissions();
-
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const toNext = async (): Promise<void> => {

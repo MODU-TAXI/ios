@@ -4,8 +4,11 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../types/ParamLists';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
+import usePermissions from '@hooks/usePermissions';
 
 const NicknameValidationScreen = () => {
+  usePermissions();
+
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [nickname, setNickname] = useState<string>('');
