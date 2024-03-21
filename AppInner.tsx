@@ -8,6 +8,8 @@ import NicknameValidationScreen from './src/screens/signUp/NicknameValidation';
 import SchoolAuthenticationScreen from './src/screens/signUp/SchoolAuthentication';
 import AuthenticationCodeScreen from './src/screens/signUp/AuthenticationCode';
 import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
+import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
+import SurveySecondScreen from './src/screens/signUp/SurveySecond';
 
 import usePermissions from './src/hooks/usePermissions';
 import { RootStackParamList } from './src/types/ParamLists';
@@ -46,6 +48,8 @@ function AppInner() {
         name="CompleteSignUpScreen"
         component={CompleteSignUpScreen}
       />
+      <Stack.Screen name="SurveyFirstScreen" component={SurveyFirstScreen} />
+      <Stack.Screen name="SurveySecondScreen" component={SurveySecondScreen} />
     </Stack.Navigator>
   );
 }

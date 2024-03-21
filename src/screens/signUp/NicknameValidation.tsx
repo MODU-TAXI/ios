@@ -11,7 +11,7 @@ const NicknameValidationScreen = () => {
   const [nickname, setNickname] = useState<string>('');
 
   const toNext = async (): Promise<void> => {
-    navigation.navigate('SchoolAuthenticationScreen');
+    navigation.navigate('SurveyFirstScreen');
   };
 
   return (

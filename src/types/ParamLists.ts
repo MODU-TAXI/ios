@@ -7,6 +7,8 @@ type RootStackParamList = {
   SchoolAuthenticationScreen: undefined;
   AuthenticationCodeScreen: undefined;
   CompleteSignUpScreen: undefined;
+  SurveyFirstScreen: undefined;
+  SurveySecondScreen: undefined;
 };
 
 export type { RootStackParamList };
