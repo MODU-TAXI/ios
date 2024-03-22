@@ -36,6 +36,7 @@ const ServeySecondScreen = () => {
           text={'확인'}
           textColor={'white'}
           onPress={toNext}
+          disabled={false}
         />
       </View>
     </SafeAreaView>

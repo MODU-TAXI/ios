@@ -10,6 +10,10 @@ const SchoolAuthenticationScreen = () => {
 
   const [email, setEmail] = useState<string>('');
 
+  const toEnd = async (): Promise<void> => {
+    navigation.navigate('CompleteSignUpScreen');
+  };
+
   const toNext = async (): Promise<void> => {
     navigation.navigate('AuthenticationCodeScreen');
   };
@@ -44,7 +48,8 @@ const SchoolAuthenticationScreen = () => {
           color={'bg-disable'}
           text={'다음에 할래요'}
           textColor={'white'}
-          onPress={toNext}
+          onPress={toEnd}
+          disabled={false}
         />
 
         {/* 확인 버튼 */}
@@ -53,6 +58,7 @@ const SchoolAuthenticationScreen = () => {
           text={'확인'}
           textColor={'white'}
           onPress={toNext}
+          disabled={false}
         />
       </View>
     </SafeAreaView>

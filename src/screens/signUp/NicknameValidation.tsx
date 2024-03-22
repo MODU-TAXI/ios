@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../types/ParamLists';
@@ -47,6 +47,7 @@ const NicknameValidationScreen = () => {
           text={'확인'}
           textColor={'white'}
           onPress={toNext}
+          disabled={false}
         />
       </View>
     </SafeAreaView>

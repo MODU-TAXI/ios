@@ -92,6 +92,7 @@ const CheckPermissionScreen = () => {
           text={'확인'}
           textColor={'white'}
           onPress={toNext}
+          disabled={false}
         />
       </View>
     </SafeAreaView>

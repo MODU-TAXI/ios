@@ -12,6 +12,7 @@ const SelectBoxComponent: React.FC<SelectBoxComponentProps> = ({ content }) => {
     setIsPressed(!isPressed);
   };
 
+  // TODO: 나중에 tailwind 형식으로 바꾸기
   return (
     <Pressable
       onPress={handlePressIn}
@@ -24,8 +25,9 @@ const SelectBoxComponent: React.FC<SelectBoxComponentProps> = ({ content }) => {
         paddingVertical: 29,
       }}
     >
-      <Text style={{ color: isPressed ? 'white' : 'black' }}>{content}</Text>
-      {/* 텍스트 색상을 변경 */}
+      <Text style={{ color: isPressed ? 'white' : 'black', fontWeight: '600' }}>
+        {content}
+      </Text>
     </Pressable>
   );
 };

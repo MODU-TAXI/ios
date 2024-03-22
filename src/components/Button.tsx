@@ -6,6 +6,7 @@ interface ButtonComponentProps {
   text: string;
   textColor: string;
   onPress: () => Promise<void>;
+  disabled: boolean;
 }
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
@@ -13,10 +14,15 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   text,
   textColor,
   onPress,
+  disabled,
 }) => {
+  const buttonStyle = disabled
+    ? `bg-disabled p-4 rounded-[12px]`
+    : `${color} p-4 rounded-[12px]`;
+
   return (
     <View className="w-full my-2">
-      <Pressable className={`${color} p-4 rounded-[12px]`} onPress={onPress}>
+      <Pressable className={buttonStyle} onPress={onPress} disabled={disabled}>
         <Text className={`font-semibold text-${textColor} text-center`}>
           {text}
         </Text>

@@ -55,6 +55,7 @@ const SignInScreen = () => {
             text={'카카오 로그인'}
             textColor={'black'}
             onPress={kakaoLogin}
+            disabled={false}
           />
 
           {/* 애플 로그인 버튼 */}
@@ -63,6 +64,7 @@ const SignInScreen = () => {
             text={'애플 로그인'}
             textColor={'white'}
             onPress={appleLogin}
+            disabled={false}
           />
         </View>
       </View>

@@ -10,9 +10,9 @@ module.exports = {
       colors: {
         DEFAULT: 'black',
         basic: '#FF7A00',
-        kakaoyellow: '#FEE500',
         error: '#FF0000',
-        disable: '#C0C0C0',
+        disabled: '#C0C0C0',
+        kakaoyellow: '#FEE500',
       },
     },
   },
