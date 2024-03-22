@@ -13,13 +13,14 @@
     "strict": true,
     "target": "esnext",
     "skipLibCheck": true,
+    // alias 설정
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
       "@hooks/*": ["src/hooks/*"],
       "@pages/*": ["src/pages/*"],
       "@routes/*": ["src/routes/*"],
-      "@types/*": ["src/types/*"],
+      "@type/*": ["src/type/*"],
       "@utils/*": ["src/utils/*"],
       "@assets/*": ["src/assets/*"],
       "@api/*": ["src/api/*"]

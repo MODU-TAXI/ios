@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../types/ParamLists';
+import { RootStackParamList } from '../../type/ParamLists';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 
@@ -44,22 +44,26 @@ const SchoolAuthenticationScreen = () => {
         <View className="flex-1"></View>
 
         {/* 다음에 하기 버튼 */}
-        <ButtonComponent
-          color={'bg-disable'}
-          text={'다음에 할래요'}
-          textColor={'white'}
-          onPress={toEnd}
-          disabled={false}
-        />
+        <View className="mx-3 mb-3">
+          <ButtonComponent
+            color={'bg-disable'}
+            text={'다음에 할래요'}
+            textColor={'white'}
+            onPress={toEnd}
+            disabled={false}
+          />
+        </View>
 
         {/* 확인 버튼 */}
-        <ButtonComponent
-          color={'bg-black'}
-          text={'확인'}
-          textColor={'white'}
-          onPress={toNext}
-          disabled={false}
-        />
+        <View className="mx-3 mb-11">
+          <ButtonComponent
+            color={'bg-black'}
+            text={'확인'}
+            textColor={'white'}
+            onPress={toNext}
+            disabled={false}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

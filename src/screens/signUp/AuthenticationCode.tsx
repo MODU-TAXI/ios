@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../types/ParamLists';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
+import { RootStackParamList } from '@type/ParamLists';
 
 const AuthenticationCodeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -25,7 +25,7 @@ const AuthenticationCodeScreen = () => {
 
         {/* Input 컴포넌트 */}
         <InputBoxComponent
-          title="학교 이메일"
+          title="인증번호"
           value={code}
           setValue={setCode}
           placeholder=""
@@ -40,13 +40,15 @@ const AuthenticationCodeScreen = () => {
         <View className="flex-1"></View>
 
         {/* 확인 버튼 */}
-        <ButtonComponent
-          color={'bg-black'}
-          text={'확인'}
-          textColor={'white'}
-          onPress={toNext}
-          disabled={false}
-        />
+        <View className="mx-3 mb-11">
+          <ButtonComponent
+            color={'bg-black'}
+            text={'확인'}
+            textColor={'white'}
+            onPress={toNext}
+            disabled={false}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

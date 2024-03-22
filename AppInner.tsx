@@ -10,7 +10,7 @@ import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
 
-import { RootStackParamList } from './src/types/ParamLists';
+import { RootStackParamList } from './src/type/ParamLists';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

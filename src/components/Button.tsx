@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 interface ButtonComponentProps {
@@ -17,11 +17,11 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   disabled,
 }) => {
   const buttonStyle = disabled
-    ? `bg-disabled p-4 rounded-[12px]`
-    : `${color} p-4 rounded-[12px]`;
+    ? `bg-disabled p-4 rounded-[61px]`
+    : `${color} p-4 rounded-[61px]`;
 
   return (
-    <View className="w-full my-2">
+    <View className="w-full">
       <Pressable className={buttonStyle} onPress={onPress} disabled={disabled}>
         <Text className={`font-semibold text-${textColor} text-center`}>
           {text}

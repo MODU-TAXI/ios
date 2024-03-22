@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../types/ParamLists';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
+import { RootStackParamList } from '@type/ParamLists';
 
 const NicknameValidationScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -24,7 +24,6 @@ const NicknameValidationScreen = () => {
             사용할 닉네임을 입력해주세요!
           </Text>
         </View>
-
         {/* Input 컴포넌트 */}
         <InputBoxComponent
           title="닉네임"
@@ -42,13 +41,15 @@ const NicknameValidationScreen = () => {
         <View className="flex-1"></View>
 
         {/* 확인 버튼 */}
-        <ButtonComponent
-          color={'bg-black'}
-          text={'확인'}
-          textColor={'white'}
-          onPress={toNext}
-          disabled={false}
-        />
+        <View className="mx-3 mb-11">
+          <ButtonComponent
+            color={'bg-black'}
+            text={'확인'}
+            textColor={'white'}
+            onPress={toNext}
+            disabled={false}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

@@ -17,7 +17,7 @@ const SelectBoxComponent: React.FC<SelectBoxComponentProps> = ({ content }) => {
     <Pressable
       onPress={handlePressIn}
       style={{
-        backgroundColor: isPressed ? 'black' : '#EDEDED',
+        backgroundColor: isPressed ? 'black' : '#E2E2E2',
         borderRadius: 8,
         justifyContent: 'center',
         marginTop: 16,

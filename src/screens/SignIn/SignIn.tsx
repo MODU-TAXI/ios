@@ -5,7 +5,7 @@ import { login } from '@react-native-seoul/kakao-login';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 import ButtonComponent from '@components/Button';
-import { RootStackParamList } from '../../types/ParamLists';
+import { RootStackParamList } from '@type/ParamLists';
 
 type KakaoLoginResponse = {
   accessToken: string;
@@ -43,13 +43,14 @@ const SignInScreen = () => {
         <View className="flex-1 justify-center items-center">
           <Text className="text-5xl">모두의 택시</Text>
         </View>
-        <View className="flex-1 justify-center items-center">
-          {/* 모두의 택시 이미지 */}
-          <View className="flex-1 w-full bg-black justify-center items-center">
-            <Text className="text-white">모택 이미지</Text>
-          </View>
 
-          {/* 카카오 로그인 버튼 */}
+        {/* 모두의 택시 이미지 */}
+        <View className="flex-1 w-full my-4 bg-black justify-center items-center">
+          <Text className="text-white">모택 이미지</Text>
+        </View>
+
+        {/* 카카오 로그인 버튼 */}
+        <View className="mx-3 mb-4">
           <ButtonComponent
             color={'bg-kakaoyellow'}
             text={'카카오 로그인'}
@@ -57,8 +58,10 @@ const SignInScreen = () => {
             onPress={kakaoLogin}
             disabled={false}
           />
+        </View>
 
-          {/* 애플 로그인 버튼 */}
+        {/* 애플 로그인 버튼 */}
+        <View className="mx-3 mb-11">
           <ButtonComponent
             color={'bg-black'}
             text={'애플 로그인'}

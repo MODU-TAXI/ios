@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../types/ParamLists';
 import ButtonComponent from '@components/Button';
 import SelectBoxComponent from '@components/SelectBox';
+import { RootStackParamList } from '@type/ParamLists';
 
 const ServeySecondScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -31,13 +31,15 @@ const ServeySecondScreen = () => {
         </View>
 
         {/* 확인 버튼 */}
-        <ButtonComponent
-          color={'bg-black'}
-          text={'확인'}
-          textColor={'white'}
-          onPress={toNext}
-          disabled={false}
-        />
+        <View className="mx-3 mb-11">
+          <ButtonComponent
+            color={'bg-black'}
+            text={'확인'}
+            textColor={'white'}
+            onPress={toNext}
+            disabled={false}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
