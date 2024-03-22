@@ -17,7 +17,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   disabled,
 }) => {
   const buttonStyle = disabled
-    ? `bg-disabled p-4 rounded-[61px]`
+    ? `bg-[#C0C0C0] p-4 rounded-[61px]`
     : `${color} p-4 rounded-[61px]`;
 
   return (

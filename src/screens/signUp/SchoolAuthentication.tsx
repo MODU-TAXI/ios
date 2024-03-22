@@ -46,7 +46,7 @@ const SchoolAuthenticationScreen = () => {
         {/* 다음에 하기 버튼 */}
         <View className="mx-3 mb-3">
           <ButtonComponent
-            color={'bg-disable'}
+            color={'bg-disabled'}
             text={'다음에 할래요'}
             textColor={'white'}
             onPress={toEnd}
