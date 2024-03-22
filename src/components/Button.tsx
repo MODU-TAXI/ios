@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 interface ButtonComponentProps {
-  color: string;
+  color?: string;
   text: string;
   textColor: string;
   onPress: () => Promise<void>;
@@ -16,8 +16,10 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
 }) => {
   return (
     <View className="w-full my-2">
-      <Pressable className={`bg-${color} p-4 rounded-[12px]`} onPress={onPress}>
-        <Text className={`text-${textColor} text-center`}>{text}</Text>
+      <Pressable className={`${color} p-4 rounded-[12px]`} onPress={onPress}>
+        <Text className={`font-semibold text-${textColor} text-center`}>
+          {text}
+        </Text>
       </Pressable>
     </View>
   );

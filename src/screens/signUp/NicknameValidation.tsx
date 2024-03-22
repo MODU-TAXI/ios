@@ -16,7 +16,7 @@ const NicknameValidationScreen = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 mx-12">
+      <View className="flex-1 mx-6">
         {/* 입력란 설명 */}
         <View className="flex mt-14">
           <Text className="text-xl font-bold">모두의 택시에서</Text>
@@ -43,7 +43,7 @@ const NicknameValidationScreen = () => {
 
         {/* 확인 버튼 */}
         <ButtonComponent
-          color={'black'}
+          color={'bg-black'}
           text={'확인'}
           textColor={'white'}
           onPress={toNext}

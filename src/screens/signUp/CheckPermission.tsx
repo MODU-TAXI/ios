@@ -33,7 +33,7 @@ const CheckPermissionScreen = () => {
     return (
       <View className="flex-row items-center my-5">
         {/* 권한 아이콘 */}
-        <View className="flex justify-center items-center w-10 h-10 rounded-full bg-basic">
+        <View className="flex justify-center items-center w-10 h-10 rounded-full bg-gray">
           <IconComponent />
         </View>
 
@@ -48,7 +48,7 @@ const CheckPermissionScreen = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 mx-12">
+      <View className="flex-1 mx-6">
         {/* 맨 상단 안내 메세지*/}
         <View className="flex items-center mt-14">
           <Text className="text-2xl font-bold">앱 서비스 접근 권한 안내</Text>
@@ -88,7 +88,7 @@ const CheckPermissionScreen = () => {
         </View>
 
         <ButtonComponent
-          color={'black'}
+          color={'bg-black'}
           text={'확인'}
           textColor={'white'}
           onPress={toNext}

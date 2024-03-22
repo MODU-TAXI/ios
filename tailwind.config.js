@@ -8,8 +8,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        DEFAULT: 'black',
+        basic: '#FF7A00',
         kakaoyellow: '#FEE500',
-        basic: '#e2e2e2',
+        error: '#FF0000',
+        disable: '#C0C0C0',
       },
     },
   },

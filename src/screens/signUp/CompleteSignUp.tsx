@@ -13,7 +13,7 @@ const CompleteSignUpScreen = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 mx-12">
+      <View className="flex-1 mx-6">
         {/* 설명 */}
         <View className="flex mt-14">
           <Text className="text-xl font-bold">가입완료!</Text>
@@ -25,7 +25,7 @@ const CompleteSignUpScreen = () => {
 
         {/* 확인 버튼 */}
         <ButtonComponent
-          color={'black'}
+          color={'bg-black'}
           text={'확인'}
           textColor={'white'}
           onPress={toNext}

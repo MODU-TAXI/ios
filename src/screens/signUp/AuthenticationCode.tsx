@@ -16,7 +16,7 @@ const AuthenticationCodeScreen = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 mx-12">
+      <View className="flex-1 mx-6">
         {/* 입력란 설명 */}
         <View className="flex mt-14">
           <Text className="text-xl font-bold">적어주신 이메일로</Text>
@@ -41,7 +41,7 @@ const AuthenticationCodeScreen = () => {
 
         {/* 확인 버튼 */}
         <ButtonComponent
-          color={'black'}
+          color={'bg-black'}
           text={'확인'}
           textColor={'white'}
           onPress={toNext}

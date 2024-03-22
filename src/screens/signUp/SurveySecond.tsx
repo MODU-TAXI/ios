@@ -9,12 +9,12 @@ const ServeySecondScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const toNext = async (): Promise<void> => {
-    navigation.navigate('CompleteSignUpScreen');
+    navigation.navigate('SchoolAuthenticationScreen');
   };
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 mx-12">
+      <View className="flex-1 mx-6">
         {/* 입력란 설명 */}
         <View className="flex mt-14">
           <Text className="text-xl font-bold">택시를 가장 타고싶었던</Text>
@@ -32,7 +32,7 @@ const ServeySecondScreen = () => {
 
         {/* 확인 버튼 */}
         <ButtonComponent
-          color={'black'}
+          color={'bg-black'}
           text={'확인'}
           textColor={'white'}
           onPress={toNext}

@@ -38,7 +38,7 @@ const SignInScreen = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 mx-12">
+      <View className="flex-1 mx-6">
         {/* 모두의 택시 로고*/}
         <View className="flex-1 justify-center items-center">
           <Text className="text-5xl">모두의 택시</Text>
@@ -51,7 +51,7 @@ const SignInScreen = () => {
 
           {/* 카카오 로그인 버튼 */}
           <ButtonComponent
-            color={'kakaoyellow'}
+            color={'bg-kakaoyellow'}
             text={'카카오 로그인'}
             textColor={'black'}
             onPress={kakaoLogin}
@@ -59,7 +59,7 @@ const SignInScreen = () => {
 
           {/* 애플 로그인 버튼 */}
           <ButtonComponent
-            color={'black'}
+            color={'bg-black'}
             text={'애플 로그인'}
             textColor={'white'}
             onPress={appleLogin}
