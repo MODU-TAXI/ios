@@ -4,6 +4,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import { RootStackParamList } from '@type/ParamLists';
+import ProgressBarComponent from '@components/ProgressBar';
 
 const AuthenticationCodeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -16,6 +17,9 @@ const AuthenticationCodeScreen = () => {
 
   return (
     <SafeAreaView className="flex-1">
+      <View className="h-1 mt-[11px]">
+        <ProgressBarComponent previousDealt="w-4/5" dealt="w-4/5" />
+      </View>
       <View className="flex-1 mx-6">
         {/* 입력란 설명 */}
         <View className="flex mt-14">
