@@ -11,7 +11,7 @@ module.exports = {
       colors: {
         DEFAULT: 'black',
         basic: '#FF7A00',
-        error: '#FF0000',
+        error: '#FF3131',
         disabled: '#C0C0C0',
         kakaoyellow: '#FEE500',
       },

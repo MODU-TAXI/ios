@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '@components/Button';
@@ -17,11 +17,14 @@ interface PermissionItemProps {
 }
 
 const CheckPermissionScreen = () => {
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
+
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const toNext = async (): Promise<void> => {
     await checkPermissions();
-    navigation.navigate('NicknameValidationScreen');
+    setButtonDisabled(true);
+    navigation.navigate('AuthenticationScreen');
   };
 
   // 권한 component
@@ -93,7 +96,7 @@ const CheckPermissionScreen = () => {
             text={'확인'}
             textColor={'white'}
             onPress={toNext}
-            disabled={false}
+            disabled={buttonDisabled}
           />
         </View>
       </View>

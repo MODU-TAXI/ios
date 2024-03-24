@@ -1,34 +1,53 @@
 import React, { useState } from 'react';
-import { Pressable, Text } from 'react-native';
+import { View, Pressable, Text } from 'react-native';
 
 interface SelectBoxComponentProps {
-  content: string;
+  items: Item[];
+  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
 }
 
-const SelectBoxComponent: React.FC<SelectBoxComponentProps> = ({ content }) => {
-  const [isPressed, setIsPressed] = useState(false);
+type Item = { index: number; content: string; select: boolean };
 
-  const handlePressIn = () => {
-    setIsPressed(!isPressed);
+const SelectBoxComponent: React.FC<SelectBoxComponentProps> = ({
+  items,
+  setItems,
+}) => {
+  // item 선택
+  const select = (selectedItem: Item) => {
+    const updatedItems = items.map((item) =>
+      item.index === selectedItem.index
+        ? { ...item, select: !item.select }
+        : item,
+    );
+    setItems(updatedItems);
   };
 
-  // TODO: 나중에 tailwind 형식으로 바꾸기
   return (
-    <Pressable
-      onPress={handlePressIn}
-      style={{
-        backgroundColor: isPressed ? 'black' : '#E2E2E2',
-        borderRadius: 8,
-        justifyContent: 'center',
-        marginTop: 16,
-        paddingHorizontal: 18,
-        paddingVertical: 29,
-      }}
-    >
-      <Text style={{ color: isPressed ? 'white' : 'black', fontWeight: '600' }}>
-        {content}
-      </Text>
-    </Pressable>
+    <View>
+      {items.map((item: Item) => {
+        return (
+          <View key={item.index}>
+            {item.select ? (
+              <Pressable
+                key={item.index}
+                onPress={() => select(item)}
+                className="bg-black rounded-xl py-7 px-5 mb-4"
+              >
+                <Text className="text-white font-semibold">{item.content}</Text>
+              </Pressable>
+            ) : (
+              <Pressable
+                key={item.index}
+                onPress={() => select(item)}
+                className="bg-[#E2E2E2] rounded-xl py-7 px-5 mb-4"
+              >
+                <Text className="font-semibold">{item.content}</Text>
+              </Pressable>
+            )}
+          </View>
+        );
+      })}
+    </View>
   );
 };
 

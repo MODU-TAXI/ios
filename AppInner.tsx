@@ -3,9 +3,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import NaverMapScreen from './src/screens/NaverMap';
 import SignInScreen from './src/screens/signIn/SignIn';
 import CheckPermissionScreen from './src/screens/signUp/CheckPermission';
-import NicknameValidationScreen from './src/screens/signUp/NicknameValidation';
+import AuthenticationScreen from './src/screens/signUp/Authentication';
+import PhoneAuthenticationCodeScreen from './src/screens/signUp/PhoneAuthenticationCode';
 import SchoolAuthenticationScreen from './src/screens/signUp/SchoolAuthentication';
-import AuthenticationCodeScreen from './src/screens/signUp/AuthenticationCode';
+import EmailAuthenticationCodeScreen from './src/screens/signUp/EmailAuthenticationCode';
 import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
@@ -28,16 +29,20 @@ function AppInner() {
         component={CheckPermissionScreen}
       />
       <Stack.Screen
-        name="NicknameValidationScreen"
-        component={NicknameValidationScreen}
+        name="AuthenticationScreen"
+        component={AuthenticationScreen}
+      />
+      <Stack.Screen
+        name="PhoneAuthenticationCodeScreen"
+        component={PhoneAuthenticationCodeScreen}
       />
       <Stack.Screen
         name="SchoolAuthenticationScreen"
         component={SchoolAuthenticationScreen}
       />
       <Stack.Screen
-        name="AuthenticationCodeScreen"
-        component={AuthenticationCodeScreen}
+        name="EmailAuthenticationCodeScreen"
+        component={EmailAuthenticationCodeScreen}
       />
       <Stack.Screen
         name="CompleteSignUpScreen"
