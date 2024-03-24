@@ -33,6 +33,7 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
         value={value}
         onChange={valueHandleChange}
         placeholder={placeholder}
+        placeholderTextColor="#C0C0C0"
         className="mt-1.5 font-semibold"
       />
     </View>

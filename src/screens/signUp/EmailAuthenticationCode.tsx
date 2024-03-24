@@ -52,7 +52,7 @@ const EmailAuthenticationCodeScreen = () => {
             title="인증번호"
             value={code}
             setValue={setCode}
-            placeholder=""
+            placeholder="인증번호를 입력해주세요"
           />
         </View>
 
