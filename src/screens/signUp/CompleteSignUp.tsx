@@ -1,8 +1,9 @@
 import React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../types/ParamLists';
 import ButtonComponent from '@components/Button';
+import ProgressBarComponent from '@components/ProgressBar';
+import { RootStackParamList } from '@type/ParamLists';
 
 const CompleteSignUpScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -13,7 +14,12 @@ const CompleteSignUpScreen = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 mx-12">
+      {/* 진행사항 progressBar */}
+      <View className="h-1 mt-[11px]">
+        <ProgressBarComponent previousDealt={60} dealt={100} />
+      </View>
+
+      <View className="flex-1 mx-6">
         {/* 설명 */}
         <View className="flex mt-14">
           <Text className="text-xl font-bold">가입완료!</Text>
@@ -24,12 +30,15 @@ const CompleteSignUpScreen = () => {
         <View className="flex-1"></View>
 
         {/* 확인 버튼 */}
-        <ButtonComponent
-          color={'black'}
-          text={'확인'}
-          textColor={'white'}
-          onPress={toNext}
-        />
+        <View className="mx-3 mb-11">
+          <ButtonComponent
+            color={'bg-black'}
+            text={'확인'}
+            textColor={'white'}
+            onPress={toNext}
+            disabled={false}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

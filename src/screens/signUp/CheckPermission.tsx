@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '@components/Button';
-import { RootStackParamList } from '../../types/ParamLists';
+import { RootStackParamList } from '@type/ParamLists';
 
-import TraySvg from '../../assets/images/signIn/SignIn/tray.svg';
-import BellSvg from '../../assets/images/signIn/SignIn/bell.svg';
-import CameraSvg from '../../assets/images/signIn/SignIn/camera.svg';
-import LocationSvg from '../../assets/images/signIn/SignIn/location.svg';
+import TraySvg from '@assets/images/signIn/SignIn/tray.svg';
+import BellSvg from '@assets/images/signIn/SignIn/bell.svg';
+import CameraSvg from '@assets/images/signIn/SignIn/camera.svg';
+import LocationSvg from '@assets/images/signIn/SignIn/location.svg';
 import checkPermissions from '@hooks/permission/checkPermissions';
 
 interface PermissionItemProps {
@@ -17,11 +17,14 @@ interface PermissionItemProps {
 }
 
 const CheckPermissionScreen = () => {
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
+
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const toNext = async (): Promise<void> => {
     await checkPermissions();
-    navigation.navigate('NicknameValidationScreen');
+    setButtonDisabled(true);
+    navigation.navigate('AuthenticationScreen');
   };
 
   // 권한 component
@@ -33,7 +36,7 @@ const CheckPermissionScreen = () => {
     return (
       <View className="flex-row items-center my-5">
         {/* 권한 아이콘 */}
-        <View className="flex justify-center items-center w-10 h-10 rounded-full bg-basic">
+        <View className="flex justify-center items-center w-10 h-10 rounded-full bg-[#E2E2E2]">
           <IconComponent />
         </View>
 
@@ -48,7 +51,7 @@ const CheckPermissionScreen = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 mx-12">
+      <View className="flex-1 mx-6">
         {/* 맨 상단 안내 메세지*/}
         <View className="flex items-center mt-14">
           <Text className="text-2xl font-bold">앱 서비스 접근 권한 안내</Text>
@@ -87,12 +90,15 @@ const CheckPermissionScreen = () => {
           />
         </View>
 
-        <ButtonComponent
-          color={'black'}
-          text={'확인'}
-          textColor={'white'}
-          onPress={toNext}
-        />
+        <View className="mx-3 mb-11">
+          <ButtonComponent
+            color={'bg-black'}
+            text={'확인'}
+            textColor={'white'}
+            onPress={toNext}
+            disabled={buttonDisabled}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

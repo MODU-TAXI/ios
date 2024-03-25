@@ -3,9 +3,10 @@ type RootStackParamList = {
   NaverMapScreen: undefined;
   PermissionScreen: undefined;
   CheckPermissionScreen: undefined;
-  NicknameValidationScreen: undefined;
+  AuthenticationScreen: undefined;
+  PhoneAuthenticationCodeScreen: undefined;
   SchoolAuthenticationScreen: undefined;
-  AuthenticationCodeScreen: undefined;
+  EmailAuthenticationCodeScreen: undefined;
   CompleteSignUpScreen: undefined;
   SurveyFirstScreen: undefined;
   SurveySecondScreen: undefined;

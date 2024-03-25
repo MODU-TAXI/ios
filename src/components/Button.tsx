@@ -2,10 +2,11 @@ import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 interface ButtonComponentProps {
-  color: string;
+  color?: string;
   text: string;
   textColor: string;
   onPress: () => Promise<void>;
+  disabled: boolean;
 }
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
@@ -13,11 +14,18 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   text,
   textColor,
   onPress,
+  disabled,
 }) => {
+  const buttonStyle = disabled
+    ? `bg-disabled p-4 rounded-[61px]`
+    : `${color} p-4 rounded-[61px]`;
+
   return (
-    <View className="w-full my-2">
-      <Pressable className={`bg-${color} p-4 rounded-[12px]`} onPress={onPress}>
-        <Text className={`text-${textColor} text-center`}>{text}</Text>
+    <View className="w-full">
+      <Pressable className={buttonStyle} onPress={onPress} disabled={disabled}>
+        <Text className={`font-semibold text-${textColor} text-center`}>
+          {text}
+        </Text>
       </Pressable>
     </View>
   );

@@ -1,80 +1,71 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../type/ParamLists';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
+import { RootStackParamList } from '@type/ParamLists';
 
-const SchoolAuthenticationScreen = () => {
+import ReSendCodeButtonSvg from '@assets/images/signUp/PhoneAuthenticationCode/ReSendCodeButton.svg';
+
+const EmailAuthenticationCodeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [email, setEmail] = useState<string>('');
+  const [code, setCode] = useState<string>('');
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
 
-  const toEnd = async (): Promise<void> => {
+  const toNext = async (): Promise<void> => {
     navigation.navigate('CompleteSignUpScreen');
   };
 
-  const toNext = async (): Promise<void> => {
-    navigation.navigate('EmailAuthenticationCodeScreen');
+  // 인증번호 재전송
+  const resendCode = () => {
+    console.log('send!');
   };
 
   // 입력 되었을때 버튼 활성화
   useEffect(() => {
-    if (!email) {
-      setButtonDisabled(true);
-    } else {
+    if (code) {
       setButtonDisabled(false);
+    } else {
+      setButtonDisabled(true);
     }
-  }, [email]);
+  }, [code]);
 
   return (
     <SafeAreaView className="flex-1">
       {/* 진행사항 progressBar */}
       <View className="h-1 mt-[11px]">
-        <ProgressBarComponent previousDealt={40} dealt={80} />
+        <ProgressBarComponent previousDealt={80} dealt={80} />
       </View>
 
       <View className="flex-1 mx-6">
         {/* 입력란 설명 */}
         <View className="flex mt-14">
-          <Text className="text-xl font-bold">학교 인증을 하면</Text>
-          <Text className="text-xl font-bold">
-            매칭률이 <Text className="text-basic">72% </Text>이상 올라가요!
-          </Text>
+          <Text className="text-xl font-bold">적어주신 이메일로</Text>
+          <Text className="text-xl font-bold">인증번호가 전송됐어요!</Text>
         </View>
 
         {/* Input 컴포넌트 */}
         <View className="mt-6">
           <InputBoxComponent
-            title="학교 이메일"
-            value={email}
-            setValue={setEmail}
-            placeholder="moduteam@inha.edu"
+            title="인증번호"
+            value={code}
+            setValue={setCode}
+            placeholder="인증번호를 입력해주세요"
           />
         </View>
 
         {/* 경고 메세지 */}
-        <View className="mt-2 px-2">
-          <Text className="text-error font-medium">
-            올바르지 않은 이메일이에요!
-          </Text>
-        </View>
+        <View className="flex-row justify-between mt-2 px-2">
+          <Text className="text-error font-medium">인증번호가 틀렸어요!</Text>
 
+          <Pressable onPress={resendCode}>
+            <ReSendCodeButtonSvg />
+          </Pressable>
+        </View>
         {/* 버튼을 아래로 내리기 위한 View */}
         <View className="flex-1"></View>
-
-        {/* 다음에 하기 버튼 */}
-        <View className="mx-3 mb-3">
-          <ButtonComponent
-            color={'bg-disabled'}
-            text={'다음에 할래요'}
-            textColor={'white'}
-            onPress={toEnd}
-            disabled={false}
-          />
-        </View>
 
         {/* 확인 버튼 */}
         <View className="mx-3 mb-11">
@@ -91,4 +82,4 @@ const SchoolAuthenticationScreen = () => {
   );
 };
 
-export default SchoolAuthenticationScreen;
+export default EmailAuthenticationCodeScreen;

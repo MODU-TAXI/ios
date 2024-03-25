@@ -27,13 +27,14 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
   };
 
   return (
-    <View className="flex-col justify-center h-16 px-3 my-4 bg-gray-300 rounded-md">
-      <Text>{title}</Text>
+    <View className="flex-col justify-center px-5 py-4 bg-[#E2E2E2] rounded-xl">
+      <Text className="text-[#626262]">{title}</Text>
       <TextInput
         value={value}
         onChange={valueHandleChange}
         placeholder={placeholder}
-        className="my-1"
+        placeholderTextColor="#C0C0C0"
+        className="mt-1.5 font-semibold"
       />
     </View>
   );

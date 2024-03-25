@@ -5,7 +5,7 @@ import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { login } from '@react-native-seoul/kakao-login';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
-import { RootStackParamList } from './../types/ParamLists';
+import { RootStackParamList } from '@type/ParamLists';
 
 type KakaoLoginResponse = {
   accessToken: string;
