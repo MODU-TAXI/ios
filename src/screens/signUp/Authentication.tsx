@@ -37,7 +37,7 @@ const AuthenticationScreen = () => {
     <SafeAreaView className="flex-1">
       {/* 진행사항 progressBar */}
       <View className="h-1 mt-[11px]">
-        <ProgressBarComponent previousDealt="w-0" dealt="w-1/5" />
+        <ProgressBarComponent previousDealt={0} dealt={20} />
       </View>
       <View className="flex-1 mx-6">
         {/* 입력란 설명 */}

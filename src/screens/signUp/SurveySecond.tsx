@@ -39,7 +39,7 @@ const ServeySecondScreen = () => {
     <SafeAreaView className="flex-1">
       {/* 진행사항 progressBar */}
       <View className="h-1 mt-[11px]">
-        <ProgressBarComponent previousDealt="w-2/5" dealt="w-3/5" />
+        <ProgressBarComponent previousDealt={20} dealt={60} />
       </View>
 
       <View className="flex-1 mx-6">
