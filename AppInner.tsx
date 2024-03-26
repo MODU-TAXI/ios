@@ -12,6 +12,7 @@ import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
 
 import { RootStackParamList } from './src/type/ParamLists';
+import ExampleScreen from 'src/screens/map/Example';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -50,6 +51,7 @@ function AppInner() {
       />
       <Stack.Screen name="SurveyFirstScreen" component={SurveyFirstScreen} />
       <Stack.Screen name="SurveySecondScreen" component={SurveySecondScreen} />
+      <Stack.Screen name="ExampleScreen" component={ExampleScreen} />
     </Stack.Navigator>
   );
 }
