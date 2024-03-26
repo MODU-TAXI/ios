@@ -30,5 +30,7 @@ module.exports = {
         },
       },
     ],
+    // reanimated 설정
+    ['react-native-reanimated/plugin'],
   ],
 };
