@@ -26,6 +26,7 @@ module.exports = {
           '@type': './src/type',
           '@utils': './src/utils',
           '@assets': './src/assets',
+          '@recoil': './src/recoil',
           '@api': './src/api',
         },
       },

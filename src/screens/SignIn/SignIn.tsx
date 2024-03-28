@@ -7,6 +7,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '@components/Button';
 import { RootStackParamList } from '@type/ParamLists';
 import { socialLoginApi } from '@api/api';
+import { errorHandler } from '@hooks/error/error.handler';
 
 type KakaoLoginResponse = {
   accessToken: string;
@@ -30,9 +31,8 @@ const SignInScreen = () => {
       await socialLoginApi('KAKAO', {
         accessToken: accessToken,
       });
-    } catch (err) {
-      // TODO: 취소 에러시에 다른 조치 취해주기
-      console.error('login err', err);
+    } catch (error: any) {
+      errorHandler(error, navigation);
     }
   };
 
