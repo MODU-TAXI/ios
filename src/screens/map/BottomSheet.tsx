@@ -1,4 +1,4 @@
-import RoomDigestBoxComponent from '@components/RoomDigestBox';
+import RoomDigestBoxComponent from '@components/RoomDigest/RoomDigestBox';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import React from 'react';
 import { View, Text } from 'react-native';
@@ -9,12 +9,51 @@ const BottomSheetScreen = () => {
       <Text>ddd</Text>
 
       <BottomSheetScrollView className="flex-1">
-        <RoomDigestBoxComponent></RoomDigestBoxComponent>
-        <RoomDigestBoxComponent></RoomDigestBoxComponent>
-        <RoomDigestBoxComponent></RoomDigestBoxComponent>
-        <RoomDigestBoxComponent></RoomDigestBoxComponent>
-        <RoomDigestBoxComponent></RoomDigestBoxComponent>
-        <RoomDigestBoxComponent></RoomDigestBoxComponent>
+        <RoomDigestBoxComponent
+          lastChatTime={3}
+          ETD="언제언제출발"
+          start="인하대학교 후문"
+          destination="주안역"
+          currCount={2}
+          maxCount={3}
+          expense={13200}
+        />
+        <RoomDigestBoxComponent
+          lastChatTime={3}
+          ETD="언제언제출발"
+          start="인하대학교 후문"
+          destination="주안역"
+          currCount={2}
+          maxCount={3}
+          expense={13200}
+        />
+        <RoomDigestBoxComponent
+          lastChatTime={3}
+          ETD="언제언제출발"
+          start="인하대학교 후문"
+          destination="주안역"
+          currCount={2}
+          maxCount={3}
+          expense={13200}
+        />
+        <RoomDigestBoxComponent
+          lastChatTime={3}
+          ETD="언제언제출발"
+          start="인하대학교 후문"
+          destination="주안역"
+          currCount={2}
+          maxCount={3}
+          expense={13200}
+        />
+        <RoomDigestBoxComponent
+          lastChatTime={3}
+          ETD="언제언제출발"
+          start="인하대학교 후문"
+          destination="주안역"
+          currCount={2}
+          maxCount={3}
+          expense={13200}
+        />
       </BottomSheetScrollView>
     </View>
   );
