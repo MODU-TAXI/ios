@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 
 import { login } from '@react-native-seoul/kakao-login';
@@ -6,6 +6,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 import ButtonComponent from '@components/Button';
 import { RootStackParamList } from '@type/ParamLists';
+import { socialLoginApi } from '@api/api';
 
 type KakaoLoginResponse = {
   accessToken: string;
@@ -19,13 +20,16 @@ type KakaoLoginResponse = {
 const SignInScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [result, setResult] = useState<string>('');
-
+  // kakao sdk에서 kakaoToken을 받아오는 함수
   const kakaoLogin = async (): Promise<void> => {
     try {
-      const token: KakaoLoginResponse = await login();
+      const kakaoLoginResponse: KakaoLoginResponse = await login();
 
-      setResult(JSON.stringify(token));
+      const { accessToken } = kakaoLoginResponse;
+
+      await socialLoginApi('KAKAO', {
+        accessToken: accessToken,
+      });
     } catch (err) {
       // TODO: 취소 에러시에 다른 조치 취해주기
       console.error('login err', err);
