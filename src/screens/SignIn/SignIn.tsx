@@ -32,7 +32,7 @@ const SignInScreen = () => {
         accessToken: accessToken,
       });
     } catch (error: any) {
-      errorHandler(error, navigation);
+      await errorHandler(error, navigation);
     }
   };
 

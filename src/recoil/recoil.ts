@@ -1,5 +1,4 @@
 import { atom } from 'recoil';
-import { SignUpRequest } from '@type/request.types';
 
 export const tempUserState = atom<{
   name: string;

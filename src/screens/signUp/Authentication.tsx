@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import RadioBoxComponent from '@components/RadioBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import { RootStackParamList } from '@type/ParamLists';
+import { tempUserState } from '@recoil/recoil';
 
 // 이름, 성별, 전화번호 입력 스크린
 const AuthenticationScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const [tempUser, setTempUser] = useRecoilState(tempUserState);
   const [name, setName] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -29,9 +32,16 @@ const AuthenticationScreen = () => {
     }
   }, [name, gender, phoneNumber]);
 
-  const toNext = async (): Promise<void> => {
+  // 다음으로
+  const toNext = useCallback(async (): Promise<void> => {
+    setTempUser({
+      name: name,
+      gender: gender === '남자' ? 'MALE' : 'FEMALE',
+      phoneNumber: phoneNumber,
+    });
+
     navigation.navigate('PhoneAuthenticationCodeScreen');
-  };
+  }, [name, gender, phoneNumber, setTempUser, navigation]);
 
   return (
     <SafeAreaView className="flex-1">
