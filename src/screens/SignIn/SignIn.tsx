@@ -33,7 +33,7 @@ const SignInScreen = () => {
   };
 
   const appleLogin = async (): Promise<void> => {
-    navigation.navigate('CheckPermissionScreen');
+    navigation.navigate('ExampleScreen');
   };
 
   return (
