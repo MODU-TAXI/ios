@@ -10,6 +10,7 @@ type RootStackParamList = {
   CompleteSignUpScreen: undefined;
   SurveyFirstScreen: undefined;
   SurveySecondScreen: undefined;
+  MainMapScreen: undefined;
 };
 
 export type { RootStackParamList };
