@@ -9,6 +9,7 @@ type RootStackParamList = {
   CompleteSignUpScreen: undefined;
   SurveyFirstScreen: undefined;
   SurveySecondScreen: undefined;
+  MainMapScreen: undefined;
 };
 
 type LoginStackParamList = {
