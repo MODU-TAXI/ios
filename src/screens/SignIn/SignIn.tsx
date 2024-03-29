@@ -7,7 +7,6 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '@components/Button';
 import { RootStackParamList } from '@type/ParamLists';
 import { socialLoginApi } from '@api/api';
-import { errorHandler } from '@hooks/error/error.handler';
 
 type KakaoLoginResponse = {
   accessToken: string;
@@ -32,7 +31,7 @@ const SignInScreen = () => {
         accessToken: accessToken,
       });
     } catch (error: any) {
-      await errorHandler(error, navigation);
+      console.error(error);
     }
   };
 

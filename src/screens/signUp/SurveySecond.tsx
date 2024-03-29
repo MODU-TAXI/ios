@@ -26,10 +26,20 @@ const ServeySecondScreen = () => {
     { index: 3, content: '기타', select: false },
   ]);
 
-  const toNext = async (): Promise<void> => {
-    await signUp();
-    navigation.navigate('SchoolAuthenticationScreen');
-  };
+  // 선택한 box 개수 계산
+  const checkSelectedNum = useCallback((): number => {
+    return surveyLists.filter((surveyList) => surveyList.select === true)
+      .length;
+  }, [surveyLists]);
+
+  // 하나라도 선택되었을때 버튼 활성화
+  useEffect(() => {
+    if (checkSelectedNum() > 0) {
+      setButtonDisabled(false);
+    } else {
+      setButtonDisabled(true);
+    }
+  }, [surveyLists, checkSelectedNum]);
 
   const signUp = useCallback(async (): Promise<void> => {
     const key = await AsyncStorage.getItem('key');
@@ -40,25 +50,12 @@ const ServeySecondScreen = () => {
     // const survey2 = surveyLists
     //   .filter((surveyList: SurveyType) => surveyList.select)
     //   .map((surveyList: SurveyType) => surveyList.index);
-
-    console.log(key);
-    console.log(name, gender, phoneNumber);
   }, [tempUser]);
 
-  // 선택한 box 개수 계산
-  const checkSelectedNum = () => {
-    return surveyLists.filter((surveyList) => surveyList.select === true)
-      .length;
+  const toNext = async (): Promise<void> => {
+    await signUp();
+    navigation.navigate('SchoolAuthenticationScreen');
   };
-
-  // 하나라도 선택되었을때 버튼 활성화
-  useEffect(() => {
-    if (checkSelectedNum() > 0) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
-    }
-  }, [surveyLists]);
 
   return (
     <SafeAreaView className="flex-1">
