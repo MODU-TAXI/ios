@@ -21,6 +21,7 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
   items,
   setItems,
 }) => {
+  // item 선택
   const select = (selectedItem: Item) => {
     const updatedItems = items.map((item) => ({
       ...item,

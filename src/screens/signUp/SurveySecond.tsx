@@ -1,30 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRecoilValue } from 'recoil';
 import ButtonComponent from '@components/Button';
 import SelectBoxComponent from '@components/SelectBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import { RootStackParamList } from '@type/ParamLists';
+import { tempUserState } from '@recoil/recoil';
+
+type SurveyType = {
+  index: number;
+  content: string;
+  select: boolean;
+};
 
 const ServeySecondScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const tempUser = useRecoilValue(tempUserState);
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
-  const [surveyLists, setSurvetLists] = useState([
+  const [surveyLists, setSurvetLists] = useState<SurveyType[]>([
     { index: 1, content: '지각할 것 같을때', select: false },
     { index: 2, content: '버스 줄이 너무 길때', select: false },
     { index: 3, content: '기타', select: false },
   ]);
 
-  const toNext = async (): Promise<void> => {
-    navigation.navigate('SchoolAuthenticationScreen');
-  };
-
   // 선택한 box 개수 계산
-  const checkSelectedNum = () => {
+  const checkSelectedNum = useCallback((): number => {
     return surveyLists.filter((surveyList) => surveyList.select === true)
       .length;
-  };
+  }, [surveyLists]);
 
   // 하나라도 선택되었을때 버튼 활성화
   useEffect(() => {
@@ -33,7 +39,23 @@ const ServeySecondScreen = () => {
     } else {
       setButtonDisabled(true);
     }
-  }, [surveyLists]);
+  }, [surveyLists, checkSelectedNum]);
+
+  const signUp = useCallback(async (): Promise<void> => {
+    const key = await AsyncStorage.getItem('key');
+
+    const name = tempUser.name;
+    const gender = tempUser.gender;
+    const phoneNumber = tempUser.phoneNumber;
+    // const survey2 = surveyLists
+    //   .filter((surveyList: SurveyType) => surveyList.select)
+    //   .map((surveyList: SurveyType) => surveyList.index);
+  }, [tempUser]);
+
+  const toNext = async (): Promise<void> => {
+    await signUp();
+    navigation.navigate('SchoolAuthenticationScreen');
+  };
 
   return (
     <SafeAreaView className="flex-1">

@@ -1,16 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useRecoilValue } from 'recoil';
 import ButtonComponent from '@components/Button';
 import SelectBoxComponent from '@components/SelectBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import { RootStackParamList } from '@type/ParamLists';
+import { tempUserState } from '@recoil/recoil';
+
+type SurveyType = {
+  index: number;
+  content: string;
+  select: boolean;
+};
 
 const ServeyFirstScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const tempUser = useRecoilValue(tempUserState);
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
-  const [surveyLists, setSurvetLists] = useState([
+  const [surveyLists, setSurvetLists] = useState<SurveyType[]>([
     { index: 1, content: '에브리타임을 통해 알게 되었어요!', select: false },
     { index: 2, content: '지인 추천을 통해 알게 되었어요!', select: false },
     { index: 3, content: '직접 검색해서 통해 알게 되었어요!', select: false },
@@ -18,10 +27,10 @@ const ServeyFirstScreen = () => {
   ]);
 
   // 선택한 box 개수 계산
-  const checkSelectedNum = () => {
+  const checkSelectedNum = useCallback((): number => {
     return surveyLists.filter((surveyList) => surveyList.select === true)
       .length;
-  };
+  }, [surveyLists]);
 
   // 하나라도 선택되었을때 버튼 활성화
   useEffect(() => {
@@ -30,11 +39,17 @@ const ServeyFirstScreen = () => {
     } else {
       setButtonDisabled(true);
     }
-  }, [surveyLists]);
+  }, [surveyLists, checkSelectedNum]);
 
-  const toNext = async (): Promise<void> => {
+  // 다음으로
+  const toNext = useCallback(async (): Promise<void> => {
+    // const survey1 = surveyLists
+    //   .filter((surveyList: SurveyType) => surveyList.select)
+    //   .map((surveyList: SurveyType) => surveyList.index);
+
+    // tempUser.survey1 = survey1;
     navigation.navigate('SurveySecondScreen');
-  };
+  }, [surveyLists, tempUser, navigation]);
 
   return (
     <SafeAreaView className="flex-1">
