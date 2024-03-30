@@ -12,3 +12,8 @@ export const tempUserState = atom<{
     phoneNumber: '',
   },
 });
+
+export const loggedInState = atom<boolean>({
+  key: 'isLoggedIn',
+  default: false,
+});

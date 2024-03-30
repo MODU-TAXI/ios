@@ -1,6 +1,5 @@
 type RootStackParamList = {
   SignInScreen: undefined;
-  NaverMapScreen: undefined;
   PermissionScreen: undefined;
   CheckPermissionScreen: undefined;
   AuthenticationScreen: undefined;
@@ -10,7 +9,13 @@ type RootStackParamList = {
   CompleteSignUpScreen: undefined;
   SurveyFirstScreen: undefined;
   SurveySecondScreen: undefined;
+};
+
+type LoginStackParamList = {
+  HomeScreen: undefined;
+  MatchScreen: undefined;
+  NaverMapScreen: undefined;
   MainMapScreen: undefined;
 };
 
-export type { RootStackParamList };
+export type { RootStackParamList, LoginStackParamList };
