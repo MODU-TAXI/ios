@@ -73,6 +73,15 @@ function AppInner() {
         name="SurveySecondScreen"
         component={SurveySecondScreen}
       />
+      <RootStack.Screen name="MainMapScreen" component={MainMapScreen} />
+      <RootStack.Screen
+        name="SurveyFirstScreen"
+        component={SurveyFirstScreen}
+      />
+      <RootStack.Screen
+        name="SurveySecondScreen"
+        component={SurveySecondScreen}
+      />
     </RootStack.Navigator>
   );
 }
