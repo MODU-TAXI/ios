@@ -12,7 +12,7 @@ const HomeScreen = () => {
   };
 
   const toMapScreen = () => {
-    navigation.navigate('NaverMapScreen');
+    navigation.navigate('MainMapScreen');
   };
 
   return (

@@ -9,12 +9,12 @@ type RootStackParamList = {
   CompleteSignUpScreen: undefined;
   SurveyFirstScreen: undefined;
   SurveySecondScreen: undefined;
-  MainMapScreen: undefined;
 };
 
 type LoginStackParamList = {
   HomeScreen: undefined;
   MatchScreen: undefined;
+  MainMapScreen: undefined;
   NaverMapScreen: undefined;
   MainMapScreen: undefined;
 };

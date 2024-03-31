@@ -16,5 +16,4 @@ function App(): React.JSX.Element {
     </RecoilRoot>
   );
 }
-
 export default App;
