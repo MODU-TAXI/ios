@@ -6,7 +6,7 @@ import BottomSheet, {
   BottomSheetModalProvider,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 import MapBottomSheetScreen from './MapBottomSheet';
 
 const MainMapScreen = () => {
@@ -33,21 +33,19 @@ const MainMapScreen = () => {
 
   // renders
   return (
-    <GestureHandlerRootView className="flex-1">
-      <View style={styles.container}>
-        <BottomSheet
-          ref={bottomSheetRef}
-          index={0}
-          snapPoints={snapPoints}
-          onChange={handleSheetChanges}
-          backdropComponent={handleBackDrop}
-        >
-          <BottomSheetView style={styles.contentContainer}>
-            <MapBottomSheetScreen />
-          </BottomSheetView>
-        </BottomSheet>
-      </View>
-    </GestureHandlerRootView>
+    <View style={styles.container}>
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={0}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        backdropComponent={handleBackDrop}
+      >
+        <BottomSheetView style={styles.contentContainer}>
+          <MapBottomSheetScreen />
+        </BottomSheetView>
+      </BottomSheet>
+    </View>
   );
 };
 
