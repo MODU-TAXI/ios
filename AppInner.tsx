@@ -10,49 +10,70 @@ import EmailAuthenticationCodeScreen from './src/screens/signUp/EmailAuthenticat
 import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
+import HomeScreen from './src/screens/home/Home';
+import MatchScreen from './src/screens/match/Match';
+import MainMapScreen from './src/screens/map/MainMap';
+import { LoginStackParamList, RootStackParamList } from './src/type/ParamLists';
+import { useRecoilValue } from 'recoil';
+import { loggedInState } from '@recoil/recoil';
 
-import { RootStackParamList } from './src/type/ParamLists';
-import MainMapScreen from 'src/screens/map/MainMap';
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const RootStack = createNativeStackNavigator<RootStackParamList>();
+const LogInStack = createNativeStackNavigator<LoginStackParamList>();
 
 function AppInner() {
-  return (
-    <Stack.Navigator
+  const isLoggedIn = useRecoilValue(loggedInState);
+
+  return isLoggedIn ? (
+    <LogInStack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen name="SignInScreen" component={SignInScreen} />
-      <Stack.Screen name="NaverMapScreen" component={NaverMapScreen} />
-      <Stack.Screen
+      <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
+      <LogInStack.Screen name="MatchScreen" component={MatchScreen} />
+      <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
+      <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
+    </LogInStack.Navigator>
+  ) : (
+    <RootStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <RootStack.Screen name="SignInScreen" component={SignInScreen} />
+      <RootStack.Screen
         name="CheckPermissionScreen"
         component={CheckPermissionScreen}
       />
-      <Stack.Screen
+      <RootStack.Screen
         name="AuthenticationScreen"
         component={AuthenticationScreen}
       />
-      <Stack.Screen
+      <RootStack.Screen
         name="PhoneAuthenticationCodeScreen"
         component={PhoneAuthenticationCodeScreen}
       />
-      <Stack.Screen
+      <RootStack.Screen
         name="SchoolAuthenticationScreen"
         component={SchoolAuthenticationScreen}
       />
-      <Stack.Screen
+      <RootStack.Screen
         name="EmailAuthenticationCodeScreen"
         component={EmailAuthenticationCodeScreen}
       />
-      <Stack.Screen
+      <RootStack.Screen
         name="CompleteSignUpScreen"
         component={CompleteSignUpScreen}
       />
-      <Stack.Screen name="SurveyFirstScreen" component={SurveyFirstScreen} />
-      <Stack.Screen name="SurveySecondScreen" component={SurveySecondScreen} />
-      <Stack.Screen name="MainMapScreen" component={MainMapScreen} />
-    </Stack.Navigator>
+      <RootStack.Screen
+        name="SurveyFirstScreen"
+        component={SurveyFirstScreen}
+      />
+      <RootStack.Screen
+        name="SurveySecondScreen"
+        component={SurveySecondScreen}
+      />
+    </RootStack.Navigator>
   );
 }
 export default AppInner;

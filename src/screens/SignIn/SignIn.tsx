@@ -7,6 +7,8 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '@components/Button';
 import { RootStackParamList } from '@type/ParamLists';
 import { socialLoginApi } from '@api/api';
+import { useRecoilState } from 'recoil';
+import { loggedInState } from '@recoil/recoil';
 
 type KakaoLoginResponse = {
   accessToken: string;
@@ -20,6 +22,8 @@ type KakaoLoginResponse = {
 const SignInScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+
   // kakao sdk에서 kakaoToken을 받아오는 함수
   const kakaoLogin = async (): Promise<void> => {
     try {
@@ -27,9 +31,11 @@ const SignInScreen = () => {
 
       const { accessToken } = kakaoLoginResponse;
 
-      await socialLoginApi('KAKAO', {
-        accessToken: accessToken,
-      });
+      // await socialLoginApi('KAKAO', {
+      //   accessToken: accessToken,
+      // });
+
+      setLoggedIn(true);
     } catch (error: any) {
       console.error(error);
     }

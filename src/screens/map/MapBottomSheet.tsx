@@ -1,9 +1,10 @@
+import React from 'react';
+import { View, Text } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import FilterButtonComponent from '@components/RoomDigest/FilterButton';
 import RoomDigestBoxComponent from '@components/RoomDigest/RoomDigestBox';
 import SearchLocationButtonComponent from '@components/RoomDigest/SearchLocationButton';
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+
 import RadioButtonSvg from '@assets/images/RadioBox/RadioButton.svg';
 import SelectedRadioButtonSvg from '@assets/images/RadioBox/SelectedRadioButton.svg';
 import ChevronDownSvg from '@assets/images/RoomDigest/ChevronDown.svg';
@@ -37,7 +38,7 @@ const MapBottomSheetScreen = () => {
         </View>
       </View>
       {/** (세로 스크롤 적용) */}
-      <BottomSheetScrollView className="flex-1">
+      <ScrollView className="flex-1">
         <RoomDigestBoxComponent
           lastChatTime={3}
           ETD="몇월며칠몇시"
@@ -83,7 +84,16 @@ const MapBottomSheetScreen = () => {
           maxCount={3}
           expense={13200}
         />
-      </BottomSheetScrollView>
+        <RoomDigestBoxComponent
+          lastChatTime={3}
+          ETD="몇월며칠몇시"
+          start="인하대학교 후문"
+          destination="주안역"
+          currCount={2}
+          maxCount={3}
+          expense={13200}
+        />
+      </ScrollView>
     </View>
   );
 };
