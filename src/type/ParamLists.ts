@@ -16,7 +16,6 @@ type LoginStackParamList = {
   MatchScreen: undefined;
   MainMapScreen: undefined;
   NaverMapScreen: undefined;
-  MainMapScreen: undefined;
 };
 
 export type { RootStackParamList, LoginStackParamList };
