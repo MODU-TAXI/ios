@@ -1,14 +1,15 @@
-import ButtonComponent from '@components/Button';
 import React, { useCallback, useState } from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
 import NaverMapView from 'react-native-nmap';
 import { ScrollView } from 'react-native-gesture-handler';
-import StartCircle from '@assets/images/Match/StartCircle.svg';
-import EndCircle from '@assets/images/Match/EndCircle.svg';
 import ParticipateUserComponent from '@components/ParticipateUser';
 import WaitUserComponent from '@components/WaitUser';
 import RoomTagComponent from '@components/RoomDigest/RoomTag';
 import HeaderComponent from '@components/Header';
+import ButtonComponent from '@components/Button';
+
+import StartCircle from '@assets/images/Match/StartCircle.svg';
+import EndCircle from '@assets/images/Match/EndCircle.svg';
 
 const MatchScreen = () => {
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
@@ -24,10 +25,10 @@ const MatchScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1 px-4">
-        {/* 헤더 */}
-        <HeaderComponent />
+      {/* 헤더 */}
+      <HeaderComponent title={'매칭 페이지'} />
 
+      <ScrollView className="flex-1 px-4">
         {/* 카테고리 */}
         <View className="flex-row mt-8">
           <RoomTagComponent
@@ -63,7 +64,7 @@ const MatchScreen = () => {
         </View>
 
         {/* 날짜, 출발지, 도착지 정보  */}
-        <View className="mt-8 mb-10 mx-2">
+        <View className="mt-8 mb-8 mx-2">
           <View>
             <Text className="text-lg font-medium text-emphasized">
               2024. 03. 25 (월)
@@ -106,7 +107,7 @@ const MatchScreen = () => {
         </View>
 
         {/* 점선 */}
-        <View className="w-full border-dashed border-[1px] border-gray-200" />
+        <View className="w-full border-dashed border-[1px] border-gray200" />
 
         {/* 방장 */}
         <View className="mt-8">
@@ -149,10 +150,10 @@ const MatchScreen = () => {
         </View>
 
         {/* 점선 */}
-        <View className="mt-8 w-full border-dashed border-[1px] border-gray-200" />
+        <View className="mt-8 w-full border-dashed border-[1px] border-gray200" />
 
         {/* 금액 */}
-        <View className="mt-8">
+        <View className="py-8">
           <View className="flex-row justify-between">
             <Text className="text-lg text-disabled2 font-medium">총액</Text>
             <Text className="text-lg text-black font-medium">14,450원</Text>
@@ -167,7 +168,7 @@ const MatchScreen = () => {
         </View>
 
         {/* 버튼 */}
-        <View className="mt-[120px] mx-6">
+        <View className="mt-[78px] mx-6">
           <ButtonComponent
             color={'bg-main'}
             text={'매칭 수정하기'}

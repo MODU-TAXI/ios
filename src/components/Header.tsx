@@ -4,7 +4,11 @@ import BackButton from '@assets/images/Header/BackButton.svg';
 import CloseButton from '@assets/images/Header/CloseButton.svg';
 import { useNavigation } from '@react-navigation/native';
 
-const HeaderComponent: React.FC = () => {
+interface HeaderComponentProps {
+  title: string;
+}
+
+const HeaderComponent: React.FC<HeaderComponentProps> = ({ title }) => {
   const navigation = useNavigation();
 
   const goBack = () => {
@@ -12,12 +16,12 @@ const HeaderComponent: React.FC = () => {
   };
 
   return (
-    <View className="flex-row items-center justify-between">
+    <View className="flex-row items-center justify-between px-4">
       <Pressable onPress={goBack}>
         <BackButton />
       </Pressable>
 
-      <Text className="text-lg text-black font-semibold">매칭 페이지</Text>
+      <Text className="text-lg text-black font-semibold">{title}</Text>
 
       <Pressable onPress={goBack}>
         <CloseButton />
