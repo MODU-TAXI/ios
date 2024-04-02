@@ -3,6 +3,9 @@ import { View, Text } from 'react-native';
 import NaverMapView from 'react-native-nmap';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+dayjs.locale('ko'); // 나중에 이 부분 dayjs 따로 빼기ㄴ
 
 import ParticipateUserComponent from '@components/ParticipateUser';
 import WaitUserComponent from '@components/WaitUser';
@@ -10,6 +13,7 @@ import RoomTagComponent from '@components/RoomDigest/RoomTag';
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
 import DescriptionComponent from '@components/Description';
+import DottedLineComponent from '@components/DottedLine';
 
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndCircle from '@assets/images/Match/EndCircle.svg';
@@ -60,11 +64,11 @@ const MatchScreen = () => {
           />
         </View>
 
-        {/* 날짜, 출발지, 도착지 정보  */}
+        {/* 날짜, 출발지, 도착지 정보 */}
         <View className="py-8 px-2">
           <View>
             <Text className="text-lg font-medium text-emphasized">
-              2024. 03. 25 (월)
+              {dayjs().format('YYYY. MM. DD (ddd)')}
             </Text>
           </View>
 
@@ -104,7 +108,7 @@ const MatchScreen = () => {
         </View>
 
         {/* 점선 */}
-        <View className="w-full border-dashed border-[1px] border-gray200" />
+        <DottedLineComponent />
 
         {/* 방장 */}
         <View className="py-8 px-1">
@@ -148,7 +152,7 @@ const MatchScreen = () => {
         </View>
 
         {/* 점선 */}
-        <View className="w-full border-dashed border-[1px] border-gray200" />
+        <DottedLineComponent />
 
         {/* 금액 */}
         <View className="py-8">

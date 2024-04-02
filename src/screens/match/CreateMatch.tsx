@@ -1,9 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import DatePicker from 'react-native-date-picker';
-import dayjs from 'dayjs';
 
 import HeaderComponent from '@components/Header';
 import DescriptionComponent from '@components/Description';
@@ -22,46 +20,63 @@ import CheckBox from '@assets/images/Match/CheckBox.svg';
 import SelectedCheckBox from '@assets/images/Match/SelectedCheckBox.svg';
 import DatePickerComponent from '@components/DatePicker';
 
-interface IconProps {
-  icon: JSX.Element;
-}
-
-interface SelectedIconProps {
-  selectedIcon: JSX.Element;
-}
-
 const CreateMatchScreen = () => {
-  const [date, setDate] = useState<Date>(new Date());
-  const [datePicked, setDatePicked] = useState<boolean>(false);
-  const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false);
-  const [passangersNumber, setPassengersNumber] = useState<number | null>(null);
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
+
+  const [date, setDate] = useState<Date>(new Date()); // 설정 날짜
+  const [datePicked, setDatePicked] = useState<boolean>(false); // 날짜 선택 여부
+  const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
+  const [passangersNumber, setPassengersNumber] = useState<number | null>(null); // 탑승 인원
   const [checkedCategorys, setCheckedCategorys] = useState<boolean[]>([
     false,
     false,
     false,
-  ]);
+  ]); // 카테고리
 
-  const openDatePicker = () => {
-    setDatePickerOpen(true);
-  };
+  // 모두 선택했을때 버튼 활성화
+  useEffect(() => {
+    if (datePicked && passangersNumber) {
+      setButtonDisabled(false);
+    } else {
+      setButtonDisabled(true);
+    }
+  }, [date, datePicked, passangersNumber]);
 
   // 다음으로
   const toNext = useCallback(async (): Promise<void> => {
     console.log('ok');
   }, []);
 
+  // Datepicker open
+  const openDatePicker = () => {
+    setDatePickerOpen(true);
+  };
+
+  // 인원수 선택
   const handlePress = (index: number) => {
     setPassengersNumber(index);
   };
 
-  const passengers = (
-    index: number,
-    { icon }: IconProps,
-    { selectedIcon }: SelectedIconProps,
-  ) => {
-    const isSelected = passangersNumber === index;
+  // 카테고리 선택
+  const selectCategory = (index: number) => {
+    setCheckedCategorys((prevState) => {
+      const newState = [...prevState];
+      newState[index] = !newState[index];
+      return newState;
+    });
+  };
 
-    const px = index === 1 ? 'px-[26px]' : index === 2 ? 'px-4' : '[6px]';
+  // 인원수 component -> 재사용 안할 것 같아서 그냥 여기 정의
+  const Passenger: React.FC<{
+    index: number;
+    icon: JSX.Element;
+    selectedIcon: JSX.Element;
+    handlePress: (index: number) => void;
+    passengersNumber: number | null;
+  }> = ({ index, icon, selectedIcon, handlePress, passengersNumber }) => {
+    const isSelected = passengersNumber === index;
+
+    const px = index === 1 ? 'px-[26px]' : index === 2 ? 'px-4' : 'px-1.5';
 
     return (
       <View>
@@ -88,30 +103,26 @@ const CreateMatchScreen = () => {
     );
   };
 
-  const selectCategory = (index: number) => {
-    setCheckedCategorys((prevState) => {
-      const newState = [...prevState];
-      newState[index] = !newState[index];
-      return newState;
-    });
-  };
-
-  const categorys = (index: number, category: string) => {
+  // 카테고리 component -> 재사용 안할 것 같아서 그냥 여기 정의
+  const Category: React.FC<{
+    index: number;
+    category: string;
+  }> = ({ index, category }) => {
     const checked = checkedCategorys[index];
     return (
       <View>
         {checked ? (
           <Pressable
             onPress={() => selectCategory(index)}
-            className="flex-row items-center justify-center border-2 border-main px-3 py-2 rounded-xl"
+            className="flex-row items-center justify-center border-[1px] border-main px-3 py-2 rounded-xl"
           >
             <SelectedCheckBox className="mr-2" />
-            <Text className="text-sm font-normal text-main">{category}</Text>
+            <Text className="text-sm font-medium text-main">{category}</Text>
           </Pressable>
         ) : (
           <Pressable
             onPress={() => selectCategory(index)}
-            className="flex-row items-center justify-center border-2 border-gray200 px-3 py-2 rounded-xl"
+            className="flex-row items-center justify-center border-[1px] border-gray200 px-3 py-2 rounded-xl"
           >
             <CheckBox className="mr-2" />
             <Text className="text-sm font-normal text-gray700">{category}</Text>
@@ -197,21 +208,29 @@ const CreateMatchScreen = () => {
 
           {/* 인원 버튼 */}
           <View className="flex-row justify-between items-center mt-6">
-            {passengers(
-              1,
-              { icon: <Person1 /> },
-              { selectedIcon: <SelectedPerson1 /> },
-            )}
-            {passengers(
-              2,
-              { icon: <Person2 /> },
-              { selectedIcon: <SelectedPerson2 /> },
-            )}
-            {passengers(
-              3,
-              { icon: <Person3 /> },
-              { selectedIcon: <SelectedPerson3 /> },
-            )}
+            <Passenger
+              index={1}
+              icon={<Person1 />}
+              selectedIcon={<SelectedPerson1 />}
+              handlePress={handlePress}
+              passengersNumber={passangersNumber}
+            />
+
+            <Passenger
+              index={2}
+              icon={<Person2 />}
+              selectedIcon={<SelectedPerson2 />}
+              handlePress={handlePress}
+              passengersNumber={passangersNumber}
+            />
+
+            <Passenger
+              index={3}
+              icon={<Person3 />}
+              selectedIcon={<SelectedPerson3 />}
+              handlePress={handlePress}
+              passengersNumber={passangersNumber}
+            />
           </View>
         </View>
 
@@ -223,9 +242,9 @@ const CreateMatchScreen = () => {
           <DescriptionComponent description="카테고리를 선택해주세요" />
 
           <View className="flex-row justify-between mt-4">
-            {categorys(0, '학생인증')}
-            {categorys(1, '여자만')}
-            {categorys(2, '매너탑승')}
+            <Category index={0} category={'학생인증'} />
+            <Category index={1} category={'여자만'} />
+            <Category index={2} category={'매너탑승'} />
           </View>
         </View>
 
@@ -236,7 +255,7 @@ const CreateMatchScreen = () => {
             text={'매칭팟 만들기'}
             textColor={'white'}
             onPress={toNext}
-            disabled={true}
+            disabled={buttonDisabled}
           />
         </View>
       </ScrollView>
