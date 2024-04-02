@@ -1,14 +1,22 @@
-import ButtonComponent from '@components/Button';
 import React, { useCallback, useState } from 'react';
-import { View, Text, SafeAreaView } from 'react-native';
+import { View, Text } from 'react-native';
 import NaverMapView from 'react-native-nmap';
 import { ScrollView } from 'react-native-gesture-handler';
-import StartCircle from '@assets/images/Match/StartCircle.svg';
-import EndCircle from '@assets/images/Match/EndCircle.svg';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+dayjs.locale('ko'); // 나중에 이 부분 dayjs 따로 빼기ㄴ
+
 import ParticipateUserComponent from '@components/ParticipateUser';
 import WaitUserComponent from '@components/WaitUser';
 import RoomTagComponent from '@components/RoomDigest/RoomTag';
 import HeaderComponent from '@components/Header';
+import ButtonComponent from '@components/Button';
+import DescriptionComponent from '@components/Description';
+import DottedLineComponent from '@components/DottedLine';
+
+import StartCircle from '@assets/images/Match/StartCircle.svg';
+import EndCircle from '@assets/images/Match/EndCircle.svg';
 
 const MatchScreen = () => {
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
@@ -19,17 +27,15 @@ const MatchScreen = () => {
   }, []);
 
   const P0 = { latitude: 37.564362, longitude: 126.977011 };
-  const P1 = { latitude: 37.565051, longitude: 126.978567 };
-  const P2 = { latitude: 37.565383, longitude: 126.976292 };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1 px-4">
-        {/* 헤더 */}
-        <HeaderComponent />
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {/* 헤더 */}
+      <HeaderComponent title={'매칭 페이지'} />
 
+      <ScrollView className="flex-1 px-4 mt-8">
         {/* 카테고리 */}
-        <View className="flex-row mt-8">
+        <View className="flex-row">
           <RoomTagComponent
             label="학생인증"
             textColor="text-main"
@@ -55,18 +61,14 @@ const MatchScreen = () => {
             style={{ width: '100%', height: '100%' }}
             showsMyLocationButton={true}
             center={{ ...P0, zoom: 16 }}
-            onCameraChange={(e) =>
-              console.warn('onCameraChange', JSON.stringify(e))
-            }
-            onMapClick={(e) => console.warn('onMapClick', JSON.stringify(e))}
           />
         </View>
 
-        {/* 날짜, 출발지, 도착지 정보  */}
-        <View className="mt-8 mb-10 mx-2">
+        {/* 날짜, 출발지, 도착지 정보 */}
+        <View className="py-8 px-2">
           <View>
             <Text className="text-lg font-medium text-emphasized">
-              2024. 03. 25 (월)
+              {dayjs().format('YYYY. MM. DD (ddd)')}
             </Text>
           </View>
 
@@ -106,11 +108,11 @@ const MatchScreen = () => {
         </View>
 
         {/* 점선 */}
-        <View className="w-full border-dashed border-[1px] border-gray-200" />
+        <DottedLineComponent />
 
         {/* 방장 */}
-        <View className="mt-8">
-          <Text className="text-[20px] font-semibold">방장</Text>
+        <View className="py-8 px-1">
+          <DescriptionComponent description="방장" />
 
           <ParticipateUserComponent
             nickname={'버스를 놓친 사자'}
@@ -120,8 +122,9 @@ const MatchScreen = () => {
         </View>
 
         {/* 참여 멤버 */}
-        <View className="mt-16">
-          <Text className="text-[20px] font-semibold">참여멤버</Text>
+        <View className="py-8 px-1">
+          <DescriptionComponent description="참여멤버" />
+
           <ParticipateUserComponent
             nickname={'졸다가 늦은 판다'}
             temperature={36.5}
@@ -140,8 +143,8 @@ const MatchScreen = () => {
         </View>
 
         {/* 대기 멤버 */}
-        <View className="mt-16">
-          <Text className="text-[20px] font-semibold">대기멤버</Text>
+        <View className="py-8 px-1">
+          <DescriptionComponent description="대기멤버" />
 
           <WaitUserComponent nickname={'남자'} temperature={36.5} />
 
@@ -149,10 +152,10 @@ const MatchScreen = () => {
         </View>
 
         {/* 점선 */}
-        <View className="mt-8 w-full border-dashed border-[1px] border-gray-200" />
+        <DottedLineComponent />
 
         {/* 금액 */}
-        <View className="mt-8">
+        <View className="py-8">
           <View className="flex-row justify-between">
             <Text className="text-lg text-disabled2 font-medium">총액</Text>
             <Text className="text-lg text-black font-medium">14,450원</Text>
@@ -167,7 +170,7 @@ const MatchScreen = () => {
         </View>
 
         {/* 버튼 */}
-        <View className="mt-[120px] mx-6">
+        <View className="mt-[78px] mx-5">
           <ButtonComponent
             color={'bg-main'}
             text={'매칭 수정하기'}
@@ -177,7 +180,7 @@ const MatchScreen = () => {
           />
         </View>
 
-        <View className="mt-3 mx-6 mb-10">
+        <View className="mt-3 mx-5 mb-10">
           <ButtonComponent
             color={'bg-main'}
             text={'매칭 삭제하기'}

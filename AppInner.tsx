@@ -17,6 +17,7 @@ import { LoginStackParamList, RootStackParamList } from './src/type/ParamLists';
 
 import { useRecoilValue } from 'recoil';
 import { loggedInState } from '@recoil/recoil';
+import CreateMatchScreen from 'src/screens/match/CreateMatch';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
@@ -31,9 +32,13 @@ function AppInner() {
       }}
     >
       <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
-      <LogInStack.Screen name="MatchScreen" component={MatchScreen} />
       <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
       <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
+      <LogInStack.Screen name="MatchScreen" component={MatchScreen} />
+      <LogInStack.Screen
+        name="CreateMatchScreen"
+        component={CreateMatchScreen}
+      />
     </LogInStack.Navigator>
   ) : (
     <RootStack.Navigator

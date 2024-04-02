@@ -17,13 +17,13 @@ const ParticipateUserComponent: React.FC<ParticipateUserComponentProps> = ({
     <View className="flex-row justify-between items-center mt-4">
       <View className="flex-row items-center">
         <UserBasicImage className="mr-1" />
-        <Text className="text-[20px] font-semibold">{nickname}</Text>
+        <Text className="text-lg text-gray800 font-medium">{nickname}</Text>
         {me && (
           <Text className="text-lg text-disabled2 font-medium ml-1">(나)</Text>
         )}
       </View>
 
-      <Text className="text-[20px] text-disabled2 font-normal">
+      <Text className="text-lg text-disabled2 font-normal">
         {temperature}'C
       </Text>
     </View>
