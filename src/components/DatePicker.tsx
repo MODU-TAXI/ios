@@ -1,0 +1,83 @@
+import React, { useState } from 'react';
+import dayjs from 'dayjs';
+import DatePicker from 'react-native-date-picker';
+import { View, Text, Pressable } from 'react-native';
+
+interface DatePickerComponentProps {
+  date: Date;
+  setDate: React.Dispatch<React.SetStateAction<Date>>;
+  datePicked: boolean;
+  setDatePicked: React.Dispatch<React.SetStateAction<boolean>>;
+  datePickerOpen: boolean;
+  setDatePickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  openDatePicker: () => void;
+}
+
+const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
+  date,
+  setDate,
+  datePicked,
+  setDatePicked,
+  datePickerOpen,
+  setDatePickerOpen,
+  openDatePicker,
+}) => {
+  return (
+    <View>
+      {datePicked ? (
+        <Pressable
+          className="flex-row justify-between items-center mt-4 py-3 px-4 border-2 border-main rounded-xl"
+          onPress={openDatePicker}
+        >
+          <View>
+            <Text className="font-medium text-base text-emphasized">
+              {dayjs().format('YYYY년 MM월 DD일')}
+            </Text>
+            <Text className="mt-1 text-lg text-main font-semibold">
+              {dayjs(date)
+                .format('A HH시 mm분')
+                .replace('AM', '오전')
+                .replace('PM', '오후')}
+            </Text>
+          </View>
+
+          <Pressable
+            className="px-4 py-[6px] bg-main rounded-[37px]"
+            onPress={openDatePicker}
+          >
+            <Text className="text-white">수정</Text>
+          </Pressable>
+        </Pressable>
+      ) : (
+        <Pressable
+          className="mt-4 py-3 px-4 border-2 border-disabled rounded-xl"
+          onPress={openDatePicker}
+        >
+          <Text className="font-medium text-base text-emphasized">
+            {dayjs().format('YYYY년 MM월 DD일')}
+          </Text>
+          <Text className="mt-1 text-lg text-gray300">
+            출발시간을 설정해주세요
+          </Text>
+        </Pressable>
+      )}
+
+      <DatePicker
+        modal
+        open={datePickerOpen}
+        date={date}
+        mode="time"
+        onConfirm={(date) => {
+          setDatePickerOpen(false);
+          setDate(date);
+          setDatePicked(true);
+        }}
+        onCancel={() => {
+          setDatePickerOpen(false);
+        }}
+      />
+    </View>
+  );
+};
+
+export default DatePickerComponent;
