@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import SearchBoxComponent from '@components/SearchBox';
 import FilterButtonComponent from '@components/RoomDigest/FilterButton';
 import ChevronDownSvg from '@assets/images/RoomDigest/ChevronDown.svg';
+import LatestSearchComponent from '@components/LatestSearch';
 
 const SearchScreen = () => {
   const value = '';
@@ -23,7 +24,7 @@ const SearchScreen = () => {
           <Text className="text-lg font-medium">즐겨찾기</Text>
         </Pressable>
       </View>
-      <View className="flex flex-row justify-between py-[6.5px]">
+      <View className="flex flex-row justify-between mt-[6.5px] mb-3">
         <View className="flex flex-row">
           <FilterButtonComponent label="서울특별시" />
           <FilterButtonComponent label="강서구" />
@@ -33,6 +34,10 @@ const SearchScreen = () => {
           <Text className="pr-1 text-gray700">최신순</Text>
           <ChevronDownSvg />
         </View>
+      </View>
+      <View className="flex flex-col">
+        <LatestSearchComponent keyword="가양역 1번 출구" distance={500} />
+        <LatestSearchComponent keyword="간재울역 4번 출구" distance={500} />
       </View>
     </SafeAreaView>
   );
