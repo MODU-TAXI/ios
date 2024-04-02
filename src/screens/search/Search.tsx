@@ -1,30 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
 import { useNavigation } from '@react-navigation/native';
+import SearchBoxComponent from '@components/SearchBox';
+import FilterButtonComponent from '@components/RoomDigest/FilterButton';
+import ChevronDownSvg from '@assets/images/RoomDigest/ChevronDown.svg';
 
 const SearchScreen = () => {
-  const navigate = useNavigation();
-  const goBack = () => {
-    navigate.goBack();
-  };
+  const value = '';
   return (
-    <SafeAreaView className="flex-1">
-      <View className="flex-1">
-        <View className="flex flex-row items-center h-fit w-auto m-4">
-          <View className="flex flex-row flex-1 items-center w-auto p-2 bg-gray100 rounded-xl">
-            <View className="px-1">
-              <MagnifyingGlassMainSvg></MagnifyingGlassMainSvg>
-            </View>
-            <TextInput
-              className="text-center"
-              placeholder="도착지를 검색해주세요"
-            ></TextInput>
-          </View>
-          <Pressable onPress={goBack}>
-            <Text className="text-base p-2.5">취소</Text>
-          </Pressable>
+    <SafeAreaView className="flex-1 mx-4">
+      <SearchBoxComponent value={value} />
+      <View className="flex flex-row py-2 px-1">
+        <Pressable>
+          <Text className="text-lg pr-4 font-semibold">최근 검색</Text>
+        </Pressable>
+        <Pressable>
+          <Text className="text-lg pr-4 font-medium">거점 리스트</Text>
+        </Pressable>
+        <Pressable>
+          <Text className="text-lg font-medium">즐겨찾기</Text>
+        </Pressable>
+      </View>
+      <View className="flex flex-row justify-between py-[6.5px]">
+        <View className="flex flex-row">
+          <FilterButtonComponent label="서울특별시" />
+          <FilterButtonComponent label="강서구" />
+          <FilterButtonComponent label="주안역" />
+        </View>
+        <View className="flex flex-row items-center">
+          <Text className="pr-1 text-gray700">최신순</Text>
+          <ChevronDownSvg />
         </View>
       </View>
     </SafeAreaView>
