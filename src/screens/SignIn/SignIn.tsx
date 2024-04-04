@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { login } from '@react-native-seoul/kakao-login';
@@ -10,6 +10,9 @@ import { RootStackParamList } from '@type/ParamLists';
 import { socialLoginApi } from '@api/api';
 import { useRecoilState } from 'recoil';
 import { loggedInState } from '@recoil/recoil';
+
+import KakaoLogo from '@assets/images/SignIn/KakaoLogo.svg';
+import AppleLogo from '@assets/images/SignIn/AppleLogo.svg';
 
 type KakaoLoginResponse = {
   accessToken: string;
@@ -61,24 +64,28 @@ const SignInScreen = () => {
 
         {/* 카카오 로그인 버튼 */}
         <View className="mx-3 mb-4">
-          <ButtonComponent
-            color={'bg-kakaoyellow'}
-            text={'카카오 로그인'}
-            textColor={'black'}
+          <Pressable
+            className="flex-row items-center bg-kakaoyellow px-[96px] py-[14px] rounded-[61px]"
             onPress={kakaoLogin}
-            disabled={false}
-          />
+          >
+            <KakaoLogo className="mr-1" />
+            <Text className="ml-1 font-semibold text-base text-black text-center">
+              카카오 로그인
+            </Text>
+          </Pressable>
         </View>
 
         {/* 애플 로그인 버튼 */}
         <View className="mx-3 mb-11">
-          <ButtonComponent
-            color={'bg-black'}
-            text={'애플 로그인'}
-            textColor={'white'}
+          <Pressable
+            className="flex-row items-center bg-black px-[96px] py-[14px] rounded-[61px]"
             onPress={appleLogin}
-            disabled={false}
-          />
+          >
+            <AppleLogo className="mr-1" />
+            <Text className="ml-1 font-semibold text-base text-white text-center">
+              애플 로그인
+            </Text>
+          </Pressable>
         </View>
       </View>
     </SafeAreaView>

@@ -31,7 +31,7 @@ const SchoolAuthenticationScreen = () => {
   }, [email]);
 
   return (
-    <SafeAreaView className="flex-1" edges={['top', 'left', 'right']}>
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 진행사항 progressBar */}
       <View className="h-1 mt-[11px]">
         <ProgressBarComponent previousDealt={40} dealt={80} />
@@ -69,9 +69,10 @@ const SchoolAuthenticationScreen = () => {
         {/* 다음에 하기 버튼 */}
         <View className="mx-3 mb-3">
           <ButtonComponent
-            color={'bg-disabled'}
+            color={'bg-white'}
+            borderColor={'border-disabled'}
             text={'다음에 할래요'}
-            textColor={'white'}
+            textColor={'disabled'}
             onPress={toEnd}
             disabled={false}
           />
@@ -81,10 +82,11 @@ const SchoolAuthenticationScreen = () => {
         <View className="mx-3 mb-11">
           <ButtonComponent
             color={'bg-black'}
-            text={'확인'}
+            borderColor={'border-black'}
             textColor={'white'}
-            onPress={toNext}
+            text={'확인'}
             disabled={buttonDisabled}
+            onPress={toNext}
           />
         </View>
       </View>

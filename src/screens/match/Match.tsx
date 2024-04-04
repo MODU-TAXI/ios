@@ -172,21 +172,23 @@ const MatchScreen = () => {
         {/* 버튼 */}
         <View className="mt-[78px] mx-5">
           <ButtonComponent
-            color={'bg-main'}
+            color={'bg-white'}
+            borderColor={'border-main'}
+            textColor={'gray500'}
             text={'매칭 수정하기'}
-            textColor={'white'}
-            onPress={toNext}
             disabled={false}
+            onPress={toNext}
           />
         </View>
 
         <View className="mt-3 mx-5 mb-10">
           <ButtonComponent
             color={'bg-main'}
-            text={'매칭 삭제하기'}
+            borderColor={'border-main'}
             textColor={'white'}
-            onPress={toNext}
+            text={'매칭 삭제하기'}
             disabled={false}
+            onPress={toNext}
           />
         </View>
       </ScrollView>
