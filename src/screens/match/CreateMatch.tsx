@@ -19,8 +19,11 @@ import SelectedPerson3 from '@assets/images/Match/SelectedPerson3.svg';
 import CheckBox from '@assets/images/Match/CheckBox.svg';
 import SelectedCheckBox from '@assets/images/Match/SelectedCheckBox.svg';
 import DatePickerComponent from '@components/DatePicker';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { LoginStackParamList } from '@type/ParamLists';
 
 const CreateMatchScreen = () => {
+  const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
 
   const [date, setDate] = useState<Date>(new Date()); // 설정 날짜
@@ -64,6 +67,10 @@ const CreateMatchScreen = () => {
       newState[index] = !newState[index];
       return newState;
     });
+  };
+
+  const handleOpen = () => {
+    navigation.navigate('SearchScreen');
   };
 
   // 인원수 component -> 재사용 안할 것 같아서 그냥 여기 정의
@@ -154,24 +161,26 @@ const CreateMatchScreen = () => {
 
             <View className="flex-row ml-[6px] my-2">
               <View className="w-[1px] h-[46px] bg-gray300" />
-
-              <Text className="ml-6 text-[20px] text-gray300 font-semibold ">
-                출발지를 선택해주세요
-              </Text>
+              <Pressable onPress={handleOpen}>
+                <Text className="ml-6 text-[20px] text-gray300 font-semibold ">
+                  출발지를 선택해주세요
+                </Text>
+              </Pressable>
             </View>
 
             <View>
               <View className="flex-row items-center">
                 <EndGrayCircle />
-
                 <Text className="text-sm text-gray700 font-normal ml-4">
                   도착지
                 </Text>
               </View>
 
-              <Text className="text-[20px] font-semibold text-gray300 ml-8 mt-2">
-                도착지를 선택해주세요
-              </Text>
+              <Pressable onPress={handleOpen}>
+                <Text className="text-[20px] font-semibold text-gray300 ml-8 mt-2">
+                  도착지를 선택해주세요
+                </Text>
+              </Pressable>
             </View>
           </View>
         </View>
