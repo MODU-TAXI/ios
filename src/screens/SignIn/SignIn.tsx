@@ -1,5 +1,6 @@
 import React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { login } from '@react-native-seoul/kakao-login';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -46,7 +47,7 @@ const SignInScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1" edges={['top', 'left', 'right']}>
       <View className="flex-1 mx-6">
         {/* 모두의 택시 로고*/}
         <View className="flex-1 justify-center items-center">

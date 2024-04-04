@@ -66,7 +66,7 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
       ) : (
         <Pressable
           onPress={handleFocus}
-          className="flex-col justify-center px-5 py-4 bg-[#E2E2E2] rounded-xl"
+          className="flex-col justify-center px-5 py-4 bg-[#E2E2E2] rounded-xl border-2 border-[#E2E2E2]"
         >
           <Text className="text-[#626262]">{title}</Text>
           <TextInput

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import ButtonComponent from '@components/Button';
@@ -44,7 +45,7 @@ const AuthenticationScreen = () => {
   }, [name, gender, phoneNumber, setTempUser, navigation]);
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1" edges={['top', 'left', 'right']}>
       {/* 진행사항 progressBar */}
       <View className="h-1 mt-[11px]">
         <ProgressBarComponent previousDealt={0} dealt={20} />

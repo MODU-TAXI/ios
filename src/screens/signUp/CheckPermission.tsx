@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '@components/Button';
 import { RootStackParamList } from '@type/ParamLists';
@@ -50,7 +51,7 @@ const CheckPermissionScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1" edges={['top', 'left', 'right']}>
       <View className="flex-1 mx-6">
         {/* 맨 상단 안내 메세지*/}
         <View className="flex items-center mt-14">

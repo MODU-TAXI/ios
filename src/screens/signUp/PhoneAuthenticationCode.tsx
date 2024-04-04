@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Pressable, SafeAreaView, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
@@ -33,7 +34,7 @@ const PhoneAuthenticationCodeScreen = () => {
   }, [code]);
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1" edges={['top', 'left', 'right']}>
       {/* 진행사항 progressBar */}
       <View className="h-1 mt-[11px]">
         <ProgressBarComponent previousDealt={20} dealt={20} />
