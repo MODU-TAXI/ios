@@ -100,7 +100,7 @@ const MatchScreen = () => {
                 </Text>
               </View>
 
-              <Text className="text-[20px] font-semibold ml-8 mt-2">
+              <Text className="text-[20px] font-semibold ml-[31px] mt-2">
                 주안역
               </Text>
             </View>
