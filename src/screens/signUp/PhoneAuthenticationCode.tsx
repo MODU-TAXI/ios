@@ -5,15 +5,17 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
+
 import { RootStackParamList } from '@type/ParamLists';
 
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
-
 const PhoneAuthenticationCodeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [code, setCode] = useState<string>('');
-  const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
+  const [code, setCode] = useState<string>(''); // 인증코드
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(true); // 버튼활성화
+  const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
+  const [time, setTime] = useState(180); // 타이머 시간
 
   const toNext = async (): Promise<void> => {
     navigation.navigate('SurveyFirstScreen');
@@ -21,17 +23,22 @@ const PhoneAuthenticationCodeScreen = () => {
 
   // 인증번호 재전송
   const resendCode = () => {
-    console.log('send!');
+    setTime(180); // 재전송시 timer 재설정
   };
 
   // 입력 되었을때 버튼 활성화
   useEffect(() => {
-    if (code) {
+    if (code && time !== 0) {
       setButtonDisabled(false);
     } else {
       setButtonDisabled(true);
+
+      // 인증번호 만료시 에러 메세지 생성
+      if (time == 0) {
+        setErrorMessage('인증번호가 만료되었습니다!');
+      }
     }
-  }, [code]);
+  }, [code, time]);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -54,12 +61,15 @@ const PhoneAuthenticationCodeScreen = () => {
             value={code}
             setValue={setCode}
             placeholder="인증번호를 입력해주세요"
+            timer={true}
+            time={time}
+            setTime={setTime}
           />
         </View>
 
         {/* 경고 메세지 및 재전송 버튼 */}
         <View className="flex-row justify-between mt-2 px-2">
-          <Text className="text-error font-medium">인증번호가 틀렸어요!</Text>
+          <Text className="text-error font-medium">{errorMessage}</Text>
 
           <Pressable onPress={resendCode}>
             <ReSendCodeButtonSvg />

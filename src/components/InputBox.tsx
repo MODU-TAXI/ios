@@ -7,12 +7,16 @@ import {
   TextInputChangeEventData,
   Pressable,
 } from 'react-native';
+import TimerComponent from './Timer';
 
 interface InputBoxComponentProps {
   title: string;
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
   placeholder: string;
+  timer?: boolean;
+  time?: number;
+  setTime?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
@@ -20,6 +24,9 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
   value,
   setValue,
   placeholder,
+  timer,
+  time,
+  setTime,
 }) => {
   const [isFocused, setIsFocused] = useState(false); // focusing 여부 판별 변수
 
@@ -46,42 +53,31 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
   };
 
   return (
-    <>
-      {isFocused ? (
-        <Pressable
-          onPress={handleFocus}
-          className="flex-col justify-center px-5 py-4 bg-white rounded-xl border-2"
-        >
-          <Text className="text-[#626262]">{title}</Text>
-          <TextInput
-            ref={inputRef}
-            value={value}
-            onBlur={handleBlur}
-            onChange={valueHandleChange}
-            placeholder={placeholder}
-            placeholderTextColor="#C0C0C0"
-            className="mt-1.5 font-semibold"
-          />
-        </Pressable>
-      ) : (
-        <Pressable
-          onPress={handleFocus}
-          className="flex-col justify-center px-5 py-4 bg-[#E2E2E2] rounded-xl border-2 border-[#E2E2E2]"
-        >
-          <Text className="text-[#626262]">{title}</Text>
-          <TextInput
-            ref={inputRef}
-            value={value}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            onChange={valueHandleChange}
-            placeholder={placeholder}
-            placeholderTextColor="#C0C0C0"
-            className="mt-1.5 font-semibold"
-          />
-        </Pressable>
-      )}
-    </>
+    <Pressable
+      onPress={handleFocus}
+      className={
+        isFocused
+          ? 'flex-col justify-center px-5 py-4 bg-white rounded-xl border-2'
+          : 'flex-col justify-center px-5 py-4 bg-[#E2E2E2] rounded-xl border-2 border-[#E2E2E2]'
+      }
+    >
+      <Text className="text-[#626262]">{title}</Text>
+      <View className="flex-row items-center justify-between mt-1.5">
+        <TextInput
+          ref={inputRef}
+          value={value}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onChange={valueHandleChange}
+          placeholder={placeholder}
+          placeholderTextColor="#C0C0C0"
+          className="font-semibold"
+        />
+
+        {/* timer 있을때만 TimerComponent 적용 */}
+        {timer && <TimerComponent time={time!} setTime={setTime!} />}
+      </View>
+    </Pressable>
   );
 };
 
