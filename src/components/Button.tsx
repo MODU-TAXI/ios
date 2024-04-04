@@ -1,24 +1,27 @@
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text } from 'react-native';
 
 interface ButtonComponentProps {
-  color?: string;
-  text: string;
+  color: string;
+  borderColor: string;
   textColor: string;
-  onPress: () => Promise<void>;
+  text: string;
   disabled: boolean;
+
+  onPress: () => Promise<void>;
 }
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
   color,
-  text,
+  borderColor,
   textColor,
+  text,
   onPress,
   disabled,
 }) => {
   const buttonStyle = disabled
-    ? `bg-disabled px-[96px] py-4 rounded-[61px]`
-    : `${color} px-[96px] py-4 rounded-[61px]`;
+    ? `bg-disabled px-[96px] py-4 border-2 border-disabled rounded-[61px]`
+    : `${color} px-[96px] py-4 border-2 ${borderColor} rounded-[61px]`;
 
   return (
     <Pressable className={buttonStyle} onPress={onPress} disabled={disabled}>

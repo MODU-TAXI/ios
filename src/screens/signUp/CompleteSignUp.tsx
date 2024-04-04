@@ -14,7 +14,7 @@ const CompleteSignUpScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1" edges={['top', 'left', 'right']}>
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 진행사항 progressBar */}
       <View className="h-1 mt-[11px]">
         <ProgressBarComponent previousDealt={60} dealt={100} />
@@ -34,6 +34,7 @@ const CompleteSignUpScreen = () => {
         <View className="mx-3 mb-11">
           <ButtonComponent
             color={'bg-black'}
+            borderColor={'border-black'}
             text={'확인'}
             textColor={'white'}
             onPress={toNext}

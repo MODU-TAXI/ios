@@ -5,10 +5,10 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '@components/Button';
 import { RootStackParamList } from '@type/ParamLists';
 
-import TraySvg from '@assets/images/signIn/SignIn/tray.svg';
-import BellSvg from '@assets/images/signIn/SignIn/bell.svg';
-import CameraSvg from '@assets/images/signIn/SignIn/camera.svg';
-import LocationSvg from '@assets/images/signIn/SignIn/location.svg';
+import TraySvg from '@assets/images/SignUp/tray.svg';
+import BellSvg from '@assets/images/SignUp/bell.svg';
+import CameraSvg from '@assets/images/SignUp/camera.svg';
+import LocationSvg from '@assets/images/SignUp/location.svg';
 import checkPermissions from '@hooks/permission/checkPermissions';
 
 interface PermissionItemProps {
@@ -51,7 +51,7 @@ const CheckPermissionScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1" edges={['top', 'left', 'right']}>
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       <View className="flex-1 mx-6">
         {/* 맨 상단 안내 메세지*/}
         <View className="flex items-center mt-14">
@@ -94,10 +94,11 @@ const CheckPermissionScreen = () => {
         <View className="mx-3 mb-11">
           <ButtonComponent
             color={'bg-black'}
-            text={'확인'}
+            borderColor={'border-black'}
             textColor={'white'}
-            onPress={toNext}
+            text={'확인'}
             disabled={buttonDisabled}
+            onPress={toNext}
           />
         </View>
       </View>

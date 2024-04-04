@@ -133,7 +133,7 @@ const CreateMatchScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1" edges={['top', 'left', 'right']}>
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 헤더 */}
       <HeaderComponent title={'생성 페이지'} />
 
@@ -252,10 +252,11 @@ const CreateMatchScreen = () => {
         <View className="mt-[78px] mx-5 mb-10">
           <ButtonComponent
             color={'bg-main'}
-            text={'매칭팟 만들기'}
+            borderColor={'border-main'}
             textColor={'white'}
-            onPress={toNext}
+            text={'매칭팟 만들기'}
             disabled={buttonDisabled}
+            onPress={toNext}
           />
         </View>
       </ScrollView>

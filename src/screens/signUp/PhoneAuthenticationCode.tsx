@@ -7,7 +7,7 @@ import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import { RootStackParamList } from '@type/ParamLists';
 
-import ReSendCodeButtonSvg from '@assets/images/signUp/PhoneAuthenticationCode/ReSendCodeButton.svg';
+import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 
 const PhoneAuthenticationCodeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -34,7 +34,7 @@ const PhoneAuthenticationCodeScreen = () => {
   }, [code]);
 
   return (
-    <SafeAreaView className="flex-1" edges={['top', 'left', 'right']}>
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 진행사항 progressBar */}
       <View className="h-1 mt-[11px]">
         <ProgressBarComponent previousDealt={20} dealt={20} />
@@ -73,10 +73,11 @@ const PhoneAuthenticationCodeScreen = () => {
         <View className="mx-3 mb-11">
           <ButtonComponent
             color={'bg-black'}
-            text={'확인'}
+            borderColor={'border-black'}
             textColor={'white'}
-            onPress={toNext}
+            text={'확인'}
             disabled={buttonDisabled}
+            onPress={toNext}
           />
         </View>
       </View>

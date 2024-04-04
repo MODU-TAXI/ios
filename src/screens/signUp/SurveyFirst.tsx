@@ -53,7 +53,7 @@ const ServeyFirstScreen = () => {
   }, [surveyLists, tempUser, navigation]);
 
   return (
-    <SafeAreaView className="flex-1" edges={['top', 'left', 'right']}>
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 진행사항 progressBar */}
       <View className="h-1 mt-[11px]">
         <ProgressBarComponent previousDealt={0} dealt={40} />
@@ -75,10 +75,11 @@ const ServeyFirstScreen = () => {
         <View className="mx-3 mb-11">
           <ButtonComponent
             color={'bg-black'}
-            text={'확인'}
+            borderColor={'border-black'}
             textColor={'white'}
-            onPress={toNext}
+            text={'확인'}
             disabled={buttonDisabled}
+            onPress={toNext}
           />
         </View>
       </View>
