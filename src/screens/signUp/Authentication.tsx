@@ -8,13 +8,16 @@ import InputBoxComponent from '@components/InputBox';
 import RadioBoxComponent from '@components/RadioBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import { RootStackParamList } from '@type/ParamLists';
-import { tempUserState } from '@recoil/recoil';
+import { SignUpUser } from '@recoil/type';
+import { signUpUserState } from '@recoil/recoil';
 
 // 이름, 성별, 전화번호 입력 스크린
 const AuthenticationScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [tempUser, setTempUser] = useRecoilState(tempUserState);
+  const [signUpUser, setSignUpUser] =
+    useRecoilState<SignUpUser>(signUpUserState);
+
   const [name, setName] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -34,15 +37,15 @@ const AuthenticationScreen = () => {
   }, [name, gender, phoneNumber]);
 
   // 다음으로
-  const toNext = useCallback(async (): Promise<void> => {
-    setTempUser({
+  const toNext = async (): Promise<void> => {
+    setSignUpUser((prevState: SignUpUser) => ({
+      ...prevState,
       name: name,
       gender: gender === '남자' ? 'MALE' : 'FEMALE',
       phoneNumber: phoneNumber,
-    });
-
+    }));
     navigation.navigate('PhoneAuthenticationCodeScreen');
-  }, [name, gender, phoneNumber, setTempUser, navigation]);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>

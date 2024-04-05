@@ -3,12 +3,10 @@ import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRecoilValue } from 'recoil';
 import ButtonComponent from '@components/Button';
 import SelectBoxComponent from '@components/SelectBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import { RootStackParamList } from '@type/ParamLists';
-import { tempUserState } from '@recoil/recoil';
 
 type SurveyType = {
   index: number;
@@ -19,7 +17,6 @@ type SurveyType = {
 const ServeySecondScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const tempUser = useRecoilValue(tempUserState);
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
   const [surveyLists, setSurvetLists] = useState<SurveyType[]>([
     { index: 1, content: '지각할 것 같을때', select: false },
@@ -42,20 +39,8 @@ const ServeySecondScreen = () => {
     }
   }, [surveyLists, checkSelectedNum]);
 
-  const signUp = useCallback(async (): Promise<void> => {
-    const key = await AsyncStorage.getItem('key');
-
-    const name = tempUser.name;
-    const gender = tempUser.gender;
-    const phoneNumber = tempUser.phoneNumber;
-    // const survey2 = surveyLists
-    //   .filter((surveyList: SurveyType) => surveyList.select)
-    //   .map((surveyList: SurveyType) => surveyList.index);
-  }, [tempUser]);
-
   const toNext = async (): Promise<void> => {
-    await signUp();
-    navigation.navigate('SchoolAuthenticationScreen');
+    navigation.navigate('CompleteSignUpScreen');
   };
 
   return (

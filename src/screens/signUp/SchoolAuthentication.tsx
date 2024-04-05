@@ -14,7 +14,7 @@ const SchoolAuthenticationScreen = () => {
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
 
   const toEnd = async (): Promise<void> => {
-    navigation.navigate('CompleteSignUpScreen');
+    navigation.navigate('SurveyFirstScreen');
   };
 
   const toNext = async (): Promise<void> => {

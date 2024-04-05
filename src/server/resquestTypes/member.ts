@@ -1,5 +1,4 @@
-// api/members/{type}/login
-interface SocialLoginRequest {
+interface CheckMembershipRequest {
   accessToken: string;
 }
 
@@ -11,4 +10,4 @@ interface SignUpRequest {
   phoneNumber: string;
 }
 
-export type { SocialLoginRequest, SignUpRequest };
+export type { CheckMembershipRequest, SignUpRequest };

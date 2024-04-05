@@ -1,15 +1,14 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { useRecoilState } from 'recoil';
 import { login } from '@react-native-seoul/kakao-login';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 
-import ButtonComponent from '@components/Button';
+import { checkMembershipApi } from '@server/api/member';
+import { SignUpUser } from '@recoil/type';
+import { loggedInState, signUpUserState } from '@recoil/recoil';
 import { RootStackParamList } from '@type/ParamLists';
-import { socialLoginApi } from '@api/api';
-import { useRecoilState } from 'recoil';
-import { loggedInState } from '@recoil/recoil';
 
 import KakaoLogo from '@assets/images/SignIn/KakaoLogo.svg';
 import AppleLogo from '@assets/images/SignIn/AppleLogo.svg';
@@ -27,6 +26,8 @@ const SignInScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+  const [signUpUser, setSignUpUser] =
+    useRecoilState<SignUpUser>(signUpUserState);
 
   // kakao sdk에서 kakaoToken을 받아오는 함수
   const kakaoLogin = async (): Promise<void> => {
@@ -35,11 +36,27 @@ const SignInScreen = () => {
 
       const { accessToken } = kakaoLoginResponse;
 
-      // await socialLoginApi('KAKAO', {
-      //   accessToken: accessToken,
-      // });
+      // 가입했던 유저인지 확인
+      const response = await checkMembershipApi('KAKAO', {
+        accessToken: accessToken,
+      });
 
-      setLoggedIn(true);
+      const { existent, key } = response;
+
+      if (existent) {
+        setLoggedIn(true);
+      } else {
+        if (key) {
+          setSignUpUser((prevState: SignUpUser) => ({
+            ...prevState,
+            key: key,
+          }));
+
+          navigation.navigate('CheckPermissionScreen');
+        } else {
+          // key 없을때 에러 핸들러 처리
+        }
+      }
     } catch (error: any) {
       console.error(error);
     }

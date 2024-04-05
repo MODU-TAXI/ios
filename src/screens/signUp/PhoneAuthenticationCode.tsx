@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useRecoilValue } from 'recoil';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 
+import { signUpApi } from '@server/api/member';
+import { signUpUserState } from '@recoil/recoil';
+import { saveAccessToken, saveRefreshToken } from '@utils/token';
 import { RootStackParamList } from '@type/ParamLists';
-
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
+
 const PhoneAuthenticationCodeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -16,9 +20,21 @@ const PhoneAuthenticationCodeScreen = () => {
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true); // 버튼활성화
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [time, setTime] = useState(180); // 타이머 시간
+  const signUpUser = useRecoilValue(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
 
-  const toNext = async (): Promise<void> => {
-    navigation.navigate('SurveyFirstScreen');
+  const signUp = async (): Promise<void> => {
+    try {
+      const response = await signUpApi(signUpUser);
+
+      const { accessToken, refreshToken } = response;
+
+      await saveAccessToken(accessToken);
+      await saveRefreshToken(refreshToken);
+
+      navigation.navigate('SchoolAuthenticationScreen');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // 인증번호 재전송
@@ -87,7 +103,7 @@ const PhoneAuthenticationCodeScreen = () => {
             textColor={'white'}
             text={'확인'}
             disabled={buttonDisabled}
-            onPress={toNext}
+            onPress={signUp}
           />
         </View>
       </View>

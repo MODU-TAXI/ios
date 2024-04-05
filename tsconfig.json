@@ -23,8 +23,9 @@
       "@type/*": ["src/type/*"],
       "@utils/*": ["src/utils/*"],
       "@assets/*": ["src/assets/*"],
-      "@api/*": ["src/api/*"],
-      "@recoil/*": ["src/recoil/*"]
+      "@server/*": ["src/server/*"],
+      "@recoil/*": ["src/recoil/*"],
+      "@axios/*": ["src/axios/*"]
     }
   },
   "exclude": [
