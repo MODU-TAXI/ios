@@ -5,13 +5,14 @@ import { useRecoilState } from 'recoil';
 import { login } from '@react-native-seoul/kakao-login';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 
-import { checkMembershipApi } from '@server/api/member';
+import { checkMembershipApi, socialLogin } from '@server/api/member';
 import { SignUpUser } from '@recoil/type';
 import { loggedInState, signUpUserState } from '@recoil/recoil';
 import { RootStackParamList } from '@type/ParamLists';
 
 import KakaoLogo from '@assets/images/SignIn/KakaoLogo.svg';
 import AppleLogo from '@assets/images/SignIn/AppleLogo.svg';
+import { setAccessToken, setRefreshToken } from '@utils/token';
 
 type KakaoLoginResponse = {
   accessToken: string;
@@ -44,6 +45,13 @@ const SignInScreen = () => {
       const { existent, key } = response;
 
       if (existent) {
+        const response = await socialLogin('KAKAO', {
+          accessToken: accessToken,
+        });
+
+        await setAccessToken(response.accessToken);
+        await setRefreshToken(response.refreshToken);
+
         setLoggedIn(true);
       } else {
         if (key) {
