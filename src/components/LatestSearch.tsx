@@ -8,7 +8,10 @@ interface LatestSearchProps {
 }
 
 /** 최근 검색어 컴포넌트 */
-const LatestSearchComponent = ({ keyword, distance }: LatestSearchProps) => {
+const LatestSearchComponent: React.FC<LatestSearchProps> = ({
+  keyword,
+  distance,
+}) => {
   const handleDelete = () => {
     // TODO: 삭제 함수 작성
     console.log('삭제');

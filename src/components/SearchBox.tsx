@@ -30,13 +30,13 @@ const SearchBoxComponent: React.FC<SearchBoxProps> = ({ value, setValue }) => {
   };
 
   // 검색창 클릭 시에도 focusing
-  const handleFocus = () => {
+  const handleFocus = (): void => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
   };
 
-  const goBack = () => {
+  const goBack = (): void => {
     navigate.goBack();
   };
 
