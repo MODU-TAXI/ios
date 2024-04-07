@@ -84,10 +84,10 @@ const CreateMatchScreen = () => {
           <Pressable
             key={index}
             onPress={() => handlePress(index)}
-            className={`flex-col items-center border-[1px] border-main ${px} py-3 rounded-full`}
+            className={`flex-col items-center border-2 border-main ${px} py-3 rounded-full`}
           >
             {selectedIcon}
-            <Text className="mt-1 text-main">{index}명</Text>
+            <Text className="mt-1 font-semibold text-main">{index}명</Text>
           </Pressable>
         ) : (
           <Pressable
@@ -117,7 +117,7 @@ const CreateMatchScreen = () => {
             className="flex-row items-center justify-center border-[1px] border-main px-3 py-2 rounded-xl"
           >
             <SelectedCheckBox className="mr-2" />
-            <Text className="text-sm font-medium text-main">{category}</Text>
+            <Text className="text-sm font-semibold text-main">{category}</Text>
           </Pressable>
         ) : (
           <Pressable

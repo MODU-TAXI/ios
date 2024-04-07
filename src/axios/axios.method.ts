@@ -1,5 +1,5 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import axiosInstance from '@api/axios.Instance';
+import axiosInstance from '@axios/axios.Instance';
 
 export const PostAxiosInstance = async <T>(
   url: string,

@@ -7,7 +7,6 @@ interface ButtonComponentProps {
   textColor: string;
   text: string;
   disabled: boolean;
-
   onPress: () => Promise<void>;
 }
 

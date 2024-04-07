@@ -1,12 +1,10 @@
 import { atom } from 'recoil';
+import { SignUpUser } from '@recoil/type';
 
-export const tempUserState = atom<{
-  name: string;
-  gender: string;
-  phoneNumber: string;
-}>({
+export const signUpUserState = atom<SignUpUser>({
   key: 'tempUser',
   default: {
+    key: '',
     name: '',
     gender: '',
     phoneNumber: '',
