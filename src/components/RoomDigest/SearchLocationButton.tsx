@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+
 import MagnifyingGlassSvg from '@assets/images/RoomDigest/MagnifyingGlass.svg';
 import XmarkSvg from '@assets/images/RoomDigest/XmarkCircleFill.svg';
 

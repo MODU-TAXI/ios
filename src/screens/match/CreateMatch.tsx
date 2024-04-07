@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import DatePickerComponent from '@components/DatePicker';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 import HeaderComponent from '@components/Header';
 import DescriptionComponent from '@components/Description';
@@ -20,8 +22,7 @@ import SelectedPerson2 from '@assets/images/Match/SelectedPerson2.svg';
 import SelectedPerson3 from '@assets/images/Match/SelectedPerson3.svg';
 import CheckBox from '@assets/images/Match/CheckBox.svg';
 import SelectedCheckBox from '@assets/images/Match/SelectedCheckBox.svg';
-import DatePickerComponent from '@components/DatePicker';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+
 import { LoginStackParamList } from '@type/ParamLists';
 
 const CreateMatchScreen = () => {

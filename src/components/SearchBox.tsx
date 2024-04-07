@@ -7,8 +7,9 @@ import {
   TextInputChangeEventData,
   View,
 } from 'react-native';
-import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
 import { useNavigation } from '@react-navigation/native';
+
+import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
 
 interface SearchBoxProps {
   value: string;
