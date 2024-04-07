@@ -15,10 +15,8 @@ const WaitUserComponent: React.FC<WaitUserComponentProps> = ({
     <View className="flex-row justify-between items-center mt-4">
       <View className="flex-row items-center">
         <UserBasicImage className="mr-1" />
-        <Text className="text-lg text-gray800 font-medium mr-1">
-          {nickname}
-        </Text>
-        <Text className="text-lg text-disabled2 font-normal">
+        <Text className="text-lg font-semibold mr-1">{nickname}</Text>
+        <Text className="text-[20px] text-disabled2 font-normal">
           ({temperature}'C)
         </Text>
       </View>

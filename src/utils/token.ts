@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // accessToken 저장
-export const saveAccessToken = async (accessToken: string): Promise<void> => {
+export const setAccessToken = async (accessToken: string): Promise<void> => {
   AsyncStorage.setItem('accessToken', accessToken);
 };
 
@@ -11,7 +11,7 @@ export const getAccessToken = async (): Promise<string | null> => {
 };
 
 // refreshToken 저장
-export const saveRefreshToken = async (refreshToken: string): Promise<void> => {
+export const setRefreshToken = async (refreshToken: string): Promise<void> => {
   AsyncStorage.setItem('refreshToken', refreshToken);
 };
 

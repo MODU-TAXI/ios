@@ -9,7 +9,7 @@ import ProgressBarComponent from '@components/ProgressBar';
 
 import { signUpApi } from '@server/api/member';
 import { signUpUserState } from '@recoil/recoil';
-import { saveAccessToken, saveRefreshToken } from '@utils/token';
+import { setAccessToken, setRefreshToken } from '@utils/token';
 import { RootStackParamList } from '@type/ParamLists';
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 
@@ -22,14 +22,15 @@ const PhoneAuthenticationCodeScreen = () => {
   const [time, setTime] = useState(180); // 타이머 시간
   const signUpUser = useRecoilValue(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
 
+  // 회원가입
   const signUp = async (): Promise<void> => {
     try {
       const response = await signUpApi(signUpUser);
 
       const { accessToken, refreshToken } = response;
 
-      await saveAccessToken(accessToken);
-      await saveRefreshToken(refreshToken);
+      await setAccessToken(accessToken);
+      await setRefreshToken(refreshToken);
 
       navigation.navigate('SchoolAuthenticationScreen');
     } catch (error) {
