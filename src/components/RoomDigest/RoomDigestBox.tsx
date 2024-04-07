@@ -2,11 +2,12 @@ import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 import { styled } from 'nativewind';
 
+import RoomTagComponent from './RoomTag';
+
 import ClockFillSvg from '@assets/images/RoomDigest/ClockFill.svg';
 import LocationFillSvg from '@assets/images/RoomDigest/LocationFill.svg';
 import Person2FillSvg from '@assets/images/RoomDigest/Person2Fill.svg';
 import ArrowRightSvg from '@assets/images/RoomDigest/ArrowRight.svg';
-import RoomTagComponent from './RoomTag';
 
 const StyledView = styled(View);
 

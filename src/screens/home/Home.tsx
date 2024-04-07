@@ -19,6 +19,10 @@ const HomeScreen = () => {
     navigation.navigate('MainMapScreen');
   };
 
+  const toSearchScreen = () => {
+    navigation.navigate('SearchScreen');
+  };
+
   return (
     <SafeAreaView className="flex-1">
       <View className="flex-col">
@@ -41,6 +45,13 @@ const HomeScreen = () => {
           className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
         >
           <Text>맵 스크린</Text>
+        </Pressable>
+
+        <Pressable
+          onPress={toSearchScreen}
+          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+        >
+          <Text>검색 스크린</Text>
         </Pressable>
       </View>
     </SafeAreaView>

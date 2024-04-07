@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import DatePickerComponent from '@components/DatePicker';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 import HeaderComponent from '@components/Header';
 import DescriptionComponent from '@components/Description';
@@ -9,7 +11,9 @@ import ButtonComponent from '@components/Button';
 import DottedLineComponent from '@components/DottedLine';
 
 import StartGrayCircle from '@assets/images/Match/StartGrayCircle.svg';
+import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndGrayCircle from '@assets/images/Match/EndGrayCircle.svg';
+import EndCircle from '@assets/images/Match/EndCircle.svg';
 import Person1 from '@assets/images/Match/Person1.svg';
 import Person2 from '@assets/images/Match/Person2.svg';
 import Person3 from '@assets/images/Match/Person3.svg';
@@ -18,9 +22,11 @@ import SelectedPerson2 from '@assets/images/Match/SelectedPerson2.svg';
 import SelectedPerson3 from '@assets/images/Match/SelectedPerson3.svg';
 import CheckBox from '@assets/images/Match/CheckBox.svg';
 import SelectedCheckBox from '@assets/images/Match/SelectedCheckBox.svg';
-import DatePickerComponent from '@components/DatePicker';
+
+import { LoginStackParamList } from '@type/ParamLists';
 
 const CreateMatchScreen = () => {
+  const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
 
   const [date, setDate] = useState<Date>(new Date()); // 설정 날짜
@@ -32,6 +38,8 @@ const CreateMatchScreen = () => {
     false,
     false,
   ]); // 카테고리
+  const [start, setStart] = useState<string>(''); // 출발지
+  const [end, setEnd] = useState<string>(''); // 도착지
 
   // 모두 선택했을때 버튼 활성화
   useEffect(() => {
@@ -64,6 +72,19 @@ const CreateMatchScreen = () => {
       newState[index] = !newState[index];
       return newState;
     });
+  };
+
+  // TODO : 서버 연동 시 검색한 거점명 받아서 start, destination 저장 비동기 처리
+  /** 출발지 선택시 검색창 오픈 */
+  const handleStart = () => {
+    navigation.navigate('SearchScreen');
+    setStart('인하대학교 후문');
+  };
+
+  /** 도착지 선택시 검색창 오픈 */
+  const handleEnd = () => {
+    navigation.navigate('SearchScreen');
+    setEnd('주안역');
   };
 
   // 인원수 component -> 재사용 안할 것 같아서 그냥 여기 정의
@@ -145,7 +166,8 @@ const CreateMatchScreen = () => {
           <View className="mt-6">
             <View>
               <View className="flex-row items-center">
-                <StartGrayCircle />
+                {start ? <StartCircle /> : <StartGrayCircle />}
+
                 <Text className="text-sm text-gray700 font-normal ml-4">
                   출발지
                 </Text>
@@ -153,25 +175,43 @@ const CreateMatchScreen = () => {
             </View>
 
             <View className="flex-row ml-[6px] my-2">
-              <View className="w-[1px] h-[46px] bg-gray300" />
-
-              <Text className="ml-6 text-[20px] text-gray300 font-semibold ">
-                출발지를 선택해주세요
-              </Text>
+              {start && end ? (
+                <View className="w-[1px] h-[46px] bg-main" />
+              ) : (
+                <View className="w-[1px] h-[46px] bg-gray300" />
+              )}
+              <Pressable onPress={handleStart}>
+                {start ? (
+                  <Text className="ml-6 text-[20px] text-gray900 font-semibold ">
+                    {start}
+                  </Text>
+                ) : (
+                  <Text className="ml-6 text-[20px] text-gray300 font-semibold ">
+                    출발지를 선택해주세요
+                  </Text>
+                )}
+              </Pressable>
             </View>
 
             <View>
               <View className="flex-row items-center">
-                <EndGrayCircle />
-
+                {end ? <EndCircle /> : <EndGrayCircle />}
                 <Text className="text-sm text-gray700 font-normal ml-4">
                   도착지
                 </Text>
               </View>
 
-              <Text className="text-[20px] font-semibold text-gray300 ml-8 mt-2">
-                도착지를 선택해주세요
-              </Text>
+              <Pressable onPress={handleEnd}>
+                {end ? (
+                  <Text className="ml-[31px] mt-2 text-[20px] text-gray900 font-semibold ">
+                    {end}
+                  </Text>
+                ) : (
+                  <Text className="ml-[31px] mt-2 text-[20px] text-gray300 font-semibold ">
+                    도착지를 선택해주세요
+                  </Text>
+                )}
+              </Pressable>
             </View>
           </View>
         </View>

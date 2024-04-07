@@ -11,7 +11,7 @@ import ChevronDownSvg from '@assets/images/RoomDigest/ChevronDown.svg';
 
 const MapBottomSheetScreen = () => {
   return (
-    <View className="flex-1 p-4 w-full">
+    <View className="flex-1 p-4 w-full bg-white">
       {/** 필터링 태그 선택 (가로 스크롤 적용) */}
       <View className="h-fit">
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
