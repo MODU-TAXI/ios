@@ -19,3 +19,8 @@ export const setRefreshToken = async (refreshToken: string): Promise<void> => {
 export const getRefreshToken = async (): Promise<string | null> => {
   return AsyncStorage.getItem('refreshToken');
 };
+
+// 토큰들 모두 삭제 (로그아웃)
+export const deleteToken = async (): Promise<void> => {
+  AsyncStorage.clear();
+};

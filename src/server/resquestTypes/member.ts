@@ -18,5 +18,5 @@ export interface SignUpRequest {
 
 // [이메일 인증] /api/members/mail/certificate
 export interface EmailAuthenticationRequest {
-  receiver: string;
+  mailAddress: string;
 }
