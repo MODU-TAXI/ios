@@ -6,6 +6,7 @@ import {
 } from '@axios/guest.axios.method';
 import {
   CheckMembershipRequest,
+  EmailAuthenticationRequest,
   SignUpRequest,
   SocialLoginRequest,
 } from '@server/resquestTypes/member';
@@ -15,7 +16,8 @@ import {
   SignUpResponse,
   SocialLoginResponse,
 } from '@server/responseTypes/member';
-import { PostAxiosInstance } from '@axios/axios.method';
+import { PatchAxiosInstance, PostAxiosInstance } from '@axios/axios.method';
+import { getRefreshToken } from '@utils/token';
 
 // [가입 여부 확인] /api/members/{type}/membership
 export const checkMembershipApi = async (
@@ -55,10 +57,16 @@ export const signUpApi = async (
   return response.data;
 };
 
+// [로그인 토큰 갱신] /api/memebers/refresh
+export const refreshToken = async () => {
+  const refreshToken = await getRefreshToken();
+  const response = await PatchAxiosInstance('/api/members/refresh');
+};
+
 // [이메일 인증 메일 발송] /api/members/mail/certificate
-// export const emailAuthentication = async (data) => {
-//   const response = await PostAxiosInstance<EmailAuthenticationResponse>(
-//     '/api/members/mail/certificate',
-//     data,
-//   );
-// };
+export const emailAuthentication = async (data: EmailAuthenticationRequest) => {
+  const response = await PostAxiosInstance<EmailAuthenticationResponse>(
+    '/api/members/mail/certificate',
+    data,
+  );
+};

@@ -6,6 +6,7 @@ import { RootStackParamList } from '../../type/ParamLists';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
+import { emailAuthentication } from '@server/api/member';
 
 const SchoolAuthenticationScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -19,6 +20,10 @@ const SchoolAuthenticationScreen = () => {
 
   const toNext = async (): Promise<void> => {
     navigation.navigate('EmailAuthenticationCodeScreen');
+  };
+
+  const sendMail = async (): Promise<void> => {
+    await emailAuthentication({ mailAddress: 'gkqkehs0321@gmail.com' });
   };
 
   // 입력 되었을때 버튼 활성화
@@ -86,7 +91,7 @@ const SchoolAuthenticationScreen = () => {
             textColor={'white'}
             text={'확인'}
             disabled={buttonDisabled}
-            onPress={toNext}
+            onPress={sendMail}
           />
         </View>
       </View>
