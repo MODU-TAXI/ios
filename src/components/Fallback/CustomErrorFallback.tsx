@@ -3,10 +3,10 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { View, StyleSheet, Button, Text } from 'react-native';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
+import * as Sentry from '@sentry/react-native'; // 줄여쓰면 에러발생 줄이지 말것
 
 const myErrorHandler = (error: any) => {
-  console.log('error comes to error handler');
-  // Do something with the error
+  Sentry.captureMessage(error);
 };
 
 function ErrorFallback({
