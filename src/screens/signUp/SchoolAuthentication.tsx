@@ -7,33 +7,33 @@ import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import { emailAuthentication } from '@server/api/member';
+import { useErrorBoundary } from 'react-error-boundary';
 
 const SchoolAuthenticationScreen = () => {
+  const { showBoundary } = useErrorBoundary(); // 400에러가 아닐시에 error-boundary로 error 보내기용
+
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [email, setEmail] = useState<string>('');
-  const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
+  const [email, setEmail] = useState<string>(''); // 이메일 입력
+  const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
 
+  // 인증 메일 보내기
+  const sendMail = async () => {
+    try {
+      await emailAuthentication({ mailAddress: email });
+      navigation.navigate('EmailAuthenticationCodeScreen');
+    } catch (error: any) {
+      if (error.response.status == 400 && error?.response?.data?.message) {
+        return setErrorMessage(error.response.data.message);
+      }
+      showBoundary(error);
+    }
+  };
+
+  // 다음에 하기
   const toEnd = async (): Promise<void> => {
     navigation.navigate('SurveyFirstScreen');
   };
-
-  const toNext = async (): Promise<void> => {
-    navigation.navigate('EmailAuthenticationCodeScreen');
-  };
-
-  const sendMail = async (): Promise<void> => {
-    await emailAuthentication({ mailAddress: 'gkqkehs0321@gmail.com' });
-  };
-
-  // 입력 되었을때 버튼 활성화
-  useEffect(() => {
-    if (!email) {
-      setButtonDisabled(true);
-    } else {
-      setButtonDisabled(false);
-    }
-  }, [email]);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -62,11 +62,11 @@ const SchoolAuthenticationScreen = () => {
         </View>
 
         {/* 경고 메세지 */}
-        <View className="mt-2 px-2">
-          <Text className="text-error font-medium">
-            올바르지 않은 이메일이에요!
-          </Text>
-        </View>
+        {errorMessage && (
+          <View className="mt-2 px-2">
+            <Text className="text-error font-medium">{errorMessage}</Text>
+          </View>
+        )}
 
         {/* 버튼을 아래로 내리기 위한 View */}
         <View className="flex-1"></View>
@@ -90,7 +90,7 @@ const SchoolAuthenticationScreen = () => {
             borderColor={'border-black'}
             textColor={'white'}
             text={'확인'}
-            disabled={buttonDisabled}
+            disabled={!email}
             onPress={sendMail}
           />
         </View>

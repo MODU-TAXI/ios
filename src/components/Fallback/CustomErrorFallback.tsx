@@ -1,21 +1,44 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { View, StyleSheet, Button, Text } from 'react-native';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query'; // react-query v5 라이브러리
+const myErrorHandler = (error: Error) => {
+  console.log('error comes to error handler');
+  // Do something with the error
+};
 
-export type Props = { error: Error; resetError: () => void };
-
-// 에러시 보여주는 화면
-const CustomErrorFallback = ({ error, resetError }: Props) => {
+function ErrorFallback({ error, resetErrorBoundary }) {
   return (
-    <SafeAreaView className="flex-1">
-      <View className="flex-1 justify-center items-center">
-        <Text>Something happened!</Text>
-        <Text>{error.message}</Text>
-        <Text>Please try again.</Text>
-        <Button title="Refresh" onPress={resetError} />
+    <View style={[styles.container]}>
+      <View>
+        <Text> Something went wrong: </Text>
+        <Button title="try Again" onPress={resetErrorBoundary} />
       </View>
-    </SafeAreaView>
+    </View>
+  );
+}
+
+export const ErrorHandler = ({ children }: { children: React.ReactNode }) => {
+  const { reset } = useQueryErrorResetBoundary();
+
+  return (
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onError={myErrorHandler}
+      onReset={reset}
+    >
+      {children}
+    </ErrorBoundary>
   );
 };
 
-export default CustomErrorFallback;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    justifyContent: 'center',
+    alignContent: 'center',
+    paddingHorizontal: 12,
+  },
+});

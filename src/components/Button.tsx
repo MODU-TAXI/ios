@@ -6,7 +6,7 @@ interface ButtonComponentProps {
   borderColor: string;
   textColor: string;
   text: string;
-  disabled: boolean;
+  disabled: any;
   onPress: () => Promise<void>;
 }
 

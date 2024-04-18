@@ -7,7 +7,6 @@ import {
   setAccessToken,
   setRefreshToken,
 } from '@utils/token';
-import { Alert } from 'react-native';
 
 // 로그인 한 유저가 사용하는 axiosInstance
 const axiosInstance: AxiosInstance = axios.create({
@@ -68,9 +67,9 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(error.config);
       } catch (refreshTokenError) {
         // 여기선 무슨 에러가 발생하더라도 로그아웃 처리
-        console.log(refreshTokenError);
+        console.log('로그아웃 처리하세요');
         await deleteToken();
-        return Promise.reject(error.response.data);
+        // return Promise.reject(error.response.data);
       }
     }
 
@@ -85,14 +84,7 @@ axiosInstance.interceptors.response.use(
       await deleteToken();
     }
 
-    // 서버에서 보낸 메세지가 있다면 alert
-    if (error?.response?.data?.message) {
-      Alert.alert(error.response.data.message);
-    }
-
-    // 여기선 잡을 수 없는 서버에러이므로 sentry에 에러 로깅
-    console.log(error.response.data);
-    return Promise.reject(error.response.data);
+    return Promise.reject(error);
   },
 );
 

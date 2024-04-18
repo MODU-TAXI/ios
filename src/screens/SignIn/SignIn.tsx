@@ -1,74 +1,17 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRecoilState } from 'recoil';
-import { login } from '@react-native-seoul/kakao-login';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-
-import { checkMembershipApi, socialLogin } from '@server/api/member';
-import { SignUpUser } from '@recoil/type';
-import { loggedInState, signUpUserState } from '@recoil/recoil';
+import { useKakaoLogin } from '@hooks/api/member';
 import { RootStackParamList } from '@type/ParamLists';
 
 import KakaoLogo from '@assets/images/SignIn/KakaoLogo.svg';
 import AppleLogo from '@assets/images/SignIn/AppleLogo.svg';
-import { setAccessToken, setRefreshToken } from '@utils/token';
-
-type KakaoLoginResponse = {
-  accessToken: string;
-  refreshToken: string;
-  idToken: string;
-  accessTokenExpiresAt: Date;
-  refreshTokenExpiresAt: Date;
-  scopes: string[];
-};
 
 const SignInScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
-  const [signUpUser, setSignUpUser] =
-    useRecoilState<SignUpUser>(signUpUserState);
-
-  // kakao sdk에서 kakaoToken을 받아오는 함수
-  const kakaoLogin = async (): Promise<void> => {
-    try {
-      const kakaoLoginResponse: KakaoLoginResponse = await login();
-
-      const { accessToken } = kakaoLoginResponse;
-
-      // 가입했던 유저인지 확인
-      const response = await checkMembershipApi('KAKAO', {
-        accessToken: accessToken,
-      });
-
-      const { existent, key } = response;
-
-      if (existent) {
-        const response = await socialLogin('KAKAO', {
-          accessToken: accessToken,
-        });
-
-        await setAccessToken(response.accessToken);
-        await setRefreshToken(response.refreshToken);
-
-        setLoggedIn(true);
-      } else {
-        if (key) {
-          setSignUpUser((prevState: SignUpUser) => ({
-            ...prevState,
-            key: key,
-          }));
-
-          navigation.navigate('CheckPermissionScreen');
-        } else {
-          // key 없을때 에러 핸들러 처리
-        }
-      }
-    } catch (error: any) {
-      console.error(error);
-    }
-  };
+  const { mutateAsync: kakaoLogin } = useKakaoLogin();
 
   const appleLogin = async (): Promise<void> => {
     navigation.navigate('CheckPermissionScreen');
@@ -91,7 +34,7 @@ const SignInScreen = () => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row items-center bg-kakaoyellow px-[96px] py-[14px] rounded-[61px]"
-            onPress={kakaoLogin}
+            onPress={() => kakaoLogin()}
           >
             <KakaoLogo className="mr-1" />
             <Text className="ml-1 font-semibold text-base text-black text-center">
