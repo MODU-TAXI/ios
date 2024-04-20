@@ -1,3 +1,13 @@
+// [카카오 sdk 로그인]
+export interface KakaoLoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  idToken: string;
+  accessTokenExpiresAt: Date;
+  refreshTokenExpiresAt: Date;
+  scopes: string[];
+}
+
 // [가입 여부 확인] /api/members/{type}/membership
 export interface CheckMembershipResponse {
   existent: boolean;

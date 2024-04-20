@@ -17,7 +17,6 @@ const PhoneAuthenticationCodeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [code, setCode] = useState<string>(''); // 인증코드
-  const [buttonDisabled, setButtonDisabled] = useState<boolean>(true); // 버튼활성화
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [time, setTime] = useState(180); // 타이머 시간
   const signUpUser = useRecoilValue(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
@@ -42,20 +41,6 @@ const PhoneAuthenticationCodeScreen = () => {
   const resendCode = () => {
     setTime(180); // 재전송시 timer 재설정
   };
-
-  // 입력 되었을때 버튼 활성화
-  useEffect(() => {
-    if (code && time !== 0) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
-
-      // 인증번호 만료시 에러 메세지 생성
-      if (time == 0) {
-        setErrorMessage('인증번호가 만료되었습니다!');
-      }
-    }
-  }, [code, time]);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -103,7 +88,7 @@ const PhoneAuthenticationCodeScreen = () => {
             borderColor={'border-black'}
             textColor={'white'}
             text={'확인'}
-            disabled={buttonDisabled}
+            disabled={!code || !time}
             onPress={signUp}
           />
         </View>
