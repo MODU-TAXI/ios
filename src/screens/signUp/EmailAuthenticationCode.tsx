@@ -44,7 +44,7 @@ const EmailAuthenticationCodeScreen = () => {
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 진행사항 progressBar */}
       <View className="h-1 mt-[11px]">
-        <ProgressBarComponent previousDealt={80} dealt={80} />
+        <ProgressBarComponent previousDealt={0} dealt={60} />
       </View>
 
       <View className="flex-1 mx-6">

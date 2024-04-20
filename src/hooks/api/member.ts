@@ -1,29 +1,23 @@
 import { useRecoilState } from 'recoil';
-import { login } from '@react-native-seoul/kakao-login';
+import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import Toast from 'react-native-toast-message';
 
-import {
-  checkMembershipApi,
-  emailAuthentication,
-  socialLogin,
-} from '@server/api/member';
+import { checkMembershipApi, socialLogin } from '@server/api/member';
+import { KakaoLoginResponse } from '@server/responseTypes/member';
 import { SignUpUser } from '@recoil/type';
 import { loggedInState, signUpUserState } from '@recoil/recoil';
 import { RootStackParamList } from '@type/ParamLists';
 import { setAccessToken, setRefreshToken } from '@utils/token';
 
-type KakaoLoginResponse = {
-  accessToken: string;
-  refreshToken: string;
-  idToken: string;
-  accessTokenExpiresAt: Date;
-  refreshTokenExpiresAt: Date;
-  scopes: string[];
-};
-
 // 카카오 로그인
-export const useKakaoLogin = () => {
+export const useKakaoLogin = (): UseMutationResult<
+  KakaoOAuthToken,
+  Error,
+  void,
+  unknown
+> => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
@@ -32,7 +26,6 @@ export const useKakaoLogin = () => {
 
   return useMutation({
     mutationFn: () => login(),
-    throwOnError: true,
     onSuccess: async (response: KakaoLoginResponse) => {
       const { accessToken } = response;
 
@@ -62,6 +55,14 @@ export const useKakaoLogin = () => {
           throw new Error('카카오 로그인에 실패하였습니다');
         }
       }
+    },
+    onError: () => {
+      Toast.show({
+        type: 'error',
+        text1: '로그인 실패',
+        text2: '로그인 재시도 하세요',
+        position: 'bottom',
+      });
     },
   });
 };

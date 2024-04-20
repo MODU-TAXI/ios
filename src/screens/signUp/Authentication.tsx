@@ -27,15 +27,6 @@ const AuthenticationScreen = () => {
     { index: 2, item: '여자', select: false },
   ]);
 
-  // 모두 입력되었을때 버튼 활성화
-  useEffect(() => {
-    if (name && gender && phoneNumber) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
-    }
-  }, [name, gender, phoneNumber]);
-
   // 다음으로
   const toNext = async (): Promise<void> => {
     setSignUpUser((prevState: SignUpUser) => ({
@@ -103,7 +94,7 @@ const AuthenticationScreen = () => {
             borderColor={'border-black'}
             textColor={'white'}
             text={'확인'}
-            disabled={buttonDisabled}
+            disabled={!name || !gender || !phoneNumber}
             onPress={toNext}
           />
         </View>

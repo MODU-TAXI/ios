@@ -57,16 +57,12 @@ export const signUpApi = async (
   return response.data;
 };
 
-// [로그인 토큰 갱신] /api/memebers/refresh
-export const refreshToken = async () => {
-  const refreshToken = await getRefreshToken();
-  const response = await PatchAxiosInstance('/api/members/refresh');
-};
-
 // [이메일 인증 메일 발송] /api/members/mail/certificate
 export const emailAuthentication = async (data: EmailAuthenticationRequest) => {
   const response = await PostAxiosInstance<EmailAuthenticationResponse>(
     '/api/members/mail/certificate',
     data,
   );
+
+  return response.data;
 };
