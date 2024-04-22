@@ -9,6 +9,7 @@ import BottomSheet, {
 import NaverMapView, { Marker } from 'react-native-nmap';
 
 import MapBottomSheetScreen from './MapBottomSheet';
+import pinMarker from '@hooks/map/pinMarker';
 
 const MainMapScreen = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -33,7 +34,25 @@ const MainMapScreen = () => {
     [],
   );
 
-  const P0 = { latitude: 37.564362, longitude: 126.977011 };
+  const P0 = { longitude: 126.68045, latitude: 37.46504 };
+  // 더미데이터
+  const data = {
+    rooms: [
+      {
+        id: 2,
+        longitude: 126.68045,
+        latitude: 37.46504,
+        spotName: '주안역',
+      },
+      {
+        id: 3,
+        longitude: 126.656563,
+        latitude: 37.451062,
+        spotName: '인하대학교 후문',
+      },
+    ],
+  };
+  const fetchedRooms = pinMarker(data.rooms);
 
   // renders
   return (
@@ -44,7 +63,9 @@ const MainMapScreen = () => {
           showsMyLocationButton={true}
           center={{ ...P0, zoom: 16 }}
         >
-          <Marker coordinate={P0}></Marker>
+          {fetchedRooms.map((room) => (
+            <Marker key={room.id} coordinate={room.coord} />
+          ))}
         </NaverMapView>
       </View>
       <BottomSheet
@@ -61,17 +82,5 @@ const MainMapScreen = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-    justifyContent: 'center',
-  },
-  contentContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-});
 
 export default MainMapScreen;
