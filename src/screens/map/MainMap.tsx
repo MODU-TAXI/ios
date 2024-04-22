@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { View, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet, Button, Text, Pressable } from 'react-native';
 import BottomSheet, {
   BottomSheetModal,
   BottomSheetView,
   BottomSheetModalProvider,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
+import NaverMapView, { Marker } from 'react-native-nmap';
 
 import MapBottomSheetScreen from './MapBottomSheet';
 
@@ -26,14 +27,26 @@ const MainMapScreen = () => {
         {...props}
         appearsOnIndex={-1}
         disappearsOnIndex={1}
+        opacity={0}
       />
     ),
     [],
   );
 
+  const P0 = { latitude: 37.564362, longitude: 126.977011 };
+
   // renders
   return (
-    <View style={styles.container}>
+    <View className="flex-1 p-6 justify-center bg-white">
+      <View className="flex-1 w-full h-[200px] mt-10 mb-72">
+        <NaverMapView
+          style={{ width: '100%', height: '100%' }}
+          showsMyLocationButton={true}
+          center={{ ...P0, zoom: 16 }}
+        >
+          <Marker coordinate={P0}></Marker>
+        </NaverMapView>
+      </View>
       <BottomSheet
         ref={bottomSheetRef}
         index={0}
@@ -41,7 +54,7 @@ const MainMapScreen = () => {
         onChange={handleSheetChanges}
         backdropComponent={handleBackDrop}
       >
-        <BottomSheetView style={styles.contentContainer}>
+        <BottomSheetView className="flex-1 items-center">
           <MapBottomSheetScreen />
         </BottomSheetView>
       </BottomSheet>
