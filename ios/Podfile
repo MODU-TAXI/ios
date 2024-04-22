@@ -57,7 +57,7 @@ end
 target 'modutaxi' do
   config = use_native_modules!
 
-  pod 'NMapsMap', '3.17.0'
+  pod 'NMapsMap', '3.18.0'
 
   use_react_native!(
     :path => config[:reactNativePath],
