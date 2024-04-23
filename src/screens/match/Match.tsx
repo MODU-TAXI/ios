@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text } from 'react-native';
-import NaverMapView from 'react-native-nmap';
+import { NaverMapView } from '@mj-studio/react-native-naver-map';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import dayjs from 'dayjs';
@@ -59,8 +59,7 @@ const MatchScreen = () => {
         <View className="w-full h-[200px] mt-2 bg-sub100 rounded">
           <NaverMapView
             style={{ width: '100%', height: '100%' }}
-            showsMyLocationButton={true}
-            center={{ ...P0, zoom: 16 }}
+            initialRegion={{ ...P0, latitudeDelta: 0.38, longitudeDelta: 0.8 }}
           />
         </View>
 

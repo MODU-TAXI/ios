@@ -6,7 +6,14 @@ import BottomSheet, {
   BottomSheetModalProvider,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
-import NaverMapView, { Marker } from 'react-native-nmap';
+import {
+  NaverMapView,
+  Region,
+  NaverMapMarkerOverlay,
+  NaverMapCircleOverlay,
+  NaverMapPathOverlay,
+  NaverMapPolygonOverlay,
+} from '@mj-studio/react-native-naver-map';
 
 import MapBottomSheetScreen from './MapBottomSheet';
 import pinMarker from '@hooks/map/pinMarker';
@@ -57,17 +64,7 @@ const MainMapScreen = () => {
   // renders
   return (
     <View className="flex-1 p-6 justify-center bg-white">
-      <View className="flex-1 w-full h-[200px] mt-10 mb-72">
-        <NaverMapView
-          style={{ width: '100%', height: '100%' }}
-          showsMyLocationButton={true}
-          center={{ ...P0, zoom: 16 }}
-        >
-          {fetchedRooms.map((room) => (
-            <Marker key={room.id} coordinate={room.coord} />
-          ))}
-        </NaverMapView>
-      </View>
+      <View className="flex-1 w-full h-[200px] mt-10 mb-72"></View>
       <BottomSheet
         ref={bottomSheetRef}
         index={0}

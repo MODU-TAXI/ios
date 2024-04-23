@@ -1,5 +1,4 @@
 import React from 'react';
-import { Marker } from 'react-native-nmap';
 
 interface PinMarkerProps {
   id: number;
