@@ -1,3 +1,4 @@
+import { PostAxiosInstance } from '@axios/axios.method';
 import {
   GuestPostAxiosInstance,
   GuestGetAxiosInstance,
@@ -16,8 +17,6 @@ import {
   SignUpResponse,
   SocialLoginResponse,
 } from '@server/responseTypes/member';
-import { PatchAxiosInstance, PostAxiosInstance } from '@axios/axios.method';
-import { getRefreshToken } from '@utils/token';
 
 // [가입 여부 확인] /api/members/{type}/membership
 export const checkMembershipApi = async (

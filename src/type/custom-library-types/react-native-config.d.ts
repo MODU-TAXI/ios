@@ -1,6 +1,6 @@
 declare module 'react-native-config' {
   export interface NativeConfig {
-    SERVER_URL?: string;
+    ENV?: string;
     SERVER_URL?: string;
     SETNRY_DSN?: string;
   }
