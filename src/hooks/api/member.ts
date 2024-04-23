@@ -56,13 +56,13 @@ export const useKakaoLogin = (): UseMutationResult<
         }
       }
     },
-    onError: () => {
-      Toast.show({
-        type: 'error',
-        text1: '로그인 실패',
-        text2: '로그인 재시도 하세요',
-        position: 'bottom',
-      });
-    },
+    // onError: () => {
+    //   Toast.show({
+    //     type: 'error',
+    //     text1: '로그인 실패',
+    //     text2: '로그인 재시도 하세요',
+    //     position: 'bottom',
+    //   });
+    // },
   });
 };

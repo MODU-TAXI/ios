@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,27 +9,31 @@ import HeaderComponent from '@components/Header';
 import DescriptionComponent from '@components/Description';
 import ButtonComponent from '@components/Button';
 import DottedLineComponent from '@components/DottedLine';
+import PassengerComponent from '@components/Match/Passenger';
+import CategoryComponent from '@components/Match/Category';
+import { LoginStackParamList } from '@type/ParamLists';
+import { ErrorToastMessage } from '@utils/toastMessage';
 
 import StartGrayCircle from '@assets/images/Match/StartGrayCircle.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndGrayCircle from '@assets/images/Match/EndGrayCircle.svg';
 import EndCircle from '@assets/images/Match/EndCircle.svg';
-import Person1 from '@assets/images/Match/Person1.svg';
-import Person2 from '@assets/images/Match/Person2.svg';
-import Person3 from '@assets/images/Match/Person3.svg';
+
 import SelectedPerson1 from '@assets/images/Match/SelectedPerson1.svg';
 import SelectedPerson2 from '@assets/images/Match/SelectedPerson2.svg';
 import SelectedPerson3 from '@assets/images/Match/SelectedPerson3.svg';
-import CheckBox from '@assets/images/Match/CheckBox.svg';
-import SelectedCheckBox from '@assets/images/Match/SelectedCheckBox.svg';
-
-import { LoginStackParamList } from '@type/ParamLists';
+import UnSelectedPerson1 from '@assets/images/Match/UnSelectedPerson1.svg';
+import UnSelectedPerson2 from '@assets/images/Match/UnSelectedPerson2.svg';
+import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
+import { useCreateMatch } from '@hooks/api/rooms';
 
 const CreateMatchScreen = () => {
   const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
-  const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
+  const { mutateAsync: createMatchMutate } = useCreateMatch();
 
-  const [date, setDate] = useState<Date>(new Date()); // 설정 날짜
+  const [start, setStart] = useState<string>(''); // 출발지
+  const [end, setEnd] = useState<string>(''); // 도착지
+  const [departureTime, setDepartureTime] = useState<Date>(new Date()); // 설정 날짜
   const [datePicked, setDatePicked] = useState<boolean>(false); // 날짜 선택 여부
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
   const [passangersNumber, setPassengersNumber] = useState<number | null>(null); // 탑승 인원
@@ -38,40 +42,36 @@ const CreateMatchScreen = () => {
     false,
     false,
   ]); // 카테고리
-  const [start, setStart] = useState<string>(''); // 출발지
-  const [end, setEnd] = useState<string>(''); // 도착지
 
-  // 모두 선택했을때 버튼 활성화
-  useEffect(() => {
-    if (datePicked && passangersNumber) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
+  // 파티 생성
+  const createMatch = async () => {
+    if (!passangersNumber || !datePicked) {
+      return ErrorToastMessage('힝목을 모두 체크해주세요');
     }
-  }, [date, datePicked, passangersNumber]);
 
-  // 다음으로
-  const toNext = useCallback(async (): Promise<void> => {
-    console.log('ok');
-  }, []);
+    const categories = ['STUDENT_CERTIFICATION', 'ONLY_WOMAN', 'MANNER'];
+
+    const filteredCategories = categories.filter(
+      (_, index) => checkedCategorys[index],
+    );
+
+    await createMatchMutate({
+      departurePoint: {
+        x: 126.69487873676,
+        y: 37.463182225352,
+      },
+      spotId: 1,
+      roomTagBitMask: filteredCategories,
+      departureTime: departureTime,
+      wishHeadcount: passangersNumber,
+    });
+
+    return navigation.navigate('HomeScreen');
+  };
 
   // Datepicker open
   const openDatePicker = () => {
     setDatePickerOpen(true);
-  };
-
-  // 인원수 선택
-  const handlePress = (index: number) => {
-    setPassengersNumber(index);
-  };
-
-  // 카테고리 선택
-  const selectCategory = (index: number) => {
-    setCheckedCategorys((prevState) => {
-      const newState = [...prevState];
-      newState[index] = !newState[index];
-      return newState;
-    });
   };
 
   // TODO : 서버 연동 시 검색한 거점명 받아서 start, destination 저장 비동기 처리
@@ -85,72 +85,6 @@ const CreateMatchScreen = () => {
   const handleEnd = () => {
     navigation.navigate('SearchScreen');
     setEnd('주안역');
-  };
-
-  // 인원수 component -> 재사용 안할 것 같아서 그냥 여기 정의
-  const Passenger: React.FC<{
-    index: number;
-    icon: JSX.Element;
-    selectedIcon: JSX.Element;
-    handlePress: (index: number) => void;
-    passengersNumber: number | null;
-  }> = ({ index, icon, selectedIcon, handlePress, passengersNumber }) => {
-    const isSelected = passengersNumber === index;
-
-    const px = index === 1 ? 'px-[26px]' : index === 2 ? 'px-4' : 'px-1.5';
-
-    return (
-      <View>
-        {isSelected ? (
-          <Pressable
-            key={index}
-            onPress={() => handlePress(index)}
-            className={`flex-col items-center border-2 border-main ${px} py-3 rounded-full`}
-          >
-            {selectedIcon}
-            <Text className="mt-1 font-semibold text-main">{index}명</Text>
-          </Pressable>
-        ) : (
-          <Pressable
-            key={index}
-            onPress={() => handlePress(index)}
-            className={`flex-col items-center border-[1px] border-gray200 ${px} py-3 rounded-full`}
-          >
-            {icon}
-            <Text className="mt-1 text-gray400">{index}명</Text>
-          </Pressable>
-        )}
-      </View>
-    );
-  };
-
-  // 카테고리 component -> 재사용 안할 것 같아서 그냥 여기 정의
-  const Category: React.FC<{
-    index: number;
-    category: string;
-  }> = ({ index, category }) => {
-    const checked = checkedCategorys[index];
-    return (
-      <View>
-        {checked ? (
-          <Pressable
-            onPress={() => selectCategory(index)}
-            className="flex-row items-center justify-center border-[1px] border-main px-3 py-2 rounded-xl"
-          >
-            <SelectedCheckBox className="mr-2" />
-            <Text className="text-sm font-semibold text-main">{category}</Text>
-          </Pressable>
-        ) : (
-          <Pressable
-            onPress={() => selectCategory(index)}
-            className="flex-row items-center justify-center border-[1px] border-gray200 px-3 py-2 rounded-xl"
-          >
-            <CheckBox className="mr-2" />
-            <Text className="text-sm font-normal text-gray700">{category}</Text>
-          </Pressable>
-        )}
-      </View>
-    );
   };
 
   return (
@@ -224,8 +158,8 @@ const CreateMatchScreen = () => {
           <DescriptionComponent description="출발시간을 설정해주세요" />
 
           <DatePickerComponent
-            date={date}
-            setDate={setDate}
+            date={departureTime}
+            setDate={setDepartureTime}
             datePicked={datePicked}
             setDatePicked={setDatePicked}
             datePickerOpen={datePickerOpen}
@@ -248,28 +182,28 @@ const CreateMatchScreen = () => {
 
           {/* 인원 버튼 */}
           <View className="flex-row justify-between items-center mt-6">
-            <Passenger
+            <PassengerComponent
               index={1}
-              icon={<Person1 />}
+              unSelectedIcon={<UnSelectedPerson1 />}
               selectedIcon={<SelectedPerson1 />}
-              handlePress={handlePress}
               passengersNumber={passangersNumber}
+              setPassengersNumber={setPassengersNumber}
             />
 
-            <Passenger
+            <PassengerComponent
               index={2}
-              icon={<Person2 />}
+              unSelectedIcon={<UnSelectedPerson2 />}
               selectedIcon={<SelectedPerson2 />}
-              handlePress={handlePress}
               passengersNumber={passangersNumber}
+              setPassengersNumber={setPassengersNumber}
             />
 
-            <Passenger
+            <PassengerComponent
               index={3}
-              icon={<Person3 />}
+              unSelectedIcon={<UnSelectedPerson3 />}
               selectedIcon={<SelectedPerson3 />}
-              handlePress={handlePress}
               passengersNumber={passangersNumber}
+              setPassengersNumber={setPassengersNumber}
             />
           </View>
         </View>
@@ -282,9 +216,24 @@ const CreateMatchScreen = () => {
           <DescriptionComponent description="카테고리를 선택해주세요" />
 
           <View className="flex-row justify-between mt-4">
-            <Category index={0} category={'학생인증'} />
-            <Category index={1} category={'여자만'} />
-            <Category index={2} category={'매너탑승'} />
+            <CategoryComponent
+              index={0}
+              category={'학생인증'}
+              checkedCategorys={checkedCategorys}
+              setCheckedCategorys={setCheckedCategorys}
+            />
+            <CategoryComponent
+              index={1}
+              category={'여자만'}
+              checkedCategorys={checkedCategorys}
+              setCheckedCategorys={setCheckedCategorys}
+            />
+            <CategoryComponent
+              index={2}
+              category={'매너탑승'}
+              checkedCategorys={checkedCategorys}
+              setCheckedCategorys={setCheckedCategorys}
+            />
           </View>
         </View>
 
@@ -295,8 +244,8 @@ const CreateMatchScreen = () => {
             borderColor={'border-main'}
             textColor={'white'}
             text={'매칭팟 만들기'}
-            disabled={buttonDisabled}
-            onPress={toNext}
+            disabled={!datePicked || !passangersNumber}
+            onPress={createMatch}
           />
         </View>
       </ScrollView>

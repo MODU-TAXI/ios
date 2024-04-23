@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 
 import sendMessageToSentry from '@utils/sentry';
+import { ErrorToastMessage } from '@utils/toastMessage';
 
 // error-boundary까지 온 에러들 처리
 const errorHandler = (error: any) => {
@@ -24,13 +25,7 @@ const ErrorFallback = ({
     // 400 Error시에는 toast message 띄우기
     if (error?.response?.status == 400 && error?.response?.data?.message) {
       resetErrorBoundary();
-      Toast.show({
-        type: 'error',
-        text1: '에러발생!',
-        text2: error?.response?.data?.message,
-        position: 'bottom',
-      });
-      return;
+      return ErrorToastMessage(error.response.data.message);
     }
   }, [
     error?.response?.status,

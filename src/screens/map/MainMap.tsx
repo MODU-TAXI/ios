@@ -48,7 +48,7 @@ const MainMapScreen = () => {
   const initial: Camera = {
     longitude: 126.68045,
     latitude: 37.46504,
-    zoom: 16,
+    zoom: 12,
   };
 
   const data = {
