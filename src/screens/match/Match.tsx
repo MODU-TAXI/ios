@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text } from 'react-native';
-import NaverMapView from 'react-native-nmap';
+import { Camera, NaverMapView } from '@mj-studio/react-native-naver-map';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import dayjs from 'dayjs';
@@ -26,7 +26,13 @@ const MatchScreen = () => {
     console.log('ok');
   }, []);
 
-  const P0 = { latitude: 37.564362, longitude: 126.977011 };
+  // initialCamera 는 첫 렌더링 시 카메라 좌표
+  // TODO : api 연동 시 출발/도착지의 중앙점으로 카메라 위치
+  const initial: Camera = {
+    longitude: 126.68045,
+    latitude: 37.46504,
+    zoom: 16,
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -55,13 +61,16 @@ const MatchScreen = () => {
           />
         </View>
 
-        {/* 자도 */}
-        <View className="w-full h-[200px] mt-2 bg-sub100 rounded">
-          <NaverMapView
-            style={{ width: '100%', height: '100%' }}
-            showsMyLocationButton={true}
-            center={{ ...P0, zoom: 16 }}
-          />
+        {/* 지도 */}
+        <View className="shadow-md">
+          <View className="w-full h-[200px] mt-2 bg-sub100 rounded-xl overflow-hidden">
+            <NaverMapView
+              style={{ flex: 1 }}
+              mapType="Basic"
+              initialCamera={initial}
+              locale="ko"
+            />
+          </View>
         </View>
 
         {/* 날짜, 출발지, 도착지 정보 */}
