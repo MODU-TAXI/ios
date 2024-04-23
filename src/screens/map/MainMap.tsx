@@ -13,10 +13,13 @@ import {
   NaverMapCircleOverlay,
   NaverMapPathOverlay,
   NaverMapPolygonOverlay,
+  Camera,
 } from '@mj-studio/react-native-naver-map';
 
 import MapBottomSheetScreen from './MapBottomSheet';
 import pinMarker from '@hooks/map/pinMarker';
+
+import ChevronForwardSvg from '@assets/images/Map/chevronForward.svg';
 
 const MainMapScreen = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -41,8 +44,13 @@ const MainMapScreen = () => {
     [],
   );
 
-  const P0 = { longitude: 126.68045, latitude: 37.46504 };
   // 더미데이터
+  const initial: Camera = {
+    longitude: 126.68045,
+    latitude: 37.46504,
+    zoom: 16,
+  };
+
   const data = {
     rooms: [
       {
@@ -59,13 +67,62 @@ const MainMapScreen = () => {
       },
     ],
   };
-  const fetchedRooms = pinMarker(data.rooms);
 
   // renders
   return (
     <View className="flex-1 p-6 justify-center bg-white">
-      <View className="flex-1 w-full h-[200px] mt-10 mb-72"></View>
+      <View className="flex-1 w-full h-[200px] mt-10 mb-72">
+        <NaverMapView
+          style={{ flex: 1 }}
+          mapType="Basic"
+          initialCamera={initial}
+          locale="ko"
+        >
+          {data.rooms.map((room) => (
+            <NaverMapMarkerOverlay
+              key={room.id}
+              latitude={room.latitude}
+              longitude={room.longitude}
+              onTap={() => console.log(room.spotName)}
+              anchor={{ x: 0.5, y: 1 }}
+            >
+              <View className="flex-1 items-center justify-center">
+                <View
+                  className="flex flex-row bg-white border-gray100 w-auto m-4 rounded-full"
+                  style={{
+                    shadowColor: 'rgba(102, 102, 102, 0.25)',
+                    shadowOffset: {
+                      width: 0,
+                      height: 4,
+                    },
+                    shadowOpacity: 1,
+                    elevation: 8,
+                  }}
+                >
+                  <Text className="text-center text-gray600 w-fit text-base py-2 pl-4">
+                    {room.spotName}
+                  </Text>
+                  <View className="flex justify-center pr-2">
+                    <ChevronForwardSvg />
+                  </View>
+                </View>
+              </View>
+            </NaverMapMarkerOverlay>
+          ))}
+        </NaverMapView>
+      </View>
       <BottomSheet
+        style={{
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 4,
+          },
+          shadowOpacity: 0.3,
+          shadowRadius: 4.65,
+
+          elevation: 8,
+        }}
         ref={bottomSheetRef}
         index={0}
         snapPoints={snapPoints}

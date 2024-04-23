@@ -33,6 +33,7 @@ function AppInner() {
       }}
     >
       <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
+      <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
       <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
       <LogInStack.Screen name="MatchScreen" component={MatchScreen} />
       <LogInStack.Screen
@@ -48,7 +49,6 @@ function AppInner() {
       }}
     >
       <RootStack.Screen name="SignInScreen" component={SignInScreen} />
-      <RootStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
       <RootStack.Screen
         name="CheckPermissionScreen"
         component={CheckPermissionScreen}
