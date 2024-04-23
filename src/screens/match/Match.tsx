@@ -1,6 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text } from 'react-native';
-import { Camera, NaverMapView } from '@mj-studio/react-native-naver-map';
+import {
+  Camera,
+  NaverMapView,
+  NaverMapPathOverlay,
+} from '@mj-studio/react-native-naver-map';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import dayjs from 'dayjs';
@@ -29,8 +33,8 @@ const MatchScreen = () => {
   // initialCamera 는 첫 렌더링 시 카메라 좌표
   // TODO : api 연동 시 출발/도착지의 중앙점으로 카메라 위치
   const initial: Camera = {
-    longitude: 126.68045,
     latitude: 37.46504,
+    longitude: 126.68045,
     zoom: 16,
   };
 
@@ -69,7 +73,19 @@ const MatchScreen = () => {
               mapType="Basic"
               initialCamera={initial}
               locale="ko"
-            />
+            >
+              <NaverMapPathOverlay
+                coords={[
+                  { latitude: 33.5249594, longitude: 126.24180047 },
+                  { latitude: 33.25683311547, longitude: 126.18193 },
+                  { latitude: 33.3332807, longitude: 126.838389399 },
+                ]}
+                width={8}
+                color={'red'}
+                progress={-0.6}
+                passedColor={'green'}
+              />
+            </NaverMapView>
           </View>
         </View>
 
