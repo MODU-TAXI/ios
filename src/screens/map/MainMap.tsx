@@ -20,6 +20,8 @@ import {
   NaverMapPolygonOverlay,
   Camera,
 } from '@mj-studio/react-native-naver-map';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { searchRoomCurrentCamera } from '@utils/map';
 import { RoomResponse } from '@server/responseTypes/map';
 
@@ -28,6 +30,7 @@ import RoomMarkerComponent from '@components/Marker/RoomMarker';
 import MapBottomSheetScreen from './MapBottomSheet';
 
 const MainMapScreen = () => {
+  const insets = useSafeAreaInsets();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   // 화면의 어디에서 멈추는지 snap point
@@ -112,15 +115,21 @@ const MainMapScreen = () => {
 
   // 렌더링
   return (
-    <View className="flex-1 justify-center bg-white">
+    // 지도가 화면 전체를 포함하기 위한 마진 설정
+    <View
+      className="flex-1 justify-center bg-white"
+      style={{ marginTop: -insets.top }}
+    >
       {/** 지도 */}
-      <View className="flex-1 w-full h-auto mt-10 mb-72">
+      <View className="flex-1 w-full h-auto mb-[320px]">
         <NaverMapView
           style={{ flex: 1 }}
           mapType="Basic"
           initialCamera={currentCamera}
           onCameraChanged={onCameraChange}
           locale="ko"
+          logoAlign="BottomRight"
+          logoMargin={{ bottom: 40 }}
         >
           {rooms &&
             rooms.map((room) => (
