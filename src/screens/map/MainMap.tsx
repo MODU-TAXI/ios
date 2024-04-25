@@ -23,9 +23,9 @@ import {
 import { searchRoomCurrentCamera } from '@utils/map';
 import { RoomResponse } from '@server/responseTypes/map';
 
-import MapBottomSheetScreen from './MapBottomSheet';
+import RoomMarkerComponent from '@components/Marker/RoomMarker';
 
-import ChevronForwardSvg from '@assets/images/Map/chevronForward.svg';
+import MapBottomSheetScreen from './MapBottomSheet';
 
 const MainMapScreen = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -112,8 +112,9 @@ const MainMapScreen = () => {
 
   // 렌더링
   return (
-    <View className="flex-1 p-6 justify-center bg-white">
-      <View className="flex-1 w-full h-[200px] mt-10 mb-72">
+    <View className="flex-1 justify-center bg-white">
+      {/** 지도 */}
+      <View className="flex-1 w-full h-auto mt-10 mb-72">
         <NaverMapView
           style={{ flex: 1 }}
           mapType="Basic"
@@ -123,6 +124,10 @@ const MainMapScreen = () => {
         >
           {rooms &&
             rooms.map((room) => (
+              /** 매칭방 하나의 마커 */
+              /** TODO :
+               * 마커 탭 했을 때의 동작 (바텀시트에 정보 출력 등)
+               */
               <NaverMapMarkerOverlay
                 key={room.id}
                 latitude={room.latitude}
@@ -130,32 +135,13 @@ const MainMapScreen = () => {
                 onTap={() => console.log(room.spotName)}
                 anchor={{ x: 0.5, y: 1 }}
               >
-                {/** TODO : 컴포넌트 분리 */}
-                <View className="flex-1 items-center justify-center">
-                  <View
-                    className="flex flex-row bg-white border-gray100 w-auto m-4 rounded-full"
-                    style={{
-                      shadowColor: 'rgba(102, 102, 102, 0.25)',
-                      shadowOffset: {
-                        width: 0,
-                        height: 4,
-                      },
-                      shadowOpacity: 1,
-                      elevation: 8,
-                    }}
-                  >
-                    <Text className="text-center text-gray600 w-fit text-base py-2 pl-4">
-                      {room.spotName}
-                    </Text>
-                    <View className="flex justify-center pr-2">
-                      <ChevronForwardSvg />
-                    </View>
-                  </View>
-                </View>
+                <RoomMarkerComponent spotName={room.spotName} />
               </NaverMapMarkerOverlay>
             ))}
         </NaverMapView>
       </View>
+
+      {/** 바텀시트 */}
       <BottomSheet
         style={{
           shadowColor: '#000',
