@@ -6,30 +6,23 @@ import { RootStackParamList } from '../../type/ParamLists';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
-import { emailAuthentication } from '@server/api/member';
-import { useErrorBoundary } from 'react-error-boundary';
 import { useRecoilState } from 'recoil';
 import { emailState } from '@recoil/recoil';
+import { useEmailAuthentication } from '@hooks/api/member.mail';
 
 const SchoolAuthenticationScreen = () => {
-  const { showBoundary } = useErrorBoundary(); // 400에러가 아닐시에 error-boundary로 error 보내기용
-
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [email, setEmail] = useRecoilState<string>(emailState); // 이메일
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
 
+  const { mutateAsync: emailAuthentication } =
+    useEmailAuthentication(setErrorMessage);
+
   // 인증 메일 보내기
   const sendMail = async (): Promise<void> => {
-    try {
-      await emailAuthentication({ mailAddress: email });
-      navigation.navigate('EmailAuthenticationCodeScreen');
-    } catch (error: any) {
-      if (error.response.status == 400 && error?.response?.data?.message) {
-        return setErrorMessage(error.response.data.message);
-      }
-      showBoundary(error);
-    }
+    await emailAuthentication({ mailAddress: email });
+    navigation.navigate('EmailAuthenticationCodeScreen');
   };
 
   // 다음에 하기

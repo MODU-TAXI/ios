@@ -13,7 +13,7 @@ import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 
-import { signUpApi } from '@server/api/member';
+import { signUp } from '@server/api/member';
 import { signUpUserState } from '@recoil/recoil';
 import { setAccessToken, setRefreshToken } from '@utils/token';
 import { RootStackParamList } from '@type/ParamLists';
@@ -35,9 +35,9 @@ const PhoneAuthenticationCodeScreen = () => {
   }, [time]);
 
   // 회원가입
-  const signUp = async (): Promise<void> => {
+  const sendCode = async (): Promise<void> => {
     try {
-      const response = await signUpApi(signUpUser);
+      const response = await signUp(signUpUser);
 
       const { accessToken, refreshToken } = response;
 
@@ -104,7 +104,7 @@ const PhoneAuthenticationCodeScreen = () => {
                 textColor={'white'}
                 text={'확인'}
                 disabled={!code || !time}
-                onPress={signUp}
+                onPress={sendCode}
               />
             </View>
           </View>

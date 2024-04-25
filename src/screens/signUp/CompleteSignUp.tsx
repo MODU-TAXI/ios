@@ -1,16 +1,16 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '@components/Button';
 import ProgressBarComponent from '@components/ProgressBar';
-import { RootStackParamList } from '@type/ParamLists';
+import { useRecoilState } from 'recoil';
+import { loggedInState } from '@recoil/recoil';
 
 const CompleteSignUpScreen = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
 
   const toNext = async (): Promise<void> => {
-    navigation.navigate('SignInScreen');
+    setLoggedIn(true);
   };
 
   return (

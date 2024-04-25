@@ -17,8 +17,6 @@ type SurveyType = {
 const ServeySecondScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const { mutateAsync } = useSurvey();
-
   const [surveyLists, setSurvetLists] = useState<SurveyType[]>([
     { index: 1, content: '지각할 것 같을때', select: false },
     { index: 2, content: '버스 줄이 너무 길때', select: false },
@@ -32,9 +30,11 @@ const ServeySecondScreen = () => {
       .length;
   }, [surveyLists]);
 
+  const { mutateAsync: survey } = useSurvey();
+
   // 설문조사 제출
   const sendSurvey = async (): Promise<void> => {
-    await mutateAsync({
+    await survey({
       questionId: 1,
       answer1: surveyLists[0].select,
       answer2: surveyLists[1].select,

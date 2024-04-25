@@ -4,7 +4,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
 
-import { checkMembershipApi, socialLogin } from '@server/api/member';
+import { checkMembership, socialLogin } from '@server/api/member';
 import { KakaoLoginResponse } from '@server/responseTypes/member';
 import { SignUpUser } from '@recoil/type';
 import { loggedInState, signUpUserState } from '@recoil/recoil';
@@ -29,7 +29,7 @@ export const useKakaoLogin = (): UseMutationResult<
     onSuccess: async (response: KakaoLoginResponse) => {
       const { accessToken } = response;
 
-      const { existent, key } = await checkMembershipApi('KAKAO', {
+      const { existent, key } = await checkMembership('KAKAO', {
         accessToken: accessToken,
       });
 
@@ -56,13 +56,13 @@ export const useKakaoLogin = (): UseMutationResult<
         }
       }
     },
-    // onError: () => {
-    //   Toast.show({
-    //     type: 'error',
-    //     text1: '로그인 실패',
-    //     text2: '로그인 재시도 하세요',
-    //     position: 'bottom',
-    //   });
-    // },
+    onError: () => {
+      Toast.show({
+        type: 'error',
+        text1: '로그인 실패',
+        text2: '로그인 재시도 하세요',
+        position: 'bottom',
+      });
+    },
   });
 };

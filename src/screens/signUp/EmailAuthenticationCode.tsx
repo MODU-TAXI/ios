@@ -14,52 +14,37 @@ import ProgressBarComponent from '@components/ProgressBar';
 import { RootStackParamList } from '@type/ParamLists';
 
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
-import { emailAuthentication, emailConfirm } from '@server/api/member';
-import { useErrorBoundary } from 'react-error-boundary';
 import { InfoToastMessage } from '@utils/toastMessage';
 import { useRecoilValue } from 'recoil';
 import { emailState } from '@recoil/recoil';
+import {
+  useEmailAuthentication,
+  useEmailConfirm,
+} from '@hooks/api/member.mail';
 
 const EmailAuthenticationCodeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
-  const { showBoundary } = useErrorBoundary(); // 400에러가 아닐시에 error-boundary로 error 보내기용
 
   const email = useRecoilValue(emailState); // 재전송할 이메일 (recoil value 사용)
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [time, setTime] = useState(180); // 타이머 시간
 
+  const { mutateAsync: emailConfirm } = useEmailConfirm(setErrorMessage);
+  const { mutateAsync: emailAuthentication } =
+    useEmailAuthentication(setErrorMessage);
+
   // 인증번호 재전송
   const resendMail = async (): Promise<void> => {
-    try {
-      await emailAuthentication({ mailAddress: email });
-      InfoToastMessage('인증번호가 재전송 되었습니다');
-      setTime(180); // 재전송시 timer 재설정
-    } catch (error: any) {
-      if (error.response.status == 400 && error?.response?.data?.message) {
-        return setErrorMessage(error.response.data.message);
-      }
-      showBoundary(error);
-    }
+    await emailAuthentication({ mailAddress: email });
+    InfoToastMessage('인증번호가 재전송 되었습니다');
+    setTime(180); // 재전송시 timer 재설정
   };
 
   // 인증 코드확인
   const confirmEmail = async (): Promise<void> => {
-    try {
-      await emailConfirm({ certCode: code });
-      navigation.navigate('CompleteSignUpScreen');
-    } catch (error: any) {
-      console.log(error.response.data.code);
-      if (error.response.status == 400 && error?.response?.data?.message) {
-        // 메세지가 너무 길어서 따로 메세지 기록
-        if (error.response.data.code === 'MAIL_006') {
-          return setErrorMessage('인증번호가 만료되었습니다!');
-        }
-        return setErrorMessage(error.response.data.message);
-      }
-      showBoundary(error);
-    }
+    await emailConfirm({ certCode: code });
+    navigation.navigate('SurveyFirstScreen');
   };
 
   // 인증번호 만료시 에러 메세지 생성
@@ -75,7 +60,7 @@ const EmailAuthenticationCodeScreen = () => {
         <View className="flex-1">
           {/* 진행사항 progressBar */}
           <View className="h-1 mt-[11px]">
-            <ProgressBarComponent previousDealt={0} dealt={60} />
+            <ProgressBarComponent previousDealt={40} dealt={40} />
           </View>
 
           <View className="flex-1 mx-6">
@@ -106,6 +91,7 @@ const EmailAuthenticationCodeScreen = () => {
                 <ReSendCodeButtonSvg />
               </Pressable>
             </View>
+
             {/* 버튼을 아래로 내리기 위한 View */}
             <View className="flex-1"></View>
 

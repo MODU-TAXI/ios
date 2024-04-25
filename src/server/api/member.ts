@@ -1,27 +1,17 @@
-import { PostAxiosInstance } from '@axios/axios.method';
-import {
-  GuestPostAxiosInstance,
-  GuestGetAxiosInstance,
-  GuestPatchAxiosInstance,
-  GuestDeleteAxiosInstance,
-} from '@axios/guest.axios.method';
+import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
 import {
   CheckMembershipRequest,
-  EmailAuthenticationRequest,
-  EmailConfirmRequest,
   SignUpRequest,
   SocialLoginRequest,
-} from '@server/resquestTypes/member';
+} from '@server/requestTypes/member';
 import {
   CheckMembershipResponse,
-  EmailAuthenticationResponse,
-  EmailConfirmResponse,
   SignUpResponse,
   SocialLoginResponse,
 } from '@server/responseTypes/member';
 
 // [가입 여부 확인] /api/members/{type}/membership
-export const checkMembershipApi = async (
+export const checkMembership = async (
   type: 'KAKAO' | 'APPLE',
   data: CheckMembershipRequest,
 ): Promise<CheckMembershipResponse> => {
@@ -47,31 +37,9 @@ export const socialLogin = async (
 };
 
 // [소셜 회원가입] /api/members/sign-up
-export const signUpApi = async (
-  data: SignUpRequest,
-): Promise<SignUpResponse> => {
+export const signUp = async (data: SignUpRequest): Promise<SignUpResponse> => {
   const response = await GuestPostAxiosInstance<SignUpResponse>(
     `/api/members/sign-up`,
-    data,
-  );
-
-  return response.data;
-};
-
-// [이메일 인증 메일 발송] /api/members/mail/certificate
-export const emailAuthentication = async (data: EmailAuthenticationRequest) => {
-  const response = await PostAxiosInstance<EmailAuthenticationResponse>(
-    '/api/members/mail/certificate',
-    data,
-  );
-
-  return response.data;
-};
-
-// [이레일 인증코드 확인] /api/members/mail/confirm
-export const emailConfirm = async (data: EmailConfirmRequest) => {
-  const response = await PostAxiosInstance<EmailConfirmResponse>(
-    '/api/members/mail/confirm',
     data,
   );
 
