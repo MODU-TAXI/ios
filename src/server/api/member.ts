@@ -8,12 +8,14 @@ import {
 import {
   CheckMembershipRequest,
   EmailAuthenticationRequest,
+  EmailConfirmRequest,
   SignUpRequest,
   SocialLoginRequest,
 } from '@server/resquestTypes/member';
 import {
   CheckMembershipResponse,
   EmailAuthenticationResponse,
+  EmailConfirmResponse,
   SignUpResponse,
   SocialLoginResponse,
 } from '@server/responseTypes/member';
@@ -60,6 +62,16 @@ export const signUpApi = async (
 export const emailAuthentication = async (data: EmailAuthenticationRequest) => {
   const response = await PostAxiosInstance<EmailAuthenticationResponse>(
     '/api/members/mail/certificate',
+    data,
+  );
+
+  return response.data;
+};
+
+// [이레일 인증코드 확인] /api/members/mail/confirm
+export const emailConfirm = async (data: EmailConfirmRequest) => {
+  const response = await PostAxiosInstance<EmailConfirmResponse>(
+    '/api/members/mail/confirm',
     data,
   );
 

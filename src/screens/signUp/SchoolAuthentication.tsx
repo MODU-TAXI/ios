@@ -8,17 +8,19 @@ import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import { emailAuthentication } from '@server/api/member';
 import { useErrorBoundary } from 'react-error-boundary';
+import { useRecoilState } from 'recoil';
+import { emailState } from '@recoil/recoil';
 
 const SchoolAuthenticationScreen = () => {
   const { showBoundary } = useErrorBoundary(); // 400에러가 아닐시에 error-boundary로 error 보내기용
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [email, setEmail] = useState<string>(''); // 이메일 입력
+  const [email, setEmail] = useRecoilState<string>(emailState); // 이메일
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
 
   // 인증 메일 보내기
-  const sendMail = async () => {
+  const sendMail = async (): Promise<void> => {
     try {
       await emailAuthentication({ mailAddress: email });
       navigation.navigate('EmailAuthenticationCodeScreen');

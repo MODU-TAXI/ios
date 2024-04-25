@@ -30,3 +30,8 @@ export interface SignUpResponse {
 export interface EmailAuthenticationResponse {
   isConfirm: boolean;
 }
+
+// [이레일 인증코드 확인] /api/members/mail/confirm
+export interface EmailConfirmResponse {
+  isConfirm: boolean;
+}

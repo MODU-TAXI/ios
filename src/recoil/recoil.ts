@@ -15,3 +15,10 @@ export const loggedInState = atom<boolean>({
   key: 'isLoggedIn',
   default: false,
 });
+
+export const emailState = atom<string>({
+  key: 'email',
+  default: '',
+});
+
+// 12321   42531
