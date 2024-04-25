@@ -23,6 +23,10 @@ const HomeScreen = () => {
     navigation.navigate('SearchScreen');
   };
 
+  const toChatRoomScreen = () => {
+    navigation.navigate('ChatRoomScreen');
+  };
+
   return (
     <SafeAreaView className="flex-1">
       <View className="flex-col">
@@ -52,6 +56,13 @@ const HomeScreen = () => {
           className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
         >
           <Text>검색 스크린</Text>
+        </Pressable>
+
+        <Pressable
+          onPress={toChatRoomScreen}
+          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+        >
+          <Text>채팅 스크린</Text>
         </Pressable>
       </View>
     </SafeAreaView>
