@@ -21,6 +21,7 @@ import {
   Camera,
 } from '@mj-studio/react-native-naver-map';
 import { searchRoomCurrentCamera } from '@utils/map';
+import { RoomResponse } from '@server/responseTypes/map';
 
 import MapBottomSheetScreen from './MapBottomSheet';
 
@@ -64,11 +65,7 @@ const MainMapScreen = () => {
     zoom: 12,
   });
 
-  useEffect(() => {
-    console.log(currentCamera);
-  }, [currentCamera]);
-
-  const [rooms, setRooms] = useState([
+  const [rooms, setRooms] = useState<RoomResponse[]>([
     {
       id: 14,
       longitude: 126.69488,
@@ -81,12 +78,12 @@ const MainMapScreen = () => {
       latitude: 37.451098,
       spotName: '인하대학교 후문',
     },
-    {
-      id: 6,
-      longitude: 126.67889,
-      latitude: 37.513138,
-      spotName: '인하대학교 후문',
-    },
+    // {
+    //   id: 6,
+    //   longitude: 126.67889,
+    //   latitude: 37.513138,
+    //   spotName: '인하대학교 후문',
+    // },
   ]);
 
   // timeout 정보 저장 Ref
