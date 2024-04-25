@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ButtonComponent from '@components/Button';
 import SelectBoxComponent from '@components/SelectBox';
 import ProgressBarComponent from '@components/ProgressBar';
+import { useSurvey } from '@hooks/api/onboarding';
 import { RootStackParamList } from '@type/ParamLists';
 
 type SurveyType = {
@@ -16,13 +17,15 @@ type SurveyType = {
 const ServeyFirstScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
+  const { mutateAsync } = useSurvey();
+
   const [surveyLists, setSurvetLists] = useState<SurveyType[]>([
     { index: 1, content: '에브리타임을 통해 알게 되었어요!', select: false },
     { index: 2, content: '지인 추천을 통해 알게 되었어요!', select: false },
     { index: 3, content: '직접 검색해서 통해 알게 되었어요!', select: false },
     { index: 4, content: '기타', select: false },
   ]);
+  const [etcContent, setEtcContent] = useState<string>('');
 
   // 선택한 box 개수 계산
   const checkSelectedNum = useCallback((): number => {
@@ -30,19 +33,18 @@ const ServeyFirstScreen = () => {
       .length;
   }, [surveyLists]);
 
-  // 하나라도 선택되었을때 버튼 활성화
-  useEffect(() => {
-    if (checkSelectedNum() > 0) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
-    }
-  }, [surveyLists, checkSelectedNum]);
-
-  // 다음으로
-  const toNext = useCallback(async (): Promise<void> => {
+  // 설문조사 제출
+  const sendSurvey = async (): Promise<void> => {
+    await mutateAsync({
+      questionId: 1,
+      answer1: surveyLists[0].select,
+      answer2: surveyLists[1].select,
+      answer3: surveyLists[2].select,
+      etc: surveyLists[3].select,
+      etcContent: etcContent,
+    });
     navigation.navigate('SurveySecondScreen');
-  }, [surveyLists, navigation]);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -70,8 +72,8 @@ const ServeyFirstScreen = () => {
             borderColor={'border-black'}
             textColor={'white'}
             text={'확인'}
-            disabled={buttonDisabled}
-            onPress={toNext}
+            disabled={!checkSelectedNum()}
+            onPress={sendSurvey}
           />
         </View>
       </View>
