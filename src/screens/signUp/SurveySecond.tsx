@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonComponent from '@components/Button';
 import SelectBoxComponent from '@components/SelectBox';
 import ProgressBarComponent from '@components/ProgressBar';
+import { useSurvey } from '@hooks/api/onboarding';
 import { RootStackParamList } from '@type/ParamLists';
 
 type SurveyType = {
@@ -17,12 +17,12 @@ type SurveyType = {
 const ServeySecondScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
   const [surveyLists, setSurvetLists] = useState<SurveyType[]>([
     { index: 1, content: '지각할 것 같을때', select: false },
     { index: 2, content: '버스 줄이 너무 길때', select: false },
     { index: 3, content: '기타', select: false },
   ]);
+  const [etcContent, setEtcContent] = useState<string>('');
 
   // 선택한 box 개수 계산
   const checkSelectedNum = useCallback((): number => {
@@ -30,16 +30,17 @@ const ServeySecondScreen = () => {
       .length;
   }, [surveyLists]);
 
-  // 하나라도 선택되었을때 버튼 활성화
-  useEffect(() => {
-    if (checkSelectedNum() > 0) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
-    }
-  }, [surveyLists, checkSelectedNum]);
+  const { mutateAsync: survey } = useSurvey();
 
-  const toNext = async (): Promise<void> => {
+  // 설문조사 제출
+  const sendSurvey = async (): Promise<void> => {
+    await survey({
+      questionId: 1,
+      answer1: surveyLists[0].select,
+      answer2: surveyLists[1].select,
+      etc: surveyLists[2].select,
+      etcContent: etcContent,
+    });
     navigation.navigate('CompleteSignUpScreen');
   };
 
@@ -47,7 +48,7 @@ const ServeySecondScreen = () => {
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 진행사항 progressBar */}
       <View className="h-1 mt-[11px]">
-        <ProgressBarComponent previousDealt={20} dealt={60} />
+        <ProgressBarComponent previousDealt={0} dealt={80} />
       </View>
 
       <View className="flex-1 mx-6">
@@ -69,8 +70,8 @@ const ServeySecondScreen = () => {
             borderColor={'border-black'}
             textColor={'white'}
             text={'확인'}
-            disabled={buttonDisabled}
-            onPress={toNext}
+            disabled={!checkSelectedNum()}
+            onPress={sendSurvey}
           />
         </View>
       </View>

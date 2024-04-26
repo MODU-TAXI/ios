@@ -1,6 +1,6 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { createMatch } from '@server/api/room';
-import { CreateMatchRequest } from '@server/resquestTypes/room';
+import { CreateMatchRequest } from '@server/requestTypes/room';
 import { ErrorToastMessage, InfoToastMessage } from '@utils/toastMessage';
 
 // 매칭 팟 생성

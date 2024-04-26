@@ -1,33 +1,39 @@
 import React, { useState } from 'react';
 import { TextInput, Text, View, Pressable } from 'react-native';
-import TimerComponent from './Timer';
 
-interface InputBoxComponentProps {
+interface PhoneNumberInputBoxComponentProps {
   title: string;
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
   placeholder: string;
-  timer?: boolean;
-  time?: number;
-  setTime?: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
-  title,
-  value,
-  setValue,
-  placeholder,
-  timer,
-  time,
-  setTime,
-}) => {
+const PhoneNumberInputBoxComponent: React.FC<
+  PhoneNumberInputBoxComponentProps
+> = ({ title, value, setValue, placeholder }) => {
   const [isFocused, setIsFocused] = useState(false); // focusing 여부 판별 변수
 
   const inputRef = React.useRef<TextInput>(null); // focusing ref
 
+  // 입력된 전화번호를 형식에 맞게 변환하는 함수
+  const formatPhoneNumber = (input: string) => {
+    const cleaned = ('' + input).replace(/\D/g, '');
+
+    const match = cleaned.match(/^(\d{3})(\d{4})(\d{4})$/);
+    if (match) {
+      return match[1] + '-' + match[2] + '-' + match[3];
+    }
+    return input;
+  };
+
   // TextInput value change 함수
   const valueHandleChange = (text: string) => {
-    setValue(text);
+    const formatted = formatPhoneNumber(text);
+
+    // 13자 이상으로 입력 불가하게 만듦
+    if (formatted.length <= 13) {
+      setValue(formatted);
+    }
   };
 
   // TextInput 밖에 영역 클릭 시에도 focusing 하게 하는 함수
@@ -64,14 +70,9 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
           placeholderTextColor="#C0C0C0"
           className="font-semibold flex-1 mr-2"
         />
-
-        {/* timer 있을때만 TimerComponent 적용 */}
-        {timer && time && setTime && (
-          <TimerComponent time={time} setTime={setTime} />
-        )}
       </View>
     </Pressable>
   );
 };
 
-export default InputBoxComponent;
+export default PhoneNumberInputBoxComponent;

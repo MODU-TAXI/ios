@@ -25,8 +25,3 @@ export interface SignUpResponse {
   accessToken: string;
   refreshToken: string;
 }
-
-// [이메일 인증] /api/members/mail/certificate
-export interface EmailAuthenticationResponse {
-  isConfirm: boolean;
-}
