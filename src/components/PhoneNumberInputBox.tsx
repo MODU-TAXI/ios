@@ -29,7 +29,11 @@ const PhoneNumberInputBoxComponent: React.FC<
   // TextInput value change 함수
   const valueHandleChange = (text: string) => {
     const formatted = formatPhoneNumber(text);
-    setValue(formatted);
+
+    // 13자 이상으로 입력 불가하게 만듦
+    if (formatted.length <= 13) {
+      setValue(formatted);
+    }
   };
 
   // TextInput 밖에 영역 클릭 시에도 focusing 하게 하는 함수
