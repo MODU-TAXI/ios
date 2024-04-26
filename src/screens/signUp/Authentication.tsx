@@ -11,6 +11,7 @@ import { RootStackParamList } from '@type/ParamLists';
 import { SignUpUser } from '@recoil/type';
 import { signUpUserState } from '@recoil/recoil';
 import { useSmsAuthentication } from '@hooks/api/member.sms';
+import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
 
 // 이름, 성별, 전화번호 입력 스크린
 const AuthenticationScreen = () => {
@@ -89,7 +90,7 @@ const AuthenticationScreen = () => {
 
             {/* 전화번호 */}
             <View className="mt-4">
-              <InputBoxComponent
+              <PhoneNumberInputBoxComponent
                 title="전화번호"
                 value={phoneNumber}
                 setValue={setPhoneNumber}
