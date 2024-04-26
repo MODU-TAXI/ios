@@ -53,7 +53,7 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
       }
     >
       <Text className="text-[#626262]">{title}</Text>
-      <View className="flex-row mt-1.5as">
+      <View className="flex-row mt-1.5">
         <TextInput
           ref={inputRef}
           value={value}
