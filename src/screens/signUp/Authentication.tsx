@@ -10,6 +10,7 @@ import ProgressBarComponent from '@components/ProgressBar';
 import { RootStackParamList } from '@type/ParamLists';
 import { SignUpUser } from '@recoil/type';
 import { signUpUserState } from '@recoil/recoil';
+import { useSmsAuthentication } from '@hooks/api/member.sms';
 
 // 이름, 성별, 전화번호 입력 스크린
 const AuthenticationScreen = () => {
@@ -17,7 +18,7 @@ const AuthenticationScreen = () => {
 
   const [signUpUser, setSignUpUser] =
     useRecoilState<SignUpUser>(signUpUserState);
-
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -25,6 +26,9 @@ const AuthenticationScreen = () => {
     { index: 1, item: '남자', select: false },
     { index: 2, item: '여자', select: false },
   ]);
+
+  const { mutateAsync: smsAuthentication } =
+    useSmsAuthentication(setErrorMessage);
 
   // 다음으로
   const toNext = async (): Promise<void> => {
@@ -34,6 +38,12 @@ const AuthenticationScreen = () => {
       gender: gender === '남자' ? 'MALE' : 'FEMALE',
       phoneNumber: phoneNumber,
     }));
+
+    await smsAuthentication({
+      key: signUpUser.key,
+      phoneNumber: phoneNumber,
+    });
+
     navigation.navigate('PhoneAuthenticationCodeScreen');
   };
 
@@ -85,6 +95,11 @@ const AuthenticationScreen = () => {
                 setValue={setPhoneNumber}
                 placeholder="010-XXXX-XXXX"
               />
+            </View>
+
+            {/* 경고 메세지 */}
+            <View className="flex-row justify-between mt-2 px-2">
+              <Text className="text-error font-medium">{errorMessage}</Text>
             </View>
 
             {/* 버튼을 아래로 내리기 위한 View */}

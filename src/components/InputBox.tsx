@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  TextInput,
-  Text,
-  View,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-  Pressable,
-} from 'react-native';
+import { TextInput, Text, View, Pressable } from 'react-native';
 import TimerComponent from './Timer';
 
 interface InputBoxComponentProps {
@@ -33,10 +26,8 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
   const inputRef = React.useRef<TextInput>(null); // focusing ref
 
   // TextInput value change 함수
-  const valueHandleChange = (
-    e: NativeSyntheticEvent<TextInputChangeEventData>,
-  ) => {
-    setValue(e.nativeEvent.text);
+  const valueHandleChange = (text: string) => {
+    setValue(text);
   };
 
   // TextInput 밖에 영역 클릭 시에도 focusing 하게 하는 함수
@@ -62,20 +53,22 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
       }
     >
       <Text className="text-[#626262]">{title}</Text>
-      <View className="flex-row items-center justify-between mt-1.5">
+      <View className="flex-row mt-1.5as">
         <TextInput
           ref={inputRef}
           value={value}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          onChange={valueHandleChange}
+          onChangeText={valueHandleChange}
           placeholder={placeholder}
           placeholderTextColor="#C0C0C0"
-          className="font-semibold"
+          className="font-semibold flex-1 mr-2"
         />
 
         {/* timer 있을때만 TimerComponent 적용 */}
-        {timer && <TimerComponent time={time!} setTime={setTime!} />}
+        {timer && time && setTime && (
+          <TimerComponent time={time} setTime={setTime} />
+        )}
       </View>
     </Pressable>
   );

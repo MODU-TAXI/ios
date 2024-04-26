@@ -15,17 +15,24 @@ import ProgressBarComponent from '@components/ProgressBar';
 
 import { signUp } from '@server/api/member';
 import { signUpUserState } from '@recoil/recoil';
+import { useSmsAuthentication, useSmsConfirm } from '@hooks/api/member.sms';
 import { setAccessToken, setRefreshToken } from '@utils/token';
+import { InfoToastMessage } from '@utils/toastMessage';
 import { RootStackParamList } from '@type/ParamLists';
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 
 const PhoneAuthenticationCodeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const signUpUser = useRecoilValue(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
-  const [time, setTime] = useState(180); // 타이머 시간
-  const signUpUser = useRecoilValue(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
+  const [time, setTime] = useState(300); // 타이머 시간
+
+  const { mutateAsync: smsConfirm } = useSmsConfirm(setErrorMessage);
+
+  const { mutateAsync: smsAuthentication } =
+    useSmsAuthentication(setErrorMessage);
 
   // 인증번호 만료시 에러 메세지 생성
   useEffect(() => {
@@ -36,23 +43,30 @@ const PhoneAuthenticationCodeScreen = () => {
 
   // 회원가입
   const sendCode = async (): Promise<void> => {
-    try {
-      const response = await signUp(signUpUser);
+    await smsConfirm({
+      key: signUpUser.key,
+      phoneNumber: signUpUser.phoneNumber,
+      certificationCode: code,
+    });
 
-      const { accessToken, refreshToken } = response;
+    const response = await signUp(signUpUser);
 
-      await setAccessToken(accessToken);
-      await setRefreshToken(refreshToken);
+    const { accessToken, refreshToken } = response;
 
-      navigation.navigate('SchoolAuthenticationScreen');
-    } catch (error) {
-      console.error(error);
-    }
+    await setAccessToken(accessToken);
+    await setRefreshToken(refreshToken);
+
+    navigation.navigate('SchoolAuthenticationScreen');
   };
 
   // 인증번호 재전송
-  const resendCode = () => {
-    setTime(180); // 재전송시 timer 재설정
+  const resendCode = async () => {
+    await smsAuthentication({
+      key: signUpUser.key,
+      phoneNumber: signUpUser.phoneNumber,
+    });
+    InfoToastMessage('인증번호가 재전송 되었습니다');
+    setTime(300); // 재전송시 timer 재설정
   };
 
   return (

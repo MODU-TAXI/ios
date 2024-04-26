@@ -4,8 +4,8 @@ import {
   EmailAuthenticationRequest,
   EmailConfirmRequest,
 } from '@server/requestTypes/member.mail';
-import { emailAuthentication, emailConfirm } from '@server/api/memeber.mail';
-import { memberMailErrorHandler } from '@server/errorHandler/memeber.mail';
+import { emailAuthentication, emailConfirm } from '@server/api/member.mail';
+import { memberMailErrorHandler } from '@server/errorHandler/member.mail';
 
 // 이메일인증
 export const useEmailAuthentication = (

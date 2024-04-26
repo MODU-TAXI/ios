@@ -23,7 +23,7 @@ guestAxiosInstance.interceptors.response.use(
   },
   async (error) => {
     // 오류 처리 후 오류를 다시 throw하여 호출한 쪽에서도 처리할 수 있게 함
-    return Promise.reject(error.response.data);
+    return Promise.reject(error);
   },
 );
 
