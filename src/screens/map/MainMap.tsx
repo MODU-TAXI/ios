@@ -21,6 +21,7 @@ import {
   Camera,
 } from '@mj-studio/react-native-naver-map';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Geolocation from '@react-native-community/geolocation';
 
 import { searchRoomCurrentCamera } from '@utils/map';
 import { RoomResponse } from '@server/responseTypes/map';
@@ -61,33 +62,33 @@ const MainMapScreen = () => {
    */
 
   // 현재 카메라 중심좌표 저장
-  const [currentCamera, setCurrentCamera] = useState<Camera>({
-    // 최초 위치는 더미데이터 사용 (인후)
-    longitude: 126.656563,
-    latitude: 37.451062,
-    zoom: 12,
-  });
+  const [currentCamera, setCurrentCamera] = useState<Camera>();
 
-  const [rooms, setRooms] = useState<RoomResponse[]>([
-    {
-      id: 14,
-      longitude: 126.69488,
-      latitude: 37.46318,
-      spotName: '인하대학교 후문',
-    },
-    {
-      id: 15,
-      longitude: 126.656152,
-      latitude: 37.451098,
-      spotName: '인하대학교 후문',
-    },
-    // {
-    //   id: 6,
-    //   longitude: 126.67889,
-    //   latitude: 37.513138,
-    //   spotName: '인하대학교 후문',
-    // },
-  ]);
+  // 현재 조회한 매칭방 배열
+  const [rooms, setRooms] = useState<RoomResponse[]>([]);
+
+  // 처음 렌더링 시 현재위치 저장 및 방 탐색
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setCurrentCamera({
+          latitude: latitude,
+          longitude: longitude,
+          zoom: 12,
+        });
+        setRooms(
+          searchRoomCurrentCamera({
+            latitude: latitude,
+            longitude: longitude,
+            zoom: 12,
+          }),
+        );
+      },
+      (error) => console.error(error),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+  }, []);
 
   // timeout 정보 저장 Ref
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -105,11 +106,13 @@ const MainMapScreen = () => {
         longitude: e.longitude,
         zoom: e.zoom,
       });
-      searchRoomCurrentCamera({
-        latitude: e.latitude,
-        longitude: e.longitude,
-        zoom: e.zoom,
-      });
+      setRooms(
+        searchRoomCurrentCamera({
+          latitude: e.latitude,
+          longitude: e.longitude,
+          zoom: e.zoom,
+        }),
+      );
     }, 1000);
   }, []);
 
@@ -122,32 +125,34 @@ const MainMapScreen = () => {
     >
       {/** 지도 */}
       <View className="flex-1 w-full h-auto mb-[320px]">
-        <NaverMapView
-          style={{ flex: 1 }}
-          mapType="Basic"
-          initialCamera={currentCamera}
-          onCameraChanged={onCameraChange}
-          locale="ko"
-          logoAlign="BottomRight"
-          logoMargin={{ bottom: 40 }}
-        >
-          {rooms &&
-            rooms.map((room) => (
-              /** 매칭방 하나의 마커 */
-              /** TODO :
-               * 마커 탭 했을 때의 동작 (바텀시트에 정보 출력 등)
-               */
-              <NaverMapMarkerOverlay
-                key={room.id}
-                latitude={room.latitude}
-                longitude={room.longitude}
-                onTap={() => console.log(room.spotName)}
-                anchor={{ x: 0.5, y: 1 }}
-              >
-                <RoomMarkerComponent spotName={room.spotName} />
-              </NaverMapMarkerOverlay>
-            ))}
-        </NaverMapView>
+        {currentCamera && (
+          <NaverMapView
+            style={{ flex: 1 }}
+            mapType="Basic"
+            initialCamera={currentCamera}
+            onCameraChanged={onCameraChange}
+            locale="ko"
+            logoAlign="BottomRight"
+            logoMargin={{ bottom: 40 }}
+          >
+            {rooms &&
+              rooms.map((room) => (
+                /** 매칭방 하나의 마커 */
+                /** TODO :
+                 * 마커 탭 했을 때의 동작 (바텀시트에 정보 출력 등)
+                 */
+                <NaverMapMarkerOverlay
+                  key={room.id}
+                  latitude={room.latitude}
+                  longitude={room.longitude}
+                  onTap={() => console.log(room.spotName)}
+                  anchor={{ x: 0.5, y: 1 }}
+                >
+                  <RoomMarkerComponent spotName={room.spotName} />
+                </NaverMapMarkerOverlay>
+              ))}
+          </NaverMapView>
+        )}
       </View>
 
       {/** 바텀시트 */}
@@ -160,8 +165,9 @@ const MainMapScreen = () => {
           },
           shadowOpacity: 0.3,
           shadowRadius: 4.65,
-
           elevation: 8,
+          backgroundColor: '#FFFFFF',
+          borderRadius: 16,
         }}
         ref={bottomSheetRef}
         index={0}
