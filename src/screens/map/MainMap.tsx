@@ -23,12 +23,12 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Geolocation from '@react-native-community/geolocation';
 
-import { searchRoomCurrentCamera } from '@utils/map';
 import { RoomResponse } from '@server/responseTypes/map';
 
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
 
 import MapBottomSheetScreen from './MapBottomSheet';
+import fetchRoomCurrentCamera from '@utils/map';
 
 const MainMapScreen = () => {
   const insets = useSafeAreaInsets();
@@ -55,12 +55,6 @@ const MainMapScreen = () => {
     [],
   );
 
-  /** TODO
-   * initialCamera 는 현재위치
-   * 최초 렌더링 시 initialCamera 중심 방 탐색
-   * camera, zoom 바뀔 때마다 재탐색 (1000ms 딜레이)
-   */
-
   // 현재 카메라 중심좌표 저장
   const [currentCamera, setCurrentCamera] = useState<Camera>();
 
@@ -77,13 +71,8 @@ const MainMapScreen = () => {
           longitude: longitude,
           zoom: 12,
         });
-        setRooms(
-          searchRoomCurrentCamera({
-            latitude: latitude,
-            longitude: longitude,
-            zoom: 12,
-          }),
-        );
+
+        fetchRoomCurrentCamera(longitude, latitude, 10000, setRooms);
       },
       (error) => console.error(error),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
@@ -106,13 +95,8 @@ const MainMapScreen = () => {
         longitude: e.longitude,
         zoom: e.zoom,
       });
-      setRooms(
-        searchRoomCurrentCamera({
-          latitude: e.latitude,
-          longitude: e.longitude,
-          zoom: e.zoom,
-        }),
-      );
+
+      fetchRoomCurrentCamera(e.longitude, e.latitude, 10000, setRooms);
     }, 1000);
   }, []);
 
@@ -143,8 +127,8 @@ const MainMapScreen = () => {
                  */
                 <NaverMapMarkerOverlay
                   key={room.id}
-                  latitude={room.latitude}
-                  longitude={room.longitude}
+                  latitude={room.departureLatitude}
+                  longitude={room.departureLongitude}
                   onTap={() => console.log(room.spotName)}
                   anchor={{ x: 0.5, y: 1 }}
                 >
