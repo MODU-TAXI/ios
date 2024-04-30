@@ -28,7 +28,7 @@ import { RoomResponse } from '@server/responseTypes/map';
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
 
 import MapBottomSheetScreen from './MapBottomSheet';
-import fetchRoomCurrentCamera from '@utils/map';
+import { fetchRoomCurrentCamera, calculateRange } from '@utils/map';
 
 const MainMapScreen = () => {
   const insets = useSafeAreaInsets();
@@ -58,6 +58,9 @@ const MainMapScreen = () => {
   // 현재 카메라 중심좌표 저장
   const [currentCamera, setCurrentCamera] = useState<Camera>();
 
+  // 현재 줌에서의 탐색 범위
+  const [range, setRange] = useState<number>(2500);
+
   // 현재 조회한 매칭방 배열
   const [rooms, setRooms] = useState<RoomResponse[]>([]);
 
@@ -66,13 +69,14 @@ const MainMapScreen = () => {
     Geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
+        const adjustedLatitude = latitude - 0.01;
         setCurrentCamera({
-          latitude: latitude,
+          latitude: adjustedLatitude,
           longitude: longitude,
           zoom: 12,
         });
 
-        fetchRoomCurrentCamera(longitude, latitude, 10000, setRooms);
+        fetchRoomCurrentCamera(longitude, latitude, range, setRooms);
       },
       (error) => console.error(error),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
@@ -90,23 +94,34 @@ const MainMapScreen = () => {
     }
 
     timeoutRef.current = setTimeout(() => {
+      const adjustedLatitude = e.latitude - 0.0005;
+      // zoom 13.5 : 0.002
+      // zoom 14.5 : 0.001
+      // zoom 15.5 : 0.0005
       setCurrentCamera({
-        latitude: e.latitude,
+        latitude: adjustedLatitude,
         longitude: e.longitude,
         zoom: e.zoom,
       });
 
-      fetchRoomCurrentCamera(e.longitude, e.latitude, 10000, setRooms);
+      let newRange = 2500;
+      if (e.zoom) {
+        newRange = calculateRange(e.zoom);
+        setRange(newRange);
+      }
+
+      fetchRoomCurrentCamera(e.longitude, e.latitude, newRange, setRooms);
     }, 1000);
   }, []);
+
+  useEffect(() => {
+    console.log(currentCamera);
+  }, [currentCamera]);
 
   // 렌더링
   return (
     // 지도가 화면 전체를 포함하기 위한 마진 설정
-    <View
-      className="flex-1 justify-center bg-white"
-      style={{ marginTop: -insets.top }}
-    >
+    <View className="flex-1 justify-center bg-white" style={{ marginTop: 0 }}>
       {/** 지도 */}
       <View className="flex-1 w-full h-auto mb-[320px]">
         {currentCamera && (
@@ -117,8 +132,18 @@ const MainMapScreen = () => {
             onCameraChanged={onCameraChange}
             locale="ko"
             logoAlign="BottomRight"
-            logoMargin={{ bottom: 40 }}
+            //logoMargin={{ bottom: 40 }}
           >
+            <NaverMapMarkerOverlay
+              latitude={currentCamera.latitude}
+              longitude={currentCamera.longitude}
+            />
+            <NaverMapCircleOverlay
+              latitude={currentCamera.latitude}
+              longitude={currentCamera.longitude}
+              radius={range}
+              color={'rgba(64, 206, 172, 0.24)'}
+            />
             {rooms &&
               rooms.map((room) => (
                 /** 매칭방 하나의 마커 */
@@ -130,7 +155,7 @@ const MainMapScreen = () => {
                   latitude={room.departureLatitude}
                   longitude={room.departureLongitude}
                   onTap={() => console.log(room.spotName)}
-                  anchor={{ x: 0.5, y: 1 }}
+                  anchor={{ x: 0.5, y: 0.5 }}
                 >
                   <RoomMarkerComponent spotName={room.spotName} />
                 </NaverMapMarkerOverlay>
