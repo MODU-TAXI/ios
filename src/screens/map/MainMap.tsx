@@ -28,7 +28,11 @@ import { RoomResponse } from '@server/responseTypes/map';
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
 
 import MapBottomSheetScreen from './MapBottomSheet';
-import { fetchRoomCurrentCamera, calculateRange } from '@utils/map';
+import {
+  fetchRoomCurrentCamera,
+  calculateRange,
+  calculateCenter,
+} from '@utils/map';
 
 const MainMapScreen = () => {
   const insets = useSafeAreaInsets();
@@ -59,7 +63,7 @@ const MainMapScreen = () => {
   const [currentCamera, setCurrentCamera] = useState<Camera>();
 
   // 현재 줌에서의 탐색 범위
-  const [range, setRange] = useState<number>(2500);
+  const [range, setRange] = useState<number>(600);
 
   // 현재 조회한 매칭방 배열
   const [rooms, setRooms] = useState<RoomResponse[]>([]);
@@ -73,7 +77,7 @@ const MainMapScreen = () => {
         setCurrentCamera({
           latitude: adjustedLatitude,
           longitude: longitude,
-          zoom: 12,
+          zoom: 14,
         });
 
         fetchRoomCurrentCamera(longitude, latitude, range, setRooms);
@@ -94,23 +98,25 @@ const MainMapScreen = () => {
     }
 
     timeoutRef.current = setTimeout(() => {
-      const adjustedLatitude = e.latitude - 0.0005;
-      // zoom 13.5 : 0.002
-      // zoom 14.5 : 0.001
-      // zoom 15.5 : 0.0005
+      let newRange = 2500;
+      let adjustValue = 0.001;
+      if (e.zoom) {
+        adjustValue = calculateCenter(e.zoom);
+        newRange = calculateRange(e.zoom);
+        setRange(newRange);
+      }
+
+      // 카메라 센터를 zoom 레벨에 따라 하단으로 조정
+      const adjustedLatitude = e.latitude - adjustValue;
+
+      // 조정된 센터 저장 및 방 탐색
       setCurrentCamera({
         latitude: adjustedLatitude,
         longitude: e.longitude,
         zoom: e.zoom,
       });
 
-      let newRange = 2500;
-      if (e.zoom) {
-        newRange = calculateRange(e.zoom);
-        setRange(newRange);
-      }
-
-      fetchRoomCurrentCamera(e.longitude, e.latitude, newRange, setRooms);
+      fetchRoomCurrentCamera(e.longitude, adjustedLatitude, newRange, setRooms);
     }, 1000);
   }, []);
 
