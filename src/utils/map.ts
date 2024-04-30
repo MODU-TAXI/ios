@@ -10,7 +10,6 @@ export const fetchRoomCurrentCamera = async (
   setRooms: React.Dispatch<React.SetStateAction<RoomResponse[]>>,
 ) => {
   try {
-    console.log(longitude, latitude, range);
     const rooms = await checkRoomCurrentCamera(longitude, latitude, range);
     setRooms(rooms);
   } catch (error) {

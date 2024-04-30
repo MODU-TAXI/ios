@@ -120,9 +120,9 @@ const MainMapScreen = () => {
     }, 1000);
   }, []);
 
-  useEffect(() => {
-    console.log(currentCamera);
-  }, [currentCamera]);
+  // useEffect(() => {
+  //   console.log(currentCamera);
+  // }, [currentCamera]);
 
   // 렌더링
   return (

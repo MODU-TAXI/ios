@@ -24,6 +24,6 @@ export const checkRoomCurrentCamera = async (
   const response = await GetAxiosInstance<any>(
     `/api/rooms/map?radius=${radius}&longitude=${longitude}&latitude=${latitude}`,
   );
-  console.log(response.data.rooms);
+
   return response.data.rooms;
 };
