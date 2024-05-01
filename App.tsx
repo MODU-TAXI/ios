@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RecoilRoot } from 'recoil'; // recoil 라이브러리
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';

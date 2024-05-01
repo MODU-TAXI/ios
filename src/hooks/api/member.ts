@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -9,7 +10,43 @@ import { KakaoLoginResponse } from '@server/responseTypes/member';
 import { SignUpUser } from '@recoil/type';
 import { loggedInState, signUpUserState } from '@recoil/recoil';
 import { RootStackParamList } from '@type/ParamLists';
-import { setAccessToken, setRefreshToken } from '@utils/token';
+import {
+  deleteToken,
+  getRefreshToken,
+  setAccessToken,
+  setRefreshToken,
+} from '@utils/token';
+import Config from 'react-native-config';
+
+// 로그인 여부 확인
+export const useCheckLogin = async () => {
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+
+  try {
+    const refreshToken = await getRefreshToken();
+
+    if (!refreshToken) {
+      await deleteToken();
+    }
+
+    const response = await axios.patch(
+      `${Config.SERVER_URL}api/members/refresh`,
+      {},
+      { headers: { refreshToken: refreshToken } },
+    );
+
+    const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+      response.data;
+
+    setLoggedIn(true);
+
+    await setAccessToken(newAccessToken);
+    await setRefreshToken(newRefreshToken);
+  } catch (error) {
+    setLoggedIn(false);
+    await deleteToken();
+  }
+};
 
 // 카카오 로그인
 export const useKakaoLogin = (): UseMutationResult<

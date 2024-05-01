@@ -3,9 +3,14 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { LoginStackParamList } from '@type/ParamLists';
 import { View, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { deleteMyChatInfo } from '@server/api/chat';
 
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
+
+  const chatOut = async () => {
+    await deleteMyChatInfo();
+  };
 
   const toMatchScreen = () => {
     navigation.navigate('MatchScreen');
@@ -63,6 +68,13 @@ const HomeScreen = () => {
           className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
         >
           <Text>채팅 스크린</Text>
+        </Pressable>
+
+        <Pressable
+          onPress={chatOut}
+          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+        >
+          <Text>채팅방 나가기</Text>
         </Pressable>
       </View>
     </SafeAreaView>

@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { SignUpUser } from '@recoil/type';
+import { MessageBody, SignUpUser } from '@recoil/type';
 
 export const signUpUserState = atom<SignUpUser>({
   key: 'tempUser',
@@ -21,4 +21,17 @@ export const emailState = atom<string>({
   default: '',
 });
 
-// 12321   42531
+export const chatInState = atom<boolean>({
+  key: 'isChatIn',
+  default: false,
+});
+
+export const chatState = atom<MessageBody[]>({
+  key: 'chat',
+  default: [],
+});
+
+export const memberIdState = atom<number>({
+  key: 'memberId',
+  default: -1,
+});
