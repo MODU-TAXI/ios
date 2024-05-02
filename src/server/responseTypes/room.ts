@@ -10,7 +10,10 @@ export interface CheckRoomResponse {
 export interface CheckRoomDetailResponse {
   roomId: number;
   spotId: number;
+
+  /** [ ONLY_WOMAN, ONLY_MAN, MANNER, QUIET, STUDENT_CERTIFICATION ] */
   roomTagBitMaskList: string[];
+
   departureLongitude: number;
   departureLatitude: number;
   departureTime: Date;
@@ -22,12 +25,16 @@ export interface CheckRoomDetailResponse {
 
 interface Path {
   coordinateReferenceSystem: {
+    /** [ NAME, LINK ] */
     type: string;
   };
   coordinates: Coordinate[];
+
+  /** [ GEOMETRY_COLLECTION, LINE_STRING, MULTI_LINE_STRING, MULTI_POINT, MULTI_POLYGON, POINT, POLYGON ] */
   type: string;
 }
 
+/** [longitude, latitude] */
 interface Coordinate {
   values: number[];
 }
