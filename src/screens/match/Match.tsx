@@ -1,9 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { View, Text, Pressable } from 'react-native';
 import {
   Camera,
   NaverMapView,
   NaverMapPathOverlay,
+  Coord,
+  NaverMapViewRef,
 } from '@mj-studio/react-native-naver-map';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -28,8 +30,14 @@ import { translateTag } from '@utils/room';
 const MatchScreen = () => {
   const [roomId, setRoomId] = useState<number>(15);
 
+  const mapRef = useRef<NaverMapViewRef>(null);
+  const map = () => mapRef.current;
+
   // 방 상세 정보 객체
   const [roomDetail, setRoomDetail] = useState<CheckRoomDetailResponse>();
+
+  // 경로 저장 배열
+  const [coordinate, setCoordinate] = useState<Coord[]>([]);
 
   // 도착시간 (계산을 위해 따로 선언)
   const [arrivalTime, setArrivalTime] = useState<Date>();
@@ -54,6 +62,16 @@ const MatchScreen = () => {
       try {
         const data = await checkRoomDetail(roomId);
         setRoomDetail(data);
+
+        // 경로 변환 및 저장
+        const coords = data.path.coordinates;
+        const convertedCoords: Coord[] = coords.map(
+          ({ values: [longitude, latitude] }) => ({
+            latitude,
+            longitude,
+          }),
+        );
+        setCoordinate(convertedCoords);
 
         // 도착시간 계산
         const departureTime = data.departureTime;
@@ -285,21 +303,30 @@ const MatchScreen = () => {
             <View className="w-full h-[200px] mt-2 bg-sub100 rounded-xl overflow-hidden">
               <NaverMapView
                 style={{ flex: 1 }}
+                ref={mapRef}
                 mapType="Basic"
                 initialCamera={initial}
                 locale="ko"
+                // TODO : onCameraChange 말고 첫 렌더링 시 하기
+                onCameraChanged={() =>
+                  map()?.animateCameraWithTwoCoords({
+                    coord1: {
+                      latitude: roomDetail.departureLatitude,
+                      longitude: roomDetail.departureLongitude,
+                    },
+                    // TODO : coord2 에 도착거점 좌표
+                    coord2: { latitude: 37.46504, longitude: 126.68045 },
+                    duration: 500,
+                  })
+                }
               >
-                <NaverMapPathOverlay
-                  coords={[
-                    { latitude: 33.5249594, longitude: 126.24180047 },
-                    { latitude: 33.25683311547, longitude: 126.18193 },
-                    { latitude: 33.3332807, longitude: 126.838389399 },
-                  ]}
-                  width={8}
-                  color={'red'}
-                  progress={-0.6}
-                  passedColor={'green'}
-                />
+                {coordinate.length > 2 && (
+                  <NaverMapPathOverlay
+                    coords={coordinate}
+                    width={8}
+                    color={'#40CEAC'}
+                  />
+                )}
               </NaverMapView>
             </View>
           </View>
