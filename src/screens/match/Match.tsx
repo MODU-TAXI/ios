@@ -27,7 +27,12 @@ import { translateTag } from '@utils/room';
 
 const MatchScreen = () => {
   const [roomId, setRoomId] = useState<number>(15);
+
+  // 방 상세 정보 객체
   const [roomDetail, setRoomDetail] = useState<CheckRoomDetailResponse>();
+
+  // 도착시간 (계산을 위해 따로 선언)
+  const [arrivalTime, setArrivalTime] = useState<Date>();
 
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
 
@@ -49,6 +54,14 @@ const MatchScreen = () => {
       try {
         const data = await checkRoomDetail(roomId);
         setRoomDetail(data);
+
+        // 도착시간 계산
+        const departureTime = data.departureTime;
+        const arrivalTime = new Date(departureTime);
+        arrivalTime.setMilliseconds(
+          arrivalTime.getMilliseconds() + data.duration,
+        );
+        setArrivalTime(arrivalTime);
       } catch (error) {
         console.error(error);
       }
@@ -295,7 +308,7 @@ const MatchScreen = () => {
           <View className="py-8 px-2">
             <View>
               <Text className="text-lg font-medium text-emphasized">
-                {dayjs().format('YYYY. MM. DD (ddd)')}
+                {dayjs(roomDetail.departureTime).format('YYYY. MM. DD (ddd)')}
               </Text>
             </View>
 
@@ -305,7 +318,7 @@ const MatchScreen = () => {
                   <StartCircle />
 
                   <Text className="text-lg text-disabled2 font-normal ml-4">
-                    13:35
+                    {dayjs(roomDetail.departureTime).format('hh:mm')}
                   </Text>
                 </View>
               </View>
@@ -323,7 +336,7 @@ const MatchScreen = () => {
                   <EndCircle />
 
                   <Text className="text-lg text-disabled2 font-normal ml-4">
-                    14:00
+                    {dayjs(arrivalTime).format('hh:mm')}
                   </Text>
                 </View>
 
@@ -385,14 +398,21 @@ const MatchScreen = () => {
           <View className="py-8">
             <View className="flex-row justify-between">
               <Text className="text-lg text-disabled2 font-medium">총액</Text>
-              <Text className="text-lg text-black font-medium">14,450원</Text>
+              <Text className="text-lg text-black font-medium">
+                {roomDetail.expectedCharge.toLocaleString('ko-KR')}원
+              </Text>
             </View>
 
             <View className="flex-row justify-between mt-4">
               <Text className="text-lg text-disabled2 font-medium">
                 최소인원 매칭시
               </Text>
-              <Text className="text-lg text-black font-medium">3,613원</Text>
+              <Text className="text-lg text-black font-medium">
+                {Math.floor(
+                  roomDetail.expectedCharge / (roomDetail.wishHeadcount + 1),
+                ).toLocaleString('ko-KR')}
+                원
+              </Text>
             </View>
           </View>
 
