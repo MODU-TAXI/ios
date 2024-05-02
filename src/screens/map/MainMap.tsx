@@ -23,7 +23,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Geolocation from '@react-native-community/geolocation';
 
-import { RoomResponse } from '@server/responseTypes/map';
+import { CheckRoomResponse } from '@server/responseTypes/room';
 
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
 
@@ -66,7 +66,7 @@ const MainMapScreen = () => {
   const [range, setRange] = useState<number>(600);
 
   // 현재 조회한 매칭방 배열
-  const [rooms, setRooms] = useState<RoomResponse[]>([]);
+  const [rooms, setRooms] = useState<CheckRoomResponse[]>([]);
 
   // 처음 렌더링 시 현재위치 저장 및 방 탐색
   useEffect(() => {

@@ -5,7 +5,10 @@ import {
   DeleteAxiosInstance,
 } from '@axios/axios.method';
 import { CreateMatchRequest } from '@server/requestTypes/room';
-import { RoomResponse } from '@server/responseTypes/map';
+import {
+  CheckRoomDetailResponse,
+  CheckRoomResponse,
+} from '@server/responseTypes/room';
 
 // [방 등록] /api/rooms
 export const createMatch = async (data: CreateMatchRequest): Promise<any> => {
@@ -20,10 +23,19 @@ export const checkRoomCurrentCamera = async (
   latitude: number,
   // spotId?: number,
   radius?: number,
-): Promise<RoomResponse[]> => {
+): Promise<CheckRoomResponse[]> => {
   const response = await GetAxiosInstance<any>(
     `/api/rooms/map?radius=${radius}&longitude=${longitude}&latitude=${latitude}`,
   );
 
   return response.data.rooms;
+};
+
+// [경로를 포함한 방 상세 정보 조회] /api/rooms/{id}
+export const checkRoomDetail = async (
+  id: number,
+): Promise<CheckRoomDetailResponse> => {
+  const response = await GetAxiosInstance<any>(`/api/rooms/${id}`);
+
+  return response.data;
 };
