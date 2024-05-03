@@ -18,6 +18,7 @@ type LoginStackParamList = {
   NaverMapScreen: undefined;
   CreateMatchScreen: undefined;
   SearchScreen: undefined;
+  ChatRoomScreen: undefined;
 };
 
 export type { RootStackParamList, LoginStackParamList };

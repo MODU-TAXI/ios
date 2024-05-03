@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { SignUpUser } from '@recoil/type';
+import { MessageBody, SignUpUser } from '@recoil/type';
 
 export const signUpUserState = atom<SignUpUser>({
   key: 'tempUser',
@@ -21,4 +21,20 @@ export const emailState = atom<string>({
   default: '',
 });
 
-// 12321   42531
+// 유저 정보 관리
+export const memberIdState = atom<number>({
+  key: 'memberId',
+  default: -1,
+});
+
+// 채팅방 입장 여부 관리
+export const chatInState = atom<boolean>({
+  key: 'isChatIn',
+  default: false,
+});
+
+//  채팅 메세지 관리
+export const messagesState = atom<MessageBody[]>({
+  key: 'messages',
+  default: [],
+});
