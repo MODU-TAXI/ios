@@ -26,6 +26,7 @@ import EndCircle from '@assets/images/Match/EndCircle.svg';
 import { CheckRoomDetailResponse } from '@server/responseTypes/room';
 import { checkRoomDetail } from '@server/api/room';
 import { translateTag } from '@utils/room';
+import { fetchRoomDetail } from '@hooks/api/rooms';
 
 const MatchScreen = () => {
   const [roomId, setRoomId] = useState<number>(15);
@@ -41,6 +42,10 @@ const MatchScreen = () => {
 
   // 도착시간 (계산을 위해 따로 선언)
   const [arrivalTime, setArrivalTime] = useState<Date>();
+
+  // 출발지, 도착거점 이름
+  const [departureName, setDepartureName] = useState<string>('');
+  const [spotName, setSpotName] = useState<string>('');
 
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
 
@@ -58,34 +63,22 @@ const MatchScreen = () => {
   };
 
   useEffect(() => {
-    const fetchRoomDetail = async (roomId: number) => {
-      try {
-        const data = await checkRoomDetail(roomId);
-        setRoomDetail(data);
-
-        // 경로 변환 및 저장
-        const coords = data.path.coordinates;
-        const convertedCoords: Coord[] = coords.map(
-          ({ values: [longitude, latitude] }) => ({
-            latitude,
-            longitude,
-          }),
-        );
-        setCoordinate(convertedCoords);
-
-        // 도착시간 계산
-        const departureTime = data.departureTime;
-        const arrivalTime = new Date(departureTime);
-        arrivalTime.setMilliseconds(
-          arrivalTime.getMilliseconds() + data.duration,
-        );
-        setArrivalTime(arrivalTime);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchRoomDetail(roomId);
+    fetchRoomDetail(roomId, setRoomDetail, setCoordinate, setArrivalTime);
   }, [roomId]);
+
+  useEffect(() => {
+    if (roomDetail) {
+      map()?.animateCameraWithTwoCoords({
+        coord1: {
+          latitude: roomDetail.departureLatitude,
+          longitude: roomDetail.departureLongitude,
+        },
+        // TODO : coord2 에 도착거점 좌표
+        coord2: { latitude: 37.46504, longitude: 126.68045 },
+        duration: 500,
+      });
+    }
+  }, [roomDetail]);
 
   if (roomDetail === undefined) {
     // 일단 react-query 적용전이니 더미데이터 적용
