@@ -29,7 +29,6 @@ import {
   setRefreshToken,
 } from '@utils/token';
 import Config from 'react-native-config';
-import { ErrorToastMessage } from '@utils/toastMessage';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
@@ -43,7 +42,6 @@ function AppInner() {
       const refreshToken = await getRefreshToken();
 
       if (!refreshToken) {
-        ErrorToastMessage('세션 만료! 다시 로그인해주세요');
         setLoggedIn(false);
         await deleteToken();
       }
@@ -62,7 +60,6 @@ function AppInner() {
       await setAccessToken(newAccessToken);
       await setRefreshToken(newRefreshToken);
     } catch (error) {
-      ErrorToastMessage('세션 만료! 다시 로그인해주세요');
       setLoggedIn(false);
       await deleteToken();
     }

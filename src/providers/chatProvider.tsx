@@ -1,18 +1,17 @@
 import React, {
   useEffect,
-  useState,
   useRef,
-  useCallback,
   createContext,
   useContext,
+  useState,
 } from 'react';
-import { getAccessToken } from '@utils/token';
-import StompJs, { Client, Message } from '@stomp/stompjs';
-import TextEncodingPolyfill from 'text-encoding';
-import { getMyChatInfo } from '@server/api/chat';
 import { useRecoilState } from 'recoil';
-import { chatInState, chatState, memberIdState } from '@recoil/recoil';
+import TextEncodingPolyfill from 'text-encoding';
+import StompJs, { Message } from '@stomp/stompjs';
+import { chatInState, memberIdState, messagesState } from '@recoil/recoil';
 import { InfoToastMessage } from '@utils/toastMessage';
+import { useAccessToken } from '@hooks/token';
+import { getMyChatInfo } from '@server/api/chat';
 import Config from 'react-native-config';
 
 Object.assign('global', {
@@ -34,66 +33,60 @@ const ChatContext = createContext(
     connect: (roomId: number) => void;
     disConnect: () => void;
     sendMessage: (inputMessage: string) => void;
-    onMessageReceived: (message: Message) => void;
   },
 );
 
 export const useChatContext = () => useContext(ChatContext);
 
 export function ChatProvider({ children }: any) {
-  const [chatIn, setChatIn] = useRecoilState(chatInState);
-  const [chat, setChat] = useRecoilState(chatState);
-  const [memberId, setMemberId] = useRecoilState(memberIdState);
-  const [roomId, setRoomId] = useState<number>();
-  const [accessToken, setAccessToken] = useState<string>('');
-
-  const getMyRoom = async () => {
-    try {
-      const token = await getAccessToken();
-
-      if (token) {
-        setAccessToken(token);
-      }
-
-      const { memberId, roomId } = await getMyChatInfo();
-
-      setMemberId(memberId); // memberId 저장
-
-      setRoomId(2); // 들어갈룸 Id
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const stompClient = useRef<any>({});
+  const [chatIn] = useRecoilState(chatInState);
+  const [, setMessages] = useRecoilState(messagesState);
+  const [accessToken] = useAccessToken();
+  const [roomId, setRoomId] = useState<number>(3);
+  const [, setMemberId] = useRecoilState(memberIdState);
 
   useEffect(() => {
-    getMyRoom();
+    (async () => {
+      const response = await getMyChatInfo();
+      const { memberId, roomId } = response;
+
+      if (memberId && roomId) {
+        setMemberId(memberId);
+        setRoomId(roomId);
+      }
+    })();
   }, []);
 
+  // 만약 내가 들어간 방이 있었을 경우메만 입장
   useEffect(() => {
-    if (roomId && roomId > 0) {
-      connect(roomId);
-    }
+    // if (accessToken && roomId && roomId > 0) {
+    //   connect(roomId);
+    // }
 
     return () => {
-      if (roomId && roomId > 0) {
+      if (accessToken && roomId && roomId > 0) {
         disConnect();
       }
     };
-  }, [roomId]);
+  }, [roomId, accessToken]);
 
-  const stompClient = useRef<any>({});
+  // 채팅방 입장했는지 여부 ref에 저장
+  useEffect(() => {
+    stompClient.current.chatIn = chatIn;
+  }, [chatIn]);
 
-  const connect = async (roomId: number) => {
+  const connect = (roomId: number) => {
     if (accessToken) {
       stompClient.current = new StompJs.Client({
-        brokerURL: Config.SOCKET_URL,
+        brokerURL: Config.SERVER_URL,
         connectHeaders: {
           token: accessToken,
         },
         debug: function (str) {
           console.log(str);
         },
-        reconnectDelay: 500000,
+        reconnectDelay: 500,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
       });
@@ -109,27 +102,22 @@ export function ChatProvider({ children }: any) {
           },
         );
       };
-
       stompClient.current.activate();
     }
   };
 
-  useEffect(() => {
-    stompClient.current.chatIn = chatIn;
-  }, [chatIn]);
-
+  // 메세지 받기
   const onMessageReceived = (message: Message) => {
     const decodedMessage: MessageBody = JSON.parse(message.body);
 
-    console.log(decodedMessage);
-
     if (stompClient.current.chatIn) {
-      setChat((prev) => [...prev, decodedMessage]);
+      setMessages((prev: MessageBody[]) => [...prev, decodedMessage]);
     } else {
       InfoToastMessage(decodedMessage.content);
     }
   };
 
+  // 메세지 보내기
   const sendMessage = (inputMessage: string) => {
     if (stompClient) {
       stompClient.current.publish({
@@ -148,8 +136,9 @@ export function ChatProvider({ children }: any) {
     }
   };
 
+  // socket 연결 해제
   const disConnect = () => {
-    if (stompClient && roomId) {
+    if (stompClient && roomId && roomId > 0) {
       stompClient.current.deactivate();
     }
   };
@@ -157,7 +146,6 @@ export function ChatProvider({ children }: any) {
   const handlers = {
     connect,
     disConnect,
-    onMessageReceived,
     sendMessage,
   };
 

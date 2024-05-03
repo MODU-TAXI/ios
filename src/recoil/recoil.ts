@@ -21,17 +21,20 @@ export const emailState = atom<string>({
   default: '',
 });
 
+// 유저 정보 관리
+export const memberIdState = atom<number>({
+  key: 'memberId',
+  default: -1,
+});
+
+// 채팅방 입장 여부 관리
 export const chatInState = atom<boolean>({
   key: 'isChatIn',
   default: false,
 });
 
-export const chatState = atom<MessageBody[]>({
-  key: 'chat',
+//  채팅 메세지 관리
+export const messagesState = atom<MessageBody[]>({
+  key: 'messages',
   default: [],
-});
-
-export const memberIdState = atom<number>({
-  key: 'memberId',
-  default: -1,
 });

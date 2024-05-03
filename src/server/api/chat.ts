@@ -4,22 +4,32 @@ import {
   PatchAxiosInstance,
   DeleteAxiosInstance,
 } from '@axios/axios.method';
-import { CreateMatchRequest } from '@server/requestTypes/room';
+import {
+  GetChatInfoResponse,
+  GetChatMessagesResponse,
+} from '@server/responseTypes/chat';
 
-export const getMyChatInfo = async (): Promise<any> => {
-  const response = await GetAxiosInstance<any>(`/chat-info`);
-
-  return response.data;
-};
-
-export const deleteMyChatInfo = async (): Promise<any> => {
-  const response = await DeleteAxiosInstance<any>('/chat-info');
+// [나의 채팅방 정보] /api/members/mail/certificate
+export const getMyChatInfo = async (): Promise<GetChatInfoResponse> => {
+  const response = await GetAxiosInstance<GetChatInfoResponse>(`/chat-info`);
 
   return response.data;
 };
 
-export const getChatMessages = async (roomId: number): Promise<any> => {
-  const response = await GetAxiosInstance<any>(`/chat-messages/${roomId}`);
+// [채팅방 퇴장] /chat-info
+export const deleteMyChatInfo = async (): Promise<string> => {
+  const response = await DeleteAxiosInstance<string>('/chat-info');
+
+  return response.data;
+};
+
+// [채팅 전부 조회] /chat-messages/{roomId}
+export const getChatMessages = async (
+  roomId: number,
+): Promise<GetChatMessagesResponse> => {
+  const response = await GetAxiosInstance<GetChatMessagesResponse>(
+    `/chat-messages/${roomId}`,
+  );
 
   return response.data;
 };

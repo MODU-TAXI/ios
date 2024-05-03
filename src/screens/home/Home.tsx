@@ -4,11 +4,15 @@ import { LoginStackParamList } from '@type/ParamLists';
 import { View, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { deleteMyChatInfo } from '@server/api/chat';
+import { useChatContext } from 'src/providers/chatProvider';
 
 const HomeScreen = () => {
+  const { disConnect } = useChatContext();
+
   const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
 
   const chatOut = async () => {
+    disConnect();
     await deleteMyChatInfo();
   };
 
