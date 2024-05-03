@@ -1,14 +1,18 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-interface RoomTagProps {
-  label: string;
-  textColor: string;
-  bgColor: string;
+export interface RoomTagProps {
+  label: string | undefined;
+  textColor: string | undefined;
+  bgColor: string | undefined;
 }
 
 /** 카풀팟 방 태그 */
-const RoomTagComponent = ({ label, textColor, bgColor }: RoomTagProps) => {
+const RoomTagComponent: React.FC<RoomTagProps> = ({
+  label,
+  textColor,
+  bgColor,
+}) => {
   return (
     <View className={`${bgColor} rounded-md mr-2`}>
       <Text className={`text-xs ${textColor} font-medium px-2 py-1`}>
