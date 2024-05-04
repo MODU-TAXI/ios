@@ -13,6 +13,11 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 dayjs.locale('ko'); // 나중에 이 부분 dayjs 따로 빼기
 
+import { CheckRoomDetailResponse } from '@server/responseTypes/room';
+import { translateTag } from '@utils/room';
+import { fetchRoomDetail } from '@hooks/api/rooms';
+import { fetchSpot } from '@hooks/api/spot';
+
 import ParticipateUserComponent from '@components/ParticipateUser';
 import WaitUserComponent from '@components/WaitUser';
 import RoomTagComponent from '@components/RoomDigest/RoomTag';
@@ -23,9 +28,6 @@ import DottedLineComponent from '@components/DottedLine';
 
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndCircle from '@assets/images/Match/EndCircle.svg';
-import { CheckRoomDetailResponse } from '@server/responseTypes/room';
-import { checkRoomDetail } from '@server/api/room';
-import { translateTag } from '@utils/room';
 
 const MatchScreen = () => {
   const [roomId, setRoomId] = useState<number>(2);
@@ -42,6 +44,14 @@ const MatchScreen = () => {
   // 도착시간 (계산을 위해 따로 선언)
   const [arrivalTime, setArrivalTime] = useState<Date>();
 
+  // 출발지, 도착거점
+  const [departureName, setDepartureName] = useState<string>('');
+  const [spotName, setSpotName] = useState<string>('');
+  const [spotCoord, setSpotCoord] = useState<Coord>({
+    latitude: 37.46504,
+    longitude: 126.68045,
+  });
+
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
 
   // 다음으로
@@ -49,43 +59,47 @@ const MatchScreen = () => {
     console.log('ok');
   }, []);
 
-  // initialCamera 는 첫 렌더링 시 카메라 좌표
-  // TODO : api 연동 시 출발/도착지의 중앙점으로 카메라 위치
+  // 첫 렌더링 시 카메라 좌표
   const initial: Camera = {
     latitude: 37.46504,
     longitude: 126.68045,
     zoom: 16,
   };
 
+  // roomId 에 따른 매칭방 정보 저장
   useEffect(() => {
-    const fetchRoomDetail = async (roomId: number) => {
-      try {
-        const data = await checkRoomDetail(roomId);
-        setRoomDetail(data);
-
-        // 경로 변환 및 저장
-        const coords = data.path.coordinates;
-        const convertedCoords: Coord[] = coords.map(
-          ({ values: [longitude, latitude] }) => ({
-            latitude,
-            longitude,
-          }),
-        );
-        setCoordinate(convertedCoords);
-
-        // 도착시간 계산
-        const departureTime = data.departureTime;
-        const arrivalTime = new Date(departureTime);
-        arrivalTime.setMilliseconds(
-          arrivalTime.getMilliseconds() + data.duration,
-        );
-        setArrivalTime(arrivalTime);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchRoomDetail(roomId);
+    fetchRoomDetail(roomId, setRoomDetail, setCoordinate, setArrivalTime);
   }, [roomId]);
+
+  // 도착 거점 이름, 좌표 저장
+  useEffect(() => {
+    if (roomDetail) {
+      fetchSpot(
+        roomDetail.spotId,
+        roomDetail.departureLongitude,
+        roomDetail.departureLatitude,
+        setSpotName,
+        setSpotCoord,
+      );
+    }
+  }, [roomDetail]);
+
+  // roomDetail 저장 시 카메라를 출발-도착지 사이로 이동
+  useEffect(() => {
+    if (roomDetail) {
+      map()?.animateCameraWithTwoCoords({
+        coord1: {
+          latitude: roomDetail.departureLatitude,
+          longitude: roomDetail.departureLongitude,
+        },
+        coord2: {
+          latitude: spotCoord.latitude,
+          longitude: spotCoord.longitude,
+        },
+        duration: 500,
+      });
+    }
+  }, [roomDetail]);
 
   if (roomDetail === undefined) {
     // 일단 react-query 적용전이니 더미데이터 적용
@@ -97,180 +111,7 @@ const MatchScreen = () => {
         {/* 헤더 */}
         <HeaderComponent title={'매칭 페이지'} />
 
-        <ScrollView className="flex-1 px-4 mt-8">
-          {/* 카테고리 */}
-          <View className="flex-row">
-            <RoomTagComponent
-              label="학생인증"
-              textColor="text-main"
-              bgColor="bg-sub100"
-            />
-
-            <RoomTagComponent
-              label="여자만"
-              textColor="text-gray500"
-              bgColor="bg-box"
-            />
-
-            <RoomTagComponent
-              label="조용히"
-              textColor="text-gray500"
-              bgColor="bg-box"
-            />
-          </View>
-
-          {/* 지도 */}
-          <View className="shadow-md">
-            <View className="w-full h-[200px] mt-2 bg-sub100 rounded-xl overflow-hidden">
-              <NaverMapView
-                style={{ flex: 1 }}
-                mapType="Basic"
-                initialCamera={initial}
-                locale="ko"
-              >
-                <NaverMapPathOverlay
-                  coords={[
-                    { latitude: 33.5249594, longitude: 126.24180047 },
-                    { latitude: 33.25683311547, longitude: 126.18193 },
-                    { latitude: 33.3332807, longitude: 126.838389399 },
-                  ]}
-                  width={8}
-                  color={'red'}
-                  progress={-0.6}
-                  passedColor={'green'}
-                />
-              </NaverMapView>
-            </View>
-          </View>
-
-          {/* 날짜, 출발지, 도착지 정보 */}
-          <View className="py-8 px-2">
-            <View>
-              <Text className="text-lg font-medium text-emphasized">
-                {dayjs().format('YYYY. MM. DD (ddd)')}
-              </Text>
-            </View>
-
-            <View className="mt-5">
-              <View>
-                <View className="flex-row items-center">
-                  <StartCircle />
-
-                  <Text className="text-lg text-disabled2 font-normal ml-4">
-                    13:35
-                  </Text>
-                </View>
-              </View>
-
-              <View className="flex-row ml-[6px] my-2">
-                <View className="w-[1px] h-[46px] bg-main" />
-
-                <Text className="ml-6 text-[20px] font-semibold">
-                  인하대학교 후문
-                </Text>
-              </View>
-
-              <View>
-                <View className="flex-row items-center">
-                  <EndCircle />
-
-                  <Text className="text-lg text-disabled2 font-normal ml-4">
-                    14:00
-                  </Text>
-                </View>
-
-                <Text className="text-[20px] font-semibold ml-[31px] mt-2">
-                  주안역
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          {/* 점선 */}
-          <DottedLineComponent />
-
-          {/* 방장 */}
-          <View className="py-8 px-1">
-            <DescriptionComponent description="방장" />
-
-            <ParticipateUserComponent
-              nickname={'버스를 놓친 사자'}
-              temperature={36.5}
-              me={true}
-            />
-          </View>
-
-          {/* 참여 멤버 */}
-          <View className="py-8 px-1">
-            <DescriptionComponent description="참여멤버" />
-
-            <ParticipateUserComponent
-              nickname={'졸다가 늦은 판다'}
-              temperature={36.5}
-              me={false}
-            />
-            <ParticipateUserComponent
-              nickname={'버스가 작은 곰'}
-              temperature={36.5}
-              me={false}
-            />
-            <ParticipateUserComponent
-              nickname={'숏다리 햄스터'}
-              temperature={36.5}
-              me={false}
-            />
-          </View>
-
-          {/* 대기 멤버 */}
-          <View className="py-8 px-1">
-            <DescriptionComponent description="대기멤버" />
-
-            <WaitUserComponent nickname={'남자'} temperature={36.5} />
-
-            <WaitUserComponent nickname={'여자'} temperature={36.5} />
-          </View>
-
-          {/* 점선 */}
-          <DottedLineComponent />
-
-          {/* 금액 */}
-          <View className="py-8">
-            <View className="flex-row justify-between">
-              <Text className="text-lg text-disabled2 font-medium">총액</Text>
-              <Text className="text-lg text-black font-medium">14,450원</Text>
-            </View>
-
-            <View className="flex-row justify-between mt-4">
-              <Text className="text-lg text-disabled2 font-medium">
-                최소인원 매칭시
-              </Text>
-              <Text className="text-lg text-black font-medium">3,613원</Text>
-            </View>
-          </View>
-
-          {/* 버튼 */}
-          <View className="mt-[78px] mx-5">
-            <ButtonComponent
-              color={'bg-white'}
-              borderColor={'border-main'}
-              textColor={'gray500'}
-              text={'매칭 수정하기'}
-              disabled={false}
-              onPress={toNext}
-            />
-          </View>
-
-          <View className="mt-3 mx-5 mb-10">
-            <ButtonComponent
-              color={'bg-main'}
-              borderColor={'border-main'}
-              textColor={'white'}
-              text={'매칭 삭제하기'}
-              disabled={false}
-              onPress={toNext}
-            />
-          </View>
-        </ScrollView>
+        <ScrollView className="flex-1 px-4 mt-8"></ScrollView>
       </SafeAreaView>
     );
   } else
@@ -299,23 +140,28 @@ const MatchScreen = () => {
           </View>
 
           {/* 지도 */}
-          <View className="shadow-md">
-            <View className="w-full h-[200px] mt-2 bg-sub100 rounded-xl overflow-hidden">
+          <View className="shadow-md ">
+            <View className="w-full h-[200px] mt-2 rounded-xl overflow-hidden">
               <NaverMapView
                 style={{ flex: 1 }}
                 ref={mapRef}
                 mapType="Basic"
                 initialCamera={initial}
                 locale="ko"
-                // TODO : onCameraChange 말고 첫 렌더링 시 하기
+                isShowCompass={false}
+                isShowLocationButton={false}
+                isShowZoomControls={false}
+                // 카메라 고정 -> 뺄 수도 ?
                 onCameraChanged={() =>
                   map()?.animateCameraWithTwoCoords({
                     coord1: {
                       latitude: roomDetail.departureLatitude,
                       longitude: roomDetail.departureLongitude,
                     },
-                    // TODO : coord2 에 도착거점 좌표
-                    coord2: { latitude: 37.46504, longitude: 126.68045 },
+                    coord2: {
+                      latitude: spotCoord.latitude,
+                      longitude: spotCoord.longitude,
+                    },
                     duration: 500,
                   })
                 }
@@ -353,6 +199,7 @@ const MatchScreen = () => {
               <View className="flex-row ml-[6px] my-2">
                 <View className="w-[1px] h-[46px] bg-main" />
 
+                {/** TODO : 방생성 시 주소탐색 구현 -> 여기에는 departureName */}
                 <Text className="ml-6 text-[20px] font-semibold">
                   인하대학교 후문
                 </Text>
@@ -368,7 +215,7 @@ const MatchScreen = () => {
                 </View>
 
                 <Text className="text-[20px] font-semibold ml-[31px] mt-2">
-                  주안역
+                  {spotName}
                 </Text>
               </View>
             </View>
