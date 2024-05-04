@@ -7738,10 +7738,10 @@ react-is@^18.2.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-react-native-config@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.npmjs.org/react-native-config/-/react-native-config-1.5.1.tgz"
-  integrity sha512-g1xNgt1tV95FCX+iWz6YJonxXkQX0GdD3fB8xQtR1GUBEqweB9zMROW77gi2TygmYmUkBI7LU4pES+zcTyK4HA==
+react-native-config@1.4.6:
+  version "1.4.6"
+  resolved "https://registry.npmjs.org/react-native-config/-/react-native-config-1.4.6.tgz"
+  integrity sha512-cSLdOfva2IPCxh6HjHN1IDVW9ratAvNnnAUx6ar2Byvr8KQU7++ysdFYPaoNVuJURuYoAKgvjab8ZcnwGZIO6Q==
 
 react-native-date-picker@^5.0.0:
   version "5.0.0"

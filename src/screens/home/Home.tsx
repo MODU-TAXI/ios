@@ -1,10 +1,11 @@
 import React from 'react';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { LoginStackParamList } from '@type/ParamLists';
-import { View, Text, Pressable } from 'react-native';
+import { Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { deleteMyChatInfo } from '@server/api/chat';
 import { useChatContext } from 'src/providers/chatProvider';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const HomeScreen = () => {
   const { disConnect } = useChatContext();
@@ -32,13 +33,17 @@ const HomeScreen = () => {
     navigation.navigate('SearchScreen');
   };
 
-  const toChatRoomScreen = () => {
+  const toChatRoomScreen = async () => {
     navigation.navigate('ChatRoomScreen');
+  };
+
+  const toTestScreen = async () => {
+    navigation.navigate('TestScreen');
   };
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-col">
+      <ScrollView className="flex-col">
         <Pressable
           onPress={toMatchScreen}
           className="bg-gray-300  h-20 m-5 rounded-md justify-center items-center"
@@ -80,7 +85,14 @@ const HomeScreen = () => {
         >
           <Text>채팅방 나가기</Text>
         </Pressable>
-      </View>
+
+        <Pressable
+          onPress={toTestScreen}
+          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+        >
+          <Text>테스트방</Text>
+        </Pressable>
+      </ScrollView>
     </SafeAreaView>
   );
 };

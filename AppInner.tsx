@@ -29,6 +29,7 @@ import {
   setRefreshToken,
 } from '@utils/token';
 import Config from 'react-native-config';
+import TestScreen from 'src/screens/test';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
@@ -86,6 +87,7 @@ function AppInner() {
         />
         <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
         <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
+        <LogInStack.Screen name="TestScreen" component={TestScreen} />
       </LogInStack.Navigator>
     </ChatProvider>
   ) : (

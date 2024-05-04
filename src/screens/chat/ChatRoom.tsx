@@ -14,7 +14,7 @@ Object.assign('global', {
   TextDecoder: TextEncodingPolyfill.TextDecoder,
 });
 
-const ChatRoomScreen: React.FC = () => {
+const ChatRoomScreen = () => {
   // 채팅스크린에 있을때는 알람안오게 해야하므로 recoil로 상태 저장
   useEnterChatRoom();
 

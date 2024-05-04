@@ -33,3 +33,10 @@ export const getChatMessages = async (
 
   return response.data;
 };
+
+// [모집방 참여 가능 확인] /chat/{roomId}
+export const CheckJoinRoomEnable = async (roomId: number): Promise<any> => {
+  const response = await GetAxiosInstance<any>(`/chat/${roomId}`);
+
+  return response.data;
+};
