@@ -13,6 +13,11 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 dayjs.locale('ko'); // 나중에 이 부분 dayjs 따로 빼기ㄴ
 
+import { CheckRoomDetailResponse } from '@server/responseTypes/room';
+import { translateTag } from '@utils/room';
+import { fetchRoomDetail } from '@hooks/api/rooms';
+import { fetchSpot } from '@hooks/api/spot';
+
 import ParticipateUserComponent from '@components/ParticipateUser';
 import WaitUserComponent from '@components/WaitUser';
 import RoomTagComponent from '@components/RoomDigest/RoomTag';
@@ -23,10 +28,6 @@ import DottedLineComponent from '@components/DottedLine';
 
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndCircle from '@assets/images/Match/EndCircle.svg';
-import { CheckRoomDetailResponse } from '@server/responseTypes/room';
-import { checkRoomDetail } from '@server/api/room';
-import { translateTag } from '@utils/room';
-import { fetchRoomDetail } from '@hooks/api/rooms';
 
 const MatchScreen = () => {
   const [roomId, setRoomId] = useState<number>(15);
@@ -43,9 +44,13 @@ const MatchScreen = () => {
   // 도착시간 (계산을 위해 따로 선언)
   const [arrivalTime, setArrivalTime] = useState<Date>();
 
-  // 출발지, 도착거점 이름
+  // 출발지, 도착거점
   const [departureName, setDepartureName] = useState<string>('');
   const [spotName, setSpotName] = useState<string>('');
+  const [spotCoord, setSpotCoord] = useState<Coord>({
+    latitude: 37.46504,
+    longitude: 126.68045,
+  });
 
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
 
@@ -54,18 +59,32 @@ const MatchScreen = () => {
     console.log('ok');
   }, []);
 
-  // initialCamera 는 첫 렌더링 시 카메라 좌표
-  // TODO : api 연동 시 출발/도착지의 중앙점으로 카메라 위치
+  // 첫 렌더링 시 카메라 좌표
   const initial: Camera = {
     latitude: 37.46504,
     longitude: 126.68045,
     zoom: 16,
   };
 
+  // roomId 에 따른 매칭방 정보 저장
   useEffect(() => {
     fetchRoomDetail(roomId, setRoomDetail, setCoordinate, setArrivalTime);
   }, [roomId]);
 
+  // 도착 거점 이름, 좌표 저장
+  useEffect(() => {
+    if (roomDetail) {
+      fetchSpot(
+        roomDetail.spotId,
+        roomDetail.departureLongitude,
+        roomDetail.departureLatitude,
+        setSpotName,
+        setSpotCoord,
+      );
+    }
+  }, [roomDetail]);
+
+  // roomDetail 저장 시 카메라를 출발-도착지 사이로 이동
   useEffect(() => {
     if (roomDetail) {
       map()?.animateCameraWithTwoCoords({
@@ -73,8 +92,10 @@ const MatchScreen = () => {
           latitude: roomDetail.departureLatitude,
           longitude: roomDetail.departureLongitude,
         },
-        // TODO : coord2 에 도착거점 좌표
-        coord2: { latitude: 37.46504, longitude: 126.68045 },
+        coord2: {
+          latitude: spotCoord.latitude,
+          longitude: spotCoord.longitude,
+        },
         duration: 500,
       });
     }
@@ -300,15 +321,20 @@ const MatchScreen = () => {
                 mapType="Basic"
                 initialCamera={initial}
                 locale="ko"
-                // TODO : onCameraChange 말고 첫 렌더링 시 하기
+                isShowCompass={false}
+                isShowLocationButton={false}
+                isShowZoomControls={false}
+                // 카메라 고정 -> 뺄 수도 ?
                 onCameraChanged={() =>
                   map()?.animateCameraWithTwoCoords({
                     coord1: {
                       latitude: roomDetail.departureLatitude,
                       longitude: roomDetail.departureLongitude,
                     },
-                    // TODO : coord2 에 도착거점 좌표
-                    coord2: { latitude: 37.46504, longitude: 126.68045 },
+                    coord2: {
+                      latitude: spotCoord.latitude,
+                      longitude: spotCoord.longitude,
+                    },
                     duration: 500,
                   })
                 }
@@ -346,6 +372,7 @@ const MatchScreen = () => {
               <View className="flex-row ml-[6px] my-2">
                 <View className="w-[1px] h-[46px] bg-main" />
 
+                {/** TODO : 방생성 시 주소탐색 구현 -> 여기에는 departureName */}
                 <Text className="ml-6 text-[20px] font-semibold">
                   인하대학교 후문
                 </Text>
@@ -361,7 +388,7 @@ const MatchScreen = () => {
                 </View>
 
                 <Text className="text-[20px] font-semibold ml-[31px] mt-2">
-                  주안역
+                  {spotName}
                 </Text>
               </View>
             </View>
