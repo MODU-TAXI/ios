@@ -140,8 +140,8 @@ const MatchScreen = () => {
           </View>
 
           {/* 지도 */}
-          <View className="shadow-md bg-white">
-            <View className="w-full h-[200px] mt-2 bg-sub100 rounded-xl overflow-hidden">
+          <View className="shadow-md ">
+            <View className="w-full h-[200px] mt-2 rounded-xl overflow-hidden">
               <NaverMapView
                 style={{ flex: 1 }}
                 ref={mapRef}
