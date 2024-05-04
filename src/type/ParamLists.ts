@@ -19,6 +19,7 @@ type LoginStackParamList = {
   CreateMatchScreen: undefined;
   SearchScreen: undefined;
   ChatRoomScreen: undefined;
+  TestScreen: undefined;
 };
 
 export type { RootStackParamList, LoginStackParamList };

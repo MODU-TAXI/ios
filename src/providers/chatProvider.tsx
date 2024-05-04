@@ -43,7 +43,7 @@ export function ChatProvider({ children }: any) {
   const [chatIn] = useRecoilState(chatInState);
   const [, setMessages] = useRecoilState(messagesState);
   const [accessToken] = useAccessToken();
-  const [roomId, setRoomId] = useState<number>(3);
+  const [roomId, setRoomId] = useState<number>(0);
   const [, setMemberId] = useRecoilState(memberIdState);
 
   useEffect(() => {
@@ -60,15 +60,11 @@ export function ChatProvider({ children }: any) {
 
   // 만약 내가 들어간 방이 있었을 경우메만 입장
   useEffect(() => {
-    // if (accessToken && roomId && roomId > 0) {
-    //   connect(roomId);
-    // }
+    if (accessToken && roomId && roomId > 0) {
+      connect(roomId);
+    }
 
-    return () => {
-      if (accessToken && roomId && roomId > 0) {
-        disConnect();
-      }
-    };
+    return () => disConnect();
   }, [roomId, accessToken]);
 
   // 채팅방 입장했는지 여부 ref에 저장
@@ -79,14 +75,14 @@ export function ChatProvider({ children }: any) {
   const connect = (roomId: number) => {
     if (accessToken) {
       stompClient.current = new StompJs.Client({
-        brokerURL: Config.SERVER_URL,
+        brokerURL: Config.SOCKET_URL,
         connectHeaders: {
           token: accessToken,
         },
         debug: function (str) {
           console.log(str);
         },
-        reconnectDelay: 500,
+        reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
       });
@@ -127,7 +123,6 @@ export function ChatProvider({ children }: any) {
           type: 'CHAT',
           content: inputMessage,
           sender: '',
-          token: accessToken,
         }),
         headers: {
           token: accessToken,

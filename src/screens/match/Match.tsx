@@ -11,7 +11,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-dayjs.locale('ko'); // 나중에 이 부분 dayjs 따로 빼기ㄴ
+dayjs.locale('ko'); // 나중에 이 부분 dayjs 따로 빼기
 
 import ParticipateUserComponent from '@components/ParticipateUser';
 import WaitUserComponent from '@components/WaitUser';
@@ -28,7 +28,7 @@ import { checkRoomDetail } from '@server/api/room';
 import { translateTag } from '@utils/room';
 
 const MatchScreen = () => {
-  const [roomId, setRoomId] = useState<number>(15);
+  const [roomId, setRoomId] = useState<number>(2);
 
   const mapRef = useRef<NaverMapViewRef>(null);
   const map = () => mapRef.current;
