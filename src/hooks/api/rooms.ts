@@ -6,14 +6,17 @@ import {
 import { Coord } from '@mj-studio/react-native-naver-map';
 import { getRoomDetail, createRoom } from '@server/api/room';
 import { CreateRoomRequest } from '@server/requestTypes/room';
-import { GetRoomDetailResponse } from '@server/responseTypes/room';
+import {
+  CreateRoomResponse,
+  GetRoomDetailResponse,
+} from '@server/responseTypes/room';
 import { ErrorToastMessage, InfoToastMessage } from '@utils/toastMessage';
 import { translateCategory } from '@utils/room';
 import { RoomDetail } from '@type/entity/room';
 
 // 방 생성
 export const useCreateRoom = (): UseMutationResult<
-  Error,
+  CreateRoomResponse,
   void,
   CreateRoomRequest,
   unknown
