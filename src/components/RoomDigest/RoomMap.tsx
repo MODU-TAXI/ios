@@ -6,7 +6,7 @@ import {
   NaverMapPathOverlay,
   NaverMapViewRef,
 } from '@mj-studio/react-native-naver-map';
-import { RoomDetail } from '@server/responseTypes/room';
+import { RoomDetail } from '@type/entity/room';
 
 interface RoomMapComponentProps {
   roomDetail: RoomDetail;
