@@ -4,7 +4,7 @@ import {
   PatchAxiosInstance,
   DeleteAxiosInstance,
 } from '@axios/axios.method';
-import { CreateMatchRequest } from '@server/requestTypes/room';
+import { CreateRoomRequest } from '@server/requestTypes/room';
 import {
   JoinRoomResponse,
   ApproveJoinRoomResponse,
@@ -12,11 +12,17 @@ import {
   GetRoomWaitingMembersResponse,
   GetRoomDetailResponse,
   CheckRoomResponse,
+  CreateRoomResponse,
 } from '@server/responseTypes/room';
 
 // [방 등록] /api/rooms
-export const createRoom = async (data: CreateMatchRequest): Promise<any> => {
-  const response = await PostAxiosInstance<any>(`/api/rooms`, data);
+export const createRoom = async (
+  data: CreateRoomRequest,
+): Promise<CreateRoomResponse> => {
+  const response = await PostAxiosInstance<CreateRoomResponse>(
+    `/api/rooms`,
+    data,
+  );
 
   return response.data;
 };
