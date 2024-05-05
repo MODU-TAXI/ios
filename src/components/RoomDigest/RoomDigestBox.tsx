@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 import { styled } from 'nativewind';
 
-import RoomTagComponent from './RoomTag';
+import RoomTagComponent from './RoomCategory';
 
 import ClockFillSvg from '@assets/images/RoomDigest/ClockFill.svg';
 import LocationFillSvg from '@assets/images/RoomDigest/LocationFill.svg';

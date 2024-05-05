@@ -13,10 +13,10 @@ type RootStackParamList = {
 
 type LoginStackParamList = {
   HomeScreen: undefined;
-  MatchScreen: undefined;
+  RoomDetailScreen: undefined;
   MainMapScreen: undefined;
   NaverMapScreen: undefined;
-  CreateMatchScreen: undefined;
+  CreateRoomScreen: undefined;
   SearchScreen: undefined;
   ChatRoomScreen: undefined;
   TestScreen: undefined;

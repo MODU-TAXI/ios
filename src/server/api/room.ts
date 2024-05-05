@@ -10,12 +10,12 @@ import {
   ApproveJoinRoomResponse,
   GetRoomMembersResponse,
   GetRoomWaitingMembersResponse,
-  CheckRoomDetailResponse,
+  GetRoomDetailResponse,
   CheckRoomResponse,
 } from '@server/responseTypes/room';
 
 // [방 등록] /api/rooms
-export const createMatch = async (data: CreateMatchRequest): Promise<any> => {
+export const createRoom = async (data: CreateMatchRequest): Promise<any> => {
   const response = await PostAxiosInstance<any>(`/api/rooms`, data);
 
   return response.data;
@@ -36,10 +36,12 @@ export const checkRoomCurrentCamera = async (
 };
 
 // [경로를 포함한 방 상세 정보 조회] /api/rooms/{id}
-export const checkRoomDetail = async (
+export const getRoomDetail = async (
   id: number,
-): Promise<CheckRoomDetailResponse> => {
-  const response = await GetAxiosInstance<any>(`/api/rooms/${id}`);
+): Promise<GetRoomDetailResponse> => {
+  const response = await GetAxiosInstance<GetRoomDetailResponse>(
+    `/api/rooms/${id}`,
+  );
 
   return response.data;
 };

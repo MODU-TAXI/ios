@@ -1,6 +1,6 @@
-import { RoomTagProps } from '@components/RoomDigest/RoomTag';
+import { RoomCategory } from '@type/entity/room';
 
-export const translateTag = (tag: string): RoomTagProps | undefined => {
+export const translateCategory = (tag: string): RoomCategory => {
   switch (tag) {
     case 'ONLY_WOMAN':
       return {
@@ -31,6 +31,12 @@ export const translateTag = (tag: string): RoomTagProps | undefined => {
         label: '학생인증',
         textColor: 'text-main',
         bgColor: 'bg-sub100',
+      };
+    default:
+      return {
+        label: '기타',
+        textColor: 'text-gray500',
+        bgColor: 'bg-box',
       };
   }
 };

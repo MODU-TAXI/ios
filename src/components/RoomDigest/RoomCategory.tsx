@@ -1,14 +1,9 @@
+import { RoomCategory } from '@type/entity/room';
 import React from 'react';
 import { Text, View } from 'react-native';
 
-export interface RoomTagProps {
-  label: string | undefined;
-  textColor: string | undefined;
-  bgColor: string | undefined;
-}
-
 /** 카풀팟 방 태그 */
-const RoomTagComponent: React.FC<RoomTagProps> = ({
+const RoomCategoryComponent: React.FC<RoomCategory> = ({
   label,
   textColor,
   bgColor,
@@ -22,4 +17,4 @@ const RoomTagComponent: React.FC<RoomTagProps> = ({
   );
 };
 
-export default RoomTagComponent;
+export default RoomCategoryComponent;

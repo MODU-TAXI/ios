@@ -9,9 +9,10 @@ import {
   GetChatMessagesResponse,
 } from '@server/responseTypes/chat';
 
-// [나의 채팅방 정보] /api/members/mail/certificate
+// [나의 채팅방 정보] /api/chats/info
 export const getMyChatInfo = async (): Promise<GetChatInfoResponse> => {
-  const response = await GetAxiosInstance<GetChatInfoResponse>(`/chat-info`);
+  const response =
+    await GetAxiosInstance<GetChatInfoResponse>(`/api/chats/info`);
 
   return response.data;
 };

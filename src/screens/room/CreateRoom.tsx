@@ -13,6 +13,7 @@ import PassengerComponent from '@components/Match/Passenger';
 import CategoryComponent from '@components/Match/Category';
 import { LoginStackParamList } from '@type/ParamLists';
 import { ErrorToastMessage } from '@utils/toastMessage';
+import { useCreateRoom } from '@hooks/api/rooms';
 
 import StartGrayCircle from '@assets/images/Match/StartGrayCircle.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
@@ -25,11 +26,10 @@ import SelectedPerson3 from '@assets/images/Match/SelectedPerson3.svg';
 import UnSelectedPerson1 from '@assets/images/Match/UnSelectedPerson1.svg';
 import UnSelectedPerson2 from '@assets/images/Match/UnSelectedPerson2.svg';
 import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
-import { useCreateMatch } from '@hooks/api/rooms';
 
-const CreateMatchScreen = () => {
+const CreateRoomScreen = () => {
   const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
-  const { mutateAsync: createMatchMutate } = useCreateMatch();
+  const { mutateAsync: createMatchMutate } = useCreateRoom();
 
   const [start, setStart] = useState<string>(''); // 출발지
   const [end, setEnd] = useState<string>(''); // 도착지
@@ -55,14 +55,16 @@ const CreateMatchScreen = () => {
       (_, index) => checkedCategorys[index],
     );
 
+    // 개발환경시 기기가 미국이라 9시간 더해주기
+    departureTime.setHours(departureTime.getHours() + 9);
+
     await createMatchMutate({
-      departurePoint: {
-        x: 126.69487873676,
-        y: 37.463182225352,
-      },
       spotId: 1,
+      departureLongitude: 126.69487873676,
+      departureLatitude: 37.463182225352,
       roomTagBitMask: filteredCategories,
       departureTime: departureTime,
+      departureName: '주안역',
       wishHeadcount: passangersNumber,
     });
 
@@ -253,4 +255,4 @@ const CreateMatchScreen = () => {
   );
 };
 
-export default CreateMatchScreen;
+export default CreateRoomScreen;

@@ -1,32 +1,27 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo, memo } from 'react';
 import { View, Text, Pressable } from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+const square = (number: number) => {
+  console.log('제곱 계산중...');
+  return number * number;
+};
+
 const TestScreen = () => {
-  const [number, setNumber] = useState<number>();
-  const [test, setTest] = useState<string[]>([]);
+  const [text, setText] = useState<string>('');
+  const [number, setNumber] = useState<number>(0);
 
-  const addNumber = () => {
-    console.log('함수 재정의 됨');
-  };
-
-  const addNumber2 = useCallback(() => {
-    console.log(number);
-  }, []);
-
-  const pressArr = () => {
-    setTest((prev) => [...prev, 'a']);
-  };
-
-  addNumber();
-
-  addNumber2();
+  const square_value = useMemo(() => square(number), [number]);
+  // const square_value = square(number);
 
   return (
     <SafeAreaView>
-      <Pressable onPress={pressArr}>
-        <Text>dd</Text>
-      </Pressable>
+      <View>
+        <Text>number * number= {square_value}</Text>
+      </View>
+
+      <TextInput value={text} onChangeText={(e) => setText(e)} />
     </SafeAreaView>
   );
 };
