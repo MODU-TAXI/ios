@@ -14,6 +14,7 @@ import {
   GetRoomCurrentCameraResponse,
   CreateRoomResponse,
   PatchRoomResponse,
+  DeleteRoomResponse,
 } from '@server/responseTypes/room';
 
 // [모집방 생성] /api/rooms
@@ -36,6 +37,17 @@ export const patchRoom = async (
   const response = await PatchAxiosInstance<PatchRoomResponse>(
     `/api/rooms/${roomId}`,
     data,
+  );
+
+  return response.data;
+};
+
+// [모집 방 삭제] /api/rooms/{id}
+export const deleteRoom = async (
+  roomId: number,
+): Promise<DeleteRoomResponse> => {
+  const response = await DeleteAxiosInstance<DeleteRoomResponse>(
+    `/api/rooms/${roomId}`,
   );
 
   return response.data;

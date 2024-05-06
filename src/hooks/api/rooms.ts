@@ -11,6 +11,7 @@ import {
   JoinRoom,
   patchRoom,
   getRoomCurrentCamera,
+  deleteRoom,
 } from '@server/api/room';
 import { CreateRoomRequest, PatchRoomRequest } from '@server/requestTypes/room';
 import {
@@ -138,7 +139,7 @@ export const usePatchRoom = (
     mutationFn: (patchRoomRequest: PatchRoomRequest) =>
       patchRoom(roomId, patchRoomRequest),
     onSuccess: async () => {
-      // 수정시에는 invalidateQueries를 통해 기존 데이터 캐싱시키기
+      // 수정시에는 invalidateQueries를 통해 기존 데이터 캐싱시키기?
       InfoToastMessage('파티 수정 성공!');
     },
 
@@ -150,15 +151,27 @@ export const usePatchRoom = (
   });
 };
 
-// 방 입장
-export const useJoinRoom = (): UseMutationResult<
-  JoinRoomResponse,
-  void,
-  number,
-  unknown
-> => {
+// 방 삭제
+export const useDeleteRoom = (roomId: number) => {
   return useMutation({
-    mutationFn: (roomId: number) => JoinRoom(roomId),
+    mutationFn: () => deleteRoom(roomId),
+    onSuccess: async () => {
+      InfoToastMessage('파티 삭제 성공!');
+    },
+    onError: (error: any) => {
+      if (error?.response?.data?.message) {
+        return ErrorToastMessage(error.response.data.message);
+      }
+    },
+  });
+};
+
+// 방 입장
+export const useJoinRoom = (
+  roomId: number,
+): UseMutationResult<JoinRoomResponse, void, number, unknown> => {
+  return useMutation({
+    mutationFn: () => JoinRoom(roomId),
     onSuccess: async () => {
       InfoToastMessage('파티 입장 성공!');
     },

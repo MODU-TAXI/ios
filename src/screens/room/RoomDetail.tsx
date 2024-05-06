@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
 import dayjs from 'dayjs';
-import { useGetRoom, useJoinRoom } from '@hooks/api/rooms';
+import { useDeleteRoom, useGetRoom, useJoinRoom } from '@hooks/api/rooms';
 import { memberIdState } from '@recoil/recoil';
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
@@ -23,20 +23,21 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { LoginStackParamList } from '@type/ParamLists';
-import { useQueryClient } from '@tanstack/react-query';
+
 dayjs.locale('ko');
 
 const RoomDetailScreen = () => {
   // 이거를 쓰라~
   const isFocused = useIsFocused();
 
-  const roomId = 28; // 방 Id
+  const roomId = 29; // 방 Id
   const myParty = true; // 내가 만든 건지 여부
   const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
   const [memberId, setMemberId] = useRecoilState(memberIdState); // 사용자 정보
-  const { roomDetail, refetch } = useGetRoom(roomId); // 방 상세 정보 객체
 
-  const { mutateAsync: joinRoomMutate } = useJoinRoom(); // 방 입장 mutate
+  const { roomDetail, refetch } = useGetRoom(roomId); // 방 상세 정보 객체
+  const { mutateAsync: joinRoomMutate } = useJoinRoom(roomId); // 방 입장 mutate
+  const { mutateAsync: deleteRoomMutate } = useDeleteRoom(roomId);
 
   // 방을 수정하고 다시 focusing 되었을때 api 재호출 -> 이 로직은 수정하지 않았을때는 두번 호출됨 수정해야할듯
   useFocusEffect(
@@ -54,15 +55,16 @@ const RoomDetailScreen = () => {
     // 어디로 이동?
   };
 
-  // 방 수정
+  // 방 삭제
+  const deleteRoom = async () => {
+    await deleteRoomMutate();
+    navigation.navigate('HomeScreen');
+  };
+
+  // 방 수정페이지로 이동
   const toPatchRoomScreen = useCallback(async (): Promise<void> => {
     navigation.navigate('PatchRoomScreen', { key: roomDetail });
   }, []);
-
-  // 방 삭제
-  const deleteRoom = () => {
-    console.log('ok');
-  };
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>

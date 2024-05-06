@@ -110,6 +110,11 @@ export interface PatchRoomResponse {
   };
 }
 
+// [모집 방 삭제] /api/rooms/{id}
+export interface DeleteRoomResponse {
+  isDeleted: boolean;
+}
+
 // [방 입장 요청] /api/rooms/{roomId}/apply
 export interface JoinRoomResponse {
   isApplied: boolean;
