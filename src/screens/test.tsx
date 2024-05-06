@@ -1,3 +1,4 @@
+import RoomDigestBoxComponent from '@components/RoomDigest/RoomDigestBox';
 import React, { useCallback, useEffect, useState, useMemo, memo } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
@@ -16,12 +17,21 @@ const TestScreen = () => {
   // const square_value = square(number);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="bg-white">
       <View>
         <Text>number * number= {square_value}</Text>
       </View>
 
       <TextInput value={text} onChangeText={(e) => setText(e)} />
+      <RoomDigestBoxComponent
+        lastChatTime={3}
+        departureTime={'14:25'}
+        departureName={'인하대학교 후문'}
+        arrivalName={'주안역'}
+        currentHeadCount={2}
+        wishHeadCount={3}
+        expectedChargePerPerson={8300}
+      />
     </SafeAreaView>
   );
 };
