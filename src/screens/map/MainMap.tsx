@@ -120,10 +120,6 @@ const MainMapScreen = () => {
     }, 1000);
   }, []);
 
-  // useEffect(() => {
-  //   console.log(currentCamera);
-  // }, [currentCamera]);
-
   // 렌더링
   return (
     // 지도가 화면 전체를 포함하기 위한 마진 설정
@@ -190,7 +186,10 @@ const MainMapScreen = () => {
         onChange={handleSheetChanges}
         backdropComponent={handleBackDrop}
       >
-        <BottomSheetView className="flex-1 items-center">
+        <BottomSheetView
+          className="flex-1 items-center"
+          style={{ marginBottom: insets.top + 36 }}
+        >
           <MapBottomSheetScreen />
         </BottomSheetView>
       </BottomSheet>

@@ -50,6 +50,42 @@ const MapBottomSheetScreen = () => {
           wishHeadCount={3}
           expectedChargePerPerson={8300}
         />
+        <RoomDigestBoxComponent
+          lastChatTime={3}
+          departureTime={'14:25'}
+          departureName={'인하대학교 후문'}
+          arrivalName={'주안역'}
+          currentHeadCount={2}
+          wishHeadCount={3}
+          expectedChargePerPerson={8300}
+        />
+        <RoomDigestBoxComponent
+          lastChatTime={3}
+          departureTime={'14:25'}
+          departureName={'인하대학교 후문'}
+          arrivalName={'주안역'}
+          currentHeadCount={2}
+          wishHeadCount={3}
+          expectedChargePerPerson={8300}
+        />
+        <RoomDigestBoxComponent
+          lastChatTime={3}
+          departureTime={'14:25'}
+          departureName={'인하대학교 후문'}
+          arrivalName={'주안역'}
+          currentHeadCount={2}
+          wishHeadCount={3}
+          expectedChargePerPerson={8300}
+        />
+        <RoomDigestBoxComponent
+          lastChatTime={3}
+          departureTime={'14:25'}
+          departureName={'인하대학교 후문'}
+          arrivalName={'주안역'}
+          currentHeadCount={2}
+          wishHeadCount={3}
+          expectedChargePerPerson={8300}
+        />
       </ScrollView>
     </View>
   );
