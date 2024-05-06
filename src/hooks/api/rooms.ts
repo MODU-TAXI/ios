@@ -31,15 +31,18 @@ export const useCreateRoom = (): UseMutationResult<
   CreateRoomRequest,
   unknown
 > => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (createRoomRequest: CreateRoomRequest) =>
       createRoom(createRoomRequest),
     onSuccess: async (data: CreateRoomResponse) => {
-      const roomId = data.roomId;
+      // const roomId = data.roomId;
 
-      queryClient.setQueryData([`/api/rooms/${roomId}`], data);
+      // queryClient.setQueryData<GetRoomDetailResponse>(
+      //   [`/api/rooms`, roomId],
+      //   data,
+      // );
 
       InfoToastMessage('파티 생성 성공!');
     },
@@ -56,8 +59,10 @@ export const useGetRoom = (
   roomId: number,
 ): { roomDetail: RoomDetail; refetch: () => void } => {
   const { data: roomDetail, refetch } = useSuspenseQuery({
-    queryKey: [`/api/rooms/${roomId}`],
+    queryKey: [`/api/rooms`, roomId],
     queryFn: () => getRoomDetail(roomId),
+    // staleTime: 30000,
+    // gcTime: 30000,
     select: (response: GetRoomDetailResponse) => {
       const coords = response.path.coordinates;
       const convertedCoords: Coord[] = coords.map(
@@ -133,8 +138,10 @@ export const usePatchRoom = (
     mutationFn: (patchRoomRequest: PatchRoomRequest) =>
       patchRoom(roomId, patchRoomRequest),
     onSuccess: async () => {
+      // 수정시에는 invalidateQueries를 통해 기존 데이터 캐싱시키기
       InfoToastMessage('파티 수정 성공!');
     },
+
     onError: (error: any) => {
       if (error?.response?.data?.message) {
         return ErrorToastMessage(error.response.data.message);

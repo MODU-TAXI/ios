@@ -26,9 +26,11 @@ import SelectedPerson3 from '@assets/images/Match/SelectedPerson3.svg';
 import UnSelectedPerson1 from '@assets/images/Match/UnSelectedPerson1.svg';
 import UnSelectedPerson2 from '@assets/images/Match/UnSelectedPerson2.svg';
 import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
+import { useQueryClient } from '@tanstack/react-query';
 
 const CreateRoomScreen = () => {
   const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
+
   const { mutateAsync: createRoomMutate } = useCreateRoom();
 
   const [start, setStart] = useState<string>(''); // 출발지

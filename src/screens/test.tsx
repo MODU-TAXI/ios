@@ -1,4 +1,5 @@
 import RoomDigestBoxComponent from '@components/RoomDigest/RoomDigestBox';
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useCallback, useEffect, useState, useMemo, memo } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
@@ -15,6 +16,18 @@ const TestScreen = () => {
 
   const square_value = useMemo(() => square(number), [number]);
   // const square_value = square(number);
+
+  const queryClient = useQueryClient();
+
+  console.log(queryClient);
+
+  const allCachedData = queryClient.getQueryCache().findAll();
+
+  const cachedRoomDetail = queryClient.getQueryData([`/api/rooms`, 18]);
+
+  // console.log(cachedRoomDetail);
+
+  console.log('All Cached Data:', allCachedData);
 
   return (
     <SafeAreaView className="bg-white">

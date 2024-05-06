@@ -23,13 +23,14 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { LoginStackParamList } from '@type/ParamLists';
+import { useQueryClient } from '@tanstack/react-query';
 dayjs.locale('ko');
 
 const RoomDetailScreen = () => {
   // 이거를 쓰라~
   const isFocused = useIsFocused();
 
-  const roomId = 3; // 방 Id
+  const roomId = 28; // 방 Id
   const myParty = true; // 내가 만든 건지 여부
   const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
   const [memberId, setMemberId] = useRecoilState(memberIdState); // 사용자 정보
@@ -37,7 +38,7 @@ const RoomDetailScreen = () => {
 
   const { mutateAsync: joinRoomMutate } = useJoinRoom(); // 방 입장 mutate
 
-  // 방을 수정하고 다시 focusing 되었을때 api 재호출
+  // 방을 수정하고 다시 focusing 되었을때 api 재호출 -> 이 로직은 수정하지 않았을때는 두번 호출됨 수정해야할듯
   useFocusEffect(
     useCallback(() => {
       if (isFocused) {
