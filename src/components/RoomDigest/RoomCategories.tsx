@@ -13,12 +13,7 @@ const RoomCategoriesComponent: React.FC<RoomCategoriesComponent> = ({
   return (
     <View className="flex-row">
       {roomCategories.map((roomCategory, index) => (
-        <RoomTagComponent
-          key={index}
-          label={roomCategory.label}
-          textColor={roomCategory.textColor}
-          bgColor={roomCategory.bgColor}
-        />
+        <RoomTagComponent key={index} roomCategory={roomCategory} />
       ))}
     </View>
   );

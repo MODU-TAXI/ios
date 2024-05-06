@@ -1,3 +1,5 @@
+import { RoomDetail } from './entity/room';
+
 type RootStackParamList = {
   SignInScreen: undefined;
   PermissionScreen: undefined;
@@ -17,6 +19,7 @@ type LoginStackParamList = {
   MainMapScreen: undefined;
   NaverMapScreen: undefined;
   CreateRoomScreen: undefined;
+  PatchRoomScreen: { key: RoomDetail };
   SearchScreen: undefined;
   ChatRoomScreen: undefined;
   TestScreen: undefined;

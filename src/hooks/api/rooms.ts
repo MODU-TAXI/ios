@@ -1,14 +1,22 @@
 import {
   useMutation,
   UseMutationResult,
+  useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
 import { Coord } from '@mj-studio/react-native-naver-map';
-import { getRoomDetail, createRoom } from '@server/api/room';
-import { CreateRoomRequest } from '@server/requestTypes/room';
+import {
+  getRoomDetail,
+  createRoom,
+  JoinRoom,
+  patchRoom,
+} from '@server/api/room';
+import { CreateRoomRequest, PatchRoomRequest } from '@server/requestTypes/room';
 import {
   CreateRoomResponse,
   GetRoomDetailResponse,
+  JoinRoomResponse,
+  PatchRoomResponse,
 } from '@server/responseTypes/room';
 import { ErrorToastMessage, InfoToastMessage } from '@utils/toastMessage';
 import { translateCategory } from '@utils/room';
@@ -21,10 +29,16 @@ export const useCreateRoom = (): UseMutationResult<
   CreateRoomRequest,
   unknown
 > => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (createRoomRequest: CreateRoomRequest) =>
       createRoom(createRoomRequest),
-    onSuccess: async () => {
+    onSuccess: async (data: CreateRoomResponse) => {
+      const roomId = data.roomId;
+
+      queryClient.setQueryData([`/api/rooms/${roomId}`], data);
+
       InfoToastMessage('파티 생성 성공!');
     },
     onError: (error: any) => {
@@ -36,9 +50,11 @@ export const useCreateRoom = (): UseMutationResult<
 };
 
 // 특정 방 가져오기
-export const useGetRoom = (roomId: number): RoomDetail => {
-  const { data: roomDetail } = useSuspenseQuery({
-    queryKey: [`/chat-messages/${roomId}`],
+export const useGetRoom = (
+  roomId: number,
+): { roomDetail: RoomDetail; refetch: () => void } => {
+  const { data: roomDetail, refetch } = useSuspenseQuery({
+    queryKey: [`/api/rooms/${roomId}`],
     queryFn: () => getRoomDetail(roomId),
     select: (response: GetRoomDetailResponse) => {
       const coords = response.path.coordinates;
@@ -84,5 +100,43 @@ export const useGetRoom = (roomId: number): RoomDetail => {
     },
   });
 
-  return roomDetail;
+  return { roomDetail, refetch };
+};
+
+// 방 수정
+export const usePatchRoom = (
+  roomId: number,
+): UseMutationResult<PatchRoomResponse, void, PatchRoomRequest, unknown> => {
+  return useMutation({
+    mutationFn: (patchRoomRequest: PatchRoomRequest) =>
+      patchRoom(roomId, patchRoomRequest),
+    onSuccess: async () => {
+      InfoToastMessage('파티 수정 성공!');
+    },
+    onError: (error: any) => {
+      if (error?.response?.data?.message) {
+        return ErrorToastMessage(error.response.data.message);
+      }
+    },
+  });
+};
+
+// 방 입장
+export const useJoinRoom = (): UseMutationResult<
+  JoinRoomResponse,
+  void,
+  number,
+  unknown
+> => {
+  return useMutation({
+    mutationFn: (roomId: number) => JoinRoom(roomId),
+    onSuccess: async () => {
+      InfoToastMessage('파티 입장 성공!');
+    },
+    onError: (error: any) => {
+      if (error?.response?.data?.message) {
+        return ErrorToastMessage(error.response.data.message);
+      }
+    },
+  });
 };

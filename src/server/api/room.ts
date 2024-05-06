@@ -4,7 +4,7 @@ import {
   PatchAxiosInstance,
   DeleteAxiosInstance,
 } from '@axios/axios.method';
-import { CreateRoomRequest } from '@server/requestTypes/room';
+import { CreateRoomRequest, PatchRoomRequest } from '@server/requestTypes/room';
 import {
   JoinRoomResponse,
   ApproveJoinRoomResponse,
@@ -13,14 +13,28 @@ import {
   GetRoomDetailResponse,
   CheckRoomResponse,
   CreateRoomResponse,
+  PatchRoomResponse,
 } from '@server/responseTypes/room';
 
-// [방 등록] /api/rooms
+// [모집방 생성] /api/rooms
 export const createRoom = async (
   data: CreateRoomRequest,
 ): Promise<CreateRoomResponse> => {
   const response = await PostAxiosInstance<CreateRoomResponse>(
     `/api/rooms`,
+    data,
+  );
+
+  return response.data;
+};
+
+// [모집방 수정] /api/rooms/{id}
+export const patchRoom = async (
+  roomId: number,
+  data: PatchRoomRequest,
+): Promise<PatchRoomResponse> => {
+  const response = await PatchAxiosInstance<PatchRoomResponse>(
+    `/api/rooms/${roomId}`,
     data,
   );
 
@@ -49,6 +63,7 @@ export const getRoomDetail = async (
     `/api/rooms/${id}`,
   );
 
+  console.log('Get 함수 실행됨');
   return response.data;
 };
 

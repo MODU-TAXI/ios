@@ -30,6 +30,7 @@ import {
 } from '@utils/token';
 import Config from 'react-native-config';
 import TestScreen from 'src/screens/test';
+import PatchRoom from 'src/screens/room/PatchRoom';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
@@ -88,8 +89,10 @@ function AppInner() {
           name="CreateRoomScreen"
           component={CreateRoomScreen}
         />
+        <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
         <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
         <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
+
         <LogInStack.Screen name="TestScreen" component={TestScreen} />
       </LogInStack.Navigator>
     </ChatProvider>

@@ -1,39 +1,67 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { View, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
-
 import dayjs from 'dayjs';
-import 'dayjs/locale/ko';
-dayjs.locale('ko');
-import { useGetRoom } from '@hooks/api/rooms';
+import { useGetRoom, useJoinRoom } from '@hooks/api/rooms';
 import { memberIdState } from '@recoil/recoil';
-
-import RoomTagComponent from '@components/RoomDigest/RoomCategory';
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
 import DottedLineComponent from '@components/DottedLine';
 import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
 import WaitingUsersComponent from '@components/RoomDigest/WaitingUsers';
 import RoomMapComponent from '@components/RoomDigest/RoomMap';
+import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndCircle from '@assets/images/Match/EndCircle.svg';
-import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
+import 'dayjs/locale/ko';
+import {
+  NavigationProp,
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
+import { LoginStackParamList } from '@type/ParamLists';
+dayjs.locale('ko');
 
 const RoomDetailScreen = () => {
-  // 사용자 정보
-  const [memberId, setMemberId] = useRecoilState(memberIdState);
+  // 이거를 쓰라~
+  const isFocused = useIsFocused();
 
-  // 방 상세 정보 객체
-  const roomDetail = useGetRoom(1);
+  const roomId = 3; // 방 Id
+  const myParty = true; // 내가 만든 건지 여부
+  const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
+  const [memberId, setMemberId] = useRecoilState(memberIdState); // 사용자 정보
+  const { roomDetail, refetch } = useGetRoom(roomId); // 방 상세 정보 객체
 
-  const myParty = false;
+  const { mutateAsync: joinRoomMutate } = useJoinRoom(); // 방 입장 mutate
 
-  // 다음으로
-  const toNext = useCallback(async (): Promise<void> => {
-    console.log('ok');
+  // 방을 수정하고 다시 focusing 되었을때 api 재호출
+  useFocusEffect(
+    useCallback(() => {
+      if (isFocused) {
+        refetch();
+      }
+    }, [isFocused]),
+  );
+
+  // 방 입장
+  const joinRoom = async () => {
+    await joinRoomMutate(roomId);
+
+    // 어디로 이동?
+  };
+
+  // 방 수정
+  const toPatchRoomScreen = useCallback(async (): Promise<void> => {
+    navigation.navigate('PatchRoomScreen', { key: roomDetail });
   }, []);
+
+  // 방 삭제
+  const deleteRoom = () => {
+    console.log('ok');
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -61,7 +89,7 @@ const RoomDetailScreen = () => {
                 <StartCircle />
 
                 <Text className="text-lg text-disabled2 font-normal ml-4">
-                  {roomDetail.arrivalTime}
+                  {roomDetail.departureTime}
                 </Text>
               </View>
             </View>
@@ -70,7 +98,7 @@ const RoomDetailScreen = () => {
               <View className="w-[1px] h-[46px] bg-main" />
 
               <Text className="ml-6 text-[20px] font-semibold">
-                {roomDetail.arrivalName}
+                {roomDetail.departureName}
               </Text>
             </View>
 
@@ -79,12 +107,12 @@ const RoomDetailScreen = () => {
                 <EndCircle />
 
                 <Text className="text-lg text-disabled2 font-normal ml-4">
-                  {roomDetail.departureTime}
+                  {roomDetail.arrivalTime}
                 </Text>
               </View>
 
               <Text className="text-[20px] font-semibold ml-[31px] mt-2">
-                {roomDetail.departureName}
+                {roomDetail.arrivalName}
               </Text>
             </View>
           </View>
@@ -130,7 +158,7 @@ const RoomDetailScreen = () => {
                 textColor={'gray500'}
                 text={'매칭 수정하기'}
                 disabled={false}
-                onPress={toNext}
+                onPress={toPatchRoomScreen}
               />
             </View>
 
@@ -141,7 +169,7 @@ const RoomDetailScreen = () => {
                 textColor={'white'}
                 text={'매칭 삭제하기'}
                 disabled={false}
-                onPress={toNext}
+                onPress={deleteRoom}
               />
             </View>
           </View>
@@ -153,7 +181,7 @@ const RoomDetailScreen = () => {
               textColor={'white'}
               text={'매칭 참여하기'}
               disabled={false}
-              onPress={toNext}
+              onPress={joinRoom}
             />
           </View>
         )}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
+import ParticipateUserComponent from '@components/RoomDigest/ParticipateUser';
 
 interface ParticipateUsersComponentProps {
   roomId: number;
@@ -36,26 +36,8 @@ const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({
         <Text className="text-[20px] font-semibold">참여멤버</Text>
       </View>
 
-      {users.map((user) => (
-        <View
-          key={user.id}
-          className="flex-row justify-between items-center mt-4"
-        >
-          <View className="flex-row items-center">
-            <UserBasicImage className="mr-1" />
-            <Text className="text-lg font-semibold">{user.nickname}</Text>
-
-            {user.me && (
-              <Text className="text-lg text-disabled2 font-medium ml-1">
-                (나)
-              </Text>
-            )}
-          </View>
-
-          <Text className="text-lg text-disabled2 font-normal">
-            {user.temperature}'C
-          </Text>
-        </View>
+      {users.map((user, index) => (
+        <ParticipateUserComponent key={index} user={user} />
       ))}
     </View>
   );
