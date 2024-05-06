@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DatePickerComponent from '@components/DatePicker';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 
 import HeaderComponent from '@components/Header';
 import DescriptionComponent from '@components/Description';
@@ -13,8 +18,8 @@ import PassengerComponent from '@components/Match/Passenger';
 import CategoryComponent from '@components/Match/Category';
 import { LoginStackParamList } from '@type/ParamLists';
 import { ErrorToastMessage } from '@utils/toastMessage';
+import { usePatchRoom } from '@hooks/api/rooms';
 
-import StartGrayCircle from '@assets/images/Match/StartGrayCircle.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndGrayCircle from '@assets/images/Match/EndGrayCircle.svg';
 import EndCircle from '@assets/images/Match/EndCircle.svg';
@@ -25,23 +30,60 @@ import SelectedPerson3 from '@assets/images/Match/SelectedPerson3.svg';
 import UnSelectedPerson1 from '@assets/images/Match/UnSelectedPerson1.svg';
 import UnSelectedPerson2 from '@assets/images/Match/UnSelectedPerson2.svg';
 import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
-import { useCreateMatch } from '@hooks/api/rooms';
+import dayjs from 'dayjs';
+dayjs.locale('ko');
 
-const CreateMatchScreen = () => {
+const PatchRoom = () => {
   const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
-  const { mutateAsync: createMatchMutate } = useCreateMatch();
+  const route = useRoute<RouteProp<LoginStackParamList>>();
+  const roomDetail = route?.params?.key;
 
-  const [start, setStart] = useState<string>(''); // 출발지
-  const [end, setEnd] = useState<string>(''); // 도착지
+  // TODO: 이부분 어떻게 할지 고민하기
+  if (!roomDetail) {
+    throw new Error('존재하지 않는 방 정보');
+  }
+
+  const { mutateAsync: patchRoomMutate } = usePatchRoom(roomDetail.roomId);
+
+  const [start, setStart] = useState<string>(roomDetail.departureName); // 출발지
+  const [end, setEnd] = useState<string>(roomDetail.arrivalName); // 도착지
   const [departureTime, setDepartureTime] = useState<Date>(new Date()); // 설정 날짜
-  const [datePicked, setDatePicked] = useState<boolean>(false); // 날짜 선택 여부
+  const [datePicked, setDatePicked] = useState<boolean>(true); // 날짜 선택 여부
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
-  const [passangersNumber, setPassengersNumber] = useState<number | null>(null); // 탑승 인원
+  const [passangersNumber, setPassengersNumber] = useState<number | null>(
+    roomDetail.wishHeadcount,
+  ); // 탑승 인원
   const [checkedCategorys, setCheckedCategorys] = useState<boolean[]>([
     false,
     false,
     false,
   ]); // 카테고리
+
+  // 날짜 다시 활성화
+  useEffect(() => {
+    const splitTime = roomDetail.departureTime.split(':');
+    const dateObj = new Date();
+    dateObj.setHours(parseInt(splitTime[0]));
+    dateObj.setMinutes(parseInt(splitTime[1]));
+    setDepartureTime(dateObj);
+  }, []);
+
+  // 카테고리 선택했던 것들 활성화
+  useEffect(() => {
+    const origin_categories = ['학생인증', '여자만', '매너탑승'];
+
+    const selected_indexs = roomDetail.roomCategories.map((roomCategory) => {
+      return origin_categories.indexOf(roomCategory.label.trim());
+    });
+
+    selected_indexs.map(
+      (selected_index) => (checkedCategorys[selected_index] = true),
+    );
+
+    const new_categories = [...checkedCategorys];
+
+    setCheckedCategorys(new_categories);
+  }, []);
 
   // 파티 생성
   const createMatch = async () => {
@@ -55,18 +97,21 @@ const CreateMatchScreen = () => {
       (_, index) => checkedCategorys[index],
     );
 
-    await createMatchMutate({
-      departurePoint: {
-        x: 126.69487873676,
-        y: 37.463182225352,
-      },
+    // 개발환경시 기기가 미국이라 9시간 더해주기
+    departureTime.setHours(departureTime.getHours() + 9);
+
+    await patchRoomMutate({
       spotId: 1,
+      departureLongitude: 126.69487873676,
+      departureLatitude: 37.463182225352,
       roomTagBitMask: filteredCategories,
       departureTime: departureTime,
+      departureName: '주안역',
       wishHeadcount: passangersNumber,
     });
 
-    return navigation.navigate('HomeScreen');
+    // 다시 매칭 페이지로 이동
+    return navigation.navigate('RoomDetailScreen');
   };
 
   // Datepicker open
@@ -90,7 +135,7 @@ const CreateMatchScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 헤더 */}
-      <HeaderComponent title={'생성 페이지'} />
+      <HeaderComponent title={'수정 페이지'} />
 
       <ScrollView className="flex-1 px-4">
         {/* 출발지, 도착지 선택*/}
@@ -100,7 +145,7 @@ const CreateMatchScreen = () => {
           <View className="mt-6">
             <View>
               <View className="flex-row items-center">
-                {start ? <StartCircle /> : <StartGrayCircle />}
+                <StartCircle />
 
                 <Text className="text-sm text-gray700 font-normal ml-4">
                   출발지
@@ -243,7 +288,7 @@ const CreateMatchScreen = () => {
             color={'bg-main'}
             borderColor={'border-main'}
             textColor={'white'}
-            text={'매칭팟 만들기'}
+            text={'매칭팟 수정하기'}
             disabled={!datePicked || !passangersNumber}
             onPress={createMatch}
           />
@@ -253,4 +298,4 @@ const CreateMatchScreen = () => {
   );
 };
 
-export default CreateMatchScreen;
+export default PatchRoom;

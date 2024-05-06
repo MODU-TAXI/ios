@@ -17,12 +17,12 @@ const HomeScreen = () => {
     await deleteMyChatInfo();
   };
 
-  const toMatchScreen = () => {
-    navigation.navigate('MatchScreen');
+  const toRoomScreen = () => {
+    navigation.navigate('RoomDetailScreen');
   };
 
-  const toCreateMatchScreen = () => {
-    navigation.navigate('CreateMatchScreen');
+  const toCreateRoomScreen = () => {
+    navigation.navigate('CreateRoomScreen');
   };
 
   const toMapScreen = () => {
@@ -45,14 +45,14 @@ const HomeScreen = () => {
     <SafeAreaView className="flex-1">
       <ScrollView className="flex-col">
         <Pressable
-          onPress={toMatchScreen}
+          onPress={toRoomScreen}
           className="bg-gray-300  h-20 m-5 rounded-md justify-center items-center"
         >
           <Text>매칭 스크린</Text>
         </Pressable>
 
         <Pressable
-          onPress={toCreateMatchScreen}
+          onPress={toCreateRoomScreen}
           className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
         >
           <Text>매칭 생성스크린</Text>

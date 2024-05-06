@@ -84,6 +84,10 @@ axiosInstance.interceptors.response.use(
       await deleteToken();
     }
 
+    if (Config.ENV === 'DEV') {
+      console.log(error.response);
+    }
+
     return Promise.reject(error);
   },
 );

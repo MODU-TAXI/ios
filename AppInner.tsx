@@ -11,14 +11,14 @@ import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
 import HomeScreen from './src/screens/home/Home';
-import MatchScreen from './src/screens/match/Match';
+import RoomDetailScreen from './src/screens/room/RoomDetail';
 import MainMapScreen from './src/screens/map/MainMap';
 import { LoginStackParamList, RootStackParamList } from './src/type/ParamLists';
 
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { loggedInState } from '@recoil/recoil';
-import CreateMatchScreen from 'src/screens/match/CreateMatch';
+import CreateRoomScreen from 'src/screens/room/CreateRoom';
 import SearchScreen from 'src/screens/search/Search';
 import ChatRoomScreen from 'src/screens/chat/ChatRoom';
 import { ChatProvider } from 'src/providers/chatProvider';
@@ -30,6 +30,7 @@ import {
 } from '@utils/token';
 import Config from 'react-native-config';
 import TestScreen from 'src/screens/test';
+import PatchRoom from 'src/screens/room/PatchRoom';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
@@ -80,13 +81,18 @@ function AppInner() {
         <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
         <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
         <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
-        <LogInStack.Screen name="MatchScreen" component={MatchScreen} />
         <LogInStack.Screen
-          name="CreateMatchScreen"
-          component={CreateMatchScreen}
+          name="RoomDetailScreen"
+          component={RoomDetailScreen}
         />
+        <LogInStack.Screen
+          name="CreateRoomScreen"
+          component={CreateRoomScreen}
+        />
+        <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
         <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
         <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
+
         <LogInStack.Screen name="TestScreen" component={TestScreen} />
       </LogInStack.Navigator>
     </ChatProvider>

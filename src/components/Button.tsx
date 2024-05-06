@@ -7,7 +7,7 @@ interface ButtonComponentProps {
   textColor: string;
   text: string;
   disabled: any;
-  onPress: () => Promise<void>;
+  onPress: () => Promise<void> | void;
 }
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({

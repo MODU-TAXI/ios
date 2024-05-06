@@ -11,7 +11,7 @@ type MessageBody = {
 };
 
 interface MessageBoxComponentProps {
-  message: MessageBody;
+  message: any;
   memberId: number;
 }
 

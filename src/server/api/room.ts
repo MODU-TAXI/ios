@@ -4,19 +4,39 @@ import {
   PatchAxiosInstance,
   DeleteAxiosInstance,
 } from '@axios/axios.method';
-import { CreateMatchRequest } from '@server/requestTypes/room';
+import { CreateRoomRequest, PatchRoomRequest } from '@server/requestTypes/room';
 import {
   JoinRoomResponse,
   ApproveJoinRoomResponse,
   GetRoomMembersResponse,
   GetRoomWaitingMembersResponse,
-  CheckRoomDetailResponse,
+  GetRoomDetailResponse,
   CheckRoomResponse,
+  CreateRoomResponse,
+  PatchRoomResponse,
 } from '@server/responseTypes/room';
 
-// [방 등록] /api/rooms
-export const createMatch = async (data: CreateMatchRequest): Promise<any> => {
-  const response = await PostAxiosInstance<any>(`/api/rooms`, data);
+// [모집방 생성] /api/rooms
+export const createRoom = async (
+  data: CreateRoomRequest,
+): Promise<CreateRoomResponse> => {
+  const response = await PostAxiosInstance<CreateRoomResponse>(
+    `/api/rooms`,
+    data,
+  );
+
+  return response.data;
+};
+
+// [모집방 수정] /api/rooms/{id}
+export const patchRoom = async (
+  roomId: number,
+  data: PatchRoomRequest,
+): Promise<PatchRoomResponse> => {
+  const response = await PatchAxiosInstance<PatchRoomResponse>(
+    `/api/rooms/${roomId}`,
+    data,
+  );
 
   return response.data;
 };
@@ -36,11 +56,14 @@ export const checkRoomCurrentCamera = async (
 };
 
 // [경로를 포함한 방 상세 정보 조회] /api/rooms/{id}
-export const checkRoomDetail = async (
+export const getRoomDetail = async (
   id: number,
-): Promise<CheckRoomDetailResponse> => {
-  const response = await GetAxiosInstance<any>(`/api/rooms/${id}`);
+): Promise<GetRoomDetailResponse> => {
+  const response = await GetAxiosInstance<GetRoomDetailResponse>(
+    `/api/rooms/${id}`,
+  );
 
+  console.log('Get 함수 실행됨');
   return response.data;
 };
 

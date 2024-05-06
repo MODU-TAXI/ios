@@ -1,0 +1,46 @@
+import React from 'react';
+import { View, Text } from 'react-native';
+import ParticipateUserComponent from '@components/RoomDigest/ParticipateUser';
+
+interface ParticipateUsersComponentProps {
+  roomId: number;
+}
+
+const users = [
+  {
+    id: 1,
+    nickname: '졸다가 늦은 판다',
+    temperature: 36.5,
+    me: false,
+  },
+  {
+    id: 2,
+    nickname: '졸다가 늦은 판다',
+    temperature: 36.5,
+    me: false,
+  },
+  {
+    id: 3,
+    nickname: '졸다가 늦은 판다',
+    temperature: 36.5,
+    me: false,
+  },
+];
+
+const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({
+  roomId,
+}) => {
+  return (
+    <View className="py-8 px-1">
+      <View>
+        <Text className="text-[20px] font-semibold">참여멤버</Text>
+      </View>
+
+      {users.map((user, index) => (
+        <ParticipateUserComponent key={index} user={user} />
+      ))}
+    </View>
+  );
+};
+
+export default ParticipateUsersComponent;
