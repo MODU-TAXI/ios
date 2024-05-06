@@ -1,10 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 import { RoomCategory } from '@type/entity/room';
-import RoomTagComponent from '@components/RoomDigest/RoomCategory';
+import RoomCategoryComponent from '@components/RoomDigest/RoomCategory';
 
 interface RoomCategoriesComponent {
-  roomCategories: RoomCategory[];
+  roomCategories: string[];
 }
 
 const RoomCategoriesComponent: React.FC<RoomCategoriesComponent> = ({
@@ -13,7 +13,7 @@ const RoomCategoriesComponent: React.FC<RoomCategoriesComponent> = ({
   return (
     <View className="flex-row">
       {roomCategories.map((roomCategory, index) => (
-        <RoomTagComponent key={index} roomCategory={roomCategory} />
+        <RoomCategoryComponent key={index} roomCategory={roomCategory} />
       ))}
     </View>
   );

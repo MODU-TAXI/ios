@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 import { styled } from 'nativewind';
 
-import RoomTagComponent from './RoomCategory';
+import RoomCategoryComponent from './RoomCategory';
 
 import ClockFillSvg from '@assets/images/RoomDigest/ClockFill.svg';
 import LocationFillSvg from '@assets/images/RoomDigest/LocationFill.svg';
@@ -37,21 +37,7 @@ const RoomDigestBoxComponent = ({
       <View className="flex flex-row h-auto mb-4 justify-between items-center">
         <View className="flex flex-row">
           {/** TODO: tags에서 RoomTagComponent 인자 받아오기 */}
-          <RoomTagComponent
-            label="마감임박"
-            textColor="text-warning"
-            bgColor="bg-[#FCE6E6]"
-          />
-          <RoomTagComponent
-            label="학생인증"
-            textColor="text-main"
-            bgColor="bg-sub100"
-          />
-          <RoomTagComponent
-            label="여자만"
-            textColor="text-gray700"
-            bgColor="bg-box"
-          />
+          <RoomCategoryComponent roomCategory={'학생인증'} />
         </View>
         <Text className="text-xs text-gray500">{lastChatTime}분전 채팅</Text>
       </View>

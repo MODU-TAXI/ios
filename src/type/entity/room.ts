@@ -20,7 +20,7 @@ export interface RoomDetail {
   expectedChargePerPerson: number; // 사람별 예상 요금
   expectedCharge: number; // 예상 요금
 
-  roomCategories: RoomCategory[];
+  roomCategories: string[];
   path: {
     coordinateReferenceSystem: {
       type: string;

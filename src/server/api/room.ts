@@ -63,7 +63,6 @@ export const getRoomDetail = async (
     `/api/rooms/${id}`,
   );
 
-  console.log('Get 함수 실행됨');
   return response.data;
 };
 

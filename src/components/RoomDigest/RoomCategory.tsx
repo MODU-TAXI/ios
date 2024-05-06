@@ -1,21 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { RoomCategory } from '@type/entity/room';
 
 interface RoomCategoryComponentProps {
-  roomCategory: RoomCategory;
+  roomCategory: string;
 }
 
 /** 카풀팟 방 태그 */
 const RoomCategoryComponent: React.FC<RoomCategoryComponentProps> = ({
   roomCategory,
 }) => {
+  const [roomTag, setRoomTag] = useState<RoomCategory>({
+    label: roomCategory,
+    textColor: 'text-gray500',
+    bgColor: 'bg-box',
+  });
+
+  // useEffect 사용으로 re-render 오류 방지
+  useEffect(() => {
+    if (roomCategory === '학생인증') {
+      setRoomTag({
+        label: roomCategory,
+        textColor: 'text-main',
+        bgColor: 'bg-sub100',
+      });
+    }
+  }, [roomCategory]);
+
   return (
-    <View className={`${roomCategory.bgColor} rounded-md mr-2`}>
-      <Text
-        className={`text-xs ${roomCategory.textColor} font-medium px-2 py-1`}
-      >
-        {roomCategory.label}
+    <View className={`${roomTag.bgColor} rounded-md mr-2`}>
+      <Text className={`text-xs ${roomTag.textColor} font-medium px-2 py-1`}>
+        {roomCategory}
       </Text>
     </View>
   );
