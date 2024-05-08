@@ -172,7 +172,7 @@ const MainMapScreen = () => {
               color={'rgba(64, 206, 172, 0.24)'}
             />
             {rooms &&
-              rooms.rooms.map((room) => (
+              rooms.map((room) => (
                 /** 매칭방 하나의 마커 */
                 /** TODO :
                  * 마커 탭 했을 때의 동작 (바텀시트에 정보 출력 등)

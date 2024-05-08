@@ -111,16 +111,14 @@ export const useGetRoomCurrentCamera = (
   longitude: number,
   latitude: number,
   radius: number,
-): { rooms: RoomCurrentCamera; refetch: () => void } => {
+): { rooms: RoomCurrentCamera['rooms']; refetch: () => void } => {
   const { data: rooms, refetch } = useSuspenseQuery({
     queryKey: [
       `/api/rooms/map?radius=${radius}&longitude=${longitude}&latitude=${latitude}`,
     ],
     queryFn: () => getRoomCurrentCamera(longitude, latitude, radius),
     select: (response: GetRoomCurrentCameraResponse) => {
-      return {
-        rooms: response.rooms,
-      };
+      return response.rooms;
     },
   });
 
