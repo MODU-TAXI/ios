@@ -5,59 +5,80 @@ import React, {
   useRef,
   useEffect,
 } from 'react';
-import { View, StyleSheet, Button, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import BottomSheet, {
-  BottomSheetModal,
   BottomSheetView,
-  BottomSheetModalProvider,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 import {
   NaverMapView,
   NaverMapMarkerOverlay,
   NaverMapCircleOverlay,
-  NaverMapPathOverlay,
-  NaverMapPolygonOverlay,
   Camera,
 } from '@mj-studio/react-native-naver-map';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Geolocation from '@react-native-community/geolocation';
 
 import { CheckRoomResponse } from '@server/responseTypes/room';
-
-import RoomMarkerComponent from '@components/Marker/RoomMarker';
-
-import MapBottomSheetScreen from './MapBottomSheet';
 import {
   fetchRoomCurrentCamera,
   calculateRange,
   calculateCenter,
 } from '@utils/map';
 
+import MapBottomSheetScreen from './MapBottomSheet';
+import RoomMarkerComponent from '@components/Marker/RoomMarker';
+
+import BackButton from '@assets/images/Header/BackButton.svg';
+import CloseButton from '@assets/images/Header/CloseButton.svg';
+
 const MainMapScreen = () => {
   const insets = useSafeAreaInsets();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   // 화면의 어디에서 멈추는지 snap point
-  const snapPoints = useMemo(() => ['40%', '90%'], []);
+  const snapPoints = useMemo(() => ['40%', '100%'], []);
+  const [isFullSnap, setIsFullSnap] = useState<boolean>(false);
+  // const [snapIndex, setSnapIndex] = useState<number>(0);
 
-  // TODO: '100%' 일 때 하나의 스크린처럼 보이도록 상단 헤더 렌더링 및 기존 컴포넌트 내리기
+  /** 바텀시트 100% 차지 시 isFullSnap === true */
   const handleSheetChanges = useCallback((index: number) => {
-    // console.log('handleSheetChanges', index);
+    setIsFullSnap(index === 1);
+    // setSnapIndex(index);
   }, []);
 
-  // 배경 터치시 복귀
-  const handleBackDrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        appearsOnIndex={-1}
-        disappearsOnIndex={1}
-        opacity={0}
-      />
-    ),
-    [],
-  );
+  /** 배경 터치시 복귀 (현재 불필요) */
+  // const handleBackDrop = useCallback(
+  //   (props: any) => (
+  //     <BottomSheetBackdrop
+  //       {...props}
+  //       appearsOnIndex={-1}
+  //       disappearsOnIndex={1}
+  //       opacity={0}
+  //     />
+  //   ),
+  //   [],
+  // );
+
+  /** 바텀시트 40%로 복귀 */
+  const handleCloseSheet = useCallback(() => {
+    bottomSheetRef.current?.snapToIndex(0);
+    setIsFullSnap(false);
+  }, []);
+
+  /** handle rendering (보류) */
+  // const animatedHeaderStyle = useAnimatedStyle(() => {
+  //   const opacity = interpolate(
+  //     snapIndex,
+  //     [0, 3], // BottomSheet 인덱스가 0에서 1로 변경될 때
+  //     [0, 100], // 헤더의 투명도를 0에서 1로 변경
+  //     Extrapolation.CLAMP // 값이 정의된 범위를 벗어나지 않도록 함
+  //   );
+
+  //   return {
+  //     opacity,
+  //   };
+  // }, [snapIndex]); // bottomSheetIndex가 변경될 때마다 다시 계산
 
   // 현재 카메라 중심좌표 저장
   const [currentCamera, setCurrentCamera] = useState<Camera>();
@@ -123,9 +144,9 @@ const MainMapScreen = () => {
   // 렌더링
   return (
     // 지도가 화면 전체를 포함하기 위한 마진 설정
-    <View className="flex-1 justify-center bg-white" style={{ marginTop: 0 }}>
+    <View className="flex-1 items-center bg-white" style={{ marginTop: 0 }}>
       {/** 지도 */}
-      <View className="flex-1 w-full h-auto mb-[320px]">
+      <View className="flex-1 w-[99%] h-auto mb-[320px]">
         {currentCamera && (
           <NaverMapView
             style={{ flex: 1 }}
@@ -184,12 +205,31 @@ const MainMapScreen = () => {
         index={0}
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
-        backdropComponent={handleBackDrop}
+        //backdropComponent={handleBackDrop}
       >
         <BottomSheetView
           className="flex-1 items-center"
           style={{ marginBottom: insets.top + 36 }}
         >
+          {/** 100% 일 때 헤더 렌더링 */}
+          {isFullSnap && (
+            // <Animated.View className="mt-6" style={animatedHeaderStyle}>
+            <View className="mt-6">
+              <View className="flex-row items-center justify-between px-4">
+                <Pressable onPress={handleCloseSheet}>
+                  <BackButton />
+                </Pressable>
+
+                <Text className="text-lg text-black font-semibold">
+                  택시팟 목록
+                </Text>
+
+                <Pressable onPress={handleCloseSheet}>
+                  <CloseButton />
+                </Pressable>
+              </View>
+            </View>
+          )}
           <MapBottomSheetScreen />
         </BottomSheetView>
       </BottomSheet>
