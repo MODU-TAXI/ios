@@ -10,17 +10,19 @@ import {
   createRoom,
   JoinRoom,
   patchRoom,
+  getRoomCurrentCamera,
 } from '@server/api/room';
 import { CreateRoomRequest, PatchRoomRequest } from '@server/requestTypes/room';
 import {
   CreateRoomResponse,
+  GetRoomCurrentCameraResponse,
   GetRoomDetailResponse,
   JoinRoomResponse,
   PatchRoomResponse,
 } from '@server/responseTypes/room';
 import { ErrorToastMessage, InfoToastMessage } from '@utils/toastMessage';
 import { translateCategory } from '@utils/room';
-import { RoomDetail } from '@type/entity/room';
+import { RoomCurrentCamera, RoomDetail } from '@type/entity/room';
 
 // 방 생성
 export const useCreateRoom = (): UseMutationResult<
@@ -102,6 +104,27 @@ export const useGetRoom = (
   });
 
   return { roomDetail, refetch };
+};
+
+// 원형 영역 방 조회
+export const useGetRoomCurrentCamera = (
+  longitude: number,
+  latitude: number,
+  radius: number,
+): { rooms: RoomCurrentCamera; refetch: () => void } => {
+  const { data: rooms, refetch } = useSuspenseQuery({
+    queryKey: [
+      `/api/rooms/map?radius=${radius}&longitude=${longitude}&latitude=${latitude}`,
+    ],
+    queryFn: () => getRoomCurrentCamera(longitude, latitude, radius),
+    select: (response: GetRoomCurrentCameraResponse) => {
+      return {
+        rooms: response.rooms,
+      };
+    },
+  });
+
+  return { rooms, refetch };
 };
 
 // 방 수정

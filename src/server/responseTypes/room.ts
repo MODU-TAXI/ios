@@ -1,9 +1,11 @@
 // [원형 영역 내 방 조회] /api/rooms/map
-export interface CheckRoomResponse {
-  id: number;
-  departureLongitude: number;
-  departureLatitude: number;
-  spotName: string;
+export interface GetRoomCurrentCameraResponse {
+  rooms: {
+    id: number;
+    departureLongitude: number;
+    departureLatitude: number;
+    spotName: string;
+  }[];
 }
 
 // [모집 방 생성] /api/rooms

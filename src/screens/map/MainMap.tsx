@@ -19,12 +19,9 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Geolocation from '@react-native-community/geolocation';
 
-import { CheckRoomResponse } from '@server/responseTypes/room';
-import {
-  fetchRoomCurrentCamera,
-  calculateRange,
-  calculateCenter,
-} from '@utils/map';
+import { GetRoomCurrentCameraResponse } from '@server/responseTypes/room';
+import { calculateRadius, calculateCenter } from '@utils/map';
+import { useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
 import MapBottomSheetScreen from './MapBottomSheet';
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
@@ -80,14 +77,22 @@ const MainMapScreen = () => {
   //   };
   // }, [snapIndex]); // bottomSheetIndex가 변경될 때마다 다시 계산
 
-  // 현재 카메라 중심좌표 저장
-  const [currentCamera, setCurrentCamera] = useState<Camera>();
+  // 현재 카메라 중심좌표 저장, 초기값 인하대 후문
+  const [currentCamera, setCurrentCamera] = useState<Camera>({
+    latitude: 37.451062,
+    longitude: 126.656496,
+    zoom: 14,
+  });
 
   // 현재 줌에서의 탐색 범위
-  const [range, setRange] = useState<number>(600);
+  const [radius, setRadius] = useState<number>(600);
 
-  // 현재 조회한 매칭방 배열
-  const [rooms, setRooms] = useState<CheckRoomResponse[]>([]);
+  // 매칭방 리스트 객체
+  const { rooms, refetch } = useGetRoomCurrentCamera(
+    currentCamera.longitude,
+    currentCamera.latitude,
+    radius,
+  );
 
   // 처음 렌더링 시 현재위치 저장 및 방 탐색
   useEffect(() => {
@@ -100,8 +105,6 @@ const MainMapScreen = () => {
           longitude: longitude,
           zoom: 14,
         });
-
-        fetchRoomCurrentCamera(longitude, latitude, range, setRooms);
       },
       (error) => console.error(error),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
@@ -118,26 +121,27 @@ const MainMapScreen = () => {
       clearTimeout(timeoutRef.current);
     }
 
+    let newRadius = 2500;
+    let adjustValue = 0.001;
+    if (e.zoom) {
+      adjustValue = calculateCenter(e.zoom);
+      newRadius = calculateRadius(e.zoom);
+      setRadius(newRadius);
+    }
+
+    // 카메라 센터를 zoom 레벨에 따라 하단으로 조정
+    const adjustedLatitude = e.latitude - adjustValue;
+
+    // 조정된 센터 저장
+    setCurrentCamera({
+      latitude: adjustedLatitude,
+      longitude: e.longitude,
+      zoom: e.zoom,
+    });
+
     timeoutRef.current = setTimeout(() => {
-      let newRange = 2500;
-      let adjustValue = 0.001;
-      if (e.zoom) {
-        adjustValue = calculateCenter(e.zoom);
-        newRange = calculateRange(e.zoom);
-        setRange(newRange);
-      }
-
-      // 카메라 센터를 zoom 레벨에 따라 하단으로 조정
-      const adjustedLatitude = e.latitude - adjustValue;
-
-      // 조정된 센터 저장 및 방 탐색
-      setCurrentCamera({
-        latitude: adjustedLatitude,
-        longitude: e.longitude,
-        zoom: e.zoom,
-      });
-
-      fetchRoomCurrentCamera(e.longitude, adjustedLatitude, newRange, setRooms);
+      // 방 다시 탐색
+      refetch();
     }, 1000);
   }, []);
 
@@ -164,11 +168,11 @@ const MainMapScreen = () => {
             <NaverMapCircleOverlay
               latitude={currentCamera.latitude}
               longitude={currentCamera.longitude}
-              radius={range}
+              radius={radius}
               color={'rgba(64, 206, 172, 0.24)'}
             />
             {rooms &&
-              rooms.map((room) => (
+              rooms.rooms.map((room) => (
                 /** 매칭방 하나의 마커 */
                 /** TODO :
                  * 마커 탭 했을 때의 동작 (바텀시트에 정보 출력 등)
