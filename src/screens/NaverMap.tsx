@@ -1,13 +1,13 @@
+import React from 'react';
+import { View } from 'react-native';
 import {
   Region,
   NaverMapView,
+  NaverMapPathOverlay,
   NaverMapCircleOverlay,
   NaverMapMarkerOverlay,
-  NaverMapPathOverlay,
   NaverMapPolygonOverlay,
 } from '@mj-studio/react-native-naver-map';
-import React from 'react';
-import { View } from 'react-native';
 
 /** 네이버맵 레퍼런스 */
 const NaverMapScreen = () => {

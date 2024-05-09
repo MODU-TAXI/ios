@@ -1,10 +1,11 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
-import { smsAuthentication, smsConfirm } from '@server/api/member.sms';
-import {
-  SmsAuthenticationRequest,
-  SmsConfirmRequest,
-} from '@server/requestTypes/member.sms';
+
+import { smsConfirm, smsAuthentication } from '@server/api/member.sms';
 import { memberSmsErrorHandler } from '@server/errorHandler/member.sms';
+import {
+  SmsConfirmRequest,
+  SmsAuthenticationRequest,
+} from '@server/requestTypes/member.sms';
 
 // sms인증
 export const useSmsAuthentication = (

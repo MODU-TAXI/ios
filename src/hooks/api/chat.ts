@@ -1,7 +1,9 @@
-import { memberIdState } from '@recoil/recoil';
-import { getChatMessages, getMyChatInfo } from '@server/api/chat';
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { useRecoilState } from 'recoil';
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import { memberIdState } from '@recoil/recoil';
+
+import { getMyChatInfo, getChatMessages } from '@server/api/chat';
 
 // 내가 참여하고 있는 채팅방 정보 가져오기
 export const useGetMyInfo = () => {

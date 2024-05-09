@@ -1,11 +1,12 @@
+
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 
-import {
-  EmailAuthenticationRequest,
-  EmailConfirmRequest,
-} from '@server/requestTypes/member.mail';
-import { emailAuthentication, emailConfirm } from '@server/api/member.mail';
 import { memberMailErrorHandler } from '@server/errorHandler/member.mail';
+import { emailConfirm, emailAuthentication } from '@server/api/member.mail';
+import {
+  EmailConfirmRequest,
+  EmailAuthenticationRequest,
+} from '@server/requestTypes/member.mail';
 
 // 이메일인증
 export const useEmailAuthentication = (

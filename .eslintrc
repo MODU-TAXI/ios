@@ -1,0 +1,94 @@
+{
+  "root": true,
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:tailwindcss/recommended",
+    "prettier",
+  ],
+  "ignorePatterns": [
+    ".eslintrc.js",
+    "babel.config.js",
+    "jest.config.js",
+    "metro.config.js",
+    "tailwind.config.js",
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react-refresh", "perfectionist"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+      },
+    },
+  },
+
+  "rules": {
+    "no-console": 1,
+    "camelcase": 0,
+    "no-use-before-define": 1,
+
+    "perfectionist/sort-named-imports": [
+      1,
+      {
+        "order": "asc",
+        "type": "line-length",
+      },
+    ],
+    "perfectionist/sort-named-exports": [
+      1,
+      {
+        "order": "asc",
+        "type": "line-length",
+      },
+    ],
+    "perfectionist/sort-exports": [
+      1,
+      {
+        "order": "asc",
+        "type": "line-length",
+      },
+    ],
+    "perfectionist/sort-imports": [
+      1,
+      {
+        "order": "asc",
+        "type": "line-length",
+        "newlines-between": "always",
+        "groups": [
+          ["builtin", "external"],
+          "internal",
+          ["parent", "sibling", "index"],
+          "object",
+          "unknown",
+          "custom-screens",
+          "custom-components",
+          "custom-routes",
+          "custom-recoil",
+          "custom-axios",
+          "custom-server",
+          "custom-hooks",
+          "custom-utils",
+          "custom-types",
+          "custom-assets",
+        ],
+        "custom-groups": {
+          "value": {
+            "custom-screens": "@screens/**",
+            "custom-components": "@components/**",
+            "custom-routes": "@routes/**",
+            "custom-recoil": "@recoil/**",
+            "custom-axios": "@axios/**",
+            "custom-server": "@server/**",
+            "custom-hooks": "@hooks/**",
+            "custom-utils": "@utils/**",
+            "custom-types": "@types/**",
+            "custom-assets": "@assets/**",
+          },
+        },
+        "internal-pattern": ["src/**"],
+      },
+    ],
+  },
+}

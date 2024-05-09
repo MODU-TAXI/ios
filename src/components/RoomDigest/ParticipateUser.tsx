@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+
+import { RoomMember } from 'src/types/entity/room';
+
 import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
-import { RoomMember } from '@type/entity/room';
 
 interface ParticipateUserComponentProps {
   roomMember: RoomMember;
@@ -13,7 +15,7 @@ const ParticipateUserComponent: React.FC<ParticipateUserComponentProps> = ({
   return (
     <View
       key={roomMember.memberId}
-      className="flex-row justify-between items-center mt-4"
+      className="mt-4 flex-row items-center justify-between"
     >
       <View className="flex-row items-center">
         <UserBasicImage className="mr-1" />
@@ -24,7 +26,7 @@ const ParticipateUserComponent: React.FC<ParticipateUserComponentProps> = ({
         )} */}
       </View>
 
-      <Text className="text-lg text-disabled2 font-normal">
+      <Text className="text-lg font-normal text-disabled2">
         {roomMember.score}'C
       </Text>
     </View>

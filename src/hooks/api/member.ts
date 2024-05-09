@@ -1,22 +1,25 @@
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import Config from 'react-native-config';
 import Toast from 'react-native-toast-message';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
-import { checkMembership, socialLogin } from '@server/api/member';
-import { KakaoLoginResponse } from '@server/responseTypes/member';
+import { RootStackParamList } from 'src/types/ParamLists';
+
 import { SignUpUser } from '@recoil/type';
 import { loggedInState, signUpUserState } from '@recoil/recoil';
-import { RootStackParamList } from '@type/ParamLists';
+
+import { socialLogin, checkMembership } from '@server/api/member';
+import { KakaoLoginResponse } from '@server/responseTypes/member';
+
 import {
   deleteToken,
-  getRefreshToken,
   setAccessToken,
+  getRefreshToken,
   setRefreshToken,
 } from '@utils/token';
-import Config from 'react-native-config';
 
 // 로그인 여부 확인
 export const useCheckLogin = async () => {

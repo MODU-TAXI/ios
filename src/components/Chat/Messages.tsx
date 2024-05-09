@@ -1,8 +1,11 @@
-import React, { useEffect, useRef } from 'react';
-import { View, ScrollView, Keyboard } from 'react-native';
-import { MessageBoxComponent } from '@components/Chat/MessageBox';
+import React, { useRef, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { messagesState, roomState } from '@recoil/recoil';
+import { View, Keyboard, ScrollView } from 'react-native';
+
+import { MessageBoxComponent } from '@components/Chat/MessageBox';
+
+import { roomState, messagesState } from '@recoil/recoil';
+
 import { useGetMessages } from '@hooks/api/chat';
 
 const MessagesComponent: React.FC = () => {

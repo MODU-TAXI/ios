@@ -1,9 +1,10 @@
-import RoomDigestBoxComponent from '@components/RoomDigest/RoomDigestBox';
-import { useQueryClient } from '@tanstack/react-query';
-import React, { useCallback, useEffect, useState, useMemo, memo } from 'react';
 import { View, Text, Pressable } from 'react-native';
+import { useQueryClient } from '@tanstack/react-query';
 import { TextInput } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { memo, useMemo, useState, useEffect, useCallback } from 'react';
+
+import RoomDigestBoxComponent from '@components/RoomDigest/RoomDigestBox';
 
 const square = (number: number) => {
   console.log('제곱 계산중...');

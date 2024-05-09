@@ -1,4 +1,5 @@
 import { Coord } from '@mj-studio/react-native-naver-map';
+
 import { checkSpot } from '@server/api/spot';
 import { CheckSpotRequest } from '@server/requestTypes/spot';
 

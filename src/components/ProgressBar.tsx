@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
 import { View, Animated } from 'react-native';
+import React, { useRef, useEffect } from 'react';
 
 interface ProgressBarComponentProps {
   previousDealt: number;
@@ -42,7 +42,7 @@ const ProgressBarComponent: React.FC<ProgressBarComponentProps> = ({
 
   return (
     <View className="flex-1">
-      <View className="flex-1 h-1 bg-[#E2E2E2]">
+      <View className="h-1 flex-1 bg-[#E2E2E2]">
         <AnimatedBar />
       </View>
     </View>

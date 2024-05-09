@@ -1,33 +1,38 @@
-import React, {
-  useState,
-  useCallback,
-  useMemo,
-  useRef,
-  useEffect,
-} from 'react';
 import { View, Text, Pressable } from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, {
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 import {
+  Camera,
   NaverMapView,
   NaverMapMarkerOverlay,
   NaverMapCircleOverlay,
-  Camera,
 } from '@mj-studio/react-native-naver-map';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Geolocation from '@react-native-community/geolocation';
-
-import { GetRoomCurrentCameraResponse } from '@server/responseTypes/room';
-import { calculateRadius, calculateCenter } from '@utils/map';
-import { useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
 import MapBottomSheetScreen from './MapBottomSheet';
+
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
+
+import { GetRoomCurrentCameraResponse } from '@server/responseTypes/room';
+
+import { useGetRoomCurrentCamera } from '@hooks/api/rooms';
+
+import { calculateRadius, calculateCenter } from '@utils/map';
 
 import BackButton from '@assets/images/Header/BackButton.svg';
 import CloseButton from '@assets/images/Header/CloseButton.svg';
+
+
 
 const MainMapScreen = () => {
   const insets = useSafeAreaInsets();
@@ -150,7 +155,7 @@ const MainMapScreen = () => {
     // 지도가 화면 전체를 포함하기 위한 마진 설정
     <View className="flex-1 items-center bg-white" style={{ marginTop: 0 }}>
       {/** 지도 */}
-      <View className="flex-1 w-[99%] h-auto mb-[320px]">
+      <View className="mb-[320px] h-auto w-[99%] flex-1">
         {currentCamera && (
           <NaverMapView
             style={{ flex: 1 }}
@@ -224,7 +229,7 @@ const MainMapScreen = () => {
                   <BackButton />
                 </Pressable>
 
-                <Text className="text-lg text-black font-semibold">
+                <Text className="text-lg font-semibold text-black">
                   택시팟 목록
                 </Text>
 

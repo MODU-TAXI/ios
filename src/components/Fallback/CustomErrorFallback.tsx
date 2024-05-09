@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Toast from 'react-native-toast-message';
-import { View, Button, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import { ErrorBoundary } from 'react-error-boundary';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';

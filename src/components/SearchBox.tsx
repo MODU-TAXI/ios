@@ -1,15 +1,16 @@
-import React, { useState, useRef } from 'react';
-import {
-  NativeSyntheticEvent,
-  Pressable,
-  Text,
-  TextInput,
-  TextInputChangeEventData,
-  View,
-} from 'react-native';
+import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import {
+  Text,
+  View,
+  Pressable,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+} from 'react-native';
 
 import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
+
 
 interface SearchBoxProps {
   value: string;
@@ -46,12 +47,12 @@ const SearchBoxComponent: React.FC<SearchBoxProps> = ({ value, setValue }) => {
       {/** 검색창 */}
       <Pressable
         onPress={handleFocus}
-        className="flex flex-row flex-1 h-full p-2 bg-gray100 rounded-xl"
+        className="flex h-full flex-1 flex-row rounded-xl bg-gray100 p-2"
       >
         <View className="px-1">
           <MagnifyingGlassMainSvg></MagnifyingGlassMainSvg>
         </View>
-        <View className="flex-col mb-1 justify-center">
+        <View className="mb-1 flex-col justify-center">
           <TextInput
             ref={inputRef}
             value={value}
@@ -64,7 +65,7 @@ const SearchBoxComponent: React.FC<SearchBoxProps> = ({ value, setValue }) => {
 
       {/** 취소 버튼 */}
       <Pressable onPress={goBack}>
-        <Text className="text-base p-2.5">취소</Text>
+        <Text className="p-2.5 text-base">취소</Text>
       </Pressable>
     </View>
   );

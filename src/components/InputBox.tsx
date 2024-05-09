@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { TextInput, Text, View, Pressable } from 'react-native';
+import { Text, View, TextInput, Pressable } from 'react-native';
+
 import TimerComponent from './Timer';
+
 
 interface InputBoxComponentProps {
   title: string;
@@ -48,12 +50,12 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
       onPress={handleFocus}
       className={
         isFocused
-          ? 'flex-col justify-center px-5 py-4 bg-white rounded-xl border-2'
-          : 'flex-col justify-center px-5 py-4 bg-[#E2E2E2] rounded-xl border-2 border-[#E2E2E2]'
+          ? 'flex-col justify-center rounded-xl border-2 bg-white px-5 py-4'
+          : 'flex-col justify-center rounded-xl border-2 border-[#E2E2E2] bg-[#E2E2E2] px-5 py-4'
       }
     >
       <Text className="text-[#626262]">{title}</Text>
-      <View className="flex-row mt-1.5">
+      <View className="mt-1.5 flex-row">
         <TextInput
           ref={inputRef}
           value={value}
@@ -62,7 +64,7 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
           onChangeText={valueHandleChange}
           placeholder={placeholder}
           placeholderTextColor="#C0C0C0"
-          className="font-semibold flex-1 mr-2"
+          className="mr-2 flex-1 font-semibold"
         />
 
         {/* timer 있을때만 TimerComponent 적용 */}

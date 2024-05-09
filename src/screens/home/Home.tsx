@@ -1,11 +1,13 @@
 import React from 'react';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { LoginStackParamList } from '@type/ParamLists';
 import { Text, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { deleteMyChatInfo } from '@server/api/chat';
-import { useChatContext } from 'src/providers/chatProvider';
 import { ScrollView } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+
+import { LoginStackParamList } from 'src/types/ParamLists';
+import { useChatContext } from 'src/providers/chatProvider';
+
+import { deleteMyChatInfo } from '@server/api/chat';
 
 const HomeScreen = () => {
   const { disConnect } = useChatContext();
@@ -46,49 +48,49 @@ const HomeScreen = () => {
       <ScrollView className="flex-col">
         <Pressable
           onPress={toRoomScreen}
-          className="bg-gray-300  h-20 m-5 rounded-md justify-center items-center"
+          className="m-5  h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>매칭 스크린</Text>
         </Pressable>
 
         <Pressable
           onPress={toCreateRoomScreen}
-          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>매칭 생성스크린</Text>
         </Pressable>
 
         <Pressable
           onPress={toMapScreen}
-          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>맵 스크린</Text>
         </Pressable>
 
         <Pressable
           onPress={toSearchScreen}
-          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>검색 스크린</Text>
         </Pressable>
 
         <Pressable
           onPress={toChatRoomScreen}
-          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>채팅 스크린</Text>
         </Pressable>
 
         <Pressable
           onPress={chatOut}
-          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>채팅방 나가기</Text>
         </Pressable>
 
         <Pressable
           onPress={toTestScreen}
-          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>테스트방</Text>
         </Pressable>

@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
-import { MessageBody, SignUpUser } from '@recoil/type';
+
+import { SignUpUser, MessageBody } from '@recoil/type';
 
 export const signUpUserState = atom<SignUpUser>({
   key: 'tempUser',

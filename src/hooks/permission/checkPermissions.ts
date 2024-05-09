@@ -1,13 +1,13 @@
 import {
-  checkMultiple,
-  checkNotifications,
-  IOSPermission,
+  RESULTS,
   Permission,
   PERMISSIONS,
-  PermissionStatus,
+  checkMultiple,
+  IOSPermission,
   requestMultiple,
+  PermissionStatus,
+  checkNotifications,
   requestNotifications,
-  RESULTS,
 } from 'react-native-permissions';
 
 /** 초기 온보딩 화면에서의 권한 요청 */

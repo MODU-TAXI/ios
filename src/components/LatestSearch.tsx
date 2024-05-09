@@ -19,10 +19,10 @@ const LatestSearchComponent: React.FC<LatestSearchProps> = ({
   };
 
   return (
-    <View className="flex flex-row justify-between items-center py-3 border-b border-gray200">
-      <Text className="text-base ml-2">{keyword}</Text>
+    <View className="flex flex-row items-center justify-between border-b border-gray200 py-3">
+      <Text className="ml-2 text-base">{keyword}</Text>
       <View className="flex flex-row">
-        <Text className="text-sm text-gray600 mr-1">{distance}m</Text>
+        <Text className="mr-1 text-sm text-gray600">{distance}m</Text>
         <Pressable onPress={handleDelete}>
           <XmarkSvg />
         </Pressable>

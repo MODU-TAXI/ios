@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, Text } from 'react-native';
+import { Text, Pressable } from 'react-native';
 
 interface ButtonComponentProps {
   color: string;
@@ -24,7 +24,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
 
   return (
     <Pressable className={buttonStyle} onPress={onPress} disabled={disabled}>
-      <Text className={`font-semibold text-base text-${textColor} text-center`}>
+      <Text className={`text- text-base font-semibold${textColor} text-center`}>
         {text}
       </Text>
     </Pressable>

@@ -1,13 +1,14 @@
 import React from 'react';
+import TextEncodingPolyfill from 'text-encoding';
 import { KeyboardAvoidingView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import TextEncodingPolyfill from 'text-encoding';
+
 import HeaderComponent from '@components/Header';
+import MessagesComponent from '@components/Chat/Messages';
+import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 
 import { useEnterChatRoom } from '@hooks/chat';
 
-import MessagesComponent from '@components/Chat/Messages';
-import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 
 Object.assign('global', {
   TextEncoder: TextEncodingPolyfill.TextEncoder,

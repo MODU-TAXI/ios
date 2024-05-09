@@ -1,36 +1,41 @@
-import React, { useCallback } from 'react';
+import 'dayjs/locale/ko';
+import dayjs from 'dayjs';
 import { View, Text } from 'react-native';
+import React, { useCallback } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import dayjs from 'dayjs';
 import {
-  useApproveJoinRoom,
-  useDeleteRoom,
-  useGetRoom,
-  useGetRoomMembers,
-  useGetRoomWaitingMembers,
-  useJoinRoom,
-} from '@hooks/api/rooms';
-import { roomState } from '@recoil/recoil';
-import HeaderComponent from '@components/Header';
-import ButtonComponent from '@components/Button';
-import DottedLineComponent from '@components/DottedLine';
-import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
-import WaitingUsersComponent from '@components/RoomDigest/WaitingUsers';
-import RoomMapComponent from '@components/RoomDigest/RoomMap';
-import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
-import StartCircle from '@assets/images/Match/StartCircle.svg';
-import EndCircle from '@assets/images/Match/EndCircle.svg';
-import 'dayjs/locale/ko';
-import {
-  NavigationProp,
-  useFocusEffect,
   useIsFocused,
   useNavigation,
+  NavigationProp,
+  useFocusEffect,
 } from '@react-navigation/native';
-import { LoginStackParamList } from '@type/ParamLists';
+
+import { LoginStackParamList } from 'src/types/ParamLists';
 import { useChatContext } from 'src/providers/chatProvider';
+
+import ButtonComponent from '@components/Button';
+import HeaderComponent from '@components/Header';
+import DottedLineComponent from '@components/DottedLine';
+import RoomMapComponent from '@components/RoomDigest/RoomMap';
+import WaitingUsersComponent from '@components/RoomDigest/WaitingUsers';
+import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
+import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
+
+import { roomState } from '@recoil/recoil';
+
+import {
+  useGetRoom,
+  useJoinRoom,
+  useDeleteRoom,
+  useGetRoomMembers,
+  useApproveJoinRoom,
+  useGetRoomWaitingMembers,
+} from '@hooks/api/rooms';
+
+import EndCircle from '@assets/images/Match/EndCircle.svg';
+import StartCircle from '@assets/images/Match/StartCircle.svg';
 
 dayjs.locale('ko');
 
@@ -91,7 +96,7 @@ const RoomDetailScreen = () => {
       {/* 헤더 */}
       <HeaderComponent title={'매칭 페이지'} />
 
-      <ScrollView className="flex-1 px-4 mt-8">
+      <ScrollView className="mt-8 flex-1 px-4">
         {/* 카테고리 */}
         <RoomCategoriesComponent roomCategories={roomDetail.roomCategories} />
 
@@ -99,7 +104,7 @@ const RoomDetailScreen = () => {
         <RoomMapComponent roomDetail={roomDetail} />
 
         {/* 날짜, 출발지, 도착지 정보 */}
-        <View className="py-8 px-2">
+        <View className="px-2 py-8">
           <View>
             <Text className="text-lg font-medium text-emphasized">
               {roomDetail.departureDairyDate}
@@ -111,14 +116,14 @@ const RoomDetailScreen = () => {
               <View className="flex-row items-center">
                 <StartCircle />
 
-                <Text className="text-lg text-disabled2 font-normal ml-4">
+                <Text className="ml-4 text-lg font-normal text-disabled2">
                   {roomDetail.departureTime}
                 </Text>
               </View>
             </View>
 
-            <View className="flex-row ml-[6px] my-2">
-              <View className="w-[1px] h-[46px] bg-main" />
+            <View className="my-2 ml-[6px] flex-row">
+              <View className="h-[46px] w-px bg-main" />
 
               <Text className="ml-6 text-[20px] font-semibold">
                 {roomDetail.departureName}
@@ -129,12 +134,12 @@ const RoomDetailScreen = () => {
               <View className="flex-row items-center">
                 <EndCircle />
 
-                <Text className="text-lg text-disabled2 font-normal ml-4">
+                <Text className="ml-4 text-lg font-normal text-disabled2">
                   {roomDetail.arrivalTime}
                 </Text>
               </View>
 
-              <Text className="text-[20px] font-semibold ml-[31px] mt-2">
+              <Text className="ml-[31px] mt-2 text-[20px] font-semibold">
                 {roomDetail.arrivalName}
               </Text>
             </View>
@@ -161,17 +166,17 @@ const RoomDetailScreen = () => {
         {/* 금액 */}
         <View className="py-8">
           <View className="flex-row justify-between">
-            <Text className="text-lg text-disabled2 font-medium">총액</Text>
-            <Text className="text-lg text-black font-medium">
+            <Text className="text-lg font-medium text-disabled2">총액</Text>
+            <Text className="text-lg font-medium text-black">
               {roomDetail.expectedCharge.toLocaleString('ko-KR')}원
             </Text>
           </View>
 
-          <View className="flex-row justify-between mt-4">
-            <Text className="text-lg text-disabled2 font-medium">
+          <View className="mt-4 flex-row justify-between">
+            <Text className="text-lg font-medium text-disabled2">
               최소인원 매칭시
             </Text>
-            <Text className="text-lg text-black font-medium">
+            <Text className="text-lg font-medium text-black">
               {roomDetail.expectedChargePerPerson.toLocaleString('ko-KR')}원
             </Text>
           </View>
@@ -179,7 +184,7 @@ const RoomDetailScreen = () => {
 
         {roomDetail.myRoom ? (
           <View>
-            <View className="mt-[78px] mx-5">
+            <View className="mx-5 mt-[78px]">
               <ButtonComponent
                 color={'bg-white'}
                 borderColor={'border-main'}
@@ -190,7 +195,7 @@ const RoomDetailScreen = () => {
               />
             </View>
 
-            <View className="mt-3 mx-5 mb-10">
+            <View className="mx-5 mb-10 mt-3">
               <ButtonComponent
                 color={'bg-main'}
                 borderColor={'border-main'}
@@ -202,7 +207,7 @@ const RoomDetailScreen = () => {
             </View>
           </View>
         ) : (
-          <View className="mt-3 mx-5 mb-10">
+          <View className="mx-5 mb-10 mt-3">
             <ButtonComponent
               color={'bg-main'}
               borderColor={'border-main'}

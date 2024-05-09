@@ -16,11 +16,11 @@
     // alias 설정
     "baseUrl": ".",
     "paths": {
+      "@providers/*": ["src/providers/*"],
       "@components/*": ["src/components/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@pages/*": ["src/pages/*"],
       "@routes/*": ["src/routes/*"],
-      "@type/*": ["src/type/*"],
+      "@types/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"],
       "@assets/*": ["src/assets/*"],
       "@server/*": ["src/server/*"],
