@@ -19,7 +19,7 @@ type LoginStackParamList = {
   MainMapScreen: undefined;
   NaverMapScreen: undefined;
   CreateRoomScreen: undefined;
-  PatchRoomScreen: { key: RoomDetail };
+  PatchRoomScreen: { roomDetail: RoomDetail };
   SearchScreen: undefined;
   ChatRoomScreen: undefined;
   TestScreen: undefined;

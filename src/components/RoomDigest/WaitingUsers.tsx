@@ -2,33 +2,16 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
 import WaitingUserComponent from './WaitingUser';
+import { RoomWaitingMember } from '@type/entity/room';
 
 interface WaitingUsersComponentProps {
-  roomId: number;
+  roomWaitingMembers: RoomWaitingMember[];
+  applyJoinRoom: (memberId: number) => Promise<void>;
 }
 
-const users = [
-  {
-    id: 1,
-    nickname: '졸다가 늦은 판다',
-    temperature: 36.5,
-    me: false,
-  },
-  {
-    id: 2,
-    nickname: '졸다가 늦은 판다',
-    temperature: 36.5,
-    me: false,
-  },
-  {
-    id: 3,
-    nickname: '졸다가 늦은 판다',
-    temperature: 36.5,
-    me: false,
-  },
-];
 const WaitingUsersComponent: React.FC<WaitingUsersComponentProps> = ({
-  roomId,
+  roomWaitingMembers,
+  applyJoinRoom,
 }) => {
   return (
     <View className="py-8 px-1">
@@ -36,8 +19,12 @@ const WaitingUsersComponent: React.FC<WaitingUsersComponentProps> = ({
         <Text className="text-[20px] font-semibold">대기멤버</Text>
       </View>
 
-      {users.map((user, index) => (
-        <WaitingUserComponent key={index} user={user} />
+      {roomWaitingMembers.map((roomWaitingMember, index) => (
+        <WaitingUserComponent
+          key={index}
+          roomWaitingMember={roomWaitingMember}
+          applyJoinRoom={applyJoinRoom}
+        />
       ))}
     </View>
   );

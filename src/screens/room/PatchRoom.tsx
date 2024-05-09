@@ -31,12 +31,13 @@ import UnSelectedPerson1 from '@assets/images/Match/UnSelectedPerson1.svg';
 import UnSelectedPerson2 from '@assets/images/Match/UnSelectedPerson2.svg';
 import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
 import dayjs from 'dayjs';
+
 dayjs.locale('ko');
 
 const PatchRoom = () => {
   const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
   const route = useRoute<RouteProp<LoginStackParamList>>();
-  const roomDetail = route?.params?.key;
+  const roomDetail = route?.params?.roomDetail;
 
   // TODO: 이부분 어떻게 할지 고민하기
   if (!roomDetail) {
@@ -85,8 +86,8 @@ const PatchRoom = () => {
     setCheckedCategorys(new_categories);
   }, []);
 
-  // 파티 생성
-  const createMatch = async () => {
+  // 파티 수정
+  const patchMatch = async () => {
     if (!passangersNumber || !datePicked) {
       return ErrorToastMessage('힝목을 모두 체크해주세요');
     }
@@ -290,7 +291,7 @@ const PatchRoom = () => {
             textColor={'white'}
             text={'매칭팟 수정하기'}
             disabled={!datePicked || !passangersNumber}
-            onPress={createMatch}
+            onPress={patchMatch}
           />
         </View>
       </ScrollView>

@@ -1,5 +1,6 @@
 // 방 세부 정보
 export interface RoomDetail {
+  managerId: number; // 방장 Id
   roomId: number; // 방 Id
   spotId: number; // 거점 Id
   departureDairyDate: string; // 날짜
@@ -21,6 +22,7 @@ export interface RoomDetail {
   expectedCharge: number; // 예상 요금
 
   roomCategories: string[];
+  myRoom: boolean;
   path: {
     coordinateReferenceSystem: {
       type: string;
@@ -45,4 +47,18 @@ export interface RoomCurrentCamera {
     departureLatitude: number;
     spotName: string;
   }[];
+}
+
+// 방 참여자 정보
+export interface RoomMember {
+  memberId: number;
+  name: string;
+  score: number;
+}
+
+// 방 대기자 정보
+export interface RoomWaitingMember {
+  memberId: number;
+  name: string;
+  score: number;
 }

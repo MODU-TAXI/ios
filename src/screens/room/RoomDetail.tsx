@@ -2,10 +2,17 @@ import React, { useCallback } from 'react';
 import { View, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import dayjs from 'dayjs';
-import { useDeleteRoom, useGetRoom, useJoinRoom } from '@hooks/api/rooms';
-import { memberIdState } from '@recoil/recoil';
+import {
+  useApproveJoinRoom,
+  useDeleteRoom,
+  useGetRoom,
+  useGetRoomMembers,
+  useGetRoomWaitingMembers,
+  useJoinRoom,
+} from '@hooks/api/rooms';
+import { memberIdState, roomState } from '@recoil/recoil';
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
 import DottedLineComponent from '@components/DottedLine';
@@ -23,6 +30,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { LoginStackParamList } from '@type/ParamLists';
+import { useChatContext } from 'src/providers/chatProvider';
 
 dayjs.locale('ko');
 
@@ -30,20 +38,25 @@ const RoomDetailScreen = () => {
   // 이거를 쓰라~
   const isFocused = useIsFocused();
 
-  const roomId = 29; // 방 Id
-  const myParty = true; // 내가 만든 건지 여부
+  const roomId = useRecoilValue(roomState);
   const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
-  const [memberId, setMemberId] = useRecoilState(memberIdState); // 사용자 정보
 
-  const { roomDetail, refetch } = useGetRoom(roomId); // 방 상세 정보 객체
+  const [socketRoomId, setSocketRoomId] = useRecoilState(roomState);
+  const { roomDetail, getRoomRefetch } = useGetRoom(roomId); // 방 상세 정보
+  const { roomMembers, getRoomMembersRefetch } = useGetRoomMembers(roomId); // 참여자 목록
+  const { roomWaitingMembers, getRoomWaitingMembersRefetch } =
+    useGetRoomWaitingMembers(roomId); // 대기자 목록
   const { mutateAsync: joinRoomMutate } = useJoinRoom(roomId); // 방 입장 mutate
-  const { mutateAsync: deleteRoomMutate } = useDeleteRoom(roomId);
+  const { mutateAsync: applyJoinRoomMutate } = useApproveJoinRoom(roomId); // 방 입장 수락 mutate
+  const { mutateAsync: deleteRoomMutate } = useDeleteRoom(roomId); // 방 삭제 mutate
+
+  const { connect, disConnect } = useChatContext();
 
   // 방을 수정하고 다시 focusing 되었을때 api 재호출 -> 이 로직은 수정하지 않았을때는 두번 호출됨 수정해야할듯
   useFocusEffect(
     useCallback(() => {
       if (isFocused) {
-        refetch();
+        getRoomRefetch();
       }
     }, [isFocused]),
   );
@@ -52,18 +65,25 @@ const RoomDetailScreen = () => {
   const joinRoom = async () => {
     await joinRoomMutate(roomId);
 
-    // 어디로 이동?
+    setSocketRoomId(roomId);
+    connect(roomId);
+  };
+
+  // 방 입장 수락
+  const applyJoinRoom = async (memberId: number) => {
+    await applyJoinRoomMutate(memberId);
   };
 
   // 방 삭제
   const deleteRoom = async () => {
     await deleteRoomMutate();
+
     navigation.navigate('HomeScreen');
   };
 
   // 방 수정페이지로 이동
   const toPatchRoomScreen = useCallback(async (): Promise<void> => {
-    navigation.navigate('PatchRoomScreen', { key: roomDetail });
+    navigation.navigate('PatchRoomScreen', { roomDetail: roomDetail });
   }, []);
 
   return (
@@ -125,10 +145,15 @@ const RoomDetailScreen = () => {
         <DottedLineComponent />
 
         {/* 참여멤버 */}
-        <ParticipateUsersComponent roomId={5} />
+        <ParticipateUsersComponent roomMembers={roomMembers.inList} />
 
         {/* 대기 멤버(방장만 확인 가능) */}
-        {myParty && <WaitingUsersComponent roomId={1} />}
+        {/* {myParty && ( */}
+        <WaitingUsersComponent
+          roomWaitingMembers={roomWaitingMembers.waitingList}
+          applyJoinRoom={applyJoinRoom}
+        />
+        {/* )} */}
 
         {/* 점선 */}
         <DottedLineComponent />
@@ -152,7 +177,7 @@ const RoomDetailScreen = () => {
           </View>
         </View>
 
-        {myParty ? (
+        {roomDetail.myRoom ? (
           <View>
             <View className="mt-[78px] mx-5">
               <ButtonComponent

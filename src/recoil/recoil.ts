@@ -27,13 +27,19 @@ export const memberIdState = atom<number>({
   default: -1,
 });
 
+// 참여하고 있는 방정보 관리
+export const roomState = atom<number>({
+  key: 'socketRoomId',
+  default: 0,
+});
+
 // 채팅방 입장 여부 관리
 export const chatInState = atom<boolean>({
   key: 'isChatIn',
   default: false,
 });
 
-//  채팅 메세지 관리
+// 채팅 메세지 관리
 export const messagesState = atom<MessageBody[]>({
   key: 'messages',
   default: [],

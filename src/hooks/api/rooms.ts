@@ -8,16 +8,22 @@ import { Coord } from '@mj-studio/react-native-naver-map';
 import {
   getRoomDetail,
   createRoom,
-  JoinRoom,
+  joinRoom,
   patchRoom,
   getRoomCurrentCamera,
   deleteRoom,
+  approveJoinRoom,
+  getRoomMembers,
+  getRoomWaitingMembers,
 } from '@server/api/room';
 import { CreateRoomRequest, PatchRoomRequest } from '@server/requestTypes/room';
 import {
+  ApproveJoinRoomResponse,
   CreateRoomResponse,
   GetRoomCurrentCameraResponse,
   GetRoomDetailResponse,
+  GetRoomMembersResponse,
+  GetRoomWaitingMembersResponse,
   JoinRoomResponse,
   PatchRoomResponse,
 } from '@server/responseTypes/room';
@@ -58,8 +64,8 @@ export const useCreateRoom = (): UseMutationResult<
 // 특정 방 가져오기
 export const useGetRoom = (
   roomId: number,
-): { roomDetail: RoomDetail; refetch: () => void } => {
-  const { data: roomDetail, refetch } = useSuspenseQuery({
+): { roomDetail: RoomDetail; getRoomRefetch: () => void } => {
+  const { data: roomDetail, refetch: getRoomRefetch } = useSuspenseQuery({
     queryKey: [`/api/rooms`, roomId],
     queryFn: () => getRoomDetail(roomId),
     // staleTime: 30000,
@@ -79,6 +85,7 @@ export const useGetRoom = (
 
       console.log(response);
       return {
+        managerId: response.managerId,
         roomId: response.roomId,
         spotId: response.spotId,
         departureDairyDate: response.departureDairyDate,
@@ -99,6 +106,7 @@ export const useGetRoom = (
         expectedChargePerPerson: response.expectedChargePerPerson,
         expectedCharge: response.expectedCharge,
         roomCategories: convertedRoomTagBitMaskList,
+        myRoom: response.myRoom,
 
         path: {
           coordinateReferenceSystem: response.path.coordinateReferenceSystem,
@@ -109,7 +117,39 @@ export const useGetRoom = (
     },
   });
 
-  return { roomDetail, refetch };
+  return { roomDetail, getRoomRefetch };
+};
+
+// 참가자 리스트 가져오기
+export const useGetRoomMembers = (
+  roomId: number,
+): {
+  roomMembers: GetRoomMembersResponse;
+  getRoomMembersRefetch: () => void;
+} => {
+  const { data: roomMembers, refetch: getRoomMembersRefetch } =
+    useSuspenseQuery({
+      queryKey: [`/api/rooms/${roomId}/members/in`, roomId],
+      queryFn: () => getRoomMembers(roomId),
+    });
+
+  return { roomMembers, getRoomMembersRefetch };
+};
+
+// 대기자 리스트 가져오기
+export const useGetRoomWaitingMembers = (
+  roomId: number,
+): {
+  roomWaitingMembers: GetRoomWaitingMembersResponse;
+  getRoomWaitingMembersRefetch: () => void;
+} => {
+  const { data: roomWaitingMembers, refetch: getRoomWaitingMembersRefetch } =
+    useSuspenseQuery({
+      queryKey: [`/api/rooms/${roomId}/members/waiting`, roomId],
+      queryFn: () => getRoomWaitingMembers(roomId),
+    });
+
+  return { roomWaitingMembers, getRoomWaitingMembersRefetch };
 };
 
 // 원형 영역 방 조회
@@ -171,7 +211,24 @@ export const useJoinRoom = (
   roomId: number,
 ): UseMutationResult<JoinRoomResponse, void, number, unknown> => {
   return useMutation({
-    mutationFn: () => JoinRoom(roomId),
+    mutationFn: () => joinRoom(roomId),
+    onSuccess: async () => {
+      InfoToastMessage('파티 입장 성공!');
+    },
+    onError: (error: any) => {
+      if (error?.response?.data?.message) {
+        return ErrorToastMessage(error.response.data.message);
+      }
+    },
+  });
+};
+
+// 방 입장 수락
+export const useApproveJoinRoom = (
+  roomId: number,
+): UseMutationResult<ApproveJoinRoomResponse, void, number, unknown> => {
+  return useMutation({
+    mutationFn: (memberId: number) => approveJoinRoom(roomId, memberId),
     onSuccess: async () => {
       InfoToastMessage('파티 입장 성공!');
     },

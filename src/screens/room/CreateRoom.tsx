@@ -14,25 +14,27 @@ import CategoryComponent from '@components/Match/Category';
 import { LoginStackParamList } from '@type/ParamLists';
 import { ErrorToastMessage } from '@utils/toastMessage';
 import { useCreateRoom } from '@hooks/api/rooms';
+import { useChatContext } from 'src/providers/chatProvider';
 
 import StartGrayCircle from '@assets/images/Match/StartGrayCircle.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndGrayCircle from '@assets/images/Match/EndGrayCircle.svg';
 import EndCircle from '@assets/images/Match/EndCircle.svg';
-
 import SelectedPerson1 from '@assets/images/Match/SelectedPerson1.svg';
 import SelectedPerson2 from '@assets/images/Match/SelectedPerson2.svg';
 import SelectedPerson3 from '@assets/images/Match/SelectedPerson3.svg';
 import UnSelectedPerson1 from '@assets/images/Match/UnSelectedPerson1.svg';
 import UnSelectedPerson2 from '@assets/images/Match/UnSelectedPerson2.svg';
 import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
-import { useQueryClient } from '@tanstack/react-query';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { roomState } from '@recoil/recoil';
 
 const CreateRoomScreen = () => {
   const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
 
   const { mutateAsync: createRoomMutate } = useCreateRoom();
 
+  const [socketRoomId, setSocketRoomId] = useRecoilState(roomState);
   const [start, setStart] = useState<string>(''); // 출발지
   const [end, setEnd] = useState<string>(''); // 도착지
   const [departureTime, setDepartureTime] = useState<Date>(new Date()); // 설정 날짜
@@ -44,6 +46,7 @@ const CreateRoomScreen = () => {
     false,
     false,
   ]); // 카테고리
+  const { connect } = useChatContext();
 
   // 파티 생성
   const createMatch = async () => {
@@ -60,7 +63,7 @@ const CreateRoomScreen = () => {
     // 개발환경시 기기가 미국이라 9시간 더해주기
     departureTime.setHours(departureTime.getHours() + 9);
 
-    await createRoomMutate({
+    const room = await createRoomMutate({
       spotId: 1,
       departureLongitude: 126.69487873676,
       departureLatitude: 37.463182225352,
@@ -70,6 +73,8 @@ const CreateRoomScreen = () => {
       wishHeadcount: passangersNumber,
     });
 
+    connect(room.roomId);
+    setSocketRoomId(room.roomId);
     return navigation.navigate('HomeScreen');
   };
 

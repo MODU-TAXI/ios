@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // accessToken 저장
 export const setAccessToken = async (accessToken: string): Promise<void> => {
-  AsyncStorage.setItem('accessToken', accessToken);
+  return AsyncStorage.setItem('accessToken', accessToken);
 };
 
 // accessToken 가져오기
@@ -12,7 +12,7 @@ export const getAccessToken = async (): Promise<string | null> => {
 
 // refreshToken 저장
 export const setRefreshToken = async (refreshToken: string): Promise<void> => {
-  AsyncStorage.setItem('refreshToken', refreshToken);
+  return AsyncStorage.setItem('refreshToken', refreshToken);
 };
 
 // refreshToken 가져오기
@@ -22,5 +22,5 @@ export const getRefreshToken = async (): Promise<string | null> => {
 
 // 토큰들 모두 삭제 (로그아웃)
 export const deleteToken = async (): Promise<void> => {
-  AsyncStorage.clear();
+  return AsyncStorage.clear();
 };

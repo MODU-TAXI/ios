@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import ParticipateUserComponent from '@components/RoomDigest/ParticipateUser';
+import { RoomMember } from '@type/entity/room';
 
 interface ParticipateUsersComponentProps {
-  roomId: number;
+  roomMembers: RoomMember[];
 }
 
 const users = [
@@ -28,7 +29,7 @@ const users = [
 ];
 
 const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({
-  roomId,
+  roomMembers,
 }) => {
   return (
     <View className="py-8 px-1">
@@ -36,8 +37,8 @@ const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({
         <Text className="text-[20px] font-semibold">참여멤버</Text>
       </View>
 
-      {users.map((user, index) => (
-        <ParticipateUserComponent key={index} user={user} />
+      {roomMembers.map((roomMember, index) => (
+        <ParticipateUserComponent key={index} roomMember={roomMember} />
       ))}
     </View>
   );

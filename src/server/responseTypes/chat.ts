@@ -13,8 +13,10 @@ export interface GetChatInfoResponse {
   memberId: number;
 }
 
-// [채팅 전부 조회] /chat-messages/{roomId}
-export interface GetChatMessagesResponse extends Array<Message> {}
+// [채팅 전부 조회] /api/chats/rooms/{roomId}/messages
+export interface GetChatMessagesResponse {
+  messages: Message[];
+}
 
 // [모집방 참여 가능 확인] /chat/{roomId}
 // export interface CheckJoinRoomRespones extends boolean {}
