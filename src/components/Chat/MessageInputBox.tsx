@@ -23,16 +23,16 @@ const MessageInputBoxComponent: React.FC = () => {
   };
 
   return (
-    <View className="flex-row items-center px-2 py-2 ">
+    <View className="flex-row items-center p-2 ">
       <TextInput
-        className="flex-1 h-10 border-2 rounded-md px-2 mr-2"
+        className="mr-2 h-10 flex-1 rounded-md border-2 px-2"
         value={inputMessage}
         onChangeText={setInputMessage}
         placeholder="메시지를 입력하세요"
       />
 
       <Pressable
-        className="h-10 rounded-md border-2 flex items-center justify-center px-2"
+        className="flex h-10 items-center justify-center rounded-md border-2 px-2"
         onPress={send}
       >
         <Text>보내기</Text>

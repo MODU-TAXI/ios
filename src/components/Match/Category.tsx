@@ -33,7 +33,7 @@ const CategoryComponent: React.FC<CategoryComponentProps> = ({
       {checked ? (
         <Pressable
           onPress={() => selectCategory(index)}
-          className="flex-row items-center justify-center border-2 border-main px-3 py-2 rounded-xl"
+          className="flex-row items-center justify-center rounded-xl border-2 border-main px-3 py-2"
         >
           <SelectedCheckBox className="mr-2" />
           <Text className="text-sm font-semibold text-main">{category}</Text>
@@ -41,7 +41,7 @@ const CategoryComponent: React.FC<CategoryComponentProps> = ({
       ) : (
         <Pressable
           onPress={() => selectCategory(index)}
-          className="flex-row items-center justify-center border-2 border-gray200 px-3 py-2 rounded-xl"
+          className="flex-row items-center justify-center rounded-xl border-2 border-gray200 px-3 py-2"
         >
           <CheckBox className="mr-2" />
           <Text className="text-sm font-normal text-gray700">{category}</Text>

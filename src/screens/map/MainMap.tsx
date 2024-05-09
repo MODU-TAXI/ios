@@ -155,7 +155,7 @@ const MainMapScreen = () => {
     // 지도가 화면 전체를 포함하기 위한 마진 설정
     <View className="flex-1 items-center bg-white" style={{ marginTop: 0 }}>
       {/** 지도 */}
-      <View className="flex-1 w-[99%] h-auto mb-[320px]">
+      <View className="mb-[320px] h-auto w-[99%] flex-1">
         {currentCamera && (
           <NaverMapView
             style={{ flex: 1 }}
@@ -229,7 +229,7 @@ const MainMapScreen = () => {
                   <BackButton />
                 </Pressable>
 
-                <Text className="text-lg text-black font-semibold">
+                <Text className="text-lg font-semibold text-black">
                   택시팟 목록
                 </Text>
 

@@ -17,19 +17,19 @@ const SearchScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-1 mx-4">
+      <View className="mx-4 flex-1">
         {/** 검색창 */}
-        <View className="mt-4 mb-3">
+        <View className="mb-3 mt-4">
           <SearchBoxComponent value={keyword} setValue={setKeyword} />
         </View>
 
         {/** 최근검색 탭 */}
-        <View className="flex flex-row py-2 px-1">
+        <View className="flex flex-row px-1 py-2">
           <Pressable>
-            <Text className="text-lg pr-4 font-semibold">최근 검색</Text>
+            <Text className="pr-4 text-lg font-semibold">최근 검색</Text>
           </Pressable>
           <Pressable>
-            <Text className="text-lg pr-4 font-medium text-gray500">
+            <Text className="pr-4 text-lg font-medium text-gray500">
               거점 리스트
             </Text>
           </Pressable>
@@ -39,7 +39,7 @@ const SearchScreen = () => {
         </View>
 
         {/** 시군구 태그, 최신순 */}
-        <View className="flex flex-row justify-between mt-[6.5px] mb-3">
+        <View className="mb-3 mt-[6.5px] flex flex-row justify-between">
           <View className="flex flex-row">
             <FilterButtonComponent label="서울특별시" />
             <FilterButtonComponent label="강서구" />

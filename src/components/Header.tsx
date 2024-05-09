@@ -22,7 +22,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ title }) => {
         <BackButton />
       </Pressable>
 
-      <Text className="text-lg text-black font-semibold">{title}</Text>
+      <Text className="text-lg font-semibold text-black">{title}</Text>
 
       <Pressable onPress={goBack}>
         <CloseButton />

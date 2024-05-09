@@ -142,7 +142,7 @@ const PatchRoom = () => {
 
       <ScrollView className="flex-1 px-4">
         {/* 출발지, 도착지 선택*/}
-        <View className="py-8 px-2">
+        <View className="px-2 py-8">
           <DescriptionComponent description="출발지, 도착지를 생성해주세요" />
 
           <View className="mt-6">
@@ -150,25 +150,25 @@ const PatchRoom = () => {
               <View className="flex-row items-center">
                 <StartCircle />
 
-                <Text className="text-sm text-gray700 font-normal ml-4">
+                <Text className="ml-4 text-sm font-normal text-gray700">
                   출발지
                 </Text>
               </View>
             </View>
 
-            <View className="flex-row ml-[6px] my-2">
+            <View className="my-2 ml-[6px] flex-row">
               {start && end ? (
-                <View className="w-[1px] h-[46px] bg-main" />
+                <View className="h-[46px] w-px bg-main" />
               ) : (
-                <View className="w-[1px] h-[46px] bg-gray300" />
+                <View className="h-[46px] w-px bg-gray300" />
               )}
               <Pressable onPress={handleStart}>
                 {start ? (
-                  <Text className="ml-6 text-[20px] text-gray900 font-semibold ">
+                  <Text className="ml-6 text-[20px] font-semibold text-gray900 ">
                     {start}
                   </Text>
                 ) : (
-                  <Text className="ml-6 text-[20px] text-gray300 font-semibold ">
+                  <Text className="ml-6 text-[20px] font-semibold text-gray300 ">
                     출발지를 선택해주세요
                   </Text>
                 )}
@@ -178,18 +178,18 @@ const PatchRoom = () => {
             <View>
               <View className="flex-row items-center">
                 {end ? <EndCircle /> : <EndGrayCircle />}
-                <Text className="text-sm text-gray700 font-normal ml-4">
+                <Text className="ml-4 text-sm font-normal text-gray700">
                   도착지
                 </Text>
               </View>
 
               <Pressable onPress={handleEnd}>
                 {end ? (
-                  <Text className="ml-[31px] mt-2 text-[20px] text-gray900 font-semibold ">
+                  <Text className="ml-[31px] mt-2 text-[20px] font-semibold text-gray900 ">
                     {end}
                   </Text>
                 ) : (
-                  <Text className="ml-[31px] mt-2 text-[20px] text-gray300 font-semibold ">
+                  <Text className="ml-[31px] mt-2 text-[20px] font-semibold text-gray300 ">
                     도착지를 선택해주세요
                   </Text>
                 )}
@@ -202,7 +202,7 @@ const PatchRoom = () => {
         <DottedLineComponent />
 
         {/* 출발시간설정 */}
-        <View className="py-8 px-2">
+        <View className="px-2 py-8">
           <DescriptionComponent description="출발시간을 설정해주세요" />
 
           <DatePickerComponent
@@ -220,16 +220,16 @@ const PatchRoom = () => {
         <DottedLineComponent />
 
         {/* 탑승 인원 설정 */}
-        <View className="py-8 px-2">
+        <View className="px-2 py-8">
           <DescriptionComponent description="최소 탑승 인원을 선택해주세요" />
           <View>
-            <Text className="text-sm text-gray600 font-normal">
+            <Text className="text-sm font-normal text-gray600">
               본인을 제외한 최소 인원을 설정해주세요
             </Text>
           </View>
 
           {/* 인원 버튼 */}
-          <View className="flex-row justify-between items-center mt-6">
+          <View className="mt-6 flex-row items-center justify-between">
             <PassengerComponent
               index={1}
               unSelectedIcon={<UnSelectedPerson1 />}
@@ -260,10 +260,10 @@ const PatchRoom = () => {
         <DottedLineComponent />
 
         {/* 카테고리 선택 */}
-        <View className="py-8 px-2">
+        <View className="px-2 py-8">
           <DescriptionComponent description="카테고리를 선택해주세요" />
 
-          <View className="flex-row justify-between mt-4">
+          <View className="mt-4 flex-row justify-between">
             <CategoryComponent
               index={0}
               category={'학생인증'}
@@ -286,7 +286,7 @@ const PatchRoom = () => {
         </View>
 
         {/* 생성 버튼 */}
-        <View className="mt-[78px] mx-5 mb-10">
+        <View className="mx-5 mb-10 mt-[78px]">
           <ButtonComponent
             color={'bg-main'}
             borderColor={'border-main'}

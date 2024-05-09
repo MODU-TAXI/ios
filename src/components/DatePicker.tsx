@@ -27,14 +27,14 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
     <View>
       {datePicked ? (
         <Pressable
-          className="flex-row justify-between items-center mt-4 py-3 px-4 border-2 border-main rounded-xl"
+          className="mt-4 flex-row items-center justify-between rounded-xl border-2 border-main px-4 py-3"
           onPress={openDatePicker}
         >
           <View>
-            <Text className="font-medium text-base text-emphasized">
+            <Text className="text-base font-medium text-emphasized">
               {dayjs().format('YYYY년 MM월 DD일')}
             </Text>
-            <Text className="mt-1 text-lg text-main font-semibold">
+            <Text className="mt-1 text-lg font-semibold text-main">
               {dayjs(date)
                 .format('A HH시 mm분')
                 .replace('AM', '오전')
@@ -43,7 +43,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
           </View>
 
           <Pressable
-            className="px-4 py-[6px] bg-main rounded-[37px]"
+            className="rounded-[37px] bg-main px-4 py-[6px]"
             onPress={openDatePicker}
           >
             <Text className="text-white">수정</Text>
@@ -51,10 +51,10 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
         </Pressable>
       ) : (
         <Pressable
-          className="mt-4 py-3 px-4 border-2 border-disabled rounded-xl"
+          className="mt-4 rounded-xl border-2 border-disabled px-4 py-3"
           onPress={openDatePicker}
         >
-          <Text className="font-medium text-base text-emphasized">
+          <Text className="text-base font-medium text-emphasized">
             {dayjs().format('YYYY년 MM월 DD일')}
           </Text>
           <Text className="mt-1 text-lg text-gray300">

@@ -42,7 +42,7 @@ const ProgressBarComponent: React.FC<ProgressBarComponentProps> = ({
 
   return (
     <View className="flex-1">
-      <View className="flex-1 h-1 bg-[#E2E2E2]">
+      <View className="h-1 flex-1 bg-[#E2E2E2]">
         <AnimatedBar />
       </View>
     </View>

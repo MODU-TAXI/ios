@@ -80,13 +80,13 @@ const PhoneAuthenticationCodeScreen = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1">
           {/* 진행사항 progressBar */}
-          <View className="h-1 mt-[11px]">
+          <View className="mt-[11px] h-1">
             <ProgressBarComponent previousDealt={20} dealt={20} />
           </View>
 
-          <View className="flex-1 mx-6">
+          <View className="mx-6 flex-1">
             {/* 입력란 설명 */}
-            <View className="flex mt-14">
+            <View className="mt-14 flex">
               <Text className="text-xl font-bold">적어주신 번호로</Text>
               <Text className="text-xl font-bold">인증번호가 전송됐어요!</Text>
             </View>
@@ -105,8 +105,8 @@ const PhoneAuthenticationCodeScreen = () => {
             </View>
 
             {/* 경고 메세지 및 재전송 버튼 */}
-            <View className="flex-row justify-between mt-2 px-2">
-              <Text className="text-error font-medium">{errorMessage}</Text>
+            <View className="mt-2 flex-row justify-between px-2">
+              <Text className="font-medium text-error">{errorMessage}</Text>
 
               <Pressable onPress={resendCode}>
                 <ReSendCodeButtonSvg />

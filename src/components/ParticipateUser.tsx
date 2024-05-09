@@ -15,17 +15,17 @@ const ParticipateUserComponent: React.FC<ParticipateUserComponentProps> = ({
   me,
 }) => {
   return (
-    <View className="flex-row justify-between items-center mt-4">
+    <View className="mt-4 flex-row items-center justify-between">
       <View className="flex-row items-center">
         <UserBasicImage className="mr-1" />
         <Text className="text-lg font-semibold">{nickname}</Text>
 
         {me && (
-          <Text className="text-lg text-disabled2 font-medium ml-1">(나)</Text>
+          <Text className="ml-1 text-lg font-medium text-disabled2">(나)</Text>
         )}
       </View>
 
-      <Text className="text-lg text-disabled2 font-normal">
+      <Text className="text-lg font-normal text-disabled2">
         {temperature}'C
       </Text>
     </View>

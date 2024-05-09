@@ -29,8 +29,8 @@ const RoomCategoryComponent: React.FC<RoomCategoryComponentProps> = ({
   }, [roomCategory]);
 
   return (
-    <View className={`${roomTag.bgColor} rounded-md mr-2`}>
-      <Text className={`text-xs ${roomTag.textColor} font-medium px-2 py-1`}>
+    <View className={`${roomTag.bgColor} mr-2 rounded-md`}>
+      <Text className={`text-xs ${roomTag.textColor} px-2 py-1 font-medium`}>
         {roomCategory}
       </Text>
     </View>

@@ -39,13 +39,13 @@ const SchoolAuthenticationScreen = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1">
           {/* 진행사항 progressBar */}
-          <View className="h-1 mt-[11px]">
+          <View className="mt-[11px] h-1">
             <ProgressBarComponent previousDealt={0} dealt={40} />
           </View>
 
-          <View className="flex-1 mx-6">
+          <View className="mx-6 flex-1">
             {/* 입력란 설명 */}
-            <View className="flex mt-14">
+            <View className="mt-14 flex">
               <Text className="text-xl font-bold">학교 인증을 하면</Text>
               <Text className="text-xl font-bold">
                 매칭률이 <Text className="text-basic">72% </Text>이상 올라가요!
@@ -65,7 +65,7 @@ const SchoolAuthenticationScreen = () => {
             {/* 경고 메세지 */}
             {errorMessage && (
               <View className="mt-2 px-2">
-                <Text className="text-error font-medium">{errorMessage}</Text>
+                <Text className="font-medium text-error">{errorMessage}</Text>
               </View>
             )}
 

@@ -13,11 +13,11 @@ import SelectedRadioButtonSvg from '@assets/images/RadioBox/SelectedRadioButton.
 
 const MapBottomSheetScreen = () => {
   return (
-    <View className="flex-1 p-4 w-full bg-white">
+    <View className="w-full flex-1 bg-white p-4">
       {/** 필터링 태그 선택 (가로 스크롤 적용) */}
       <View className="h-fit">
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View className="flex flex-row mb-4 overflow-scroll">
+          <View className="mb-4 flex flex-row overflow-scroll">
             <SpotFilterButtonComponent label="도착지" />
             <FilterButtonComponent label="학생인증" />
             <FilterButtonComponent label="여자만" />
@@ -28,15 +28,15 @@ const MapBottomSheetScreen = () => {
       </View>
 
       {/** 마감임박 radio, 최신순 필터 */}
-      <View className="flex flex-row mb-1 justify-between items-center">
+      <View className="mb-1 flex flex-row items-center justify-between">
         <Pressable className="flex flex-row items-center">
           <View className="p-2">
             <RadioButtonBoxSvg />
           </View>
-          <Text className="text-boxFont font-medium">마감임박</Text>
+          <Text className="font-medium text-boxFont">마감임박</Text>
         </Pressable>
         <Pressable className="flex flex-row items-center pr-1">
-          <Text className="text-boxFont font-medium mr-1">최신순</Text>
+          <Text className="mr-1 font-medium text-boxFont">최신순</Text>
           <ChevronDownBoxSvg />
         </Pressable>
       </View>

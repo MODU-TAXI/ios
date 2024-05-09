@@ -50,19 +50,19 @@ const ServeySecondScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 진행사항 progressBar */}
-      <View className="h-1 mt-[11px]">
+      <View className="mt-[11px] h-1">
         <ProgressBarComponent previousDealt={0} dealt={80} />
       </View>
 
-      <View className="flex-1 mx-6">
+      <View className="mx-6 flex-1">
         {/* 입력란 설명 */}
-        <View className="flex mt-14">
+        <View className="mt-14 flex">
           <Text className="text-xl font-bold">택시를 가장 타고싶었던</Text>
           <Text className="text-xl font-bold">순간이 있으신가요?</Text>
         </View>
 
         {/* 선택 BOX */}
-        <View className="flex-1 mt-6">
+        <View className="mt-6 flex-1">
           <SelectBoxComponent items={surveyLists} setItems={setSurvetLists} />
         </View>
 

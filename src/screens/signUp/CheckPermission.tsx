@@ -38,14 +38,14 @@ const CheckPermissionScreen = () => {
     description,
   }) => {
     return (
-      <View className="flex-row items-center my-5">
+      <View className="my-5 flex-row items-center">
         {/* 권한 아이콘 */}
-        <View className="flex justify-center items-center w-10 h-10 rounded-full bg-[#E2E2E2]">
+        <View className="flex size-10 items-center justify-center rounded-full bg-[#E2E2E2]">
           <IconComponent />
         </View>
 
         {/* 권한 설명 */}
-        <View className="flex mx-3">
+        <View className="mx-3 flex">
           <Text className="text-lg font-bold">{title}</Text>
           <Text className="text-md">{description}</Text>
         </View>
@@ -55,20 +55,20 @@ const CheckPermissionScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
-      <View className="flex-1 mx-6">
+      <View className="mx-6 flex-1">
         {/* 맨 상단 안내 메세지*/}
-        <View className="flex items-center mt-14">
+        <View className="mt-14 flex items-center">
           <Text className="text-2xl font-bold">앱 서비스 접근 권한 안내</Text>
-          <Text className="mt-2 text-xs text-slate-500 text-center">
+          <Text className="mt-2 text-center text-xs text-slate-500">
             권한을 허용하지 않아도 모두의 택시를 이용할 수 있지만
           </Text>
-          <Text className="text-xs text-slate-500 text-center">
+          <Text className="text-center text-xs text-slate-500">
             일부 서비스가 제한될 수 있어요
           </Text>
         </View>
 
         {/* 권한 확인 목록들 */}
-        <View className="flex-1 justify-center px-5 mb-14">
+        <View className="mb-14 flex-1 justify-center px-5">
           <PermissionItem
             icon={TraySvg}
             title="기기 및 앱 기록"

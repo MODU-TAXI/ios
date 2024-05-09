@@ -53,18 +53,18 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
     <>
       {isFocused ? (
         <Pressable
-          className="flex-col justify-center px-5 py-4 bg-white rounded-xl border-2"
+          className="flex-col justify-center rounded-xl border-2 bg-white px-5 py-4"
           onPress={handleFocus}
         >
           <Text className="text-[#626262]">{title}</Text>
 
-          <View className="flex-row mt-2.5">
+          <View className="mt-2.5 flex-row">
             {items.map((item: Item) => {
               return (
                 <View key={item.index}>
                   {item.select ? (
                     <Pressable
-                      className="flex-row items-center mr-2.5"
+                      className="mr-2.5 flex-row items-center"
                       onPress={() => select(item)}
                     >
                       <SelectedRadioButtonSvg className="mr-1" />
@@ -72,7 +72,7 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
                     </Pressable>
                   ) : (
                     <Pressable
-                      className="flex-row items-center mr-2.5"
+                      className="mr-2.5 flex-row items-center"
                       onPress={() => select(item)}
                     >
                       <RadioButtonSvg className="mr-1" />
@@ -89,18 +89,18 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
         </Pressable>
       ) : (
         <Pressable
-          className="flex-col justify-center px-5 py-4 bg-[#E2E2E2] rounded-xl border-2 border-[#E2E2E2]"
+          className="flex-col justify-center rounded-xl border-2 border-[#E2E2E2] bg-[#E2E2E2] px-5 py-4"
           onPress={handleFocus}
         >
           <Text className="text-[#626262]">{title}</Text>
 
-          <View className="flex-row mt-2.5">
+          <View className="mt-2.5 flex-row">
             {items.map((item: Item) => {
               return (
                 <View key={item.index}>
                   {item.select ? (
                     <Pressable
-                      className="flex-row items-center mr-2.5"
+                      className="mr-2.5 flex-row items-center"
                       onPress={() => select(item)}
                     >
                       <SelectedRadioButtonSvg className="mr-1" />
@@ -108,7 +108,7 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
                     </Pressable>
                   ) : (
                     <Pressable
-                      className="flex-row items-center mr-2.5"
+                      className="mr-2.5 flex-row items-center"
                       onPress={() => select(item)}
                     >
                       <RadioButtonSvg className="mr-1" />

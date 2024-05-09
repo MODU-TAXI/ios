@@ -31,15 +31,15 @@ const SelectBoxComponent: React.FC<SelectBoxComponentProps> = ({
               <Pressable
                 key={item.index}
                 onPress={() => select(item)}
-                className="bg-black rounded-xl py-7 px-5 mb-4"
+                className="mb-4 rounded-xl bg-black px-5 py-7"
               >
-                <Text className="text-white font-semibold">{item.content}</Text>
+                <Text className="font-semibold text-white">{item.content}</Text>
               </Pressable>
             ) : (
               <Pressable
                 key={item.index}
                 onPress={() => select(item)}
-                className="bg-[#E2E2E2] rounded-xl py-7 px-5 mb-4"
+                className="mb-4 rounded-xl bg-[#E2E2E2] px-5 py-7"
               >
                 <Text className="font-semibold">{item.content}</Text>
               </Pressable>

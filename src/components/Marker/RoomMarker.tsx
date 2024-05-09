@@ -12,7 +12,7 @@ const RoomMarkerComponent: React.FC<RoomMarkerProps> = ({ spotName }) => {
   return (
     <View className="flex-1 items-center justify-center">
       <View
-        className="flex flex-row bg-white border-gray100 w-auto m-4 rounded-full"
+        className="m-4 flex w-auto flex-row rounded-full border-gray100 bg-white"
         style={{
           shadowColor: 'rgba(102, 102, 102, 0.25)',
           shadowOffset: {
@@ -23,7 +23,7 @@ const RoomMarkerComponent: React.FC<RoomMarkerProps> = ({ spotName }) => {
           elevation: 8,
         }}
       >
-        <Text className="text-center text-gray600 w-fit text-base py-2 pl-4">
+        <Text className="w-fit py-2 pl-4 text-center text-base text-gray600">
           {spotName}
         </Text>
         <View className="flex justify-center pr-2">

@@ -12,10 +12,10 @@ const SpotFilterButtonComponent: React.FC<SpotFilterButtonProps> = ({
   label,
 }) => {
   return (
-    <View className="flex bg-white border border-gray200 rounded-full mr-2 text-center items-center">
-      <View className="flex flex-row px-4 py-2 items-center">
+    <View className="mr-2 flex items-center rounded-full border border-gray200 bg-white text-center">
+      <View className="flex flex-row items-center px-4 py-2">
         <SpotPinGraySvg width={10.5} height={14} />
-        <Text className="pl-1 text-gray700 text-sm">{label}</Text>
+        <Text className="pl-1 text-sm text-gray700">{label}</Text>
       </View>
     </View>
   );

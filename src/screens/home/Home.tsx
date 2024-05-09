@@ -48,49 +48,49 @@ const HomeScreen = () => {
       <ScrollView className="flex-col">
         <Pressable
           onPress={toRoomScreen}
-          className="bg-gray-300  h-20 m-5 rounded-md justify-center items-center"
+          className="m-5  h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>매칭 스크린</Text>
         </Pressable>
 
         <Pressable
           onPress={toCreateRoomScreen}
-          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>매칭 생성스크린</Text>
         </Pressable>
 
         <Pressable
           onPress={toMapScreen}
-          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>맵 스크린</Text>
         </Pressable>
 
         <Pressable
           onPress={toSearchScreen}
-          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>검색 스크린</Text>
         </Pressable>
 
         <Pressable
           onPress={toChatRoomScreen}
-          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>채팅 스크린</Text>
         </Pressable>
 
         <Pressable
           onPress={chatOut}
-          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>채팅방 나가기</Text>
         </Pressable>
 
         <Pressable
           onPress={toTestScreen}
-          className=" bg-gray-300 h-20 m-5 rounded-md justify-center items-center"
+          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>테스트방</Text>
         </Pressable>
