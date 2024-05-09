@@ -83,7 +83,6 @@ export const useGetRoom = (
         (roomTagBitMask) => translateCategory(roomTagBitMask),
       );
 
-      console.log(response);
       return {
         managerId: response.managerId,
         roomId: response.roomId,

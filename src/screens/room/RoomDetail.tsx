@@ -12,7 +12,7 @@ import {
   useGetRoomWaitingMembers,
   useJoinRoom,
 } from '@hooks/api/rooms';
-import { memberIdState, roomState } from '@recoil/recoil';
+import { roomState } from '@recoil/recoil';
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
 import DottedLineComponent from '@components/DottedLine';
