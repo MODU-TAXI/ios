@@ -1,12 +1,14 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { useKakaoLogin } from '@hooks/api/member';
-import { RootStackParamList } from '@type/ParamLists';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
-import KakaoLogo from '@assets/images/SignIn/KakaoLogo.svg';
+import { RootStackParamList } from 'src/types/ParamLists';
+
+import { useKakaoLogin } from '@hooks/api/member';
+
 import AppleLogo from '@assets/images/SignIn/AppleLogo.svg';
+import KakaoLogo from '@assets/images/SignIn/KakaoLogo.svg';
 
 const SignInScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+
+import { RoomMember } from 'src/types/entity/room';
+
 import ParticipateUserComponent from '@components/RoomDigest/ParticipateUser';
-import { RoomMember } from '@type/entity/room';
 
 interface ParticipateUsersComponentProps {
   roomMembers: RoomMember[];

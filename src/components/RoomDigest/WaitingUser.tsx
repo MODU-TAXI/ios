@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
+
+import { RoomWaitingMember } from 'src/types/entity/room';
+
 import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
-import { RoomWaitingMember } from '@type/entity/room';
 
 interface WaitingUserComponentProps {
   roomWaitingMember: RoomWaitingMember;

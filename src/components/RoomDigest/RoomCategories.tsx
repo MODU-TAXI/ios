@@ -1,6 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import { RoomCategory } from '@type/entity/room';
+
+import { RoomCategory } from 'src/types/entity/room';
+
 import RoomCategoryComponent from '@components/RoomDigest/RoomCategory';
 
 interface RoomCategoriesComponent {

@@ -1,11 +1,13 @@
 import React from 'react';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { LoginStackParamList } from '@type/ParamLists';
 import { Text, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { deleteMyChatInfo } from '@server/api/chat';
-import { useChatContext } from 'src/providers/chatProvider';
 import { ScrollView } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+
+import { LoginStackParamList } from 'src/types/ParamLists';
+import { useChatContext } from 'src/providers/chatProvider';
+
+import { deleteMyChatInfo } from '@server/api/chat';
 
 const HomeScreen = () => {
   const { disConnect } = useChatContext();

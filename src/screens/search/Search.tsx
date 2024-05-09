@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import SearchBoxComponent from '@components/SearchBox';
-import FilterButtonComponent from '@components/RoomDigest/FilterButton';
-import ChevronDownSvg from '@assets/images/RoomDigest/ChevronDown.svg';
-import LatestSearchComponent from '@components/LatestSearch';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text, View, Pressable, TextInput } from 'react-native';
+
 import InputBoxComponent from '@components/InputBox';
+import SearchBoxComponent from '@components/SearchBox';
+import LatestSearchComponent from '@components/LatestSearch';
+import FilterButtonComponent from '@components/RoomDigest/FilterButton';
+
+import ChevronDownSvg from '@assets/images/RoomDigest/ChevronDown.svg';
+import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
 
 const SearchScreen = () => {
   /** 검색어 저장 변수 */

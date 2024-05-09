@@ -1,13 +1,14 @@
 import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
+
 import {
-  CheckMembershipRequest,
   SignUpRequest,
   SocialLoginRequest,
+  CheckMembershipRequest,
 } from '@server/requestTypes/member';
 import {
-  CheckMembershipResponse,
   SignUpResponse,
   SocialLoginResponse,
+  CheckMembershipResponse,
 } from '@server/responseTypes/member';
 
 // [가입 여부 확인] /api/members/{type}/membership

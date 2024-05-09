@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Text, View, Pressable, TextInput } from 'react-native';
 
 import RadioButtonSvg from '@assets/images/RadioBox/RadioButton.svg';

@@ -1,9 +1,11 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import ButtonComponent from '@components/Button';
 import ProgressBarComponent from '@components/ProgressBar';
-import { useRecoilState } from 'recoil';
+
 import { loggedInState } from '@recoil/recoil';
 
 const CompleteSignUpScreen = () => {

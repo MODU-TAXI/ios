@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useRecoilState } from 'recoil';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+
+import { RootStackParamList } from 'src/types/ParamLists';
+
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import RadioBoxComponent from '@components/RadioBox';
 import ProgressBarComponent from '@components/ProgressBar';
-import { RootStackParamList } from '@type/ParamLists';
+import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
+
 import { SignUpUser } from '@recoil/type';
 import { signUpUserState } from '@recoil/recoil';
+
 import { useSmsAuthentication } from '@hooks/api/member.sms';
-import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
 
 // 이름, 성별, 전화번호 입력 스크린
 const AuthenticationScreen = () => {

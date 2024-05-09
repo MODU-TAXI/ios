@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-import { RoomCategory } from '@type/entity/room';
+import React, { useState, useEffect } from 'react';
+
+import { RoomCategory } from 'src/types/entity/room';
 
 interface RoomCategoryComponentProps {
   roomCategory: string;

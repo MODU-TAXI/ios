@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+
 import ChevronForwardSvg from '@assets/images/Map/chevronForward.svg';
 
 interface RoomMarkerProps {

@@ -1,11 +1,12 @@
 import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
+
 import {
-  SmsAuthenticationRequest,
   SmsConfirmRequest,
+  SmsAuthenticationRequest,
 } from '@server/requestTypes/member.sms';
 import {
-  SmsAuthenticationResponse,
   SmsConfirmResponse,
+  SmsAuthenticationResponse,
 } from '@server/responseTypes/member.sms';
 
 // [sms 인증 메일 발송] /api/members/sms/certificate

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+
 import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
 
 interface ParticipateUserComponentProps {

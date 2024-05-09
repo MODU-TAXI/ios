@@ -1,5 +1,5 @@
-import { PERMISSIONS, RESULTS, check } from 'react-native-permissions';
 import { Alert, Linking } from 'react-native';
+import { check, RESULTS, PERMISSIONS } from 'react-native-permissions';
 
 /** 위치 권한 BLOCKED 이면 다시 요청 */
 async function useLocationPermission() {

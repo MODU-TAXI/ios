@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { TextInput, Text, View, Pressable } from 'react-native';
+import { Text, View, TextInput, Pressable } from 'react-native';
+
 import TimerComponent from './Timer';
+
 
 interface InputBoxComponentProps {
   title: string;

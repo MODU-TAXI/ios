@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import ButtonComponent from '@components/Button';
-import { RootStackParamList } from '@type/ParamLists';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
-import TraySvg from '@assets/images/SignUp/tray.svg';
+import { RootStackParamList } from 'src/types/ParamLists';
+
+import ButtonComponent from '@components/Button';
+
+import checkPermissions from '@hooks/permission/checkPermissions';
+
 import BellSvg from '@assets/images/SignUp/bell.svg';
+import TraySvg from '@assets/images/SignUp/tray.svg';
 import CameraSvg from '@assets/images/SignUp/camera.svg';
 import LocationSvg from '@assets/images/SignUp/location.svg';
-import checkPermissions from '@hooks/permission/checkPermissions';
 
 interface PermissionItemProps {
   icon: React.FC;

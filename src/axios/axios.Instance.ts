@@ -1,10 +1,11 @@
-import axios, { AxiosInstance } from 'axios';
 import Config from 'react-native-config';
+import axios, { AxiosInstance } from 'axios';
+
 import {
   deleteToken,
   getAccessToken,
-  getRefreshToken,
   setAccessToken,
+  getRefreshToken,
   setRefreshToken,
 } from '@utils/token';
 

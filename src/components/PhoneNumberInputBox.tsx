@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, Text, View, Pressable } from 'react-native';
+import { Text, View, TextInput, Pressable } from 'react-native';
 
 interface PhoneNumberInputBoxComponentProps {
   title: string;

@@ -1,9 +1,10 @@
 import {
-  PostAxiosInstance,
   GetAxiosInstance,
+  PostAxiosInstance,
   PatchAxiosInstance,
   DeleteAxiosInstance,
 } from '@axios/axios.method';
+
 import {
   GetChatInfoResponse,
   GetChatMessagesResponse,

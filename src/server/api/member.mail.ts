@@ -1,11 +1,12 @@
 import { PostAxiosInstance } from '@axios/axios.method';
+
 import {
-  EmailAuthenticationRequest,
   EmailConfirmRequest,
+  EmailAuthenticationRequest,
 } from '@server/requestTypes/member.mail';
 import {
-  EmailAuthenticationResponse,
   EmailConfirmResponse,
+  EmailAuthenticationResponse,
 } from '@server/responseTypes/member.mail';
 
 // [이메일 인증 메일 발송] /api/members/mail/certificate

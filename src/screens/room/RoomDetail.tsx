@@ -1,36 +1,41 @@
-import React, { useCallback } from 'react';
+import 'dayjs/locale/ko';
+import dayjs from 'dayjs';
 import { View, Text } from 'react-native';
+import React, { useCallback } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import dayjs from 'dayjs';
 import {
-  useApproveJoinRoom,
-  useDeleteRoom,
-  useGetRoom,
-  useGetRoomMembers,
-  useGetRoomWaitingMembers,
-  useJoinRoom,
-} from '@hooks/api/rooms';
-import { roomState } from '@recoil/recoil';
-import HeaderComponent from '@components/Header';
-import ButtonComponent from '@components/Button';
-import DottedLineComponent from '@components/DottedLine';
-import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
-import WaitingUsersComponent from '@components/RoomDigest/WaitingUsers';
-import RoomMapComponent from '@components/RoomDigest/RoomMap';
-import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
-import StartCircle from '@assets/images/Match/StartCircle.svg';
-import EndCircle from '@assets/images/Match/EndCircle.svg';
-import 'dayjs/locale/ko';
-import {
-  NavigationProp,
-  useFocusEffect,
   useIsFocused,
   useNavigation,
+  NavigationProp,
+  useFocusEffect,
 } from '@react-navigation/native';
-import { LoginStackParamList } from '@type/ParamLists';
+
+import { LoginStackParamList } from 'src/types/ParamLists';
 import { useChatContext } from 'src/providers/chatProvider';
+
+import ButtonComponent from '@components/Button';
+import HeaderComponent from '@components/Header';
+import DottedLineComponent from '@components/DottedLine';
+import RoomMapComponent from '@components/RoomDigest/RoomMap';
+import WaitingUsersComponent from '@components/RoomDigest/WaitingUsers';
+import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
+import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
+
+import { roomState } from '@recoil/recoil';
+
+import {
+  useGetRoom,
+  useJoinRoom,
+  useDeleteRoom,
+  useGetRoomMembers,
+  useApproveJoinRoom,
+  useGetRoomWaitingMembers,
+} from '@hooks/api/rooms';
+
+import EndCircle from '@assets/images/Match/EndCircle.svg';
+import StartCircle from '@assets/images/Match/StartCircle.svg';
 
 dayjs.locale('ko');
 

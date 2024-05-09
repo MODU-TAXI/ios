@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from 'react';
 import { View } from 'react-native';
+import React, { useRef, useEffect } from 'react';
 import {
   Camera,
   NaverMapView,
-  NaverMapPathOverlay,
   NaverMapViewRef,
+  NaverMapPathOverlay,
 } from '@mj-studio/react-native-naver-map';
-import { RoomDetail } from '@type/entity/room';
+
+import { RoomDetail } from 'src/types/entity/room';
 
 interface RoomMapComponentProps {
   roomDetail: RoomDetail;

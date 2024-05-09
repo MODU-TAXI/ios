@@ -1,35 +1,38 @@
-import {
-  useMutation,
-  UseMutationResult,
-  useQueryClient,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import {
-  getRoomDetail,
-  createRoom,
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+  UseMutationResult,
+} from '@tanstack/react-query';
+
+import { RoomDetail, RoomCurrentCamera } from 'src/types/entity/room';
+
+import { PatchRoomRequest, CreateRoomRequest } from '@server/requestTypes/room';
+import {
   joinRoom,
   patchRoom,
-  getRoomCurrentCamera,
+  createRoom,
   deleteRoom,
-  approveJoinRoom,
+  getRoomDetail,
   getRoomMembers,
+  approveJoinRoom,
+  getRoomCurrentCamera,
   getRoomWaitingMembers,
 } from '@server/api/room';
-import { CreateRoomRequest, PatchRoomRequest } from '@server/requestTypes/room';
 import {
-  ApproveJoinRoomResponse,
-  CreateRoomResponse,
-  GetRoomCurrentCameraResponse,
-  GetRoomDetailResponse,
-  GetRoomMembersResponse,
-  GetRoomWaitingMembersResponse,
   JoinRoomResponse,
   PatchRoomResponse,
+  CreateRoomResponse,
+  GetRoomDetailResponse,
+  GetRoomMembersResponse,
+  ApproveJoinRoomResponse,
+  GetRoomCurrentCameraResponse,
+  GetRoomWaitingMembersResponse,
 } from '@server/responseTypes/room';
-import { ErrorToastMessage, InfoToastMessage } from '@utils/toastMessage';
+
 import { translateCategory } from '@utils/room';
-import { RoomCurrentCamera, RoomDetail } from '@type/entity/room';
+import { InfoToastMessage, ErrorToastMessage } from '@utils/toastMessage';
 
 // 방 생성
 export const useCreateRoom = (): UseMutationResult<
@@ -41,8 +44,7 @@ export const useCreateRoom = (): UseMutationResult<
   // const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (createRoomRequest: CreateRoomRequest) =>
-      createRoom(createRoomRequest),
+    mutationFn: (createRoomRequest: CreateRoomRequest) => createRoom(createRoomRequest),
     onSuccess: async (data: CreateRoomResponse) => {
       // const roomId = data.roomId;
 
@@ -72,15 +74,13 @@ export const useGetRoom = (
     // gcTime: 30000,
     select: (response: GetRoomDetailResponse) => {
       const coords = response.path.coordinates;
-      const convertedCoords: Coord[] = coords.map(
-        ({ values: [longitude, latitude] }) => ({
-          latitude,
-          longitude,
-        }),
-      );
+      const convertedCoords: Coord[] = coords.map(({ values: [longitude, latitude] }) => ({
+        latitude,
+        longitude,
+      }));
 
-      const convertedRoomTagBitMaskList = response.roomTagBitMaskList.map(
-        (roomTagBitMask) => translateCategory(roomTagBitMask),
+      const convertedRoomTagBitMaskList = response.roomTagBitMaskList.map((roomTagBitMask) =>
+        translateCategory(roomTagBitMask),
       );
 
       return {
@@ -126,11 +126,10 @@ export const useGetRoomMembers = (
   roomMembers: GetRoomMembersResponse;
   getRoomMembersRefetch: () => void;
 } => {
-  const { data: roomMembers, refetch: getRoomMembersRefetch } =
-    useSuspenseQuery({
-      queryKey: [`/api/rooms/${roomId}/members/in`, roomId],
-      queryFn: () => getRoomMembers(roomId),
-    });
+  const { data: roomMembers, refetch: getRoomMembersRefetch } = useSuspenseQuery({
+    queryKey: [`/api/rooms/${roomId}/members/in`, roomId],
+    queryFn: () => getRoomMembers(roomId),
+  });
 
   return { roomMembers, getRoomMembersRefetch };
 };
@@ -142,11 +141,10 @@ export const useGetRoomWaitingMembers = (
   roomWaitingMembers: GetRoomWaitingMembersResponse;
   getRoomWaitingMembersRefetch: () => void;
 } => {
-  const { data: roomWaitingMembers, refetch: getRoomWaitingMembersRefetch } =
-    useSuspenseQuery({
-      queryKey: [`/api/rooms/${roomId}/members/waiting`, roomId],
-      queryFn: () => getRoomWaitingMembers(roomId),
-    });
+  const { data: roomWaitingMembers, refetch: getRoomWaitingMembersRefetch } = useSuspenseQuery({
+    queryKey: [`/api/rooms/${roomId}/members/waiting`, roomId],
+    queryFn: () => getRoomWaitingMembers(roomId),
+  });
 
   return { roomWaitingMembers, getRoomWaitingMembersRefetch };
 };
@@ -158,9 +156,7 @@ export const useGetRoomCurrentCamera = (
   radius: number,
 ): { rooms: RoomCurrentCamera['rooms']; refetch: () => void } => {
   const { data: rooms, refetch } = useSuspenseQuery({
-    queryKey: [
-      `/api/rooms/map?radius=${radius}&longitude=${longitude}&latitude=${latitude}`,
-    ],
+    queryKey: [`/api/rooms/map?radius=${radius}&longitude=${longitude}&latitude=${latitude}`],
     queryFn: () => getRoomCurrentCamera(longitude, latitude, radius),
     select: (response: GetRoomCurrentCameraResponse) => {
       return response.rooms;
@@ -175,8 +171,7 @@ export const usePatchRoom = (
   roomId: number,
 ): UseMutationResult<PatchRoomResponse, void, PatchRoomRequest, unknown> => {
   return useMutation({
-    mutationFn: (patchRoomRequest: PatchRoomRequest) =>
-      patchRoom(roomId, patchRoomRequest),
+    mutationFn: (patchRoomRequest: PatchRoomRequest) => patchRoom(roomId, patchRoomRequest),
     onSuccess: async () => {
       // 수정시에는 invalidateQueries를 통해 기존 데이터 캐싱시키기?
       InfoToastMessage('파티 수정 성공!');

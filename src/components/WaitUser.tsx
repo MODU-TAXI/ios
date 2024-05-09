@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
+
 import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
 
 interface WaitUserComponentProps {

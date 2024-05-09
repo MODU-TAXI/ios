@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+
+import { RoomMember } from 'src/types/entity/room';
+
 import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
-import { RoomMember } from '@type/entity/room';
 
 interface ParticipateUserComponentProps {
   roomMember: RoomMember;

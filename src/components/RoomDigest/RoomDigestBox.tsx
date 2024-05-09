@@ -1,13 +1,15 @@
 import React from 'react';
-import { Text, View, Pressable } from 'react-native';
 import { styled } from 'nativewind';
+import { Text, View, Pressable } from 'react-native';
 
 import RoomCategoryComponent from './RoomCategory';
 
-import Person2FillSvg from '@assets/images/RoomDigest/Person2Fill.svg';
-import EndgrayCircleSvg from '@assets/images/Match/EndGrayCircle.svg';
 import SpotGraySvg from '@assets/images/RoomDigest/SpotGray.svg';
 import DottedLineSvg from '@assets/images/RoomDigest/DottedLine.svg';
+import EndgrayCircleSvg from '@assets/images/Match/EndGrayCircle.svg';
+import Person2FillSvg from '@assets/images/RoomDigest/Person2Fill.svg';
+
+
 
 const StyledView = styled(View);
 

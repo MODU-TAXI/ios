@@ -1,33 +1,37 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import DatePickerComponent from '@components/DatePicker';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
-import HeaderComponent from '@components/Header';
-import DescriptionComponent from '@components/Description';
-import ButtonComponent from '@components/Button';
-import DottedLineComponent from '@components/DottedLine';
-import PassengerComponent from '@components/Match/Passenger';
-import CategoryComponent from '@components/Match/Category';
-import { LoginStackParamList } from '@type/ParamLists';
-import { ErrorToastMessage } from '@utils/toastMessage';
-import { useCreateRoom } from '@hooks/api/rooms';
+import { LoginStackParamList } from 'src/types/ParamLists';
 import { useChatContext } from 'src/providers/chatProvider';
 
-import StartGrayCircle from '@assets/images/Match/StartGrayCircle.svg';
+import ButtonComponent from '@components/Button';
+import HeaderComponent from '@components/Header';
+import DatePickerComponent from '@components/DatePicker';
+import DottedLineComponent from '@components/DottedLine';
+import DescriptionComponent from '@components/Description';
+import CategoryComponent from '@components/Match/Category';
+import PassengerComponent from '@components/Match/Passenger';
+
+import { roomState } from '@recoil/recoil';
+
+import { useCreateRoom } from '@hooks/api/rooms';
+
+import { ErrorToastMessage } from '@utils/toastMessage';
+
+import EndCircle from '@assets/images/Match/EndCircle.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndGrayCircle from '@assets/images/Match/EndGrayCircle.svg';
-import EndCircle from '@assets/images/Match/EndCircle.svg';
 import SelectedPerson1 from '@assets/images/Match/SelectedPerson1.svg';
 import SelectedPerson2 from '@assets/images/Match/SelectedPerson2.svg';
 import SelectedPerson3 from '@assets/images/Match/SelectedPerson3.svg';
+import StartGrayCircle from '@assets/images/Match/StartGrayCircle.svg';
 import UnSelectedPerson1 from '@assets/images/Match/UnSelectedPerson1.svg';
 import UnSelectedPerson2 from '@assets/images/Match/UnSelectedPerson2.svg';
 import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { roomState } from '@recoil/recoil';
 
 const CreateRoomScreen = () => {
   const navigation = useNavigation<NavigationProp<LoginStackParamList>>();

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Pressable, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 
 interface SelectBoxComponentProps {
   items: Item[];

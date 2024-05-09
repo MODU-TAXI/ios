@@ -1,24 +1,30 @@
+import { useRecoilValue } from 'recoil';
 import React, { useState, useEffect } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import {
-  Pressable,
   Text,
   View,
   Keyboard,
+  Pressable,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { useRecoilValue } from 'recoil';
+
+import { RootStackParamList } from 'src/types/ParamLists';
+
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 
-import { signUp } from '@server/api/member';
 import { signUpUserState } from '@recoil/recoil';
-import { useSmsAuthentication, useSmsConfirm } from '@hooks/api/member.sms';
-import { setAccessToken, setRefreshToken } from '@utils/token';
+
+import { signUp } from '@server/api/member';
+
+import { useSmsConfirm, useSmsAuthentication } from '@hooks/api/member.sms';
+
 import { InfoToastMessage } from '@utils/toastMessage';
-import { RootStackParamList } from '@type/ParamLists';
+import { setAccessToken, setRefreshToken } from '@utils/token';
+
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 
 const PhoneAuthenticationCodeScreen = () => {

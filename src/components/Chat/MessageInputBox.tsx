@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, Pressable } from 'react-native';
+import { View, Text, TextInput, Pressable } from 'react-native';
 
 import { useChatContext } from 'src/providers/chatProvider';
 

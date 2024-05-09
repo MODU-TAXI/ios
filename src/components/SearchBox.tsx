@@ -1,15 +1,16 @@
-import React, { useState, useRef } from 'react';
-import {
-  NativeSyntheticEvent,
-  Pressable,
-  Text,
-  TextInput,
-  TextInputChangeEventData,
-  View,
-} from 'react-native';
+import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import {
+  Text,
+  View,
+  Pressable,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+} from 'react-native';
 
 import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
+
 
 interface SearchBoxProps {
   value: string;

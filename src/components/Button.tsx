@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, Text } from 'react-native';
+import { Text, Pressable } from 'react-native';
 
 interface ButtonComponentProps {
   color: string;

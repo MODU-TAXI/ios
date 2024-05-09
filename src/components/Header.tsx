@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
 import BackButton from '@assets/images/Header/BackButton.svg';
 import CloseButton from '@assets/images/Header/CloseButton.svg';
-import { useNavigation } from '@react-navigation/native';
 
 interface HeaderComponentProps {
   title: string;

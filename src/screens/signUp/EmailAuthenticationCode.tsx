@@ -1,26 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import {
-  Pressable,
   Text,
   View,
   Keyboard,
+  Pressable,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+
+import { RootStackParamList } from 'src/types/ParamLists';
+
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
-import { RootStackParamList } from '@type/ParamLists';
+
+import { emailState } from '@recoil/recoil';
+
+import {
+  useEmailConfirm,
+  useEmailAuthentication,
+} from '@hooks/api/member.mail';
+
+import { InfoToastMessage } from '@utils/toastMessage';
 
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
-import { InfoToastMessage } from '@utils/toastMessage';
-import { useRecoilValue } from 'recoil';
-import { emailState } from '@recoil/recoil';
-import {
-  useEmailAuthentication,
-  useEmailConfirm,
-} from '@hooks/api/member.mail';
 
 const EmailAuthenticationCodeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

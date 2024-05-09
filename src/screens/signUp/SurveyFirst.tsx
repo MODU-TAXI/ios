@@ -1,12 +1,15 @@
-import React, { useCallback, useState } from 'react';
 import { Text, View } from 'react-native';
+import React, { useState, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+
+import { RootStackParamList } from 'src/types/ParamLists';
+
 import ButtonComponent from '@components/Button';
 import SelectBoxComponent from '@components/SelectBox';
 import ProgressBarComponent from '@components/ProgressBar';
+
 import { useSurvey } from '@hooks/api/onboarding';
-import { RootStackParamList } from '@type/ParamLists';
 
 type SurveyType = {
   index: number;

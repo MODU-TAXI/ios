@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
-import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { useRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../type/ParamLists';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+
+import { RootStackParamList } from '../../types/ParamLists';
+
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
-import { useRecoilState } from 'recoil';
+
 import { emailState } from '@recoil/recoil';
+
 import { useEmailAuthentication } from '@hooks/api/member.mail';
 
 const SchoolAuthenticationScreen = () => {

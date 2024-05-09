@@ -1,20 +1,21 @@
 import {
-  PostAxiosInstance,
   GetAxiosInstance,
+  PostAxiosInstance,
   PatchAxiosInstance,
   DeleteAxiosInstance,
 } from '@axios/axios.method';
-import { CreateRoomRequest, PatchRoomRequest } from '@server/requestTypes/room';
+
+import { PatchRoomRequest, CreateRoomRequest } from '@server/requestTypes/room';
 import {
   JoinRoomResponse,
-  ApproveJoinRoomResponse,
-  GetRoomMembersResponse,
-  GetRoomWaitingMembersResponse,
-  GetRoomDetailResponse,
-  GetRoomCurrentCameraResponse,
-  CreateRoomResponse,
   PatchRoomResponse,
+  CreateRoomResponse,
   DeleteRoomResponse,
+  GetRoomDetailResponse,
+  GetRoomMembersResponse,
+  ApproveJoinRoomResponse,
+  GetRoomCurrentCameraResponse,
+  GetRoomWaitingMembersResponse,
 } from '@server/responseTypes/room';
 
 // [모집방 생성] /api/rooms

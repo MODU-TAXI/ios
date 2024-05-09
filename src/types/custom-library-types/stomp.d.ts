@@ -1,5 +1,4 @@
-// declare.d.ts
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare module '@stomp/stompjs' {
   export interface StompClientConfig {
     brokerURL: string;

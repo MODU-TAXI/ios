@@ -1,36 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import DatePickerComponent from '@components/DatePicker';
 import {
-  NavigationProp,
+  useRoute,
   RouteProp,
   useNavigation,
-  useRoute,
+  NavigationProp,
 } from '@react-navigation/native';
 
-import HeaderComponent from '@components/Header';
-import DescriptionComponent from '@components/Description';
+import { LoginStackParamList } from 'src/types/ParamLists';
+
 import ButtonComponent from '@components/Button';
+import HeaderComponent from '@components/Header';
+import DatePickerComponent from '@components/DatePicker';
 import DottedLineComponent from '@components/DottedLine';
-import PassengerComponent from '@components/Match/Passenger';
+import DescriptionComponent from '@components/Description';
 import CategoryComponent from '@components/Match/Category';
-import { LoginStackParamList } from '@type/ParamLists';
-import { ErrorToastMessage } from '@utils/toastMessage';
+import PassengerComponent from '@components/Match/Passenger';
+
 import { usePatchRoom } from '@hooks/api/rooms';
 
+import { ErrorToastMessage } from '@utils/toastMessage';
+
+import EndCircle from '@assets/images/Match/EndCircle.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndGrayCircle from '@assets/images/Match/EndGrayCircle.svg';
-import EndCircle from '@assets/images/Match/EndCircle.svg';
-
 import SelectedPerson1 from '@assets/images/Match/SelectedPerson1.svg';
 import SelectedPerson2 from '@assets/images/Match/SelectedPerson2.svg';
 import SelectedPerson3 from '@assets/images/Match/SelectedPerson3.svg';
 import UnSelectedPerson1 from '@assets/images/Match/UnSelectedPerson1.svg';
 import UnSelectedPerson2 from '@assets/images/Match/UnSelectedPerson2.svg';
 import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
-import dayjs from 'dayjs';
 
 dayjs.locale('ko');
 
