@@ -5,68 +5,94 @@ import React, {
   useRef,
   useEffect,
 } from 'react';
-import { View, StyleSheet, Button, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import BottomSheet, {
-  BottomSheetModal,
   BottomSheetView,
-  BottomSheetModalProvider,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 import {
   NaverMapView,
   NaverMapMarkerOverlay,
   NaverMapCircleOverlay,
-  NaverMapPathOverlay,
-  NaverMapPolygonOverlay,
   Camera,
 } from '@mj-studio/react-native-naver-map';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Geolocation from '@react-native-community/geolocation';
 
-import { CheckRoomResponse } from '@server/responseTypes/room';
-
-import RoomMarkerComponent from '@components/Marker/RoomMarker';
+import { GetRoomCurrentCameraResponse } from '@server/responseTypes/room';
+import { calculateRadius, calculateCenter } from '@utils/map';
+import { useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
 import MapBottomSheetScreen from './MapBottomSheet';
-import {
-  fetchRoomCurrentCamera,
-  calculateRange,
-  calculateCenter,
-} from '@utils/map';
+import RoomMarkerComponent from '@components/Marker/RoomMarker';
+
+import BackButton from '@assets/images/Header/BackButton.svg';
+import CloseButton from '@assets/images/Header/CloseButton.svg';
 
 const MainMapScreen = () => {
   const insets = useSafeAreaInsets();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   // 화면의 어디에서 멈추는지 snap point
-  const snapPoints = useMemo(() => ['40%', '90%'], []);
+  const snapPoints = useMemo(() => ['40%', '100%'], []);
+  const [isFullSnap, setIsFullSnap] = useState<boolean>(false);
+  // const [snapIndex, setSnapIndex] = useState<number>(0);
 
-  // TODO: '100%' 일 때 하나의 스크린처럼 보이도록 상단 헤더 렌더링 및 기존 컴포넌트 내리기
+  /** 바텀시트 100% 차지 시 isFullSnap === true */
   const handleSheetChanges = useCallback((index: number) => {
-    // console.log('handleSheetChanges', index);
+    setIsFullSnap(index === 1);
+    // setSnapIndex(index);
   }, []);
 
-  // 배경 터치시 복귀
-  const handleBackDrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        appearsOnIndex={-1}
-        disappearsOnIndex={1}
-        opacity={0}
-      />
-    ),
-    [],
-  );
+  /** 배경 터치시 복귀 (현재 불필요) */
+  // const handleBackDrop = useCallback(
+  //   (props: any) => (
+  //     <BottomSheetBackdrop
+  //       {...props}
+  //       appearsOnIndex={-1}
+  //       disappearsOnIndex={1}
+  //       opacity={0}
+  //     />
+  //   ),
+  //   [],
+  // );
 
-  // 현재 카메라 중심좌표 저장
-  const [currentCamera, setCurrentCamera] = useState<Camera>();
+  /** 바텀시트 40%로 복귀 */
+  const handleCloseSheet = useCallback(() => {
+    bottomSheetRef.current?.snapToIndex(0);
+    setIsFullSnap(false);
+  }, []);
+
+  /** handle rendering (보류) */
+  // const animatedHeaderStyle = useAnimatedStyle(() => {
+  //   const opacity = interpolate(
+  //     snapIndex,
+  //     [0, 3], // BottomSheet 인덱스가 0에서 1로 변경될 때
+  //     [0, 100], // 헤더의 투명도를 0에서 1로 변경
+  //     Extrapolation.CLAMP // 값이 정의된 범위를 벗어나지 않도록 함
+  //   );
+
+  //   return {
+  //     opacity,
+  //   };
+  // }, [snapIndex]); // bottomSheetIndex가 변경될 때마다 다시 계산
+
+  // 현재 카메라 중심좌표 저장, 초기값 인하대 후문
+  const [currentCamera, setCurrentCamera] = useState<Camera>({
+    latitude: 37.451062,
+    longitude: 126.656496,
+    zoom: 14,
+  });
 
   // 현재 줌에서의 탐색 범위
-  const [range, setRange] = useState<number>(600);
+  const [radius, setRadius] = useState<number>(600);
 
-  // 현재 조회한 매칭방 배열
-  const [rooms, setRooms] = useState<CheckRoomResponse[]>([]);
+  // 매칭방 리스트 객체
+  const { rooms, refetch } = useGetRoomCurrentCamera(
+    currentCamera.longitude,
+    currentCamera.latitude,
+    radius,
+  );
 
   // 처음 렌더링 시 현재위치 저장 및 방 탐색
   useEffect(() => {
@@ -79,8 +105,6 @@ const MainMapScreen = () => {
           longitude: longitude,
           zoom: 14,
         });
-
-        fetchRoomCurrentCamera(longitude, latitude, range, setRooms);
       },
       (error) => console.error(error),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
@@ -97,39 +121,36 @@ const MainMapScreen = () => {
       clearTimeout(timeoutRef.current);
     }
 
+    let newRadius = 2500;
+    let adjustValue = 0.001;
+    if (e.zoom) {
+      adjustValue = calculateCenter(e.zoom);
+      newRadius = calculateRadius(e.zoom);
+      setRadius(newRadius);
+    }
+
+    // 카메라 센터를 zoom 레벨에 따라 하단으로 조정
+    const adjustedLatitude = e.latitude - adjustValue;
+
+    // 조정된 센터 저장
+    setCurrentCamera({
+      latitude: adjustedLatitude,
+      longitude: e.longitude,
+      zoom: e.zoom,
+    });
+
     timeoutRef.current = setTimeout(() => {
-      let newRange = 2500;
-      let adjustValue = 0.001;
-      if (e.zoom) {
-        adjustValue = calculateCenter(e.zoom);
-        newRange = calculateRange(e.zoom);
-        setRange(newRange);
-      }
-
-      // 카메라 센터를 zoom 레벨에 따라 하단으로 조정
-      const adjustedLatitude = e.latitude - adjustValue;
-
-      // 조정된 센터 저장 및 방 탐색
-      setCurrentCamera({
-        latitude: adjustedLatitude,
-        longitude: e.longitude,
-        zoom: e.zoom,
-      });
-
-      fetchRoomCurrentCamera(e.longitude, adjustedLatitude, newRange, setRooms);
+      // 방 다시 탐색
+      refetch();
     }, 1000);
   }, []);
-
-  // useEffect(() => {
-  //   console.log(currentCamera);
-  // }, [currentCamera]);
 
   // 렌더링
   return (
     // 지도가 화면 전체를 포함하기 위한 마진 설정
-    <View className="flex-1 justify-center bg-white" style={{ marginTop: 0 }}>
+    <View className="flex-1 items-center bg-white" style={{ marginTop: 0 }}>
       {/** 지도 */}
-      <View className="flex-1 w-full h-auto mb-[320px]">
+      <View className="flex-1 w-[99%] h-auto mb-[320px]">
         {currentCamera && (
           <NaverMapView
             style={{ flex: 1 }}
@@ -147,7 +168,7 @@ const MainMapScreen = () => {
             <NaverMapCircleOverlay
               latitude={currentCamera.latitude}
               longitude={currentCamera.longitude}
-              radius={range}
+              radius={radius}
               color={'rgba(64, 206, 172, 0.24)'}
             />
             {rooms &&
@@ -188,9 +209,31 @@ const MainMapScreen = () => {
         index={0}
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
-        backdropComponent={handleBackDrop}
+        //backdropComponent={handleBackDrop}
       >
-        <BottomSheetView className="flex-1 items-center">
+        <BottomSheetView
+          className="flex-1 items-center"
+          style={{ marginBottom: insets.top + 36 }}
+        >
+          {/** 100% 일 때 헤더 렌더링 */}
+          {isFullSnap && (
+            // <Animated.View className="mt-6" style={animatedHeaderStyle}>
+            <View className="mt-6">
+              <View className="flex-row items-center justify-between px-4">
+                <Pressable onPress={handleCloseSheet}>
+                  <BackButton />
+                </Pressable>
+
+                <Text className="text-lg text-black font-semibold">
+                  택시팟 목록
+                </Text>
+
+                <Pressable onPress={handleCloseSheet}>
+                  <CloseButton />
+                </Pressable>
+              </View>
+            </View>
+          )}
           <MapBottomSheetScreen />
         </BottomSheetView>
       </BottomSheet>

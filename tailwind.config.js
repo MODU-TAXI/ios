@@ -30,6 +30,7 @@ module.exports = {
         disabled2: '#9C9C9C',
         emphasized: '#5D5D5D',
         mainFont: '#1F1F1F', // 텍스트
+        boxFont: '#A1A9AF',
 
         gray100: '#EBEBEB',
         gray200: '#D7D7D7',

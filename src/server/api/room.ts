@@ -11,7 +11,7 @@ import {
   GetRoomMembersResponse,
   GetRoomWaitingMembersResponse,
   GetRoomDetailResponse,
-  CheckRoomResponse,
+  GetRoomCurrentCameraResponse,
   CreateRoomResponse,
   PatchRoomResponse,
 } from '@server/responseTypes/room';
@@ -42,17 +42,17 @@ export const patchRoom = async (
 };
 
 // [원형 영역 내 방 조회] /api/rooms/map
-export const checkRoomCurrentCamera = async (
+export const getRoomCurrentCamera = async (
   longitude: number,
   latitude: number,
-  // spotId?: number,
   radius?: number,
-): Promise<CheckRoomResponse[]> => {
+  spotId?: number,
+): Promise<GetRoomCurrentCameraResponse> => {
   const response = await GetAxiosInstance<any>(
     `/api/rooms/map?radius=${radius}&longitude=${longitude}&latitude=${latitude}`,
   );
 
-  return response.data.rooms;
+  return response.data;
 };
 
 // [경로를 포함한 방 상세 정보 조회] /api/rooms/{id}
@@ -63,7 +63,6 @@ export const getRoomDetail = async (
     `/api/rooms/${id}`,
   );
 
-  console.log('Get 함수 실행됨');
   return response.data;
 };
 
