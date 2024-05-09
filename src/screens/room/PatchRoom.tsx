@@ -73,7 +73,7 @@ const PatchRoom = () => {
     const origin_categories = ['학생인증', '여자만', '매너탑승'];
 
     const selected_indexs = roomDetail.roomCategories.map((roomCategory) => {
-      return origin_categories.indexOf(roomCategory.label.trim());
+      return origin_categories.indexOf(roomCategory.trim());
     });
 
     selected_indexs.map(
