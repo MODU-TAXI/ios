@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-  createContext,
-  useContext,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, createContext, useContext } from 'react';
 import { useRecoilState } from 'recoil';
 import TextEncodingPolyfill from 'text-encoding';
 import StompJs, { Message } from '@stomp/stompjs';
@@ -99,6 +93,10 @@ export function ChatProvider({ children }: any) {
             },
           },
         );
+      };
+
+      stompClient.current.onStompError = (error: any) => {
+        console.error('Error 여기서 발생:', error);
       };
     }
   };
