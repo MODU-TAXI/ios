@@ -24,12 +24,12 @@ export const deleteMyChatInfo = async (): Promise<string> => {
   return response.data;
 };
 
-// [채팅 전부 조회] /chat-messages/{roomId}
+// [채팅 전부 조회] /api/chats/rooms/{roomId}/messages
 export const getChatMessages = async (
   roomId: number,
 ): Promise<GetChatMessagesResponse> => {
   const response = await GetAxiosInstance<GetChatMessagesResponse>(
-    `/chat-messages/${roomId}`,
+    `/api/chats/rooms/${roomId}/messages`,
   );
 
   return response.data;

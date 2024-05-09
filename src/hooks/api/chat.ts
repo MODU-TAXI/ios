@@ -20,7 +20,7 @@ export const useGetMyInfo = () => {
 // 채팅 가져오기
 export const useGetMessages = (roomId: number) => {
   const { data: messages, isLoading } = useSuspenseQuery({
-    queryKey: [`/chat-messages/${roomId}`],
+    queryKey: [`/api/chat-messages/${roomId}`],
     queryFn: () => getChatMessages(roomId),
   });
 

@@ -1,14 +1,8 @@
-import React, {
-  useEffect,
-  useRef,
-  createContext,
-  useContext,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, createContext, useContext } from 'react';
 import { useRecoilState } from 'recoil';
 import TextEncodingPolyfill from 'text-encoding';
 import StompJs, { Message } from '@stomp/stompjs';
-import { chatInState, memberIdState, messagesState } from '@recoil/recoil';
+import { chatInState, messagesState, roomState } from '@recoil/recoil';
 import { InfoToastMessage } from '@utils/toastMessage';
 import { useAccessToken } from '@hooks/token';
 import { getMyChatInfo } from '@server/api/chat';
@@ -42,30 +36,30 @@ export function ChatProvider({ children }: any) {
   const stompClient = useRef<any>({});
   const [chatIn] = useRecoilState(chatInState);
   const [, setMessages] = useRecoilState(messagesState);
+  const [roomId, setRoomId] = useRecoilState(roomState);
   const [accessToken] = useAccessToken();
-  const [roomId, setRoomId] = useState<number>(0);
-  const [, setMemberId] = useRecoilState(memberIdState);
 
+  // 내가 접속하고 있는 방이 있는지 여부 확인
   useEffect(() => {
     (async () => {
       const response = await getMyChatInfo();
-      const { memberId, roomId } = response;
+      const { roomId } = response;
 
-      if (memberId && roomId) {
-        setMemberId(memberId);
-        setRoomId(roomId);
-      }
+      console.log('너', roomId, '번 방에있어');
+
+      setRoomId(roomId);
     })();
   }, []);
 
-  // 만약 내가 들어간 방이 있었을 경우메만 입장
+  // 로그인하자마자 소켓 연결
   useEffect(() => {
-    if (accessToken && roomId && roomId > 0) {
+    if (roomId > 0) {
       connect(roomId);
     }
 
+    // 어플이 꺼질때 disconnect();
     return () => disConnect();
-  }, [roomId, accessToken]);
+  }, [accessToken, roomId]);
 
   // 채팅방 입장했는지 여부 ref에 저장
   useEffect(() => {
@@ -87,6 +81,8 @@ export function ChatProvider({ children }: any) {
         heartbeatOutgoing: 4000,
       });
 
+      stompClient.current.activate();
+
       stompClient.current.onConnect = () => {
         stompClient.current.subscribe(
           `/sub/chat/${roomId}`,
@@ -98,7 +94,10 @@ export function ChatProvider({ children }: any) {
           },
         );
       };
-      stompClient.current.activate();
+
+      stompClient.current.onStompError = (error: any) => {
+        console.error('Error 여기서 발생:', error);
+      };
     }
   };
 
@@ -133,7 +132,8 @@ export function ChatProvider({ children }: any) {
 
   // socket 연결 해제
   const disConnect = () => {
-    if (stompClient && roomId && roomId > 0) {
+    if (stompClient.current.deactivate) {
+      console.log('소켓 연결 종료');
       stompClient.current.deactivate();
     }
   };

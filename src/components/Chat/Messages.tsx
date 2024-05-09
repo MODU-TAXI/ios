@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { View, ScrollView, Keyboard } from 'react-native';
 import { MessageBoxComponent } from '@components/Chat/MessageBox';
-import { useRecoilState } from 'recoil';
-import { messagesState } from '@recoil/recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { messagesState, roomState } from '@recoil/recoil';
 import { useGetMessages } from '@hooks/api/chat';
 
 const MessagesComponent: React.FC = () => {
   const scrollViewRef = useRef<ScrollView>(null);
-  const { messages } = useGetMessages(3);
+  const roomId = useRecoilValue(roomState);
+  const { messages } = useGetMessages(roomId);
   const [newMessages] = useRecoilState(messagesState);
 
   // 키보드 밑으로 내리기 위함
@@ -45,7 +46,7 @@ const MessagesComponent: React.FC = () => {
         }
       }}
     >
-      {messages.map((chat, index) => (
+      {messages.messages.map((chat, index) => (
         <View key={index} className="px-2">
           {/* 말풍선 */}
           <MessageBoxComponent message={chat} memberId={1} />

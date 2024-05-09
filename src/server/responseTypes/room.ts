@@ -10,6 +10,7 @@ export interface GetRoomCurrentCameraResponse {
 
 // [모집 방 생성] /api/rooms
 export interface CreateRoomResponse {
+  managerId: number; // 방장 Id
   roomId: number; // 방 Id
   spotId: number; // 거점 Id
   departureDairyDate: string; // 날짜
@@ -30,8 +31,7 @@ export interface CreateRoomResponse {
   expectedChargePerPerson: number; // 사람별 예상 요금
   expectedCharge: number; // 예상 요금
 
-  // managerId: number;
-  // managerName: string;
+  myRoom: boolean; // 내가 방장인지 여부
   roomTagBitMaskList: string[]; // 카테고리
   path: {
     coordinateReferenceSystem: {
@@ -44,6 +44,7 @@ export interface CreateRoomResponse {
 
 // [경로를 포함한 방 상세 정보 조회] /api/rooms/{id}
 export interface GetRoomDetailResponse {
+  managerId: number; // 방장 Id
   roomId: number; // 방 Id
   spotId: number; // 거점 Id
   departureDairyDate: string; // 날짜
@@ -64,8 +65,7 @@ export interface GetRoomDetailResponse {
   expectedChargePerPerson: number; // 사람별 예상 요금
   expectedCharge: number; // 예상 요금
 
-  // managerId: number;
-  // managerName: string;
+  myRoom: boolean; // 내가 방장인지 여부
   roomTagBitMaskList: string[]; // 카테고리
   path: {
     coordinateReferenceSystem: {
@@ -78,6 +78,7 @@ export interface GetRoomDetailResponse {
 
 // [모집방 수정] /api/rooms/{id}
 export interface PatchRoomResponse {
+  managerId: number; // 방장 Id
   roomId: number; // 방 Id
   spotId: number; // 거점 Id
   departureDairyDate: string; // 날짜
@@ -98,8 +99,7 @@ export interface PatchRoomResponse {
   expectedChargePerPerson: number; // 사람별 예상 요금
   expectedCharge: number; // 예상 요금
 
-  // managerId: number;
-  // managerName: string;
+  myRoom: boolean; // 내가 방장인지 여부
   roomTagBitMaskList: string[]; // 카테고리
   path: {
     coordinateReferenceSystem: {
@@ -108,6 +108,11 @@ export interface PatchRoomResponse {
     coordinates: { values: number[] }[];
     type: string;
   };
+}
+
+// [모집 방 삭제] /api/rooms/{id}
+export interface DeleteRoomResponse {
+  isDeleted: boolean;
 }
 
 // [방 입장 요청] /api/rooms/{roomId}/apply
