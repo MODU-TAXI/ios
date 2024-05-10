@@ -3,14 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  useRoute,
-  RouteProp,
-  useNavigation,
-  NavigationProp,
-} from '@react-navigation/native';
-
-import { LoginStackParamList } from 'src/types/ParamLists';
 
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
@@ -24,6 +16,8 @@ import { usePatchRoom } from '@hooks/api/rooms';
 
 import { ErrorToastMessage } from '@utils/toastMessage';
 
+import { PatchRoomScreenProps } from '@type/param/loginStack';
+
 import EndCircle from '@assets/images/Match/EndCircle.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndGrayCircle from '@assets/images/Match/EndGrayCircle.svg';
@@ -36,10 +30,8 @@ import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
 
 dayjs.locale('ko');
 
-const PatchRoom = () => {
-  const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
-  const route = useRoute<RouteProp<LoginStackParamList>>();
-  const roomDetail = route?.params?.roomDetail;
+const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
+  const { roomDetail } = route.params;
 
   // TODO: 이부분 어떻게 할지 고민하기
   if (!roomDetail) {
@@ -53,14 +45,8 @@ const PatchRoom = () => {
   const [departureTime, setDepartureTime] = useState<Date>(new Date()); // 설정 날짜
   const [datePicked, setDatePicked] = useState<boolean>(true); // 날짜 선택 여부
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
-  const [passangersNumber, setPassengersNumber] = useState<number | null>(
-    roomDetail.wishHeadcount,
-  ); // 탑승 인원
-  const [checkedCategorys, setCheckedCategorys] = useState<boolean[]>([
-    false,
-    false,
-    false,
-  ]); // 카테고리
+  const [passangersNumber, setPassengersNumber] = useState<number | null>(roomDetail.wishHeadcount); // 탑승 인원
+  const [checkedCategorys, setCheckedCategorys] = useState<boolean[]>([false, false, false]); // 카테고리
 
   // 날짜 다시 활성화
   useEffect(() => {
@@ -79,9 +65,7 @@ const PatchRoom = () => {
       return origin_categories.indexOf(roomCategory.trim());
     });
 
-    selected_indexs.map(
-      (selected_index) => (checkedCategorys[selected_index] = true),
-    );
+    selected_indexs.map((selected_index) => (checkedCategorys[selected_index] = true));
 
     const new_categories = [...checkedCategorys];
 
@@ -96,9 +80,7 @@ const PatchRoom = () => {
 
     const categories = ['STUDENT_CERTIFICATION', 'ONLY_WOMAN', 'MANNER'];
 
-    const filteredCategories = categories.filter(
-      (_, index) => checkedCategorys[index],
-    );
+    const filteredCategories = categories.filter((_, index) => checkedCategorys[index]);
 
     // 개발환경시 기기가 미국이라 9시간 더해주기
     departureTime.setHours(departureTime.getHours() + 9);
@@ -114,7 +96,7 @@ const PatchRoom = () => {
     });
 
     // 다시 매칭 페이지로 이동
-    return navigation.navigate('RoomDetailScreen');
+    return navigation.navigate('RoomDetailScreen', { roomId: roomDetail.roomId });
   };
 
   // Datepicker open
@@ -150,9 +132,7 @@ const PatchRoom = () => {
               <View className="flex-row items-center">
                 <StartCircle />
 
-                <Text className="ml-4 text-sm font-normal text-gray700">
-                  출발지
-                </Text>
+                <Text className="ml-4 text-sm font-normal text-gray700">출발지</Text>
               </View>
             </View>
 
@@ -164,9 +144,7 @@ const PatchRoom = () => {
               )}
               <Pressable onPress={handleStart}>
                 {start ? (
-                  <Text className="ml-6 text-[20px] font-semibold text-gray900 ">
-                    {start}
-                  </Text>
+                  <Text className="ml-6 text-[20px] font-semibold text-gray900 ">{start}</Text>
                 ) : (
                   <Text className="ml-6 text-[20px] font-semibold text-gray300 ">
                     출발지를 선택해주세요
@@ -178,9 +156,7 @@ const PatchRoom = () => {
             <View>
               <View className="flex-row items-center">
                 {end ? <EndCircle /> : <EndGrayCircle />}
-                <Text className="ml-4 text-sm font-normal text-gray700">
-                  도착지
-                </Text>
+                <Text className="ml-4 text-sm font-normal text-gray700">도착지</Text>
               </View>
 
               <Pressable onPress={handleEnd}>

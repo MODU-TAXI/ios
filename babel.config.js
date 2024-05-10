@@ -24,7 +24,7 @@ module.exports = {
           '@hooks': './src/hooks',
           '@pages': './src/pages',
           '@routes': './src/routes',
-          '@types': './src/types',
+          '@type': './src/type', // types는 불가능해서 type으로 대체
           '@utils': './src/utils',
           '@assets': './src/assets',
           '@recoil': './src/recoil',

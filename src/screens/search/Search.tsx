@@ -29,9 +29,7 @@ const SearchScreen = () => {
             <Text className="pr-4 text-lg font-semibold">최근 검색</Text>
           </Pressable>
           <Pressable>
-            <Text className="pr-4 text-lg font-medium text-gray500">
-              거점 리스트
-            </Text>
+            <Text className="pr-4 text-lg font-medium text-gray500">거점 리스트</Text>
           </Pressable>
           <Pressable>
             <Text className="text-lg font-medium text-gray500">즐겨찾기</Text>

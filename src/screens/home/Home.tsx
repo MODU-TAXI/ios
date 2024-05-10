@@ -2,17 +2,15 @@ import React from 'react';
 import { Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
 
-import { LoginStackParamList } from 'src/types/ParamLists';
 import { useChatContext } from 'src/providers/chatProvider';
 
 import { deleteMyChatInfo } from '@server/api/chat';
 
-const HomeScreen = () => {
-  const { disConnect } = useChatContext();
+import { HomeScreenProps } from '@type/param/loginStack';
 
-  const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
+const HomeScreen = ({ navigation }: HomeScreenProps) => {
+  const { disConnect } = useChatContext();
 
   const chatOut = async () => {
     disConnect();
@@ -20,7 +18,7 @@ const HomeScreen = () => {
   };
 
   const toRoomScreen = () => {
-    navigation.navigate('RoomDetailScreen');
+    navigation.navigate('RoomDetailScreen', { roomId: 45 });
   };
 
   const toCreateRoomScreen = () => {
@@ -36,7 +34,7 @@ const HomeScreen = () => {
   };
 
   const toChatRoomScreen = async () => {
-    navigation.navigate('ChatRoomScreen');
+    navigation.navigate('ChatRoomScreen', { roomId: 45 });
   };
 
   const toTestScreen = async () => {

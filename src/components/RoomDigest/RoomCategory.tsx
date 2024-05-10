@@ -1,16 +1,14 @@
 import { Text, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 
-import { RoomCategory } from 'src/types/entity/room';
+import { RoomCategory } from '@type/entity/room';
 
 interface RoomCategoryComponentProps {
   roomCategory: string;
 }
 
 /** 카풀팟 방 태그 */
-const RoomCategoryComponent: React.FC<RoomCategoryComponentProps> = ({
-  roomCategory,
-}) => {
+const RoomCategoryComponent: React.FC<RoomCategoryComponentProps> = ({ roomCategory }) => {
   const [roomTag, setRoomTag] = useState<RoomCategory>({
     label: roomCategory,
     textColor: 'text-gray500',
@@ -30,9 +28,7 @@ const RoomCategoryComponent: React.FC<RoomCategoryComponentProps> = ({
 
   return (
     <View className={`${roomTag.bgColor} mr-2 rounded-md`}>
-      <Text className={`text-xs ${roomTag.textColor} px-2 py-1 font-medium`}>
-        {roomCategory}
-      </Text>
+      <Text className={`text-xs ${roomTag.textColor} px-2 py-1 font-medium`}>{roomCategory}</Text>
     </View>
   );
 };

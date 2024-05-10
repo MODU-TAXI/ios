@@ -6,20 +6,15 @@ import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
-import { RootStackParamList } from 'src/types/ParamLists';
-
 import { SignUpUser } from '@recoil/type';
 import { loggedInState, signUpUserState } from '@recoil/recoil';
 
 import { socialLogin, checkMembership } from '@server/api/member';
 import { KakaoLoginResponse } from '@server/responseTypes/member';
 
-import {
-  deleteToken,
-  setAccessToken,
-  getRefreshToken,
-  setRefreshToken,
-} from '@utils/token';
+import { deleteToken, setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
+
+import { RootStackParamList } from '@type/ParamLists';
 
 // 로그인 여부 확인
 export const useCheckLogin = async () => {
@@ -38,8 +33,7 @@ export const useCheckLogin = async () => {
       { headers: { refreshToken: refreshToken } },
     );
 
-    const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-      response.data;
+    const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
 
     setLoggedIn(true);
 
@@ -52,17 +46,11 @@ export const useCheckLogin = async () => {
 };
 
 // 카카오 로그인
-export const useKakaoLogin = (): UseMutationResult<
-  KakaoOAuthToken,
-  Error,
-  void,
-  unknown
-> => {
+export const useKakaoLogin = (): UseMutationResult<KakaoOAuthToken, Error, void, unknown> => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
-  const [signUpUser, setSignUpUser] =
-    useRecoilState<SignUpUser>(signUpUserState);
+  const [signUpUser, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
 
   return useMutation({
     mutationFn: () => login(),

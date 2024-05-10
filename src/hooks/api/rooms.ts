@@ -6,8 +6,6 @@ import {
   UseMutationResult,
 } from '@tanstack/react-query';
 
-import { RoomDetail, RoomCurrentCamera } from 'src/types/entity/room';
-
 import { PatchRoomRequest, CreateRoomRequest } from '@server/requestTypes/room';
 import {
   joinRoom,
@@ -33,6 +31,8 @@ import {
 
 import { translateCategory } from '@utils/room';
 import { InfoToastMessage, ErrorToastMessage } from '@utils/toastMessage';
+
+import { RoomDetail, RoomCurrentCamera } from '@type/entity/room';
 
 // 방 생성
 export const useCreateRoom = (): UseMutationResult<

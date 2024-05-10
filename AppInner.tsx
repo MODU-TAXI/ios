@@ -5,7 +5,6 @@ import Config from 'react-native-config';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { ChatProvider } from 'src/providers/chatProvider';
-import { RootStackParamList, LoginStackParamList } from 'src/types/ParamLists';
 
 import TestScreen from './src/screens/test';
 import HomeScreen from './src/screens/home/Home';
@@ -29,6 +28,9 @@ import PhoneAuthenticationCodeScreen from './src/screens/signUp/PhoneAuthenticat
 import { loggedInState } from '@recoil/recoil';
 
 import { deleteToken, setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
+
+import { RootStackParamList } from '@type/param/rootStack';
+import { LoginStackParamList } from '@type/param/loginStack';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
@@ -84,7 +86,6 @@ function AppInner() {
         <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
         <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
         <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
-
         <LogInStack.Screen name="TestScreen" component={TestScreen} />
       </LogInStack.Navigator>
     </ChatProvider>

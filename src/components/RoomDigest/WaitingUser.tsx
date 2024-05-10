@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 
-import { RoomWaitingMember } from 'src/types/entity/room';
+import { RoomWaitingMember } from '@type/entity/room';
 
 import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
 
@@ -17,9 +17,7 @@ const WaitingUserComponent: React.FC<WaitingUserComponentProps> = ({
     <View className="mt-4 flex-row items-center justify-between">
       <View className="flex-row items-center">
         <UserBasicImage className="mr-1" />
-        <Text className="mr-1 text-lg font-semibold">
-          {roomWaitingMember.name}
-        </Text>
+        <Text className="mr-1 text-lg font-semibold">{roomWaitingMember.name}</Text>
         <Text className="text-[20px] font-normal text-disabled2">
           ({roomWaitingMember.score}'C)
         </Text>
