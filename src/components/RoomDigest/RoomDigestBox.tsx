@@ -58,12 +58,12 @@ const RoomDigestBoxComponent: React.FC<RoomDigestBoxProps> = ({
 
         <View className="flex flex-row">
           <DottedLineSvg width={1} height={32} className="px-2 py-0.5" />
-          <Text className="pl-1.5 text-base font-medium">{departureName}</Text>
+          <Text className="pl-1.5 font-medium text-base">{departureName}</Text>
         </View>
 
         <View className="flex flex-row items-center">
           <SpotGraySvg width={8} height={10} className="mx-1 my-0.5" />
-          <Text className="pl-1.5 text-base font-medium">{arrivalName}</Text>
+          <Text className="pl-1.5 font-medium text-base">{arrivalName}</Text>
         </View>
       </View>
 

@@ -2,9 +2,9 @@ import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import React, { useEffect } from 'react';
 import Config from 'react-native-config';
-import { ChatProvider } from '@providers/chatProvider';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { ChatProvider } from 'src/providers/chatProvider';
 import { RootStackParamList, LoginStackParamList } from 'src/types/ParamLists';
 
 import TestScreen from './src/screens/test';
