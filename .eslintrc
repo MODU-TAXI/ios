@@ -70,7 +70,7 @@
           "custom-server",
           "custom-hooks",
           "custom-utils",
-          "custom-types",
+          "custom-type",
           "custom-assets",
         ],
         "custom-groups": {
@@ -83,7 +83,7 @@
             "custom-server": "@server/**",
             "custom-hooks": "@hooks/**",
             "custom-utils": "@utils/**",
-            "custom-types": "@types/**",
+            "custom-type": "@type/**",
             "custom-assets": "@assets/**",
           },
         },

@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { View, Text, Pressable } from 'react-native';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
 
-import { LoginStackParamList } from 'src/types/ParamLists';
 import { useChatContext } from 'src/providers/chatProvider';
 
 import ButtonComponent from '@components/Button';
@@ -22,6 +20,8 @@ import { useCreateRoom } from '@hooks/api/rooms';
 
 import { ErrorToastMessage } from '@utils/toastMessage';
 
+import { CreateRoomScreenProps } from '@type/param/loginStack';
+
 import EndCircle from '@assets/images/Match/EndCircle.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndGrayCircle from '@assets/images/Match/EndGrayCircle.svg';
@@ -33,9 +33,7 @@ import UnSelectedPerson1 from '@assets/images/Match/UnSelectedPerson1.svg';
 import UnSelectedPerson2 from '@assets/images/Match/UnSelectedPerson2.svg';
 import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
 
-const CreateRoomScreen = () => {
-  const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
-
+const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   const { mutateAsync: createRoomMutate } = useCreateRoom();
 
   const [, setSocketRoomId] = useRecoilState(roomState);

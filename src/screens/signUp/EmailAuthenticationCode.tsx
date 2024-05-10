@@ -1,16 +1,7 @@
 import { useRecoilValue } from 'recoil';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import {
-  Text,
-  View,
-  Keyboard,
-  Pressable,
-  TouchableWithoutFeedback,
-} from 'react-native';
-
-import { RootStackParamList } from 'src/types/ParamLists';
+import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native';
 
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
@@ -18,26 +9,22 @@ import ProgressBarComponent from '@components/ProgressBar';
 
 import { emailState } from '@recoil/recoil';
 
-import {
-  useEmailConfirm,
-  useEmailAuthentication,
-} from '@hooks/api/member.mail';
+import { useEmailConfirm, useEmailAuthentication } from '@hooks/api/member.mail';
 
 import { InfoToastMessage } from '@utils/toastMessage';
 
+import { EmailAuthenticationCodeScreenProps } from '@type/param/rootStack';
+
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 
-const EmailAuthenticationCodeScreen = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
+const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeScreenProps) => {
   const email = useRecoilValue(emailState); // 재전송할 이메일 (recoil value 사용)
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [time, setTime] = useState(180); // 타이머 시간
 
   const { mutateAsync: emailConfirm } = useEmailConfirm(setErrorMessage);
-  const { mutateAsync: emailAuthentication } =
-    useEmailAuthentication(setErrorMessage);
+  const { mutateAsync: emailAuthentication } = useEmailAuthentication(setErrorMessage);
 
   // 인증번호 재전송
   const resendMail = async (): Promise<void> => {

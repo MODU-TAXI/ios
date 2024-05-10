@@ -1,18 +1,15 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-
-import { RootStackParamList } from 'src/types/ParamLists';
 
 import { useKakaoLogin } from '@hooks/api/member';
+
+import { SignInScreenProps } from '@type/param/rootStack';
 
 import AppleLogo from '@assets/images/SignIn/AppleLogo.svg';
 import KakaoLogo from '@assets/images/SignIn/KakaoLogo.svg';
 
-const SignInScreen = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
+const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const { mutateAsync: kakaoLogin } = useKakaoLogin();
 
   const appleLogin = async (): Promise<void> => {
@@ -52,9 +49,7 @@ const SignInScreen = () => {
             onPress={appleLogin}
           >
             <AppleLogo className="mr-1" />
-            <Text className="ml-1 text-center font-semibold text-base text-white">
-              애플 로그인
-            </Text>
+            <Text className="ml-1 text-center font-semibold text-base text-white">애플 로그인</Text>
           </Pressable>
         </View>
       </View>

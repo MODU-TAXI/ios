@@ -1,18 +1,12 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
+import { useRecoilState } from 'recoil';
 import { View, Text } from 'react-native';
 import React, { useCallback } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  useIsFocused,
-  useNavigation,
-  NavigationProp,
-  useFocusEffect,
-} from '@react-navigation/native';
+import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 
-import { LoginStackParamList } from 'src/types/ParamLists';
 import { useChatContext } from 'src/providers/chatProvider';
 
 import ButtonComponent from '@components/Button';
@@ -34,23 +28,23 @@ import {
   useGetRoomWaitingMembers,
 } from '@hooks/api/rooms';
 
+import { RoomDetailScreenProps } from '@type/param/loginStack';
+
 import EndCircle from '@assets/images/Match/EndCircle.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 
 dayjs.locale('ko');
 
-const RoomDetailScreen = () => {
+const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
   // 이거를 쓰라~
   const isFocused = useIsFocused();
 
-  const roomId = useRecoilValue(roomState);
-  const navigation = useNavigation<NavigationProp<LoginStackParamList>>();
+  const { roomId } = route.params;
 
-  const [socketRoomId, setSocketRoomId] = useRecoilState(roomState);
+  const [, setSocketRoomId] = useRecoilState(roomState);
   const { roomDetail, getRoomRefetch } = useGetRoom(roomId); // 방 상세 정보
-  const { roomMembers, getRoomMembersRefetch } = useGetRoomMembers(roomId); // 참여자 목록
-  const { roomWaitingMembers, getRoomWaitingMembersRefetch } =
-    useGetRoomWaitingMembers(roomId); // 대기자 목록
+  const { roomMembers } = useGetRoomMembers(roomId); // 참여자 목록
+  const { roomWaitingMembers } = useGetRoomWaitingMembers(roomId); // 대기자 목록
   const { mutateAsync: joinRoomMutate } = useJoinRoom(roomId); // 방 입장 mutate
   const { mutateAsync: applyJoinRoomMutate } = useApproveJoinRoom(roomId); // 방 입장 수락 mutate
   const { mutateAsync: deleteRoomMutate } = useDeleteRoom(roomId); // 방 삭제 mutate
@@ -125,9 +119,7 @@ const RoomDetailScreen = () => {
             <View className="my-2 ml-[6px] flex-row">
               <View className="h-[46px] w-px bg-main" />
 
-              <Text className="ml-6 text-[20px] font-semibold">
-                {roomDetail.departureName}
-              </Text>
+              <Text className="ml-6 text-[20px] font-semibold">{roomDetail.departureName}</Text>
             </View>
 
             <View>
@@ -173,9 +165,7 @@ const RoomDetailScreen = () => {
           </View>
 
           <View className="mt-4 flex-row justify-between">
-            <Text className="text-lg font-medium text-disabled2">
-              최소인원 매칭시
-            </Text>
+            <Text className="text-lg font-medium text-disabled2">최소인원 매칭시</Text>
             <Text className="text-lg font-medium text-black">
               {roomDetail.expectedChargePerPerson.toLocaleString('ko-KR')}원
             </Text>

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-
-import { RootStackParamList } from 'src/types/ParamLists';
 
 import ButtonComponent from '@components/Button';
 
 import checkPermissions from '@hooks/permission/checkPermissions';
+
+import { CheckPermissionScreenProps } from '@type/param/rootStack';
 
 import BellSvg from '@assets/images/SignUp/bell.svg';
 import TraySvg from '@assets/images/SignUp/tray.svg';
@@ -20,10 +19,8 @@ interface PermissionItemProps {
   description: string;
 }
 
-const CheckPermissionScreen = () => {
+const CheckPermissionScreen = ({ navigation }: CheckPermissionScreenProps) => {
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
-
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const toNext = async (): Promise<void> => {
     await checkPermissions();
@@ -62,9 +59,7 @@ const CheckPermissionScreen = () => {
           <Text className="mt-2 text-center text-xs text-slate-500">
             권한을 허용하지 않아도 모두의 택시를 이용할 수 있지만
           </Text>
-          <Text className="text-center text-xs text-slate-500">
-            일부 서비스가 제한될 수 있어요
-          </Text>
+          <Text className="text-center text-xs text-slate-500">일부 서비스가 제한될 수 있어요</Text>
         </View>
 
         {/* 권한 확인 목록들 */}
@@ -75,11 +70,7 @@ const CheckPermissionScreen = () => {
             description="서비스 개선 및 오류 확인"
           />
 
-          <PermissionItem
-            icon={BellSvg}
-            title="알림"
-            description="푸시 알림 및 메세지 수신 안내"
-          />
+          <PermissionItem icon={BellSvg} title="알림" description="푸시 알림 및 메세지 수신 안내" />
 
           <PermissionItem
             icon={CameraSvg}

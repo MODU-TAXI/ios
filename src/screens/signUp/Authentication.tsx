@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
-
-import { RootStackParamList } from 'src/types/ParamLists';
 
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
@@ -17,12 +14,11 @@ import { signUpUserState } from '@recoil/recoil';
 
 import { useSmsAuthentication } from '@hooks/api/member.sms';
 
-// 이름, 성별, 전화번호 입력 스크린
-const AuthenticationScreen = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+import { AuthenticationScreenProps } from '@type/param/rootStack';
 
-  const [signUpUser, setSignUpUser] =
-    useRecoilState<SignUpUser>(signUpUserState);
+// 이름, 성별, 전화번호 입력 스크린
+const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
+  const [signUpUser, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [gender, setGender] = useState<string>('');
@@ -32,8 +28,7 @@ const AuthenticationScreen = () => {
     { index: 2, item: '여자', select: false },
   ]);
 
-  const { mutateAsync: smsAuthentication } =
-    useSmsAuthentication(setErrorMessage);
+  const { mutateAsync: smsAuthentication } = useSmsAuthentication(setErrorMessage);
 
   // 다음으로
   const toNext = async (): Promise<void> => {
@@ -66,9 +61,7 @@ const AuthenticationScreen = () => {
             {/* 입력란 설명 */}
             <View className="mt-14 flex">
               <Text className="text-xl font-bold">모두의 택시에서</Text>
-              <Text className="text-xl font-bold">
-                사용할 닉네임을 입력해주세요!
-              </Text>
+              <Text className="text-xl font-bold">사용할 닉네임을 입력해주세요!</Text>
             </View>
 
             {/* 이름 입력란 */}

@@ -1,9 +1,6 @@
 import { Text, View } from 'react-native';
 import React, { useState, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-
-import { RootStackParamList } from 'src/types/ParamLists';
 
 import ButtonComponent from '@components/Button';
 import SelectBoxComponent from '@components/SelectBox';
@@ -11,26 +8,25 @@ import ProgressBarComponent from '@components/ProgressBar';
 
 import { useSurvey } from '@hooks/api/onboarding';
 
+import { SurveySecondScreenProps } from '@type/param/rootStack';
+
 type SurveyType = {
   index: number;
   content: string;
   select: boolean;
 };
 
-const ServeySecondScreen = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
+const ServeySecondScreen = ({ navigation }: SurveySecondScreenProps) => {
   const [surveyLists, setSurvetLists] = useState<SurveyType[]>([
     { index: 1, content: '지각할 것 같을때', select: false },
     { index: 2, content: '버스 줄이 너무 길때', select: false },
     { index: 3, content: '기타', select: false },
   ]);
-  const [etcContent, setEtcContent] = useState<string>('');
+  const [etcContent] = useState<string>('');
 
   // 선택한 box 개수 계산
   const checkSelectedNum = useCallback((): number => {
-    return surveyLists.filter((surveyList) => surveyList.select === true)
-      .length;
+    return surveyLists.filter((surveyList) => surveyList.select === true).length;
   }, [surveyLists]);
 
   const { mutateAsync: survey } = useSurvey();

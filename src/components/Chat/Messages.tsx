@@ -1,36 +1,33 @@
+import { useRecoilState } from 'recoil';
 import React, { useRef, useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { View, Keyboard, ScrollView } from 'react-native';
 
 import { MessageBoxComponent } from '@components/Chat/MessageBox';
 
-import { roomState, messagesState } from '@recoil/recoil';
+import { messagesState } from '@recoil/recoil';
 
 import { useGetMessages } from '@hooks/api/chat';
 
-const MessagesComponent: React.FC = () => {
+interface MessagesComponentProps {
+  roomId: number;
+}
+
+const MessagesComponent: React.FC<MessagesComponentProps> = ({ roomId }) => {
   const scrollViewRef = useRef<ScrollView>(null);
-  const roomId = useRecoilValue(roomState);
   const { messages } = useGetMessages(roomId);
   const [newMessages] = useRecoilState(messagesState);
 
   // 키보드 밑으로 내리기 위함
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        if (scrollViewRef.current) {
-          scrollViewRef.current.scrollToEnd({ animated: false });
-        }
-      },
-    );
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      if (scrollViewRef.current) {
+        scrollViewRef.current.scrollToEnd({ animated: false });
+      }
+    });
 
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        // 키보드가 내려가면 아무 동작 없음
-      },
-    );
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      // 키보드가 내려가면 아무 동작 없음
+    });
 
     return () => {
       keyboardDidShowListener.remove();

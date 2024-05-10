@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
-
-import { RootStackParamList } from '../../types/ParamLists';
 
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
@@ -14,14 +11,13 @@ import { emailState } from '@recoil/recoil';
 
 import { useEmailAuthentication } from '@hooks/api/member.mail';
 
-const SchoolAuthenticationScreen = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+import { SchoolAuthenticationScreenProps } from '@type/param/rootStack';
 
+const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenProps) => {
   const [email, setEmail] = useRecoilState<string>(emailState); // 이메일
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
 
-  const { mutateAsync: emailAuthentication } =
-    useEmailAuthentication(setErrorMessage);
+  const { mutateAsync: emailAuthentication } = useEmailAuthentication(setErrorMessage);
 
   // 인증 메일 보내기
   const sendMail = async (): Promise<void> => {

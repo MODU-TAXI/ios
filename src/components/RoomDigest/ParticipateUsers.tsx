@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-import { RoomMember } from 'src/types/entity/room';
-
 import ParticipateUserComponent from '@components/RoomDigest/ParticipateUser';
+
+import { RoomMember } from '@type/entity/room';
 
 interface ParticipateUsersComponentProps {
   roomMembers: RoomMember[];
@@ -30,9 +30,7 @@ const users = [
   },
 ];
 
-const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({
-  roomMembers,
-}) => {
+const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({ roomMembers }) => {
   return (
     <View className="px-1 py-8">
       <View>

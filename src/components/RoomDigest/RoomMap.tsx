@@ -7,7 +7,7 @@ import {
   NaverMapPathOverlay,
 } from '@mj-studio/react-native-naver-map';
 
-import { RoomDetail } from 'src/types/entity/room';
+import { RoomDetail } from '@type/entity/room';
 
 interface RoomMapComponentProps {
   roomDetail: RoomDetail;
@@ -68,11 +68,7 @@ const RoomMapComponent: React.FC<RoomMapComponentProps> = ({ roomDetail }) => {
           }
         >
           {roomDetail.path.coordinates.length > 2 && (
-            <NaverMapPathOverlay
-              coords={roomDetail.path.coordinates}
-              width={8}
-              color={'#40CEAC'}
-            />
+            <NaverMapPathOverlay coords={roomDetail.path.coordinates} width={8} color={'#40CEAC'} />
           )}
         </NaverMapView>
       </View>

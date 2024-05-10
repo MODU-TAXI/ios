@@ -9,7 +9,7 @@ import ProgressBarComponent from '@components/ProgressBar';
 import { loggedInState } from '@recoil/recoil';
 
 const CompleteSignUpScreen = () => {
-  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setLoggedIn] = useRecoilState(loggedInState);
 
   const toNext = async (): Promise<void> => {
     setLoggedIn(true);
