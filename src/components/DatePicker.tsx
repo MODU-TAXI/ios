@@ -31,7 +31,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
           onPress={openDatePicker}
         >
           <View>
-            <Text className="text-base font-medium text-emphasized">
+            <Text className="font-medium text-base text-emphasized">
               {dayjs().format('YYYY년 MM월 DD일')}
             </Text>
             <Text className="mt-1 text-lg font-semibold text-main">
@@ -54,7 +54,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
           className="mt-4 rounded-xl border-2 border-disabled px-4 py-3"
           onPress={openDatePicker}
         >
-          <Text className="text-base font-medium text-emphasized">
+          <Text className="font-medium text-base text-emphasized">
             {dayjs().format('YYYY년 MM월 DD일')}
           </Text>
           <Text className="mt-1 text-lg text-gray300">

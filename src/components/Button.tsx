@@ -24,7 +24,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
 
   return (
     <Pressable className={buttonStyle} onPress={onPress} disabled={disabled}>
-      <Text className={`text- text-base font-semibold${textColor} text-center`}>
+      <Text className={`text- font-semibold text-base${textColor} text-center`}>
         {text}
       </Text>
     </Pressable>

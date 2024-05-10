@@ -40,7 +40,7 @@ const CheckPermissionScreen = () => {
     return (
       <View className="my-5 flex-row items-center">
         {/* 권한 아이콘 */}
-        <View className="flex size-10 items-center justify-center rounded-full bg-[#E2E2E2]">
+        <View className="size-10 flex items-center justify-center rounded-full bg-[#E2E2E2]">
           <IconComponent />
         </View>
 

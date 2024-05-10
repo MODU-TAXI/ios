@@ -13,11 +13,6 @@ import { NavigationContainer } from '@react-navigation/native'; // 줄여쓰면 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // react-query v5 라이브러리
 import { RecoilRoot } from 'recoil'; // recoil 라이브러리
 
-
-
-
-
-
 Sentry.init({
   dsn: Config.SENTRY_DSN,
 });
@@ -52,4 +47,5 @@ function App(): React.JSX.Element {
     </>
   );
 }
+
 export default App;

@@ -39,7 +39,7 @@ const SignInScreen = () => {
             onPress={() => kakaoLogin()}
           >
             <KakaoLogo className="mr-1" />
-            <Text className="ml-1 text-center text-base font-semibold text-black">
+            <Text className="ml-1 text-center font-semibold text-base text-black">
               카카오 로그인
             </Text>
           </Pressable>
@@ -52,7 +52,7 @@ const SignInScreen = () => {
             onPress={appleLogin}
           >
             <AppleLogo className="mr-1" />
-            <Text className="ml-1 text-center text-base font-semibold text-white">
+            <Text className="ml-1 text-center font-semibold text-base text-white">
               애플 로그인
             </Text>
           </Pressable>
