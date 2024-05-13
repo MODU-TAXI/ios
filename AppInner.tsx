@@ -12,7 +12,7 @@ import NaverMapScreen from './src/screens/NaverMap';
 import PatchRoom from './src/screens/room/PatchRoom';
 import MainMapScreen from './src/screens/map/MainMap';
 import SearchScreen from './src/screens/search/Search';
-import SignInScreen from './src/screens/SignIn/SignIn';
+import SignInScreen from './src/screens/signIn/SignIn';
 import ChatRoomScreen from './src/screens/chat/ChatRoom';
 import CreateRoomScreen from './src/screens/room/CreateRoom';
 import RoomDetailScreen from './src/screens/room/RoomDetail';

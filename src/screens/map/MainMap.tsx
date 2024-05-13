@@ -15,6 +15,7 @@ import BottomSheet, {
 import {
   Camera,
   NaverMapView,
+  NaverMapViewRef,
   NaverMapMarkerOverlay,
   NaverMapCircleOverlay,
 } from '@mj-studio/react-native-naver-map';
@@ -22,21 +23,23 @@ import {
 import MapBottomSheetScreen from './MapBottomSheet';
 
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
-
-import { GetRoomCurrentCameraResponse } from '@server/responseTypes/room';
+import CreateRoomButtonComponent from '@components/CreateRoomButton';
 
 import { useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
 import { calculateRadius, calculateCenter } from '@utils/map';
 
+import { MainMapScreenProps } from '@type/param/loginStack';
+
 import BackButton from '@assets/images/Header/BackButton.svg';
 import CloseButton from '@assets/images/Header/CloseButton.svg';
+import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 
 
-
-const MainMapScreen = () => {
+const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   const insets = useSafeAreaInsets();
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const mapRef = useRef<NaverMapViewRef>(null);
 
   // 화면의 어디에서 멈추는지 snap point
   const snapPoints = useMemo(() => ['40%', '100%'], []);
@@ -114,6 +117,8 @@ const MainMapScreen = () => {
       (error) => console.error(error),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
     );
+
+    refetch();
   }, []);
 
   // timeout 정보 저장 Ref
@@ -150,6 +155,39 @@ const MainMapScreen = () => {
     }, 1000);
   }, []);
 
+  /** 현재위치 이동 버튼 */
+  const moveToCurrentLocation = async() => {
+    let currentLocation: Camera = {
+      latitude: 37.451062,
+      longitude: 126.656496,
+    }
+
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        currentLocation = {
+          latitude: latitude,
+          longitude: longitude,
+        }
+      },
+      (error) => console.error(error),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+
+    mapRef.current?.animateCameraTo(currentLocation);
+    refetch();
+  }
+
+  /** 해당 마커의 room 으로 이동 */
+  const toRoomDetailScreen = (roomId: number) => {
+    navigation.navigate('RoomDetailScreen', {roomId: roomId});
+  }
+
+  /** 매칭방 생성으로 이동 */
+  const toCreateRoomScreen = () => {
+    navigation.navigate('CreateRoomScreen');
+  }
+
   // 렌더링
   return (
     // 지도가 화면 전체를 포함하기 위한 마진 설정
@@ -158,11 +196,14 @@ const MainMapScreen = () => {
       <View className="mb-[320px] h-auto w-[99%] flex-1">
         {currentCamera && (
           <NaverMapView
+            ref={mapRef}
             style={{ flex: 1 }}
             mapType="Basic"
             initialCamera={currentCamera}
             onCameraChanged={onCameraChange}
             locale="ko"
+            isShowLocationButton={false}
+            isShowScaleBar={false}
             logoAlign="BottomRight"
             //logoMargin={{ bottom: 40 }}
           >
@@ -186,7 +227,7 @@ const MainMapScreen = () => {
                   key={room.id}
                   latitude={room.departureLatitude}
                   longitude={room.departureLongitude}
-                  onTap={() => console.log(room.spotName)}
+                  onTap={() => toRoomDetailScreen(room.id)}
                   anchor={{ x: 0.5, y: 0.5 }}
                 >
                   <RoomMarkerComponent spotName={room.spotName} />
@@ -194,6 +235,23 @@ const MainMapScreen = () => {
               ))}
           </NaverMapView>
         )}
+      </View>
+
+      <View className='absolute left-1/4 top-[52%] flex flex-row'>
+        {/** 카풀팟 생성 버튼 */}
+        <Pressable
+          onPress={toCreateRoomScreen}
+        >
+          <CreateRoomButtonComponent />
+        </Pressable>
+        
+        {/** 현재위치 버튼 */}
+        <Pressable
+          className='ml-2 flex-1'
+          onPress={moveToCurrentLocation}
+        >
+          <CurrentLocationButton />
+        </Pressable>
       </View>
 
       {/** 바텀시트 */}
@@ -218,7 +276,10 @@ const MainMapScreen = () => {
       >
         <BottomSheetView
           className="flex-1 items-center"
-          style={{ marginBottom: insets.top + 36 }}
+          style={{ 
+            marginBottom:
+              isFullSnap ? insets.top + 96 : insets.top + 520
+          }}
         >
           {/** 100% 일 때 헤더 렌더링 */}
           {isFullSnap && (

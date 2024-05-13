@@ -32,8 +32,8 @@ const RoomMapComponent: React.FC<RoomMapComponentProps> = ({ roomDetail }) => {
           longitude: roomDetail.departureLongitude,
         },
         coord2: {
-          latitude: 37.46504,
-          longitude: 126.68045,
+          latitude: roomDetail.arrivalLatitude,
+          longitude: roomDetail.arrivalLongitude,
         },
         duration: 500,
       });
@@ -60,8 +60,8 @@ const RoomMapComponent: React.FC<RoomMapComponentProps> = ({ roomDetail }) => {
                 longitude: roomDetail.departureLongitude,
               },
               coord2: {
-                latitude: 37.46504,
-                longitude: 126.68045,
+                latitude: roomDetail.arrivalLatitude,
+                longitude: roomDetail.arrivalLongitude,
               },
               duration: 500,
             })
