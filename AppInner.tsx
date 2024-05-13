@@ -35,8 +35,20 @@ import { LoginStackParamList } from '@type/param/loginStack';
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
 
+import { Alert } from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+
 function AppInner() {
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+
+  // FCM 받는 부분 (테스트 중)
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
 
   // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
   const checkLogin = async () => {

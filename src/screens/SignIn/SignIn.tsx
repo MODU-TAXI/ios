@@ -10,7 +10,7 @@ import AppleLogo from '@assets/images/SignIn/AppleLogo.svg';
 import KakaoLogo from '@assets/images/SignIn/KakaoLogo.svg';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
-  const { mutateAsync: kakaoLogin } = useKakaoLogin();
+  const { mutateAsync: kakaoLogin } = useKakaoLogin(navigation);
 
   const appleLogin = async (): Promise<void> => {
     navigation.navigate('CheckPermissionScreen');
