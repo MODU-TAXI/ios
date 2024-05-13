@@ -38,14 +38,14 @@ const LogInStack = createNativeStackNavigator<LoginStackParamList>();
 import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 
+import { onMessageReceived } from '@utils/fcm';
+
 function AppInner() {
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
 
   // FCM 받는 부분 (테스트 중)
   useEffect(() => {
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
+    const unsubscribe = messaging().onMessage(onMessageReceived);
 
     return unsubscribe;
   }, []);

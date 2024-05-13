@@ -18,7 +18,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   };
 
   const toRoomScreen = () => {
-    navigation.navigate('RoomDetailScreen', { roomId: 50 });
+    navigation.navigate('RoomDetailScreen', { roomId: 55 });
   };
 
   const toCreateRoomScreen = () => {
@@ -34,7 +34,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   };
 
   const toChatRoomScreen = async () => {
-    navigation.navigate('ChatRoomScreen', { roomId: 50 });
+    navigation.navigate('ChatRoomScreen', { roomId: 55 });
   };
 
   const toTestScreen = async () => {

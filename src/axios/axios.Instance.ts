@@ -58,8 +58,7 @@ axiosInstance.interceptors.response.use(
         );
 
         console.log('토큰 갱신');
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-          response.data;
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
 
         await setAccessToken(newAccessToken);
         await setRefreshToken(newRefreshToken);
@@ -85,7 +84,7 @@ axiosInstance.interceptors.response.use(
       await deleteToken();
     }
 
-    if (Config.ENV === 'DEV') {
+    if (Config.ENV === 'DEVELOP') {
       console.log(error.response);
     }
 
