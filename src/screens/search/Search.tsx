@@ -1,14 +1,27 @@
+import { View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, View, Pressable, TextInput } from 'react-native';
 
 import SearchBoxComponent from '@components/Search/SearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 
+import { useNaverSearch } from '@hooks/api/search';
+
+import { NaverSearch } from '@type/entity/search';
+
 const SearchScreen = () => {
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useState<string>('');
+  const { data: items, refetch } = useNaverSearch(keyword);
+
+  useEffect(() => {
+    refetch();
+  }, [keyword, refetch])
+
+  useEffect(() => {
+    console.log(items);
+  }, [items])
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -21,18 +34,17 @@ const SearchScreen = () => {
 
         {/** 추천 검색어 */}
         <View className="flex-1">
-          <RecommendedSearchComponent 
-            keyword='주안역' 
-            fullKeyword='주안역 센트리빌' 
-            address='인천 미추홀구 주안로 41번길' 
-            distance={500}
-          />
-          <RecommendedSearchComponent 
-            keyword='주안역' 
-            fullKeyword='주안역 3동 성모마리아 성당' 
-            address='인천 미추홀구 주안로 41번길' 
-            distance={500}
-          />
+          {items && 
+          items.map((item, index) => (
+            <RecommendedSearchComponent 
+              key={index}
+              keyword={keyword}
+              fullKeyword={item.title}
+              address={item.address} 
+              distance={500}
+            />
+          ))}
+
         </View>
       </View>
     </SafeAreaView>

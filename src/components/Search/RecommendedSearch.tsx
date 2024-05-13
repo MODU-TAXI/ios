@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 
 
@@ -16,15 +16,17 @@ const RecommendedSearchComponent: React.FC<RecommendedSearchProps> = ({
   address,
   distance,
 }) => {
-  const restKeyword = fullKeyword.replace(keyword, '');
+  let restKeyword = fullKeyword.replace(/<\/?b>/g, "");
 
-
+  if (fullKeyword.search(keyword)) {
+    restKeyword = restKeyword.replace(keyword, "");
+  }
   return (
     <View className="flex flex-row items-center border-b border-gray100 py-3">
         <View className='ml-2 flex flex-col'>
 
             <View className='mb-1 flex flex-row items-center'>
-                <Text className="text-[16px] font-medium text-main">{keyword}</Text>
+                {fullKeyword.search(keyword) && <Text className='text-[16px] font-medium text-main'>{keyword}</Text>}
                 <Text className='text-[16px] font-medium text-gray800'>{restKeyword}</Text>
             </View>
 

@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -8,6 +8,8 @@ import {
   NativeSyntheticEvent,
   TextInputChangeEventData,
 } from 'react-native';
+
+import { useNaverSearch } from '@hooks/api/search';
 
 import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
 
