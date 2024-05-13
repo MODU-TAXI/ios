@@ -23,18 +23,18 @@ import MapBottomSheetScreen from './MapBottomSheet';
 
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
 
-import { GetRoomCurrentCameraResponse } from '@server/responseTypes/room';
-
 import { useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
 import { calculateRadius, calculateCenter } from '@utils/map';
+
+import { MainMapScreenProps } from '@type/param/loginStack';
 
 import BackButton from '@assets/images/Header/BackButton.svg';
 import CloseButton from '@assets/images/Header/CloseButton.svg';
 
 
 
-const MainMapScreen = () => {
+const MainMapScreen = ({route, navigation}: MainMapScreenProps) => {
   const insets = useSafeAreaInsets();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -150,6 +150,11 @@ const MainMapScreen = () => {
     }, 1000);
   }, []);
 
+  /** 해당 마커의 room 으로 이동 */
+  const toRoomDetailScreen = (roomId: number) => {
+    navigation.navigate('RoomDetailScreen', {roomId: roomId});
+  }
+
   // 렌더링
   return (
     // 지도가 화면 전체를 포함하기 위한 마진 설정
@@ -186,7 +191,7 @@ const MainMapScreen = () => {
                   key={room.id}
                   latitude={room.departureLatitude}
                   longitude={room.departureLongitude}
-                  onTap={() => console.log(room.spotName)}
+                  onTap={() => toRoomDetailScreen(room.id)}
                   anchor={{ x: 0.5, y: 0.5 }}
                 >
                   <RoomMarkerComponent spotName={room.spotName} />
