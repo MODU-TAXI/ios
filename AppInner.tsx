@@ -12,7 +12,7 @@ import NaverMapScreen from './src/screens/NaverMap';
 import PatchRoom from './src/screens/room/PatchRoom';
 import MainMapScreen from './src/screens/map/MainMap';
 import SearchScreen from './src/screens/search/Search';
-import SignInScreen from './src/screens/signIn/SignIn';
+import SignInScreen from './src/screens/SignIn/SignIn';
 import ChatRoomScreen from './src/screens/chat/ChatRoom';
 import CreateRoomScreen from './src/screens/room/CreateRoom';
 import RoomDetailScreen from './src/screens/room/RoomDetail';
@@ -35,8 +35,20 @@ import { LoginStackParamList } from '@type/param/loginStack';
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
 
+import { Alert } from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+
 function AppInner() {
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+
+  // FCM 받는 부분 (테스트 중)
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
 
   // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
   const checkLogin = async () => {

@@ -11,6 +11,7 @@ import { signUpUserState } from '@recoil/recoil';
 
 import { signUp } from '@server/api/member';
 
+import { useFcmToken } from '@hooks/fcm';
 import { useSmsConfirm, useSmsAuthentication } from '@hooks/api/member.sms';
 
 import { InfoToastMessage } from '@utils/toastMessage';
@@ -25,6 +26,7 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [time, setTime] = useState(300); // 타이머 시간
+  const [fcmToken] = useFcmToken();
 
   const { mutateAsync: smsConfirm } = useSmsConfirm(setErrorMessage);
 
@@ -45,7 +47,7 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
       certificationCode: code,
     });
 
-    const response = await signUp(signUpUser);
+    const response = await signUp({ ...signUpUser, fcmToken: fcmToken });
 
     const { accessToken, refreshToken } = response;
 

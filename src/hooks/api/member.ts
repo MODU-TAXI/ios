@@ -12,9 +12,9 @@ import { loggedInState, signUpUserState } from '@recoil/recoil';
 import { socialLogin, checkMembership } from '@server/api/member';
 import { KakaoLoginResponse } from '@server/responseTypes/member';
 
-import { deleteToken, setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
+import { useFcmToken } from '@hooks/fcm';
 
-import { RootStackParamList } from '@type/ParamLists';
+import { deleteToken, setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
 
 // 로그인 여부 확인
 export const useCheckLogin = async () => {
@@ -46,11 +46,12 @@ export const useCheckLogin = async () => {
 };
 
 // 카카오 로그인
-export const useKakaoLogin = (): UseMutationResult<KakaoOAuthToken, Error, void, unknown> => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
-  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
-  const [signUpUser, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
+export const useKakaoLogin = (
+  navigation: any,
+): UseMutationResult<KakaoOAuthToken, Error, void, unknown> => {
+  const [fcmToken] = useFcmToken();
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
 
   return useMutation({
     mutationFn: () => login(),
@@ -59,11 +60,13 @@ export const useKakaoLogin = (): UseMutationResult<KakaoOAuthToken, Error, void,
 
       const { existent, key } = await checkMembership('KAKAO', {
         accessToken: accessToken,
+        fcmToken: fcmToken,
       });
 
       if (existent) {
         const response = await socialLogin('KAKAO', {
           accessToken: accessToken,
+          fcmToken: fcmToken,
         });
 
         await setAccessToken(response.accessToken);

@@ -1,11 +1,13 @@
 // [가입 여부 확인] /api/members/{type}/membership
 export interface CheckMembershipRequest {
   accessToken: string;
+  fcmToken: string;
 }
 
 // [소셜 로그인] /api/members/{type}/login
 export interface SocialLoginRequest {
   accessToken: string;
+  fcmToken: string;
 }
 
 // [소셜 회원가입] /api/members/sign-up
@@ -14,4 +16,5 @@ export interface SignUpRequest {
   name: string;
   gender: string;
   phoneNumber: string;
+  fcmToken: string;
 }
