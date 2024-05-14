@@ -28,7 +28,7 @@ const SearchScreen = () => {
       <View className="mx-4 flex-1">
         
         {/** 검색창 */}
-        <View className="mb-3 mt-4">
+        <View className="mb-3 mt-2">
           <SearchBoxComponent value={keyword} setValue={setKeyword} />
         </View>
 

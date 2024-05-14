@@ -24,6 +24,7 @@ import MapBottomSheetScreen from './MapBottomSheet';
 
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
 import CreateRoomButtonComponent from '@components/CreateRoomButton';
+import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 
 import { useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
@@ -40,6 +41,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   const insets = useSafeAreaInsets();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const mapRef = useRef<NaverMapViewRef>(null);
+  const [keyword, setKeyword] = useState<string>('');
 
   // 화면의 어디에서 멈추는지 snap point
   const snapPoints = useMemo(() => ['40%', '100%'], []);
@@ -188,6 +190,10 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
     navigation.navigate('CreateRoomScreen');
   }
 
+  const toSearchScreen = () => {
+    navigation.navigate('SearchScreen');
+  }
+
   // 렌더링
   return (
     // 지도가 화면 전체를 포함하기 위한 마진 설정
@@ -237,7 +243,22 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         )}
       </View>
 
-      <View className='absolute left-1/4 top-[52%] flex flex-row'>
+      {/** 검색창 */}
+      <View
+        className="absolute w-full"
+        style={{
+          // safearea 기준 위치 설정
+          top: insets.top + 8,
+        }}
+      >
+        <Pressable
+          onPress={toSearchScreen}
+        >
+          <TransparentSearchBoxComponent />
+        </Pressable>
+      </View>
+
+      <View className="absolute left-1/4 top-[52%] flex flex-row">
         {/** 카풀팟 생성 버튼 */}
         <Pressable
           onPress={toCreateRoomScreen}

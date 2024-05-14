@@ -15,7 +15,7 @@ export const signUpUserState = atom<SignUpUser>({
 // 로그인 여부 관리
 export const loggedInState = atom<boolean>({
   key: 'isLoggedIn',
-  default: true,
+  default: false,
 });
 
 // 유저 정보 관리
