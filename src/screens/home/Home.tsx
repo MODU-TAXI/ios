@@ -17,9 +17,9 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     await deleteMyChatInfo();
   };
 
-  const toRoomScreen = () => {
-    navigation.navigate('RoomDetailScreen', { roomId: 50 });
-  };
+  // const toRoomScreen = () => {
+  //   navigation.navigate('RoomDetailScreen', { roomId: 55 });
+  // };
 
   const toCreateRoomScreen = () => {
     navigation.navigate('CreateRoomScreen');
@@ -33,9 +33,9 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('SearchScreen');
   };
 
-  const toChatRoomScreen = async () => {
-    navigation.navigate('ChatRoomScreen', { roomId: 50 });
-  };
+  // const toChatRoomScreen = async () => {
+  //   navigation.navigate('ChatRoomScreen', { roomId: 55 });
+  // };
 
   const toTestScreen = async () => {
     navigation.navigate('TestScreen');
@@ -44,12 +44,12 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   return (
     <SafeAreaView className="flex-1">
       <ScrollView className="flex-col">
-        <Pressable
+        {/* <Pressable
           onPress={toRoomScreen}
           className="m-5  h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>매칭 스크린</Text>
-        </Pressable>
+        </Pressable> */}
 
         <Pressable
           onPress={toCreateRoomScreen}
@@ -72,12 +72,12 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           <Text>검색 스크린</Text>
         </Pressable>
 
-        <Pressable
+        {/* <Pressable
           onPress={toChatRoomScreen}
           className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
         >
           <Text>채팅 스크린</Text>
-        </Pressable>
+        </Pressable> */}
 
         <Pressable
           onPress={chatOut}

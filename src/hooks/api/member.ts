@@ -14,36 +14,7 @@ import { KakaoLoginResponse } from '@server/responseTypes/member';
 
 import { useFcmToken } from '@hooks/fcm';
 
-import { deleteToken, setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
-
-// 로그인 여부 확인
-export const useCheckLogin = async () => {
-  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
-
-  try {
-    const refreshToken = await getRefreshToken();
-
-    if (!refreshToken) {
-      await deleteToken();
-    }
-
-    const response = await axios.patch(
-      `${Config.SERVER_URL}api/members/refresh`,
-      {},
-      { headers: { refreshToken: refreshToken } },
-    );
-
-    const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
-
-    setLoggedIn(true);
-
-    await setAccessToken(newAccessToken);
-    await setRefreshToken(newRefreshToken);
-  } catch (error) {
-    setLoggedIn(false);
-    await deleteToken();
-  }
-};
+import { setAccessToken, setRefreshToken } from '@utils/token';
 
 // 카카오 로그인
 export const useKakaoLogin = (

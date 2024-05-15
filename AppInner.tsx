@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
 import React, { useEffect } from 'react';
 import Config from 'react-native-config';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { ChatProvider } from 'src/providers/chatProvider';
@@ -27,61 +27,27 @@ import PhoneAuthenticationCodeScreen from './src/screens/signUp/PhoneAuthenticat
 
 import { loggedInState } from '@recoil/recoil';
 
-import { deleteToken, setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
-
 import { RootStackParamList } from '@type/param/rootStack';
 import { LoginStackParamList } from '@type/param/loginStack';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
 
-import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 
+import { useFcmMessage } from '@hooks/fcm';
+import { useCheckLogin } from '@hooks/login';
+
+import { onMessageReceivedBackground } from '@utils/fcm';
+
+// Background에서 FCM Message 수신
+messaging().setBackgroundMessageHandler(onMessageReceivedBackground);
+
 function AppInner() {
-  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+  const loggedIn = useRecoilValue(loggedInState);
 
-  // FCM 받는 부분 (테스트 중)
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    return unsubscribe;
-  }, []);
-
-  // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
-  const checkLogin = async () => {
-    try {
-      const refreshToken = await getRefreshToken();
-
-      if (!refreshToken) {
-        setLoggedIn(false);
-        await deleteToken();
-      }
-
-      const response = await axios.patch(
-        `${Config.SERVER_URL}api/members/refresh`,
-        {},
-        { headers: { refreshToken: refreshToken } },
-      );
-
-      const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
-
-      setLoggedIn(true);
-
-      await setAccessToken(newAccessToken);
-      await setRefreshToken(newRefreshToken);
-    } catch (error) {
-      setLoggedIn(false);
-      await deleteToken();
-    }
-  };
-
-  useEffect(() => {
-    checkLogin();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useCheckLogin(); // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
+  useFcmMessage(); // Foreground에서 FCM Message 수신
 
   return loggedIn ? (
     <ChatProvider>
