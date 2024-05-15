@@ -49,7 +49,7 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
   const { mutateAsync: applyJoinRoomMutate } = useApproveJoinRoom(roomId); // 방 입장 수락 mutate
   const { mutateAsync: deleteRoomMutate } = useDeleteRoom(roomId); // 방 삭제 mutate
 
-  const { connect, disConnect } = useChatContext();
+  const { connect } = useChatContext();
 
   // 방을 수정하고 다시 focusing 되었을때 api 재호출 -> 이 로직은 수정하지 않았을때는 두번 호출됨 수정해야할듯
   useFocusEffect(
@@ -84,6 +84,11 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
   const toPatchRoomScreen = useCallback(async (): Promise<void> => {
     navigation.navigate('PatchRoomScreen', { roomDetail: roomDetail });
   }, []);
+
+  // 채팅방으로 이동
+  const toChatRoomScreen = async () => {
+    navigation.navigate('ChatRoomScreen', { roomId: roomId });
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -175,6 +180,17 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
         {roomDetail.myRoom ? (
           <View>
             <View className="mx-5 mt-[78px]">
+              <ButtonComponent
+                color={'bg-white'}
+                borderColor={'border-main'}
+                textColor={'gray500'}
+                text={'채팅방으로 이동'}
+                disabled={false}
+                onPress={toChatRoomScreen}
+              />
+            </View>
+
+            <View className="mx-5 mt-3">
               <ButtonComponent
                 color={'bg-white'}
                 borderColor={'border-main'}
