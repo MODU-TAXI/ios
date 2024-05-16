@@ -87,7 +87,7 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
 
   // 채팅방으로 이동
   const toChatRoomScreen = async () => {
-    navigation.navigate('ChatRoomScreen', { roomId: roomId });
+    navigation.navigate('ChatRoomScreen', { roomDetail: roomDetail });
   };
 
   return (

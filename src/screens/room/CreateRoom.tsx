@@ -93,7 +93,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+    <SafeAreaView className="flex-1 bg-white">
       {/* 헤더 */}
       <HeaderComponent title={'생성 페이지'} />
 

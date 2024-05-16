@@ -10,7 +10,7 @@ export type LoginStackParamList = {
   CreateRoomScreen: undefined;
   RoomDetailScreen: { roomId: number };
   PatchRoomScreen: { roomDetail: RoomDetail };
-  ChatRoomScreen: { roomId: number };
+  ChatRoomScreen: { roomDetail: RoomDetail };
   TestScreen: undefined;
 };
 
