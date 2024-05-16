@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextEncodingPolyfill from 'text-encoding';
-import { KeyboardAvoidingView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text, View, Modal, Pressable, KeyboardAvoidingView } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import MessagesComponent from '@components/Chat/Messages';
+import RoomInfoComponent from '@components/Chat/RoomInfo';
+import UserModalComponent from '@components/Chat/UserModal';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 
 import { useEnterChatRoom } from '@hooks/chat';
@@ -17,20 +19,37 @@ Object.assign('global', {
 });
 
 const ChatRoomScreen = ({ route }: ChatRoomScreenProps) => {
-  const { roomId } = route.params;
+  const { roomDetail } = route.params;
   // 채팅스크린에 있을때는 알람안오게 해야하므로 recoil로 상태 저장
   useEnterChatRoom();
 
-  return (
-    <SafeAreaView className="flex-1">
-      <HeaderComponent title={'채팅 페이지'} />
-      <KeyboardAvoidingView className="flex-1" behavior="padding">
-        {/* 채팅 Messages */}
-        <MessagesComponent roomId={roomId} />
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
-        {/* 채팅 입력 Box */}
+  const openUserInfoModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeUserInfoModal = () => {
+    setModalVisible(false);
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-white " edges={['top', 'left', 'right']}>
+      <HeaderComponent title={'채팅 페이지'} />
+
+      {/* 방 정보 Component */}
+      <RoomInfoComponent roomDetail={roomDetail} />
+
+      <KeyboardAvoidingView className="flex-1 bg-gray-100" behavior="padding">
+        {/* 메세지 Component */}
+        <MessagesComponent roomId={roomDetail.roomId} openUserInfoModal={openUserInfoModal} />
+
+        {/* 입력창 Component */}
         <MessageInputBoxComponent />
       </KeyboardAvoidingView>
+
+      {/* 유저 정보 modal */}
+      <UserModalComponent modalVisible={modalVisible} closeUserInfoModal={closeUserInfoModal} />
     </SafeAreaView>
   );
 };

@@ -17,7 +17,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ title }) => {
   };
 
   return (
-    <View className="flex-row items-center justify-between px-4">
+    <View className="flex-row items-center justify-between bg-white px-4">
       <Pressable onPress={goBack}>
         <BackButton />
       </Pressable>

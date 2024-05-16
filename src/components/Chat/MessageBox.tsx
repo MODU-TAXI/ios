@@ -1,78 +1,95 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import dayjs from 'dayjs';
+import { View, Text, Pressable } from 'react-native';
 
-type MessageBody = {
-  content: string;
-  dateTime: Date;
-  memberId: number;
-  roomId: number;
-  sender: string;
-  messageType: 'JOIN' | 'CHAT' | 'LEAVE';
-};
+import { ChatMessage } from '@type/entity/chat';
+
+import ProfileImage from '@assets/images/Chat/ProfileImage.svg';
 
 interface MessageBoxComponentProps {
-  message: any;
-  memberId: number;
+  message: ChatMessage;
+  openUserInfoModal: () => void;
 }
 
 export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
   message,
-  memberId,
+  openUserInfoModal,
 }) => {
-  // 타입 추가
+  if (message.messageType === 'JOIN') {
+    return (
+      <View className="my-4 flex-row items-center">
+        <View className="h-[1px] flex-1 bg-gray-200" />
+        <Text className="mx-2 text-[12px] font-normal text-gray-700">
+          {message.sender}님이 매칭팟에 들어왔어요!
+        </Text>
+        <View className="h-[1px] flex-1 bg-gray-200" />
+      </View>
+    );
+  }
+
+  if (message.messageType === 'LEAVE') {
+    return (
+      <View className="my-4 flex-row items-center">
+        <View className="h-[1px] flex-1 bg-gray-200" />
+        <Text className="mx-2 text-[12px] font-normal text-gray-700">
+          {message.sender}님이 매칭팟에서 퇴장했어요!
+        </Text>
+        <View className="h-[1px] flex-1 bg-gray-200" />
+      </View>
+    );
+  }
+
   if (message.messageType === 'CHAT') {
-    if (message.memberId === memberId) {
+    if (message.memberId === 123) {
       return (
-        <View className="mt-2 items-end">
-          <View className="flex-row">
-            {/* 이름 + 채팅 */}
-            <View className="mr-2 flex-col">
-              {/* 이름 */}
-              <View className="items-end">
-                <Text>{message.sender}</Text>
-              </View>
+        <View className="my-4 flex-row">
+          <View className="mr-1 flex-1 flex-col items-end justify-end ">
+            <Text className="text-[10px]">2</Text>
+            <Text className="text-[10px] text-gray-300">
+              {dayjs(message.dateTime).format('HH:MM')}
+            </Text>
+          </View>
 
-              {/* 채팅 */}
-              <View className="rounded-xl border-2 p-2 ">
-                <Text className="">{message.content}</Text>
-              </View>
+          {/* 메세지 */}
+          <View className="max-w-[260px] rounded-2xl bg-main px-4 py-3">
+            <View className="">
+              <Text className="font-medium text-white">{message.content}</Text>
             </View>
-
-            {/* 프로필 이미지 */}
-            <View className="size-10 rounded-full border-2 p-2"></View>
           </View>
         </View>
       );
     } else {
       return (
-        <View className="mt-2 items-start ">
-          <View className="flex-row">
-            {/* 프로필 이미지 */}
-            <View className="size-10 rounded-full border-2 p-2"></View>
+        <View className="my-4 flex-col">
+          <Pressable className="flex-row items-center" onPress={openUserInfoModal}>
+            <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
+              <ProfileImage className="" />
+            </View>
 
-            {/* 이름 + 채팅 */}
-            <View className="ml-2 flex-col">
-              {/* 이름 */}
-              <View>
-                <Text>{message.sender}</Text>
-              </View>
+            <View>
+              <Text>{message.sender}</Text>
+            </View>
+          </Pressable>
 
-              {/* 채팅 */}
-              <View className="rounded-xl border-2 p-2 ">
-                <Text className="">{message.content}</Text>
+          <View className="ml-4 mt-2 flex-row">
+            {/* 메세지 */}
+            <View className="max-w-[260px] rounded-2xl bg-white px-4 py-3">
+              <View className="">
+                <Text className="font-medium  text-black">{message.content}</Text>
               </View>
+            </View>
+
+            <View className="ml-1 flex-1 flex-col items-start justify-end">
+              <Text className="text-[10px]">2</Text>
+              <Text className="text-[10px] text-gray-300">
+                {dayjs(message.dateTime).format('HH:MM')}
+              </Text>
             </View>
           </View>
         </View>
       );
     }
-  } else {
-    return (
-      <View className="items-center">
-        <View className=" m-2 rounded-xl border-2 p-2">
-          <Text className="">{message.content}</Text>
-        </View>
-      </View>
-    );
   }
+
+  return <View></View>;
 };

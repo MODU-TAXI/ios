@@ -12,7 +12,6 @@ import { useAccessToken } from '@hooks/token';
 
 import { InfoToastMessage } from '@utils/toastMessage';
 
-
 Object.assign('global', {
   TextEncoder: TextEncodingPolyfill.TextEncoder,
   TextDecoder: TextEncodingPolyfill.TextDecoder,
@@ -89,15 +88,11 @@ export function ChatProvider({ children }: any) {
       stompClient.current.activate();
 
       stompClient.current.onConnect = () => {
-        stompClient.current.subscribe(
-          `/sub/chat/${roomId}`,
-          onMessageReceived,
-          {
-            headers: {
-              token: accessToken,
-            },
+        stompClient.current.subscribe(`/sub/chat/${roomId}`, onMessageReceived, {
+          headers: {
+            token: accessToken,
           },
-        );
+        });
       };
 
       stompClient.current.onStompError = (error: any) => {
@@ -149,7 +144,5 @@ export function ChatProvider({ children }: any) {
     sendMessage,
   };
 
-  return (
-    <ChatContext.Provider value={handlers}>{children}</ChatContext.Provider>
-  );
+  return <ChatContext.Provider value={handlers}>{children}</ChatContext.Provider>;
 }
