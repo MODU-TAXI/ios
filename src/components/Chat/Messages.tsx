@@ -10,6 +10,7 @@ import { useGetMessages } from '@hooks/api/chat';
 
 interface MessagesComponentProps {
   roomId: number;
+  openUserInfoModal: () => void;
 }
 
 const tempMessages = [
@@ -105,7 +106,7 @@ const tempMessages = [
   },
 ];
 
-const MessagesComponent: React.FC<MessagesComponentProps> = ({ roomId }) => {
+const MessagesComponent: React.FC<MessagesComponentProps> = ({ roomId, openUserInfoModal }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const { messages } = useGetMessages(roomId);
   const [newMessages] = useRecoilState(messagesState);
@@ -140,10 +141,17 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({ roomId }) => {
         }
       }}
     >
-      {tempMessages.map((chat, index) => (
-        <View key={index}>
+      {messages.messages.map((chat, index) => (
+        <View key={index} className="px-2">
           {/* 말풍선 */}
-          <MessageBoxComponent message={chat} memberId={1} />
+          <MessageBoxComponent message={chat} openUserInfoModal={openUserInfoModal} />
+        </View>
+      ))}
+
+      {newMessages.map((chat, index) => (
+        <View key={index} className="px-2">
+          {/* 말풍선 */}
+          <MessageBoxComponent message={chat} openUserInfoModal={openUserInfoModal} />
         </View>
       ))}
     </ScrollView>
@@ -151,17 +159,3 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({ roomId }) => {
 };
 
 export default MessagesComponent;
-
-// {messages.messages.map((chat, index) => (
-//   <View key={index} className="px-2">
-//     {/* 말풍선 */}
-//     <MessageBoxComponent message={chat} memberId={1} />
-//   </View>
-// ))}
-
-// {newMessages.map((chat, index) => (
-//   <View key={index} className="px-2">
-//     {/* 말풍선 */}
-//     <MessageBoxComponent message={chat} memberId={1} />
-//   </View>
-// ))}

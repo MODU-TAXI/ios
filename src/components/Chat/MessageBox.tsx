@@ -1,6 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 
 import { ChatMessage } from '@type/entity/chat';
 
@@ -8,10 +8,13 @@ import ProfileImage from '@assets/images/Chat/ProfileImage.svg';
 
 interface MessageBoxComponentProps {
   message: ChatMessage;
-  memberId: number;
+  openUserInfoModal: () => void;
 }
 
-export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({ message, memberId }) => {
+export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
+  message,
+  openUserInfoModal,
+}) => {
   if (message.messageType === 'JOIN') {
     return (
       <View className="my-4 flex-row items-center">
@@ -58,7 +61,7 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({ messag
     } else {
       return (
         <View className="my-4 flex-col">
-          <View className="flex-row items-center">
+          <Pressable className="flex-row items-center" onPress={openUserInfoModal}>
             <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
               <ProfileImage className="" />
             </View>
@@ -66,7 +69,7 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({ messag
             <View>
               <Text>{message.sender}</Text>
             </View>
-          </View>
+          </Pressable>
 
           <View className="ml-4 mt-2 flex-row">
             {/* 메세지 */}

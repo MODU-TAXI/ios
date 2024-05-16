@@ -24,7 +24,7 @@ const MessageInputBoxComponent: React.FC = () => {
   // 채팅 보내기
   const send = () => {
     if (inputMessage !== '') {
-      // sendMessage(inputMessage);
+      sendMessage(inputMessage);
       setInputMessage('');
 
       //   if (scrollViewRef.current) {
