@@ -1,26 +1,16 @@
 import React from 'react';
-import { Text, Pressable } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useChatContext } from 'src/providers/chatProvider';
-
-import { deleteMyChatInfo } from '@server/api/chat';
+import EtcComponent from '@components/Home/Etc';
+import TopComponent from '@components/Home/Top';
+import MiddleComponent from '@components/Home/Middle';
+import PartiesComponent from '@components/Home/Parties';
+import InputBoxComponent from '@components/Home/InputBox';
 
 import { HomeScreenProps } from '@type/param/loginStack';
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
-  const { disConnect } = useChatContext();
-
-  const chatOut = async () => {
-    disConnect();
-    await deleteMyChatInfo();
-  };
-
-  // const toRoomScreen = () => {
-  //   navigation.navigate('RoomDetailScreen', { roomId: 55 });
-  // };
-
   const toCreateRoomScreen = () => {
     navigation.navigate('CreateRoomScreen');
   };
@@ -33,66 +23,30 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('SearchScreen');
   };
 
-  // const toChatRoomScreen = async () => {
-  //   navigation.navigate('ChatRoomScreen', { roomId: 55 });
-  // };
-
-  const toTestScreen = async () => {
-    navigation.navigate('TestScreen');
-  };
-
   return (
-    <SafeAreaView className="flex-1">
-      <ScrollView className="flex-col">
-        {/* <Pressable
-          onPress={toRoomScreen}
-          className="m-5  h-20 items-center justify-center rounded-md bg-gray-300"
-        >
-          <Text>매칭 스크린</Text>
-        </Pressable> */}
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="flex-col px-4">
+        {/* 로고, 알림 */}
+        <TopComponent />
 
-        <Pressable
-          onPress={toCreateRoomScreen}
-          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
-        >
-          <Text>매칭 생성스크린</Text>
-        </Pressable>
+        {/* 이름 */}
+        <View className="mt-2 flex-row items-center">
+          <Text className="text-[20px]">반가워요,</Text>
+          <Text className="text-[20px] font-semibold">정현님!</Text>
+        </View>
 
-        <Pressable
-          onPress={toMapScreen}
-          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
-        >
-          <Text>맵 스크린</Text>
-        </Pressable>
+        {/* 검색 */}
+        <InputBoxComponent toSearchScreen={toSearchScreen} />
 
-        <Pressable
-          onPress={toSearchScreen}
-          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
-        >
-          <Text>검색 스크린</Text>
-        </Pressable>
+        {/* 지도, 택시팟 */}
+        <MiddleComponent toMapScreen={toMapScreen} toCreateRoomScreen={toCreateRoomScreen} />
 
-        {/* <Pressable
-          onPress={toChatRoomScreen}
-          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
-        >
-          <Text>채팅 스크린</Text>
-        </Pressable> */}
+        {/* 실시간 택시팟 */}
+        <PartiesComponent />
 
-        <Pressable
-          onPress={chatOut}
-          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
-        >
-          <Text>채팅방 나가기</Text>
-        </Pressable>
-
-        <Pressable
-          onPress={toTestScreen}
-          className=" m-5 h-20 items-center justify-center rounded-md bg-gray-300"
-        >
-          <Text>테스트방</Text>
-        </Pressable>
-      </ScrollView>
+        {/* 기타 */}
+        <EtcComponent />
+      </View>
     </SafeAreaView>
   );
 };
