@@ -1,10 +1,10 @@
-import { useRecoilState } from 'recoil';
 import Config from 'react-native-config';
 import TextEncodingPolyfill from 'text-encoding';
 import StompJs, { Message } from '@stomp/stompjs';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import React, { useRef, useEffect, useContext, createContext } from 'react';
 
-import { roomState, chatInState, messagesState } from '@recoil/recoil';
+import { roomState, chatInState, messagesState, memberIdState } from '@recoil/recoil';
 
 import { getMyChatInfo } from '@server/api/chat';
 
@@ -38,20 +38,20 @@ export const useChatContext = () => useContext(ChatContext);
 
 export function ChatProvider({ children }: any) {
   const stompClient = useRef<any>({});
-  const [chatIn] = useRecoilState(chatInState);
+  const chatIn = useRecoilValue(chatInState);
   const [, setMessages] = useRecoilState(messagesState);
   const [roomId, setRoomId] = useRecoilState(roomState);
+  const [, setMemberId] = useRecoilState(memberIdState);
   const [accessToken] = useAccessToken();
 
   // 내가 접속하고 있는 방이 있는지 여부 확인
   useEffect(() => {
     (async () => {
       const response = await getMyChatInfo();
-      const { roomId } = response;
-
-      console.log('너', roomId, '번 방에있어');
+      const { roomId, memberId } = response;
 
       setRoomId(roomId);
+      setMemberId(memberId);
     })();
   }, []);
 
