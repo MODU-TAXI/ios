@@ -43,11 +43,11 @@ const MessageInputBoxComponent: React.FC = () => {
     <Pressable
       onPress={focusTextInput}
       style={styles.shadow}
-      className="mx-[23px] mb-8 flex-row items-center rounded-3xl bg-white px-4 py-3"
+      className="relative mx-[23px] mb-8 flex-row items-center rounded-3xl bg-white px-4 py-3"
     >
       <Camera className="mr-4" />
 
-      <View className="mr-2 flex-1">
+      <View className="mr-8 flex-1">
         <TextInput
           ref={textInputRef}
           className="text-sm"
@@ -64,7 +64,9 @@ const MessageInputBoxComponent: React.FC = () => {
         />
       </View>
 
-      <SendButton onPress={send} />
+      <Pressable onPress={send} className="absolute right-0 p-3">
+        <SendButton />
+      </Pressable>
     </Pressable>
   );
 };
