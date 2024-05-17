@@ -32,15 +32,21 @@ import { calculateRadius, calculateCenter } from '@utils/map';
 
 import { MainMapScreenProps } from '@type/param/loginStack';
 
+import MapPin from '@assets/images/Map/MapPin.svg';
+import MapPinGray from '@assets/images/Map/MapPinGray.svg';
 import BackButton from '@assets/images/Header/BackButton.svg';
 import CloseButton from '@assets/images/Header/CloseButton.svg';
+import RefreshButton from '@assets/images/Map/refreshButton.svg';
 import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 
 
 const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   const insets = useSafeAreaInsets();
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const [isTouching, setIsTouching] = useState<boolean>(false);
   const mapRef = useRef<NaverMapViewRef>(null);
+  const buttonSizeRef = useRef<View>(null);
+  const [buttonWidth, setButtonWidth] = useState(0);
   const [keyword, setKeyword] = useState<string>('');
 
   // 화면의 어디에서 멈추는지 snap point
@@ -157,6 +163,15 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
     }, 1000);
   }, []);
 
+  /** 택시팟 버튼 width 계산 */
+  useEffect(() => {
+    if (buttonSizeRef.current) {
+      buttonSizeRef.current.measure((x, y, width, height) => {
+        setButtonWidth(width);
+      });
+    }
+  }, [buttonSizeRef.current])
+
   /** 현재위치 이동 버튼 */
   const moveToCurrentLocation = async() => {
     let currentLocation: Camera = {
@@ -198,8 +213,13 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   return (
     // 지도가 화면 전체를 포함하기 위한 마진 설정
     <View className="flex-1 items-center bg-white" style={{ marginTop: 0 }}>
+
       {/** 지도 */}
-      <View className="mb-[320px] h-auto w-[99%] flex-1">
+      <Pressable
+        className="mb-[85%] h-auto w-full flex-1"
+        onPressIn={() => setIsTouching(true)}
+        onPressOut={() => setIsTouching(false)}
+      >
         {currentCamera && (
           <NaverMapView
             ref={mapRef}
@@ -210,10 +230,12 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
             locale="ko"
             isShowLocationButton={false}
             isShowScaleBar={false}
-            logoAlign="BottomRight"
+            logoAlign="BottomLeft"
             //logoMargin={{ bottom: 40 }}
           >
-            <NaverMapMarkerOverlay
+
+            {/** 현재 탐색 지점 마커 및 범위 */}
+            {/* <NaverMapMarkerOverlay
               latitude={currentCamera.latitude}
               longitude={currentCamera.longitude}
             />
@@ -222,7 +244,8 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
               longitude={currentCamera.longitude}
               radius={radius}
               color={'rgba(64, 206, 172, 0.24)'}
-            />
+            /> */}
+
             {rooms &&
               rooms.map((room) => (
                 /** 매칭방 하나의 마커 */
@@ -241,7 +264,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
               ))}
           </NaverMapView>
         )}
-      </View>
+      </Pressable>
 
       {/** 검색창 */}
       <View
@@ -258,20 +281,46 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         </Pressable>
       </View>
 
-      <View className="absolute left-1/4 top-[52%] flex flex-row">
-        {/** 카풀팟 생성 버튼 */}
+      {/** 중앙 마커 */}
+      <View 
+        className="absolute left-1/2 top-1/3"
+      >
+        {!isTouching ? (
+          <View className="-translate-x-6 -translate-y-6">
+            <MapPin width={48} height={48} />
+          </View>
+        ) : (
+          <View className="-translate-x-6 -translate-y-7">
+            <MapPinGray width={48} height={52} />
+          </View>
+        )}
+      </View>
+
+      {/** 택시팟 생성, 현재위치, 새로고침 버튼 */}
+      <View 
+        className="absolute left-1/2 top-[52%] flex flex-row"
+        style={{
+          transform: [{ translateX: -(buttonWidth/2) }],
+        }}
+      >
         <Pressable
+          ref={buttonSizeRef}
           onPress={toCreateRoomScreen}
         >
           <CreateRoomButtonComponent />
         </Pressable>
         
-        {/** 현재위치 버튼 */}
         <Pressable
-          className='ml-2 flex-1'
+          className='ml-2'
           onPress={moveToCurrentLocation}
         >
           <CurrentLocationButton />
+        </Pressable>
+
+        <Pressable
+          onPress={() => refetch()}
+        >
+          <RefreshButton />
         </Pressable>
       </View>
 

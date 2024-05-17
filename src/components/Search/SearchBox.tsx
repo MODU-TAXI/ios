@@ -1,3 +1,4 @@
+import { useRecoilState } from 'recoil';
 import { useNavigation } from '@react-navigation/native';
 import React, { useRef, useState, useEffect } from 'react';
 import {
@@ -9,20 +10,17 @@ import {
   TextInputChangeEventData,
 } from 'react-native';
 
+import { searchKeywordState } from '@recoil/recoil';
+
 import { useNaverSearch } from '@hooks/api/search';
 
 import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
 
-
-interface SearchBoxProps {
-  value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
-}
-
 /** 검색 바 */
-const SearchBoxComponent: React.FC<SearchBoxProps> = ({ value, setValue }) => {
+const SearchBoxComponent = () => {
   // focusing ref
   const inputRef = React.useRef<TextInput>(null);
+  const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
 
   const navigate = useNavigation();
 
@@ -30,7 +28,7 @@ const SearchBoxComponent: React.FC<SearchBoxProps> = ({ value, setValue }) => {
   const valueHandleChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
-    setValue(e.nativeEvent.text);
+    setKeyword(e.nativeEvent.text);
   };
 
   // 검색창 클릭 시에도 focusing
@@ -57,7 +55,7 @@ const SearchBoxComponent: React.FC<SearchBoxProps> = ({ value, setValue }) => {
         <View className="mb-1 flex-col justify-center">
           <TextInput
             ref={inputRef}
-            value={value}
+            value={keyword}
             onChange={valueHandleChange}
             className="text-base"
             placeholder="도착지를 검색해주세요"

@@ -60,3 +60,9 @@ export const messagesState = atom<MessageBody[]>({
   key: 'messages',
   default: [],
 });
+
+// 검색어 관리
+export const searchKeywordState = atom<string>({
+    key: 'searchKeyword',
+    default: '',
+});

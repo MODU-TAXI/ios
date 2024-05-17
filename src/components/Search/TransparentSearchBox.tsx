@@ -1,10 +1,9 @@
 import { useRecoilValue } from 'recoil';
-import React, { useRef, useState, useEffect } from 'react';
 import {
   Text,
   View,
-  Pressable,
 } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
 
 import { SignUpUser } from '@recoil/type';
 import { signUpUserState } from '@recoil/recoil';
@@ -13,7 +12,7 @@ import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.sv
 
 /** 검색 바 */
 const TransparentSearchBoxComponent = () => {
-    const signUpUser = useRecoilValue<SignUpUser>(signUpUserState);
+  const signUpUser = useRecoilValue<SignUpUser>(signUpUserState);
 
   return (
     <View className="mx-4 flex flex-row">
