@@ -79,20 +79,6 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
     setIsFullSnap(false);
   }, []);
 
-  /** handle rendering (보류) */
-  // const animatedHeaderStyle = useAnimatedStyle(() => {
-  //   const opacity = interpolate(
-  //     snapIndex,
-  //     [0, 3], // BottomSheet 인덱스가 0에서 1로 변경될 때
-  //     [0, 100], // 헤더의 투명도를 0에서 1로 변경
-  //     Extrapolation.CLAMP // 값이 정의된 범위를 벗어나지 않도록 함
-  //   );
-
-  //   return {
-  //     opacity,
-  //   };
-  // }, [snapIndex]); // bottomSheetIndex가 변경될 때마다 다시 계산
-
   // 현재 카메라 중심좌표 저장, 초기값 인하대 후문
   const [currentCamera, setCurrentCamera] = useState<Camera>({
     latitude: 37.451062,
