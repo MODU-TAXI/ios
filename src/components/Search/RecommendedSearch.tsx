@@ -9,15 +9,13 @@ interface RecommendedSearchProps {
   distance: number;
 }
 
-/** 최근 검색어 컴포넌트 */
+/** 추천 검색어 컴포넌트 */
 const RecommendedSearchComponent: React.FC<RecommendedSearchProps> = ({
   keyword,
   fullKeyword,
   address,
   distance,
 }) => {
-  const restKeyword = fullKeyword.replace(/<\/?b>/g, "");
-
   // 키워드가 포함된 부분을 찾아서 하이라이트 처리
   const highlightKeyword = (text: string, keyword: string) => {
     const parts = text.split(new RegExp(`(${keyword})`, 'gi'));
@@ -39,7 +37,7 @@ const RecommendedSearchComponent: React.FC<RecommendedSearchProps> = ({
         <View className='ml-2 flex flex-col'>
 
             <View className='mb-1 flex flex-row items-center'>
-              {highlightKeyword(restKeyword, keyword) }
+              {highlightKeyword(fullKeyword, keyword) }
             </View>
 
             <View className='flex w-full flex-row'>

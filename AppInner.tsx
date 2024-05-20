@@ -7,6 +7,7 @@ import MainScreen from 'src/screens/main/Main';
 import AlarmScreen from 'src/screens/alarm/alarm';
 import { ChatProvider } from 'src/providers/chatProvider';
 import RegisterNicknameScreen from 'src/screens/signUp/RegisterNickname';
+import DepartureMapScreen from 'src/screens/map/departureMap';
 
 import TestScreen from './src/screens/test';
 import HomeScreen from './src/screens/home/Home';
@@ -62,6 +63,7 @@ function AppInner() {
         <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
         <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
         <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
+        <LogInStack.Screen name="DepartureMapScreen" component={DepartureMapScreen} />
         <LogInStack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
         <LogInStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
         <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />

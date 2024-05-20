@@ -1,5 +1,5 @@
-import { View } from 'react-native';
 import { useRecoilState } from 'recoil';
+import { View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,9 +12,12 @@ import { searchKeywordState } from '@recoil/recoil';
 
 import { useNaverSearch } from '@hooks/api/search';
 
-import { NaverSearch } from '@type/entity/search';
+import { deleteTagTitle } from '@utils/search';
 
-const SearchScreen = () => {
+import { NaverSearch } from '@type/entity/search';
+import { SearchScreenProps } from '@type/param/loginStack';
+
+const SearchScreen = ({ navigation }: SearchScreenProps) => {
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
   const { data: items, refetch } = useNaverSearch(keyword);
@@ -26,6 +29,19 @@ const SearchScreen = () => {
   useEffect(() => {
     console.log(items);
   }, [items])
+
+  /** 선택한 검색어를 전달하며 이동 */
+  const toDepartureMapScreen = (
+    title: string,
+    latitude: number,
+    longitude: number,
+  ) => {
+    navigation.navigate('DepartureMapScreen', {
+      title: title,
+      latitude: latitude,
+      longitude: longitude,
+    });
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -44,13 +60,21 @@ const SearchScreen = () => {
         <View className="flex-1">
           {items && 
           items.map((item, index) => (
-            <RecommendedSearchComponent 
-              key={index}
-              keyword={keyword}
-              fullKeyword={item.title}
-              address={item.address} 
-              distance={500}
-            />
+            <Pressable
+              onPress={() => toDepartureMapScreen(
+                deleteTagTitle(item.title),
+                item.mapx,
+                item.mapy,
+              )}
+            >
+              <RecommendedSearchComponent 
+                key={index}
+                keyword={keyword}
+                fullKeyword={deleteTagTitle(item.title)}
+                address={item.address} 
+                distance={500}
+              />
+            </Pressable>
           ))}
 
         </View>
