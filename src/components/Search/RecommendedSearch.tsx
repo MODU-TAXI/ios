@@ -25,9 +25,9 @@ const RecommendedSearchComponent: React.FC<RecommendedSearchProps> = ({
       <>
         {parts.map((part, index) => (
           part.toLowerCase() === keyword.toLowerCase() ? (
-            <Text key={index} className='text-[16px] font-medium text-main'>{part}</Text>
+            <Text key={index} className='text-[16px] font-medium text-main' numberOfLines={1} ellipsizeMode='tail'>{part}</Text>
           ) : (
-            <Text key={index} className='text-[16px] font-medium text-gray800'>{part}</Text>
+            <Text key={index} className='text-[16px] font-medium text-gray800' numberOfLines={1} ellipsizeMode='tail'>{part}</Text>
           )
         ))}
       </>
@@ -35,16 +35,22 @@ const RecommendedSearchComponent: React.FC<RecommendedSearchProps> = ({
   };
 
   return (
-    <View className="flex flex-row items-center border-b border-gray100 py-3">
+    <View className="flex flex-row items-center border-t border-gray100 py-3">
         <View className='ml-2 flex flex-col'>
 
             <View className='mb-1 flex flex-row items-center'>
               {highlightKeyword(restKeyword, keyword) }
             </View>
 
-            <View className='flex w-full flex-row justify-between'>
-                <Text className="text-sm text-gray600">{address}</Text>
-                <Text className="text-sm text-gray600">{distance}m</Text>
+            <View className='flex w-full flex-row'>
+                <Text 
+                  className="w-4/5 text-left text-sm text-gray600"
+                  numberOfLines={1}
+                  ellipsizeMode='tail'
+                >
+                  {address}
+                </Text>
+                <Text className="w-1/5 text-right text-sm text-gray600">{distance}m</Text>
             </View>
         </View>
     </View>

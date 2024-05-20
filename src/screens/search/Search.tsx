@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SearchBoxComponent from '@components/Search/SearchBox';
+import SpotSearchComponent from '@components/Search/SpotSearch';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 
 import { searchKeywordState } from '@recoil/recoil';
@@ -34,6 +35,10 @@ const SearchScreen = () => {
         <View className="mb-3 mt-2">
           <SearchBoxComponent />
         </View>
+
+        {keyword && (
+          <SpotSearchComponent spotName={keyword} />
+        )}
 
         {/** 추천 검색어 */}
         <View className="flex-1">
