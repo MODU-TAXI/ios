@@ -177,7 +177,7 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
           </View>
         </View>
 
-        {!roomDetail.myRoom ? (
+        {roomDetail.myRoom ? (
           <View>
             <View className="mx-5 mt-[78px]">
               <ButtonComponent
