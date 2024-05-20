@@ -79,7 +79,7 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
 
           <View className="ml-4 mt-2 flex-row">
             {/* 메세지 */}
-            <View className="max-w-[260px] rounded-r-2xl bg-white px-4 py-3">
+            <View className="max-w-[260px] rounded-r-2xl rounded-bl-2xl bg-white px-4 py-3">
               <View className="">
                 <Text className="font-medium  text-black">{message.content}</Text>
               </View>

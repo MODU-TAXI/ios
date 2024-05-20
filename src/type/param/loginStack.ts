@@ -2,7 +2,14 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { RoomDetail } from '@type/entity/room';
 
+export type TabNavigatorParamList = {
+  HomeScreen: undefined;
+  MainMapScreen: undefined;
+  MyPageScreen: undefined;
+};
+
 export type LoginStackParamList = {
+  MainScreen: undefined;
   HomeScreen: undefined;
   MainMapScreen: undefined;
   NaverMapScreen: undefined;
