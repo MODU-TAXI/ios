@@ -36,11 +36,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
     latitude: number,
     longitude: number,
   ) => {
-    navigation.navigate('DepartureMapScreen', {
-      title: title,
-      latitude: latitude,
-      longitude: longitude,
-    });
+    navigation.navigate('DepartureMapScreen');
   }
 
   return (

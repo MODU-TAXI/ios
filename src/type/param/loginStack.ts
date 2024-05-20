@@ -14,11 +14,7 @@ export type LoginStackParamList = {
   MainMapScreen: undefined;
   NaverMapScreen: undefined;
   SearchScreen: undefined;
-  DepartureMapScreen: { 
-    title: string,
-    latitude: number,
-    longitude: number,
-  };
+  DepartureMapScreen: undefined;
   CreateRoomScreen: undefined;
   RoomDetailScreen: { roomId: number };
   PatchRoomScreen: { roomDetail: RoomDetail };

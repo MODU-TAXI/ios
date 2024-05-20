@@ -91,9 +91,9 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   };
 
   // TODO : 서버 연동 시 검색한 거점명 받아서 start, destination 저장 비동기 처리
-  /** 출발지 선택시 검색창 오픈 */
+  /** 출발지 선택시 지도 스크린 오픈 */
   const handleStart = () => {
-    navigation.navigate('SearchScreen');
+    navigation.navigate('DepartureMapScreen');
     setStart('인하대학교 후문');
   };
 
