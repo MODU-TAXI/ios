@@ -20,6 +20,7 @@
     "@react-native-firebase/app": "^19.2.2",
     "@react-native-firebase/messaging": "^19.2.2",
     "@react-native-seoul/kakao-login": "^5.3.1",
+    "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.14",
     "@react-navigation/native-stack": "^6.9.22",
     "@sentry/react-native": "^5.22.0",

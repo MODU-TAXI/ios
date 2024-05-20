@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 import Search from '@assets/images/Home/Search.svg';
@@ -12,15 +12,13 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({ toSearchScreen })
   return (
     <Pressable
       onPress={toSearchScreen}
-      className="mt-2 flex-row rounded-xl border-2 border-[#E2E2E2] py-2 pr-6"
+      className="mt-2 flex flex-row items-center rounded-xl border-2 border-[#E2E2E2] py-2 pr-6"
     >
       <Search className="ml-3 mr-1" />
 
-      <TextInput
-        placeholder="오늘 우리 어디로 떠날까요?"
-        className="text-normal"
-        placeholderTextColor="#9C9C9C"
-      />
+      <View>
+        <Text className="text-[16px] text-[#9C9C9C]">오늘 우리 어디로 떠날까요?</Text>
+      </View>
     </Pressable>
   );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import EtcComponent from '@components/Home/Etc';
@@ -25,7 +26,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-col px-4">
+      <ScrollView className="flex-col px-4">
         {/* 로고, 알림 */}
         <TopComponent />
 
@@ -46,7 +47,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
         {/* 기타 */}
         <EtcComponent />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

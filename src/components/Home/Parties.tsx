@@ -48,7 +48,7 @@ const PartiesComponent: React.FC = () => {
 
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className="mt-2">
         {parties.map((party) => (
-          <PartyComponent />
+          <PartyComponent key={party.id} />
         ))}
       </ScrollView>
     </View>

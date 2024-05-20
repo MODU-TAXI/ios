@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 
-import Car from '@assets/images/Home/Car.svg';
-import Map from '@assets/images/Home/Map.svg';
+import Taxi from '@assets/images/Home/Taxi.svg';
+import Road from '@assets/images/Home/Road.svg';
 
 interface MiddleComponentProps {
   toMapScreen: () => void;
@@ -18,7 +18,8 @@ const MiddleComponent: React.FC<MiddleComponentProps> = ({ toMapScreen, toCreate
         </View>
 
         <Pressable onPress={toMapScreen} className="h-[162px] w-[162px]">
-          <Car />
+          <Road />
+          {/* <Taxi className="absolute" /> */}
         </Pressable>
       </View>
 
@@ -28,7 +29,7 @@ const MiddleComponent: React.FC<MiddleComponentProps> = ({ toMapScreen, toCreate
         </View>
 
         <Pressable onPress={toCreateRoomScreen}>
-          <Car />
+          <Road />
         </Pressable>
       </View>
     </View>
