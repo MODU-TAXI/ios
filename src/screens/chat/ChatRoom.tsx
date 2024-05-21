@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import TextEncodingPolyfill from 'text-encoding';
+import { KeyboardAvoidingView } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, View, Modal, Pressable, KeyboardAvoidingView } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import MessagesComponent from '@components/Chat/Messages';
@@ -46,13 +46,13 @@ const ChatRoomScreen = ({ route }: ChatRoomScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white " edges={['top', 'left', 'right']}>
+    <SafeAreaView className="flex-1 bg-white">
       <HeaderComponent title={'채팅 페이지'} claerMessages={claerMessages} />
 
       {/* 방 정보 Component */}
       <RoomInfoComponent roomDetail={roomDetail} />
 
-      <KeyboardAvoidingView className="flex-1 bg-gray-100" behavior="padding">
+      <KeyboardAvoidingView className="flex-1 bg-white" behavior="padding">
         {/* 메세지 Component */}
         <MessagesComponent
           roomId={roomDetail.roomId}
@@ -62,7 +62,7 @@ const ChatRoomScreen = ({ route }: ChatRoomScreenProps) => {
         />
 
         {/* 입력창 Component */}
-        <MessageInputBoxComponent />
+        <MessageInputBoxComponent setNewMeesages={setNewMeesages} />
       </KeyboardAvoidingView>
 
       {/* 유저 정보 modal */}

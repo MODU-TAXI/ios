@@ -16,13 +16,15 @@ interface RoomInfoComponentProps {
 const styles = StyleSheet.create({
   shadow: {
     shadowColor: 'rgba(150, 150, 150, 0.25)',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 1,
+    shadowRadius: 10,
   },
 });
 
 const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomDetail }) => {
   return (
-    <View className="bg-gray-100">
+    <View className="z-10 bg-white">
       <View style={styles.shadow} className="flex-col rounded-b-3xl bg-white px-4 py-6">
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center justify-center">

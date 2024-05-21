@@ -1,7 +1,5 @@
-import axios from 'axios';
-import React, { useEffect } from 'react';
-import Config from 'react-native-config';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React from 'react';
+import { useRecoilValue } from 'recoil';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { ChatProvider } from 'src/providers/chatProvider';
