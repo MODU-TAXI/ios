@@ -31,12 +31,11 @@ export const useNaverSearch = (
 export const useReverseGeocoding = (
   latitude: number,
   longitude: number,
-): UseQueryResult<NaverReverseGeocoding['results'], Error> => {
-  return useQuery({
-    queryKey: ['reverseGeocoding', latitude, longitude],
+): { results: NaverReverseGeocoding['results'] | undefined; refetch: () => void } => {
+  const { data: results, refetch } = useQuery({
+    queryKey: ['reverseGeocoding'],
     queryFn: async () => {
       const coords = `${longitude},${latitude}`;
-      
       const response: AxiosResponse<NaverReverseGeocoding> = await axios.get(
         `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc`, {
           params: {
@@ -52,8 +51,9 @@ export const useReverseGeocoding = (
           },
         }
       );
-      console.log(response.data.results[0].land)
+      // console.log(response.data.results[1])
       return response.data.results;
     }
-  })
+  });
+  return { results, refetch };
 }

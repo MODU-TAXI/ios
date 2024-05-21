@@ -82,6 +82,26 @@ export interface NaverReverseGeocoding {
       },
     },
     land: {
+      addition0: {
+        type: string,
+        value: string,
+      },
+      addition1: {
+        type: string,
+        value: string,
+      },
+      addition2: {
+        type: string,
+        value: string,
+      },
+      addition3: {
+        type: string,
+        value: string,
+      },
+      addition4: {
+        type: string,
+        value: string,
+      },
       type: string,
       name: string,
       number1: string,
@@ -93,18 +113,6 @@ export interface NaverReverseGeocoding {
           y: number
         }
       }
-    },
-    addition0: {
-      type: string,
-      value: string,
-    },
-    addition1: {
-      type: string,
-      value: string,
-    },
-    addition2: {
-      type: string,
-      value: string,
     },
   }[]
 }

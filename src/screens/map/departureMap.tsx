@@ -25,7 +25,10 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
     zoom: 16,
   });
 
-  const { data: results, refetch } = useReverseGeocoding(currentCamera.latitude, currentCamera.longitude);
+  const { results, refetch } = useReverseGeocoding(
+    currentCamera.latitude, 
+    currentCamera.longitude
+  );
   
   // 화면의 어디에서 멈추는지 snap point
   const snapPoints = useMemo(() => ['27%'], []);
@@ -44,7 +47,6 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
       (error) => console.error(error),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
     );
-    refetch();
   }, []);
 
   // timeout 정보 저장 Ref
@@ -65,10 +67,30 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
     });
 
     timeoutRef.current = setTimeout(() => {
-      // 방 다시 탐색
+      // 다시 탐색
       refetch();
-    }, 1000);
+      console.log(results)
+    }, 100);
   }, []);
+
+  const formatAddress = () => {
+    const area1 = results?.[0]?.region.area1.name;
+    const area2 = results?.[0]?.region.area2.name;
+    const landName = results?.[1]?.land.name;
+    const landNumber1 = results?.[1]?.land.number1;
+    const landNumber2 = results?.[1]?.land.number2;
+
+    let addressString = " ";
+
+    area1 && (addressString += area1);
+    area2 && (addressString += " " + area2);
+    landName && (addressString += " " + landName);
+    landNumber1 && (addressString += " " + landNumber1);
+    landNumber2 && (addressString += "-" + landNumber2);
+
+    console.log(addressString)
+    return addressString.trim();
+  }
 
   const toSearchScreen = () => {
     navigation.navigate('SearchScreen');
@@ -110,7 +132,7 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
 
       {/** 중앙 마커 */}
       <View 
-        className="absolute left-1/2 top-[42%]"
+        className="absolute left-1/2 top-1/2"
       >
         {!isTouching ? (
           <View className="-translate-x-6 -translate-y-6">
@@ -145,8 +167,12 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
         >
           <View className="flex-1 flex-col px-6 py-2">
             <Text className="mb-2 font-medium text-base text-boxFont">출발지</Text>
-            <Text className="text-lg font-semibold text-main">주안역</Text>
-            <Text className="text-gray600">인천 미추홀구 주안로 95-19</Text>
+            <Text className="text-lg font-semibold text-main">
+              {results && results[1]?.land.addition0.value ? results[1]?.land.addition0.value : "건물명 없음"}
+            </Text>
+            <Text className="text-gray600">
+              {formatAddress()}
+            </Text>
             <Pressable
               className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-main"
             >
