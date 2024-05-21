@@ -43,7 +43,7 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
 
   return (
     <ScrollView
-      className="bg-gray-100 px-4"
+      className="bg-white px-4"
       ref={scrollViewRef}
       contentContainerStyle={{ flexGrow: 1 }}
       keyboardShouldPersistTaps="handled"
