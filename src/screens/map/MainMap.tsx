@@ -83,7 +83,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   const [currentCamera, setCurrentCamera] = useState<Camera>({
     latitude: 37.451062,
     longitude: 126.656496,
-    zoom: 14,
+    zoom: 16,
   });
 
   // 현재 줌에서의 탐색 범위
@@ -105,7 +105,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         setCurrentCamera({
           latitude: adjustedLatitude,
           longitude: longitude,
-          zoom: 14,
+          zoom: 16,
         });
       },
       (error) => console.error(error),

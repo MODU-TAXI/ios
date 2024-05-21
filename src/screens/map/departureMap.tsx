@@ -1,11 +1,15 @@
 import { Text, View, Pressable } from "react-native";
-import React, { useMemo, useState, useEffect } from "react";
 import Geolocation from "@react-native-community/geolocation";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Camera, NaverMapView } from "@mj-studio/react-native-naver-map";
+import React, { useRef, useMemo, useState, useEffect, useCallback } from "react";
 
 import TransparentSearchBoxComponent from "@components/Search/TransparentSearchBox";
+
+import { useReverseGeocoding } from "@hooks/api/search";
+
+import { calculateCenter } from "@utils/map";
 
 import { DepartureMapScreenProps } from "@type/param/loginStack";
 
@@ -18,8 +22,11 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
   const [currentCamera, setCurrentCamera] = useState<Camera>({
     latitude: 37.451062,
     longitude: 126.656496,
-    zoom: 14,
+    zoom: 16,
   });
+
+  const { data: results, refetch } = useReverseGeocoding(currentCamera.latitude, currentCamera.longitude);
+  
   // 화면의 어디에서 멈추는지 snap point
   const snapPoints = useMemo(() => ['27%'], []);
 
@@ -28,16 +35,39 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
     Geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        const adjustedLatitude = latitude - 0.01;
         setCurrentCamera({
-          latitude: adjustedLatitude,
+          latitude: latitude,
           longitude: longitude,
-          zoom: 14,
+          zoom: 16,
         });
       },
       (error) => console.error(error),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
     );
+    refetch();
+  }, []);
+
+  // timeout 정보 저장 Ref
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  /** 카메라 이동시 1000ms 딜레이 주며 함수호출 */
+  const handleCameraChange = useCallback((e: Camera) => {
+    // timeout 시
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // 조정된 센터 저장
+    setCurrentCamera({
+      latitude: e.latitude,
+      longitude: e.longitude,
+      zoom: e.zoom,
+    });
+
+    timeoutRef.current = setTimeout(() => {
+      // 방 다시 탐색
+      refetch();
+    }, 1000);
   }, []);
 
   const toSearchScreen = () => {
@@ -59,6 +89,7 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
           isShowLocationButton={false}
           isShowScaleBar={false}
           logoAlign="BottomLeft"
+          onCameraChanged={handleCameraChange}
         />
       </Pressable>
 
