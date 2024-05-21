@@ -12,6 +12,7 @@ import {
   patchRoom,
   createRoom,
   deleteRoom,
+  getRoomList,
   getRoomDetail,
   getRoomMembers,
   approveJoinRoom,
@@ -22,6 +23,7 @@ import {
   JoinRoomResponse,
   PatchRoomResponse,
   CreateRoomResponse,
+  GetRoomListResponse,
   GetRoomDetailResponse,
   GetRoomMembersResponse,
   ApproveJoinRoomResponse,
@@ -32,7 +34,7 @@ import {
 import { translateCategory } from '@utils/room';
 import { InfoToastMessage, ErrorToastMessage } from '@utils/toastMessage';
 
-import { RoomDetail, RoomCurrentCamera } from '@type/entity/room';
+import { RoomList, RoomDetail, RoomCurrentCamera } from '@type/entity/room';
 
 // 방 생성
 export const useCreateRoom = (): UseMutationResult<
@@ -82,7 +84,7 @@ export const useGetRoom = (
       const convertedRoomTagBitMaskList = response.roomTagBitMaskList.map((roomTagBitMask) =>
         translateCategory(roomTagBitMask),
       );
-
+      console.log(response)
       return {
         managerId: response.managerId,
         roomId: response.roomId,
@@ -151,15 +153,41 @@ export const useGetRoomWaitingMembers = (
 
 // 원형 영역 방 조회
 export const useGetRoomCurrentCamera = (
-  longitude: number,
-  latitude: number,
-  radius: number,
+  searchLongitude: number,
+  searchLatitude: number,
+  radius?: number,
+  spotId?: number,
+  roomTags?: string[],
+  isImminent?: boolean
 ): { rooms: RoomCurrentCamera['rooms']; refetch: () => void } => {
   const { data: rooms, refetch } = useSuspenseQuery({
-    queryKey: [`/api/rooms/map?radius=${radius}&longitude=${longitude}&latitude=${latitude}`],
-    queryFn: () => getRoomCurrentCamera(longitude, latitude, radius),
+    queryKey: [`/api/rooms/map`, searchLongitude, searchLatitude, radius, spotId, roomTags, isImminent],
+    queryFn: () => getRoomCurrentCamera(searchLongitude, searchLatitude, radius, spotId, roomTags, isImminent),
     select: (response: GetRoomCurrentCameraResponse) => {
       return response.rooms;
+    },
+  });
+  console.log(rooms)
+  return { rooms, refetch };
+};
+
+// 경로를 제외한 방 리스트 조회
+export const useGetRoomList = (
+  page: number,
+  size: number,
+  searchLongitude: number,
+  searchLatitude: number,
+  spotId?: number,
+  radius?: number,
+  roomTags?: string[],
+  isImminent?: boolean,
+  sortType?: string,
+): { rooms: RoomList[]; refetch: () => void } => {
+  const { data: rooms, refetch } = useSuspenseQuery({
+    queryKey: [`/api/rooms/map`, page, size, searchLongitude, searchLatitude, spotId, radius, roomTags, isImminent, sortType],
+    queryFn: () => getRoomList(page, size, searchLongitude, searchLatitude, spotId, radius, roomTags, isImminent, sortType),
+    select: (response: GetRoomListResponse[]) => {
+      return response;
     },
   });
 

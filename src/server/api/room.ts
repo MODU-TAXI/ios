@@ -11,6 +11,7 @@ import {
   PatchRoomResponse,
   CreateRoomResponse,
   DeleteRoomResponse,
+  GetRoomListResponse,
   GetRoomDetailResponse,
   GetRoomMembersResponse,
   ApproveJoinRoomResponse,
@@ -44,17 +45,61 @@ export const deleteRoom = async (roomId: number): Promise<DeleteRoomResponse> =>
 
 // [원형 영역 내 방 조회] /api/rooms/map
 export const getRoomCurrentCamera = async (
-  longitude: number,
-  latitude: number,
+  searchLongitude: number,
+  searchLatitude: number,
   radius?: number,
   spotId?: number,
+  roomTags?: string[],
+  isImminent?: boolean
 ): Promise<GetRoomCurrentCameraResponse> => {
-  const response = await GetAxiosInstance<any>(
-    `/api/rooms/map?radius=${radius}&longitude=${longitude}&latitude=${latitude}`,
-  );
+  const params: any = {
+    searchLongitude: searchLongitude,
+    searchLatitude: searchLatitude,
+  };
+
+  radius && (params.radius = radius);
+  spotId && (params.spotId = spotId);
+  roomTags && (params.roomTags = roomTags);
+  isImminent && (params.isImminent = isImminent);
+
+  const response = await GetAxiosInstance<GetRoomCurrentCameraResponse>(`/api/rooms/map`, {
+    params: params,
+  });
 
   return response.data;
 };
+
+// [경로를 제외한 방 리스트 조회] /api/rooms/list
+export const getRoomList = async (
+  page: number,
+  size: number,
+  searchLongitude: number,
+  searchLatitude: number,
+  spotId?: number,
+  radius?: number,
+  roomTags?: string[],
+  isImminent?: boolean,
+  sortType?: string,
+): Promise<GetRoomListResponse[]> => {
+  const params: any = {
+    page: page,
+    size: size,
+    searchLongitude: searchLongitude,
+    searchLatitude: searchLatitude,
+  };
+
+  radius && (params.radius = radius);
+  spotId && (params.spotId = spotId);
+  roomTags && (params.roomTags = roomTags);
+  isImminent && (params.isImminent = isImminent);
+  sortType && (params.sortType = sortType);
+
+  const response = await GetAxiosInstance<GetRoomListResponse[]>(`/api/rooms/list`, {
+    params: params,
+  });
+
+  return response.data;
+}
 
 // [경로를 포함한 방 상세 정보 조회] /api/rooms/{id}
 export const getRoomDetail = async (id: number): Promise<GetRoomDetailResponse> => {
