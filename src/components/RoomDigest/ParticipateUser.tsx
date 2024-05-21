@@ -14,11 +14,11 @@ const ParticipateUserComponent: React.FC<ParticipateUserComponentProps> = ({ roo
     <View key={roomMember.memberId} className="mt-4 flex-row items-center justify-between">
       <View className="flex-row items-center">
         <UserBasicImage className="mr-1" />
-        <Text className="text-lg font-semibold">{roomMember.nickname}</Text>
-
+        <Text className="text-base font-normal">{roomMember.nickname}</Text>
         {roomMember.thisIsMe && (
           <Text className="ml-1 text-lg font-medium text-disabled2">(나)</Text>
         )}
+        
       </View>
     </View>
   );

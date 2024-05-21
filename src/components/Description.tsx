@@ -10,7 +10,7 @@ const DescriptionComponent: React.FC<DescriptionComponentProps> = ({
 }) => {
   return (
     <View>
-      <Text className="text-[20px] font-semibold">{description}</Text>
+      <Text className="text-[18px] font-semibold">{description}</Text>
     </View>
   );
 };

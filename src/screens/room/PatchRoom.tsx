@@ -7,7 +7,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import DatePickerComponent from '@components/DatePicker';
-import DottedLineComponent from '@components/DottedLine';
 import LoadingComponent from '@components/Common/Loading';
 import DescriptionComponent from '@components/Description';
 import CategoryComponent from '@components/Match/Category';
@@ -20,6 +19,7 @@ import { ErrorToastMessage } from '@utils/toastMessage';
 import { PatchRoomScreenProps } from '@type/param/loginStack';
 
 import EndCircle from '@assets/images/Match/EndCircle.svg';
+import DottedLine from '@assets/images/Match/DottedLine.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 import EndGrayCircle from '@assets/images/Match/EndGrayCircle.svg';
 import SelectedPerson1 from '@assets/images/Match/SelectedPerson1.svg';
@@ -150,9 +150,9 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
               )}
               <Pressable onPress={handleStart}>
                 {start ? (
-                  <Text className="ml-6 text-[20px] font-semibold text-gray900 ">{start}</Text>
+                  <Text className="ml-6 text-[16px] font-semibold text-gray900 ">{start}</Text>
                 ) : (
-                  <Text className="ml-6 text-[20px] font-semibold text-gray300 ">
+                  <Text className="ml-6 text-[16px] font-semibold text-gray300 ">
                     출발지를 선택해주세요
                   </Text>
                 )}
@@ -167,11 +167,11 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
 
               <Pressable onPress={handleEnd}>
                 {end ? (
-                  <Text className="ml-[31px] mt-2 text-[20px] font-semibold text-gray900 ">
+                  <Text className="ml-[31px] mt-2 text-[16px] font-semibold text-gray900 ">
                     {end}
                   </Text>
                 ) : (
-                  <Text className="ml-[31px] mt-2 text-[20px] font-semibold text-gray300 ">
+                  <Text className="ml-[31px] mt-2 text-[16px] font-semibold text-gray300 ">
                     도착지를 선택해주세요
                   </Text>
                 )}
@@ -181,7 +181,7 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
         </View>
 
         {/* 점선 */}
-        <DottedLineComponent />
+        <DottedLine width="100%" />
 
         {/* 출발시간설정 */}
         <View className="px-2 py-8">
@@ -199,7 +199,7 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
         </View>
 
         {/* 점선 */}
-        <DottedLineComponent />
+        <DottedLine width="100%" />
 
         {/* 탑승 인원 설정 */}
         <View className="px-2 py-8">
@@ -239,7 +239,7 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
         </View>
 
         {/* 점선 */}
-        <DottedLineComponent />
+        <DottedLine width="100%" />
 
         {/* 카테고리 선택 */}
         <View className="px-2 py-8">

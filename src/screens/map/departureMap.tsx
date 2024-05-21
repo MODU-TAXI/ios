@@ -21,7 +21,7 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
     zoom: 14,
   });
   // 화면의 어디에서 멈추는지 snap point
-  const snapPoints = useMemo(() => ['25%'], []);
+  const snapPoints = useMemo(() => ['27%'], []);
 
   // 처음 렌더링 시 현재위치
   useEffect(() => {
@@ -117,9 +117,9 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
             <Text className="text-lg font-semibold text-main">주안역</Text>
             <Text className="text-gray600">인천 미추홀구 주안로 95-19</Text>
             <Pressable
-              className="mt-4 flex w-full items-center justify-center rounded-full bg-main"
+              className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-main"
             >
-              <Text className="py-[15.5px] font-semibold text-white">출발지로 설정</Text>
+              <Text className="font-semibold text-white">출발지로 설정</Text>
             </Pressable>
           </View>
         </BottomSheetView>

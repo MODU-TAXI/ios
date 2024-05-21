@@ -9,7 +9,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useChatContext } from 'src/providers/chatProvider';
 
 import ButtonComponent from '@components/Button';
-import DottedLineComponent from '@components/DottedLine';
 import RoomMapComponent from '@components/RoomDigest/RoomMap';
 import RoomHeaderComponent from '@components/Home/RoomHeader';
 import UpdateModalComponent from '@components/RoomDigest/UpdateModal';
@@ -31,6 +30,7 @@ import {
 import { RoomDetailScreenProps } from '@type/param/loginStack';
 
 import EndCircle from '@assets/images/Match/EndCircle.svg';
+import DottedLine from '@assets/images/Match/DottedLine.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
 
 dayjs.locale('ko');
@@ -145,10 +145,10 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
               </View>
             </View>
 
-            <View className="my-2 ml-[6px] flex-row">
+            <View className="my-1 ml-[6px] flex-row">
               <View className="h-[46px] w-px bg-main" />
 
-              <Text className="ml-6 text-[20px] font-semibold">{roomDetail.departureName}</Text>
+              <Text className="ml-6 text-lg font-semibold">{roomDetail.departureName}</Text>
             </View>
 
             <View>
@@ -160,7 +160,7 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
                 </Text>
               </View>
 
-              <Text className="ml-[31px] mt-2 text-[20px] font-semibold">
+              <Text className="ml-[31px] mt-1 text-lg font-semibold">
                 {roomDetail.arrivalName}
               </Text>
             </View>
@@ -168,7 +168,7 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
         </View>
 
         {/* 점선 */}
-        <DottedLineComponent />
+        <DottedLine width="100%" />
 
         {/* 참여멤버 */}
         <ParticipateUsersComponent roomMembers={roomMembers.inList} />
@@ -180,20 +180,20 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
         />
 
         {/* 점선 */}
-        <DottedLineComponent />
+        <DottedLine width="100%" />
 
         {/* 금액 */}
-        <View className="py-8">
+        <View className="px-3 py-8">
           <View className="flex-row justify-between">
-            <Text className="text-lg font-medium text-disabled2">총액</Text>
-            <Text className="text-lg font-medium text-black">
+            <Text className="font-medium text-base text-disabled2">총액</Text>
+            <Text className="font-medium text-base text-black">
               {roomDetail.expectedCharge.toLocaleString('ko-KR')}원
             </Text>
           </View>
 
           <View className="mt-4 flex-row justify-between">
-            <Text className="text-lg font-medium text-disabled2">최소인원 매칭시</Text>
-            <Text className="text-lg font-medium text-black">
+            <Text className="font-medium text-base text-disabled2">최소인원 매칭시</Text>
+            <Text className="font-medium text-base text-black">
               {roomDetail.expectedChargePerPerson.toLocaleString('ko-KR')}원
             </Text>
           </View>

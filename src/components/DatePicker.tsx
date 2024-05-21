@@ -34,7 +34,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
             <Text className="font-medium text-base text-emphasized">
               {dayjs().format('YYYY년 MM월 DD일')}
             </Text>
-            <Text className="mt-1 text-lg font-semibold text-main">
+            <Text className="mt-1 font-semibold text-base text-main">
               {dayjs(date)
                 .format('A HH시 mm분')
                 .replace('AM', '오전')
@@ -57,7 +57,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
           <Text className="font-medium text-base text-emphasized">
             {dayjs().format('YYYY년 MM월 DD일')}
           </Text>
-          <Text className="mt-1 text-lg text-gray300">
+          <Text className="mt-1 text-base text-gray300">
             출발시간을 설정해주세요
           </Text>
         </Pressable>
