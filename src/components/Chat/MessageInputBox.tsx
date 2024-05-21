@@ -1,21 +1,21 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, Keyboard, TextInput, Pressable, StyleSheet } from 'react-native';
+import { SetterOrUpdater } from 'recoil';
+import React, { useRef, useState } from 'react';
+import { View, Alert, TextInput, Pressable } from 'react-native';
 
 import { useChatContext } from 'src/providers/chatProvider';
+
+import { MessageBody } from '@recoil/type';
+
+import { openAlbum, openCamera } from '@utils/image';
 
 import Plus from '@assets/images/Chat/Plus.svg';
 import SendButton from '@assets/images/Chat/SendButton.svg';
 
-const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: 'rgba(144, 144, 144, 0.25)',
-    shadowOffset: { width: 0, height: 2 }, // y-offset을 2로 설정
-    shadowOpacity: 1,
-    shadowRadius: 8,
-  },
-});
+interface MessageInputBoxComponentProps {
+  setNewMeesages: SetterOrUpdater<MessageBody[]>;
+}
 
-const MessageInputBoxComponent: React.FC = () => {
+const MessageInputBoxComponent: React.FC<MessageInputBoxComponentProps> = ({ setNewMeesages }) => {
   const { sendMessage } = useChatContext();
   const textInputRef = useRef<TextInput>(null);
 
@@ -33,9 +33,22 @@ const MessageInputBoxComponent: React.FC = () => {
     textInputRef.current?.focus();
   };
 
+  const selectImage = () => {
+    Alert.alert('뭘로 올릴래?', '선택해', [
+      {
+        text: '카메라로 찍기',
+        onPress: openCamera,
+      },
+      {
+        text: '앨범에서 선택',
+        onPress: openAlbum,
+      },
+    ]);
+  };
+
   return (
     <View className="flex-row items-center justify-center bg-white px-8 py-2">
-      <Pressable className="p-3">
+      <Pressable className="p-3" onPress={selectImage}>
         <Plus />
       </Pressable>
 

@@ -983,6 +983,10 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - react-native-image-picker (7.1.2):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - react-native-safe-area-context (4.9.0):
     - React-Core
   - React-nativeconfig (0.73.5)
@@ -1230,6 +1234,7 @@ DEPENDENCIES:
   - react-native-config (from `../node_modules/react-native-config`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1352,6 +1357,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-date-picker"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-nativeconfig:
@@ -1468,6 +1475,7 @@ SPEC CHECKSUMS:
   react-native-config: 7cd105e71d903104e8919261480858940a6b9c0e
   react-native-date-picker: 656d78c3f8a5e79bc1642b8d1c587ce10aab2195
   react-native-geolocation: fff5fb51dd294e845aa203c2e747958421425087
+  react-native-image-picker: 7c3a279e7a518628910f2ea02917bd3b90049465
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   React-nativeconfig: 78e2b14c0ee479449845b67bbe103343257cbcc0
   React-NativeModulesApple: 4fce13d416890352a7a9621427459fe738c4e79a

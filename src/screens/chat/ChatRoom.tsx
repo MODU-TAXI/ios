@@ -62,7 +62,7 @@ const ChatRoomScreen = ({ route }: ChatRoomScreenProps) => {
         />
 
         {/* 입력창 Component */}
-        <MessageInputBoxComponent />
+        <MessageInputBoxComponent setNewMeesages={setNewMeesages} />
       </KeyboardAvoidingView>
 
       {/* 유저 정보 modal */}
