@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
 import Config from 'react-native-config';
-import { Text, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -13,11 +12,20 @@ import { NavigationContainer } from '@react-navigation/native'; // 줄여쓰면 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // react-query v5 라이브러리
 import { RecoilRoot } from 'recoil'; // recoil 라이브러리
 
+import messaging from '@react-native-firebase/messaging';
+
+import LoadingComponent from '@components/Common/Loading';
+
+import { onMessageReceivedBackground } from '@utils/fcm';
+
 Sentry.init({
   dsn: Config.SENTRY_DSN,
 });
 
 const queryClient = new QueryClient(); // react-query client
+
+// Background에서 FCM Message 수신
+messaging().setBackgroundMessageHandler(onMessageReceivedBackground);
 
 function App(): React.JSX.Element {
   return (
@@ -26,19 +34,13 @@ function App(): React.JSX.Element {
         <GestureHandlerRootView>
           <SafeAreaProvider>
             <NavigationContainer>
-              <Suspense
-                fallback={
-                  <View>
-                    <Text>...loading</Text>
-                  </View>
-                }
-              >
-                <QueryClientProvider client={queryClient}>
-                  <CustomErrorHandler>
+              <CustomErrorHandler>
+                <Suspense fallback={<LoadingComponent />}>
+                  <QueryClientProvider client={queryClient}>
                     <AppInner />
-                  </CustomErrorHandler>
-                </QueryClientProvider>
-              </Suspense>
+                  </QueryClientProvider>
+                </Suspense>
+              </CustomErrorHandler>
             </NavigationContainer>
           </SafeAreaProvider>
         </GestureHandlerRootView>

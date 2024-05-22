@@ -8,6 +8,7 @@ import TopComponent from '@components/Home/Top';
 import MiddleComponent from '@components/Home/Middle';
 import PartiesComponent from '@components/Home/Parties';
 import InputBoxComponent from '@components/Home/InputBox';
+import LoadingComponent from '@components/Common/Loading';
 
 import { HomeScreenProps } from '@type/param/loginStack';
 
@@ -25,7 +26,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       <ScrollView className="flex-col px-4">
         {/* 로고, 알림 */}
         <TopComponent />

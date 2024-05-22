@@ -1,5 +1,5 @@
-import React from 'react';
 import { useRecoilValue } from 'recoil';
+import React, { useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { ChatProvider } from 'src/providers/chatProvider';
@@ -31,7 +31,6 @@ import { LoginStackParamList, TabNavigatorParamList } from '@type/param/loginSta
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
 
-import messaging from '@react-native-firebase/messaging';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import MyPageScreen from 'src/screens/my/MyPage';
@@ -43,11 +42,6 @@ import MyPageTabComponent from '@components/BottomTab/MyPageTab';
 import { useFcmMessage } from '@hooks/fcm';
 import { useCheckLogin } from '@hooks/login';
 
-import { onMessageReceivedBackground } from '@utils/fcm';
-
-// Background에서 FCM Message 수신
-messaging().setBackgroundMessageHandler(onMessageReceivedBackground);
-
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
 function TabNavigator() {
@@ -56,7 +50,12 @@ function TabNavigator() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
+          backgroundColor: 'white',
+          opacity: 0.95,
           paddingTop: 12,
+          borderRadius: 24,
+          borderTopWidth: 0,
+          position: 'absolute',
         },
       }}
     >
@@ -102,12 +101,43 @@ function TabNavigator() {
     </Tab.Navigator>
   );
 }
+import { useNavigation } from '@react-navigation/native';
+import notifee, { EventType } from '@notifee/react-native';
 
 function AppInner() {
   const loggedIn = useRecoilValue(loggedInState);
 
   useCheckLogin(); // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
   useFcmMessage(); // Foreground에서 FCM Message 수신
+
+  useEffect(() => {
+    notifee.onForegroundEvent(async ({ type, detail }) => {
+      console.log(detail);
+      if (type === EventType.PRESS) {
+        // 처리할 이벤트 추가
+        console.log('touch!');
+        navigation.navigate('MainScreen');
+      } else if (type === EventType.DISMISSED) {
+        console.log('dismiss');
+        // noti 삭제
+        if (detail?.notification?.id) {
+          notifee.cancelNotification(detail.notification.id);
+          notifee.cancelDisplayedNotification(detail.notification.id);
+        }
+      }
+    });
+
+    notifee.onBackgroundEvent(async ({ type, detail }) => {
+      console.log('App.js notifee onBackgroundEvent==============');
+      if (type === EventType.PRESS) {
+        // 처리할 이벤트 추가
+      } else if (type === EventType.DISMISSED) {
+        // noti 삭제
+        // notifee.cancelNotification(detail.notification.id);
+        // notifee.cancelDisplayedNotification(detail.notification.id);
+      }
+    });
+  });
 
   return loggedIn ? (
     <ChatProvider>

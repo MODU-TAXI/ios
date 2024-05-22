@@ -1,3 +1,4 @@
+#import "RNFBMessagingModule.h"
 #import "AppDelegate.h"
 #import <Firebase.h>
 #import <RNKakaoLogins.h>

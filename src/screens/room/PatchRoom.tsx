@@ -8,6 +8,7 @@ import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import DatePickerComponent from '@components/DatePicker';
 import DottedLineComponent from '@components/DottedLine';
+import LoadingComponent from '@components/Common/Loading';
 import DescriptionComponent from '@components/Description';
 import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
@@ -38,7 +39,7 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
     throw new Error('존재하지 않는 방 정보');
   }
 
-  const { mutateAsync: patchRoomMutate } = usePatchRoom(roomDetail.roomId);
+  const { mutateAsync: patchRoomMutate, isPending } = usePatchRoom(roomDetail.roomId);
 
   const [start, setStart] = useState<string>(roomDetail.departureName); // 출발지
   const [end, setEnd] = useState<string>(roomDetail.arrivalName); // 도착지
@@ -123,6 +124,8 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
       <HeaderComponent title={'수정 페이지'} />
 
       <ScrollView className="flex-1 px-4">
+        {isPending && <LoadingComponent />}
+
         {/* 출발지, 도착지 선택*/}
         <View className="px-2 py-8">
           <DescriptionComponent description="출발지, 도착지를 생성해주세요" />

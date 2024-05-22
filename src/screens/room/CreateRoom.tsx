@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { View, Text, Pressable } from 'react-native';
+import { BlurView } from '@react-native-community/blur';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,6 +11,7 @@ import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import DatePickerComponent from '@components/DatePicker';
 import DottedLineComponent from '@components/DottedLine';
+import LoadingComponent from '@components/Common/Loading';
 import DescriptionComponent from '@components/Description';
 import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
@@ -34,7 +36,7 @@ import UnSelectedPerson2 from '@assets/images/Match/UnSelectedPerson2.svg';
 import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
 
 const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
-  const { mutateAsync: createRoomMutate } = useCreateRoom();
+  const { mutateAsync: createRoomMutate, isPending } = useCreateRoom();
 
   const [, setSocketRoomId] = useRecoilState(roomState);
   const [start, setStart] = useState<string>(''); // 출발지
@@ -97,7 +99,9 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
       {/* 헤더 */}
       <HeaderComponent title={'생성 페이지'} />
 
-      <ScrollView className="flex-1 px-4">
+      <ScrollView className="flex-1 px-4 ">
+        {isPending && <LoadingComponent />}
+
         {/* 출발지, 도착지 선택*/}
         <View className="px-2 py-8">
           <DescriptionComponent description="출발지, 도착지를 생성해주세요" />

@@ -177,7 +177,7 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
           </View>
         </View>
 
-        {roomDetail.myRoom ? (
+        {/* {roomDetail.myRoom ? (
           <View>
             <View className="mx-5 mt-[78px]">
               <ButtonComponent
@@ -223,7 +223,53 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
               onPress={joinRoom}
             />
           </View>
-        )}
+        )} */}
+
+        <View>
+          <View className="mx-5 mt-[78px]">
+            <ButtonComponent
+              color={'bg-white'}
+              borderColor={'border-main'}
+              textColor={'gray500'}
+              text={'채팅방으로 이동'}
+              disabled={false}
+              onPress={toChatRoomScreen}
+            />
+          </View>
+
+          <View className="mx-5 mt-3">
+            <ButtonComponent
+              color={'bg-white'}
+              borderColor={'border-main'}
+              textColor={'gray500'}
+              text={'매칭 수정하기'}
+              disabled={false}
+              onPress={toPatchRoomScreen}
+            />
+          </View>
+
+          <View className="mx-5 mt-3">
+            <ButtonComponent
+              color={'bg-main'}
+              borderColor={'border-main'}
+              textColor={'white'}
+              text={'매칭 삭제하기'}
+              disabled={false}
+              onPress={deleteRoom}
+            />
+          </View>
+
+          <View className="mx-5 mb-10 mt-3">
+            <ButtonComponent
+              color={'bg-main'}
+              borderColor={'border-main'}
+              textColor={'white'}
+              text={'매칭 참여하기'}
+              disabled={false}
+              onPress={joinRoom}
+            />
+          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
