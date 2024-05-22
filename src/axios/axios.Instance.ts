@@ -1,6 +1,8 @@
 import Config from 'react-native-config';
 import axios, { AxiosInstance } from 'axios';
 
+import { refreshAccessToken } from '@server/api/member';
+
 import {
   deleteToken,
   getAccessToken,
@@ -51,14 +53,9 @@ axiosInstance.interceptors.response.use(
         }
 
         // refresh 요청
-        const response = await axios.patch(
-          `${Config.SERVER_URL}api/members/refresh`,
-          {},
-          { headers: { refreshToken: refreshToken } },
-        );
+        const { tokenResponse } = await refreshAccessToken(refreshToken);
 
-        console.log('토큰 갱신');
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = tokenResponse;
 
         await setAccessToken(newAccessToken);
         await setRefreshToken(newRefreshToken);

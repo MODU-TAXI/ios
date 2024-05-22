@@ -14,8 +14,6 @@ export const useFcmToken = (): [string, React.Dispatch<React.SetStateAction<stri
     (async () => {
       const tempFcmToken = await messaging().getToken();
 
-      console.log('FCM TOKEN:', tempFcmToken);
-
       if (tempFcmToken) {
         setFcmToken(tempFcmToken);
       }

@@ -27,13 +27,15 @@ const queryClient = new QueryClient(); // react-query client
 // Background에서 FCM Message 수신
 messaging().setBackgroundMessageHandler(onMessageReceivedBackground);
 
+import { linking } from './deepLinkConfig';
+
 function App(): React.JSX.Element {
   return (
     <>
       <RecoilRoot>
         <GestureHandlerRootView>
           <SafeAreaProvider>
-            <NavigationContainer>
+            <NavigationContainer linking={linking} fallback={<LoadingComponent />}>
               <CustomErrorHandler>
                 <Suspense fallback={<LoadingComponent />}>
                   <QueryClientProvider client={queryClient}>

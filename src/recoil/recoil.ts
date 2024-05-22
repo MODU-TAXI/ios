@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-import { SignUpUser, MessageBody } from '@recoil/type';
+import { UserInfo, SignUpUser, MessageBody } from '@recoil/type';
 
 export const signUpUserState = atom<SignUpUser>({
   key: 'tempUser',
@@ -12,9 +12,23 @@ export const signUpUserState = atom<SignUpUser>({
   },
 });
 
+// 로그인 여부 관리
 export const loggedInState = atom<boolean>({
   key: 'isLoggedIn',
   default: false,
+});
+
+// 유저 정보 관리
+export const userInfoState = atom<UserInfo>({
+  key: 'userInfo',
+  default: {
+    id: 0,
+    name: '',
+    gender: '',
+    phoneNumber: '',
+    email: '',
+    score: 0,
+  },
 });
 
 export const emailState = atom<string>({

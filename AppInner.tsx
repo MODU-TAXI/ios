@@ -1,5 +1,5 @@
-import { useRecoilValue } from 'recoil';
 import React, { useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { ChatProvider } from 'src/providers/chatProvider';
@@ -101,13 +101,13 @@ function TabNavigator() {
     </Tab.Navigator>
   );
 }
-import { useNavigation } from '@react-navigation/native';
+import { Linking } from 'react-native';
 import notifee, { EventType } from '@notifee/react-native';
 
 function AppInner() {
-  const loggedIn = useRecoilValue(loggedInState);
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
 
-  useCheckLogin(); // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
+  useCheckLogin(setLoggedIn); // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
   useFcmMessage(); // Foreground에서 FCM Message 수신
 
   useEffect(() => {
@@ -116,7 +116,7 @@ function AppInner() {
       if (type === EventType.PRESS) {
         // 처리할 이벤트 추가
         console.log('touch!');
-        navigation.navigate('MainScreen');
+        await Linking.openURL('modutaxi://createRoom');
       } else if (type === EventType.DISMISSED) {
         console.log('dismiss');
         // noti 삭제

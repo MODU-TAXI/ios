@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import { Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,11 +9,14 @@ import TopComponent from '@components/Home/Top';
 import MiddleComponent from '@components/Home/Middle';
 import PartiesComponent from '@components/Home/Parties';
 import InputBoxComponent from '@components/Home/InputBox';
-import LoadingComponent from '@components/Common/Loading';
+
+import { userInfoState } from '@recoil/recoil';
 
 import { HomeScreenProps } from '@type/param/loginStack';
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
+  const userInfo = useRecoilValue(userInfoState);
+
   const toCreateRoomScreen = () => {
     navigation.navigate('CreateRoomScreen');
   };
@@ -34,7 +38,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         {/* 이름 */}
         <View className="mt-2 flex-row items-center">
           <Text className="text-[20px]">반가워요,</Text>
-          <Text className="text-[20px] font-semibold">정현님!</Text>
+          <Text className="text-[20px] font-semibold">{userInfo.name}!</Text>
         </View>
 
         {/* 검색 */}

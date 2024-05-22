@@ -1,3 +1,19 @@
+// [토큰 재발급] /api/members/refresh
+export interface RefreshTokenResponse {
+  tokenResponse: {
+    accessToken: string;
+    refreshToken: string;
+  };
+  memberInfoResponse: {
+    id: number;
+    name: string;
+    gender: string;
+    phoneNumber: string;
+    email: string;
+    score: number;
+  };
+}
+
 // [카카오 sdk 로그인]
 export interface KakaoLoginResponse {
   accessToken: string;

@@ -1,3 +1,6 @@
+import axios from 'axios';
+import Config from 'react-native-config';
+
 import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
 
 import {
@@ -8,8 +11,20 @@ import {
 import {
   SignUpResponse,
   SocialLoginResponse,
+  RefreshTokenResponse,
   CheckMembershipResponse,
 } from '@server/responseTypes/member';
+
+// [토큰 재발급] /api/members/refresh
+export const refreshAccessToken = async (refreshToken: string): Promise<RefreshTokenResponse> => {
+  const response = await axios.patch(
+    `${Config.SERVER_URL}api/members/refresh`,
+    {},
+    { headers: { refreshToken: refreshToken } },
+  );
+
+  return response.data;
+};
 
 // [가입 여부 확인] /api/members/{type}/membership
 export const checkMembership = async (
@@ -39,10 +54,7 @@ export const socialLogin = async (
 
 // [소셜 회원가입] /api/members/sign-up
 export const signUp = async (data: SignUpRequest): Promise<SignUpResponse> => {
-  const response = await GuestPostAxiosInstance<SignUpResponse>(
-    `/api/members/sign-up`,
-    data,
-  );
+  const response = await GuestPostAxiosInstance<SignUpResponse>(`/api/members/sign-up`, data);
 
   return response.data;
 };

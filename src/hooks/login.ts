@@ -1,41 +1,42 @@
-import axios from 'axios';
 import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import Config from 'react-native-config';
+import { useRecoilState, SetterOrUpdater } from 'recoil';
 
-import { chatInState, loggedInState } from '@recoil/recoil';
+import { userInfoState } from '@recoil/recoil';
+
+import { refreshAccessToken } from '@server/api/member';
 
 import { deleteToken, setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
 
-export const useCheckLogin = async () => {
-  const [, setLoggedIn] = useRecoilState(chatInState);
+export const useCheckLogin = (setLoggedIn: SetterOrUpdater<boolean>) => {
+  const [, setUserInfo] = useRecoilState(userInfoState);
 
   useEffect(() => {
-    async () => {
+    (async () => {
       try {
         const refreshToken = await getRefreshToken();
 
         if (!refreshToken) {
           setLoggedIn(false);
           await deleteToken();
+          return;
         }
 
-        const response = await axios.patch(
-          `${Config.SERVER_URL}api/members/refresh`,
-          {},
-          { headers: { refreshToken: refreshToken } },
-        );
+        const { tokenResponse, memberInfoResponse } = await refreshAccessToken(refreshToken);
 
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = tokenResponse;
 
-        setLoggedIn(true);
+        // 유저 정보 저장
+        setUserInfo(memberInfoResponse);
 
+        // 토큰 저장
         await setAccessToken(newAccessToken);
         await setRefreshToken(newRefreshToken);
+
+        setLoggedIn(true);
       } catch (error) {
         setLoggedIn(false);
         await deleteToken();
       }
-    };
-  }, [setLoggedIn]);
+    })();
+  }, [setLoggedIn, setUserInfo]);
 };
