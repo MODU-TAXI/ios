@@ -1,11 +1,14 @@
+import { useRecoilState } from "recoil";
 import { Text, View, Pressable } from "react-native";
 import Geolocation from "@react-native-community/geolocation";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { Camera, NaverMapView } from "@mj-studio/react-native-naver-map";
 import React, { useRef, useMemo, useState, useEffect, useCallback } from "react";
+import { Camera, NaverMapView, NaverMapViewRef } from "@mj-studio/react-native-naver-map";
 
 import TransparentSearchBoxComponent from "@components/Search/TransparentSearchBox";
+
+import { departureState } from "@recoil/recoil";
 
 import { useReverseGeocoding } from "@hooks/api/search";
 
@@ -15,10 +18,17 @@ import { DepartureMapScreenProps } from "@type/param/loginStack";
 
 import MapPin from '@assets/images/Map/MapPin.svg';
 import MapPinGray from '@assets/images/Map/MapPinGray.svg';
+import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
+import ChevronBackwardCircle from '@assets/images/Map/chevronBackwardCircle.svg';
 
 const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
   const insets = useSafeAreaInsets();
   const [isTouching, setIsTouching] = useState<boolean>(false);
+  const mapRef = useRef<NaverMapViewRef>(null);
+  const [searchBoxValue, setSearchBoxValue] = useState<string>("출발지를 입력하세요");
+  const [isSearched, setIsSearched] = useState<boolean>(false);
+  const [, setDeparture] = useRecoilState(departureState);
+
   const [currentCamera, setCurrentCamera] = useState<Camera>({
     latitude: 37.451062,
     longitude: 126.656496,
@@ -73,6 +83,43 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
     }, 100);
   }, []);
 
+  /** 현재 위치로 */
+  const moveToCurrentLocation = async() => {
+    let currentLocation: Camera = {
+      latitude: 37.451062,
+      longitude: 126.656496,
+    }
+
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        currentLocation = {
+          latitude: latitude,
+          longitude: longitude,
+        }
+      },
+      (error) => console.error(error),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+
+    mapRef.current?.animateCameraTo(currentLocation);
+    refetch();
+  }
+
+  /** 빌딩 이름 유무에 따른 렌더링 */
+  const formatBuildingName = () => {
+    const value = results?.[1]?.land.addition0.value;
+
+    if (value === undefined) {
+      return "주소 정보 없음";
+    } else if (value === "") {
+      return "건물 정보 없음";
+    } else {
+      return value;
+    }
+  }
+
+  /** 도로명 주소 포맷 로직 */
   const formatAddress = () => {
     const area1 = results?.[0]?.region.area1.name;
     const area2 = results?.[0]?.region.area2.name;
@@ -92,8 +139,34 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
     return addressString.trim();
   }
 
+  /** 출발지 저장 로직 */
+  const handleSearch = () => {
+    if (formatBuildingName() === "건물 정보 없음") {
+      setDeparture({
+        name: formatAddress(),
+        longitude: currentCamera.longitude,
+        latitude: currentCamera.latitude,
+      });
+      setIsSearched(true);
+    } else if (formatBuildingName() === "주소 정보 없음") {
+      setIsSearched(false);
+    } else {
+      setDeparture({
+        name: formatBuildingName(),
+        longitude: currentCamera.longitude,
+        latitude: currentCamera.latitude,
+      });
+      setIsSearched(true);
+    }
+    navigation.goBack();
+  }
+
   const toSearchScreen = () => {
     navigation.navigate('SearchScreen');
+  }
+
+  const toBack = () => {
+    navigation.goBack();
   }
 
   return (
@@ -104,6 +177,7 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
         onPressOut={() => setIsTouching(false)}
       >
         <NaverMapView 
+          ref={mapRef}
           style={{ flex: 1 }}
           mapType="Basic"
           initialCamera={currentCamera}
@@ -126,7 +200,10 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
         <Pressable
           onPress={toSearchScreen}
         >
-          <TransparentSearchBoxComponent />
+          <TransparentSearchBoxComponent 
+            isSearched={isSearched}
+            value={searchBoxValue}
+          />
         </Pressable>
       </View>
 
@@ -143,6 +220,22 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
             <MapPinGray width={48} height={52} />
           </View>
         )}
+      </View>
+
+      <View className="absolute bottom-[29%] flex w-full flex-row items-center justify-between px-4">
+        <Pressable 
+          onPress={toBack}
+          className=""
+        >
+          <ChevronBackwardCircle />
+        </Pressable>
+
+        <Pressable
+          className="p-2"
+          onPress={moveToCurrentLocation}
+        >
+          <CurrentLocationButton />
+        </Pressable>
       </View>
 
       {/** 바텀시트 */}
@@ -166,18 +259,23 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
           className="flex-1 items-center"
         >
           <View className="flex-1 flex-col px-6 py-2">
+
             <Text className="mb-2 font-medium text-base text-boxFont">출발지</Text>
             <Text className="text-lg font-semibold text-main">
-              {results && results[1]?.land.addition0.value ? results[1]?.land.addition0.value : "건물명 없음"}
+              {formatBuildingName()}
             </Text>
             <Text className="text-gray600">
               {formatAddress()}
             </Text>
+
+            {/** 출발지 설정 버튼 */}
             <Pressable
               className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-main"
+              onPress={() => handleSearch()}
             >
               <Text className="font-semibold text-white">출발지로 설정</Text>
             </Pressable>
+
           </View>
         </BottomSheetView>
       </BottomSheet>

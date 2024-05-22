@@ -23,3 +23,9 @@ export type UserInfo = {
   email: string;
   imageUrl: string;
 };
+
+export type Departure = {
+  name: string;
+  latitude: number;
+  longitude: number;
+}

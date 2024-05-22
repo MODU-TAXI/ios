@@ -1,3 +1,4 @@
+import { useRecoilValue } from 'recoil';
 import { View, Text, Pressable } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -26,6 +27,9 @@ import RoomMarkerComponent from '@components/Marker/RoomMarker';
 import CreateRoomButtonComponent from '@components/CreateRoomButton';
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 
+import { SignUpUser } from '@recoil/type';
+import { signUpUserState } from '@recoil/recoil';
+
 import { useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
 import { calculateRadius, calculateCenter } from '@utils/map';
@@ -48,6 +52,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   const buttonSizeRef = useRef<View>(null);
   const [buttonWidth, setButtonWidth] = useState(0);
   const [keyword, setKeyword] = useState<string>('');
+  const signUpUser = useRecoilValue<SignUpUser>(signUpUserState);
 
   // 화면의 어디에서 멈추는지 snap point
   const snapPoints = useMemo(() => ['40%', '100%'], []);
@@ -263,7 +268,10 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         <Pressable
           onPress={toSearchScreen}
         >
-          <TransparentSearchBoxComponent />
+          <TransparentSearchBoxComponent 
+            value={`${signUpUser}님 우리 어디로 갈까요?`}
+            isSearched={false}
+          />
         </Pressable>
       </View>
 

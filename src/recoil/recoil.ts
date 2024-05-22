@@ -61,8 +61,23 @@ export const messagesState = atom<MessageBody[]>({
   default: [],
 });
 
-// 검색어 관리
-export const searchKeywordState = atom<string>({
-    key: 'searchKeyword',
-    default: '',
+// 방 생성 시 출발지
+export const departureState = atom<Departure>({
+  key: 'departure',
+  default: {
+    name: '',
+    latitude: 0,
+    longitude: 0,
+  },
 });
+
+// 방 생성 시 도착거점
+export const arrivalNameState = atom<string>({
+  key: 'arrivalName',
+  default: '',
+});
+
+export const searchKeywordState = atom<string>({
+  key: 'searchKeyword',
+  default: '',
+})

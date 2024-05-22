@@ -51,7 +51,6 @@ export const useReverseGeocoding = (
           },
         }
       );
-      // console.log(response.data.results[1])
       return response.data.results;
     }
   });
