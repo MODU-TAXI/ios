@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React from 'react';
+import { useRecoilState } from 'recoil';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import MainScreen from 'src/screens/main/Main';
 import { ChatProvider } from 'src/providers/chatProvider';
 
 import TestScreen from './src/screens/test';
@@ -25,119 +26,22 @@ import PhoneAuthenticationCodeScreen from './src/screens/signUp/PhoneAuthenticat
 
 import { loggedInState } from '@recoil/recoil';
 
+import { useFcmMessage } from '@hooks/fcm';
+import { useNotifee } from '@hooks/notifee';
+import { useCheckLogin } from '@hooks/login';
+
 import { RootStackParamList } from '@type/param/rootStack';
-import { LoginStackParamList, TabNavigatorParamList } from '@type/param/loginStack';
+import { LoginStackParamList } from '@type/param/loginStack';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
-
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import MyPageScreen from 'src/screens/my/MyPage';
-
-import MapTabComponent from '@components/BottomTab/MapTab';
-import HomeTabComponent from '@components/BottomTab/HomeTab';
-import MyPageTabComponent from '@components/BottomTab/MyPageTab';
-
-import { useFcmMessage } from '@hooks/fcm';
-import { useCheckLogin } from '@hooks/login';
-
-const Tab = createBottomTabNavigator<TabNavigatorParamList>();
-
-function TabNavigator() {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: 'white',
-          opacity: 0.95,
-          paddingTop: 12,
-          borderRadius: 24,
-          borderTopWidth: 0,
-          position: 'absolute',
-        },
-      }}
-    >
-      <Tab.Screen
-        name="HomeScreen"
-        component={HomeScreen}
-        options={({ route }) => ({
-          // title 없애고 custom 하기 위한 옵션
-          tabBarLabel: () => {
-            return null;
-          },
-          tabBarIcon: ({ focused }) => {
-            return <HomeTabComponent focused={focused} />;
-          },
-        })}
-      />
-      <Tab.Screen
-        name="MainMapScreen"
-        component={MainMapScreen}
-        options={({ route }) => ({
-          // title 없애고 custom 하기 위한 옵션
-          tabBarLabel: () => {
-            return null;
-          },
-          tabBarIcon: ({ focused }) => {
-            return <MapTabComponent focused={focused} />;
-          },
-        })}
-      />
-      <Tab.Screen
-        name="MyPageScreen"
-        component={MyPageScreen}
-        options={({ route }) => ({
-          // title 없애고 custom 하기 위한 옵션
-          tabBarLabel: () => {
-            return null;
-          },
-          tabBarIcon: ({ focused }) => {
-            return <MyPageTabComponent focused={focused} />;
-          },
-        })}
-      />
-    </Tab.Navigator>
-  );
-}
-import { Linking } from 'react-native';
-import notifee, { EventType } from '@notifee/react-native';
 
 function AppInner() {
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
 
   useCheckLogin(setLoggedIn); // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
   useFcmMessage(); // Foreground에서 FCM Message 수신
-
-  useEffect(() => {
-    notifee.onForegroundEvent(async ({ type, detail }) => {
-      console.log(detail);
-      if (type === EventType.PRESS) {
-        // 처리할 이벤트 추가
-        console.log('touch!');
-        await Linking.openURL('modutaxi://createRoom');
-      } else if (type === EventType.DISMISSED) {
-        console.log('dismiss');
-        // noti 삭제
-        if (detail?.notification?.id) {
-          notifee.cancelNotification(detail.notification.id);
-          notifee.cancelDisplayedNotification(detail.notification.id);
-        }
-      }
-    });
-
-    notifee.onBackgroundEvent(async ({ type, detail }) => {
-      console.log('App.js notifee onBackgroundEvent==============');
-      if (type === EventType.PRESS) {
-        // 처리할 이벤트 추가
-      } else if (type === EventType.DISMISSED) {
-        // noti 삭제
-        // notifee.cancelNotification(detail.notification.id);
-        // notifee.cancelDisplayedNotification(detail.notification.id);
-      }
-    });
-  });
+  useNotifee(); // notifeecation제어
 
   return loggedIn ? (
     <ChatProvider>
@@ -146,7 +50,7 @@ function AppInner() {
           headerShown: false,
         }}
       >
-        <LogInStack.Screen name="MainScreen" component={TabNavigator} />
+        <LogInStack.Screen name="MainScreen" component={MainScreen} />
         <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
         <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
         <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
