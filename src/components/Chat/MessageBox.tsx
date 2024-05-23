@@ -10,12 +10,14 @@ interface MessageBoxComponentProps {
   message: ChatMessage;
   memberId: number;
   openUserInfoModal: () => void;
+  openImageModal: (imageUrl: string) => void;
 }
 
 export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
   message,
   memberId,
   openUserInfoModal,
+  openImageModal,
 }) => {
   // Join message인 경우
   if (message.messageType === 'JOIN') {
@@ -101,7 +103,7 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
     // 내가 보낸거
     if (message.memberId === memberId) {
       return (
-        <View className="my-2 flex-row">
+        <Pressable className="my-2 flex-row" onPress={() => openImageModal(message.content)}>
           <View className="mr-1 flex-1 flex-col items-end justify-end ">
             <Text className="text-[10px]">2</Text>
             <Text className="text-[10px] text-gray-300">
@@ -116,12 +118,12 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
               uri: message.content,
             }}
           />
-        </View>
+        </Pressable>
       );
     } else {
       // 남이 보낸거
       return (
-        <View className="my-2 flex-col">
+        <Pressable className="my-2 flex-col">
           <Pressable className="flex-row items-center" onPress={openUserInfoModal}>
             <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
               <ProfileImage className="" />
@@ -149,7 +151,7 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
               </Text>
             </View>
           </View>
-        </View>
+        </Pressable>
       );
     }
   }

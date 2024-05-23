@@ -5,18 +5,12 @@ import React, { useRef, Dispatch, useState, SetStateAction } from 'react';
 
 import { useChatContext } from 'src/providers/chatProvider';
 
-import { MessageBody } from '@recoil/type';
-
 import { openAlbum, openCamera } from '@utils/image';
 
 import Plus from '@assets/images/Chat/Plus.svg';
 import SendButton from '@assets/images/Chat/SendButton.svg';
 
-interface MessageInputBoxComponentProps {
-  setLoading: Dispatch<SetStateAction<boolean>>;
-}
-
-const MessageInputBoxComponent: React.FC<MessageInputBoxComponentProps> = ({ setLoading }) => {
+const MessageInputBoxComponent: React.FC = () => {
   const { sendMessage } = useChatContext();
   const textInputRef = useRef<TextInput>(null);
 
@@ -43,10 +37,8 @@ const MessageInputBoxComponent: React.FC<MessageInputBoxComponentProps> = ({ set
       {
         text: '카메라로 찍기',
         onPress: async () => {
-          setLoading(true);
           const image = await openCamera();
           sendImage(image);
-          setLoading(false);
         },
       },
       {
