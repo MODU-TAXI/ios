@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { Text, View } from 'react-native';
+import { Text, View, Linking } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -21,7 +21,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('CreateRoomScreen');
   };
 
-  const toMapScreen = () => {
+  const toMapScreen = async () => {
     navigation.navigate('MainMapScreen');
   };
 
@@ -38,7 +38,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         {/* 이름 */}
         <View className="mt-2 flex-row items-center">
           <Text className="text-[20px]">반가워요,</Text>
-          <Text className="text-[20px] font-semibold">{userInfo.name}!</Text>
+          <Text className="text-[20px] font-semibold">{userInfo.name}님!</Text>
         </View>
 
         {/* 검색 */}

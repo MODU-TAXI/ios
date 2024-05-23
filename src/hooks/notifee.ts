@@ -1,34 +1,27 @@
 import { useEffect } from 'react';
-import { Linking } from 'react-native';
 import notifee, { EventType } from '@notifee/react-native';
 
+import { handleNotificationPress } from '@utils/notifee';
+
+// notifee 관리
 export const useNotifee = () => {
   useEffect(() => {
+    // foreground일때 notifee 알림제어
     notifee.onForegroundEvent(async ({ type, detail }) => {
-      console.log(detail);
       if (type === EventType.PRESS) {
-        // 처리할 이벤트 추가
-        console.log('touch!');
-        await Linking.openURL('modutaxi://createRoom');
+        await handleNotificationPress(detail);
       } else if (type === EventType.DISMISSED) {
-        console.log('dismiss');
-        // noti 삭제
-        if (detail?.notification?.id) {
-          notifee.cancelNotification(detail.notification.id);
-          notifee.cancelDisplayedNotification(detail.notification.id);
-        }
+        await handleNotificationPress(detail);
       }
     });
 
+    // background, quit일떄 알림제어 -> ios는 quit상태거 없어서 필요없지만 더 공부해봄
     notifee.onBackgroundEvent(async ({ type, detail }) => {
-      console.log('App.js notifee onBackgroundEvent==============');
       if (type === EventType.PRESS) {
-        // 처리할 이벤트 추가
+        await handleNotificationPress(detail);
       } else if (type === EventType.DISMISSED) {
-        // noti 삭제
-        // notifee.cancelNotification(detail.notification.id);
-        // notifee.cancelDisplayedNotification(detail.notification.id);
+        await handleNotificationPress(detail);
       }
     });
-  });
+  }, []);
 };
