@@ -30,7 +30,7 @@ const ChatContext = createContext(
   {} as {
     connect: (roomId: number) => void;
     disConnect: () => void;
-    sendMessage: (inputMessage: string) => void;
+    sendMessage: (inputMessage: string, type: string) => void;
   },
 );
 
@@ -105,6 +105,8 @@ export function ChatProvider({ children }: any) {
   const onMessageReceived = (message: Message) => {
     const decodedMessage: MessageBody = JSON.parse(message.body);
 
+    console.log(decodedMessage);
+
     if (stompClient.current.chatIn) {
       setMessages((prev: MessageBody[]) => [...prev, decodedMessage]);
     } else {
@@ -113,13 +115,13 @@ export function ChatProvider({ children }: any) {
   };
 
   // 메세지 보내기
-  const sendMessage = (inputMessage: string) => {
+  const sendMessage = (inputMessage: string, type: string) => {
     if (stompClient) {
       stompClient.current.publish({
         destination: '/pub/chat',
         body: JSON.stringify({
           roomId: roomId,
-          type: 'CHAT',
+          type: type,
           content: inputMessage,
           sender: '',
         }),

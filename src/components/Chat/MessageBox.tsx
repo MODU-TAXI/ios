@@ -1,6 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Image, Pressable } from 'react-native';
 
 import { ChatMessage } from '@type/entity/chat';
 
@@ -84,6 +84,63 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
                 <Text className="font-medium  text-black">{message.content}</Text>
               </View>
             </View>
+
+            <View className="ml-1 flex-1 flex-col items-start justify-end">
+              <Text className="text-[10px]">2</Text>
+              <Text className="text-[10px] text-gray-300">
+                {dayjs(message.dateTime).format('HH:MM')}
+              </Text>
+            </View>
+          </View>
+        </View>
+      );
+    }
+  }
+
+  if (message.messageType === 'IMAGE') {
+    // 내가 보낸거
+    if (message.memberId === memberId) {
+      return (
+        <View className="my-2 flex-row">
+          <View className="mr-1 flex-1 flex-col items-end justify-end ">
+            <Text className="text-[10px]">2</Text>
+            <Text className="text-[10px] text-gray-300">
+              {dayjs(message.dateTime).format('HH:MM')}
+            </Text>
+          </View>
+
+          {/* 이미지 */}
+          <Image
+            className="h-[240px] w-[240px] rounded-xl"
+            source={{
+              uri: message.content,
+            }}
+          />
+        </View>
+      );
+    } else {
+      // 남이 보낸거
+      return (
+        <View className="my-2 flex-col">
+          <Pressable className="flex-row items-center" onPress={openUserInfoModal}>
+            <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
+              <ProfileImage className="" />
+            </View>
+
+            <View>
+              <Text>{message.sender}</Text>
+            </View>
+          </Pressable>
+
+          <View className="ml-4 mt-2 flex-row">
+            {/* 메세지 */}
+            {/* 이미지 */}
+            <Image
+              className="h-[140px] w-[140px] rounded-xl"
+              source={{
+                uri: message.content,
+              }}
+            />
 
             <View className="ml-1 flex-1 flex-col items-start justify-end">
               <Text className="text-[10px]">2</Text>

@@ -7,10 +7,9 @@ import {
 } from 'react-native-image-picker';
 
 import { uploadImage } from '@server/api/s3';
-import { s3Response } from '@server/responseTypes/s3';
 
 // 이미지 업로드
-export const handleUpload = async (image: Asset): Promise<s3Response> => {
+export const handleUpload = async (image: Asset): Promise<string> => {
   const localUri = image.uri;
 
   // 이미지 경로가 존재하지 않을때 에러 표사
@@ -28,11 +27,13 @@ export const handleUpload = async (image: Asset): Promise<s3Response> => {
     name: imageName,
   });
 
-  return await uploadImage(formData);
+  const { imgUrl } = await uploadImage(formData);
+
+  return imgUrl;
 };
 
 // 카메라로 사진 선택
-export const openCamera = async (): Promise<Asset | null> => {
+export const openCamera = async (): Promise<string | null> => {
   const options: CameraOptions = {
     mediaType: 'photo',
     cameraType: 'back',
@@ -45,15 +46,15 @@ export const openCamera = async (): Promise<Asset | null> => {
   }
 
   if (result?.assets) {
-    await handleUpload(result.assets[0]);
-    return result.assets[0];
+    return handleUpload(result.assets[0]);
+    // return result.assets[0];
   }
 
   return null;
 };
 
 // 앨범에서 사진 선택
-export const openAlbum = async (): Promise<Asset | null> => {
+export const openAlbum = async (): Promise<string | null> => {
   const options: ImageLibraryOptions = {
     mediaType: 'photo',
   };
@@ -65,8 +66,8 @@ export const openAlbum = async (): Promise<Asset | null> => {
   }
 
   if (result?.assets) {
-    await handleUpload(result.assets[0]);
-    return result.assets[0];
+    return handleUpload(result.assets[0]);
+    // return result.assets[0];
   }
 
   return null;

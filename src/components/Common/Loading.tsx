@@ -4,7 +4,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 
 const LoadingComponent = () => {
   return (
-    <View className="absolute z-10 flex h-full w-full items-center justify-center ">
+    <View className="absolute z-20 flex h-full w-full items-center justify-center ">
       <BlurView
         style={{
           position: 'absolute',
