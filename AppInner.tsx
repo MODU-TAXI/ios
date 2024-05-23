@@ -1,7 +1,8 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import MainScreen from 'src/screens/main/Main';
 import { ChatProvider } from 'src/providers/chatProvider';
 
 import TestScreen from './src/screens/test';
@@ -25,89 +26,22 @@ import PhoneAuthenticationCodeScreen from './src/screens/signUp/PhoneAuthenticat
 
 import { loggedInState } from '@recoil/recoil';
 
+import { useFcmMessage } from '@hooks/fcm';
+import { useNotifee } from '@hooks/notifee';
+import { useCheckLogin } from '@hooks/login';
+
 import { RootStackParamList } from '@type/param/rootStack';
-import { LoginStackParamList, TabNavigatorParamList } from '@type/param/loginStack';
+import { LoginStackParamList } from '@type/param/loginStack';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
 
-import messaging from '@react-native-firebase/messaging';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import MyPageScreen from 'src/screens/my/MyPage';
-
-import MapTabComponent from '@components/BottomTab/MapTab';
-import HomeTabComponent from '@components/BottomTab/HomeTab';
-import MyPageTabComponent from '@components/BottomTab/MyPageTab';
-
-import { useFcmMessage } from '@hooks/fcm';
-import { useCheckLogin } from '@hooks/login';
-
-import { onMessageReceivedBackground } from '@utils/fcm';
-
-// Background에서 FCM Message 수신
-messaging().setBackgroundMessageHandler(onMessageReceivedBackground);
-
-const Tab = createBottomTabNavigator<TabNavigatorParamList>();
-
-function TabNavigator() {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          paddingTop: 12,
-        },
-      }}
-    >
-      <Tab.Screen
-        name="HomeScreen"
-        component={HomeScreen}
-        options={({ route }) => ({
-          // title 없애고 custom 하기 위한 옵션
-          tabBarLabel: () => {
-            return null;
-          },
-          tabBarIcon: ({ focused }) => {
-            return <HomeTabComponent focused={focused} />;
-          },
-        })}
-      />
-      <Tab.Screen
-        name="MainMapScreen"
-        component={MainMapScreen}
-        options={({ route }) => ({
-          // title 없애고 custom 하기 위한 옵션
-          tabBarLabel: () => {
-            return null;
-          },
-          tabBarIcon: ({ focused }) => {
-            return <MapTabComponent focused={focused} />;
-          },
-        })}
-      />
-      <Tab.Screen
-        name="MyPageScreen"
-        component={MyPageScreen}
-        options={({ route }) => ({
-          // title 없애고 custom 하기 위한 옵션
-          tabBarLabel: () => {
-            return null;
-          },
-          tabBarIcon: ({ focused }) => {
-            return <MyPageTabComponent focused={focused} />;
-          },
-        })}
-      />
-    </Tab.Navigator>
-  );
-}
-
 function AppInner() {
-  const loggedIn = useRecoilValue(loggedInState);
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
 
-  useCheckLogin(); // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
+  useCheckLogin(setLoggedIn); // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
   useFcmMessage(); // Foreground에서 FCM Message 수신
+  useNotifee(); // notifeecation제어
 
   return loggedIn ? (
     <ChatProvider>
@@ -116,7 +50,7 @@ function AppInner() {
           headerShown: false,
         }}
       >
-        <LogInStack.Screen name="MainScreen" component={TabNavigator} />
+        <LogInStack.Screen name="MainScreen" component={MainScreen} />
         <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
         <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
         <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />

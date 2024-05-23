@@ -6,7 +6,7 @@ import Bell from '@assets/images/Home/Bell.svg';
 
 const TopComponent = () => {
   return (
-    <View className="flex-row items-center justify-between">
+    <View className="flex-row items-center justify-between bg-main">
       <View>
         <Logo />
       </View>

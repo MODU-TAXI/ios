@@ -1,7 +1,9 @@
+#import "RNFBMessagingModule.h"
 #import "AppDelegate.h"
 #import <Firebase.h>
 #import <RNKakaoLogins.h>
 #import <React/RCTBundleURLProvider.h>
+#import <React/RCTLinkingManager.h>
 
 @implementation AppDelegate
 
@@ -23,6 +25,8 @@
     return [RNKakaoLogins handleOpenUrl: url];
  }
 
+  return [RCTLinkingManager application:app openURL:url options:options];
+  
  return NO;
 }
 

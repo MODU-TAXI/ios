@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Pressable } from 'react-native';
+import { Text, View, Linking, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useKakaoLogin } from '@hooks/api/member';
@@ -13,7 +13,9 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const { mutateAsync: kakaoLogin } = useKakaoLogin(navigation);
 
   const appleLogin = async (): Promise<void> => {
-    navigation.navigate('CheckPermissionScreen');
+    await Linking.openURL('modutaxi://main');
+
+    // navigation.navigate('CheckPermissionScreen');
   };
 
   return (
