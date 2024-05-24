@@ -47,6 +47,8 @@ export interface CreateRoomResponse {
   expectedCharge: number; // 예상 요금
 
   myRoom: boolean; // 내가 방장인지 여부
+  participate: boolean; // 참여여부
+
   roomTagBitMaskList: string[]; // 카테고리
   path: {
     coordinateReferenceSystem: {
@@ -81,6 +83,8 @@ export interface GetRoomDetailResponse {
   expectedCharge: number; // 예상 요금
 
   myRoom: boolean; // 내가 방장인지 여부
+  participate: boolean; // 참여여부
+
   roomTagBitMaskList: string[]; // 카테고리
   path: {
     coordinateReferenceSystem: {
@@ -115,6 +119,8 @@ export interface PatchRoomResponse {
   expectedCharge: number; // 예상 요금
 
   myRoom: boolean; // 내가 방장인지 여부
+  participate: boolean; // 참여여부
+
   roomTagBitMaskList: string[]; // 카테고리
   path: {
     coordinateReferenceSystem: {
@@ -146,6 +152,7 @@ export interface GetRoomMembersResponse {
     memberId: number;
     name: string;
     score: number;
+    thisIsMe: boolean;
   }[];
 }
 
@@ -155,5 +162,6 @@ export interface GetRoomWaitingMembersResponse {
     memberId: number;
     name: string;
     score: number;
+    thisIsMe: boolean;
   }[];
 }

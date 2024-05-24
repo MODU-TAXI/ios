@@ -1,49 +1,58 @@
 import { SetterOrUpdater } from 'recoil';
-import React, { useRef, useState } from 'react';
+import { Asset } from 'react-native-image-picker';
 import { View, Alert, TextInput, Pressable } from 'react-native';
+import React, { useRef, Dispatch, useState, SetStateAction } from 'react';
 
 import { useChatContext } from 'src/providers/chatProvider';
-
-import { MessageBody } from '@recoil/type';
 
 import { openAlbum, openCamera } from '@utils/image';
 
 import Plus from '@assets/images/Chat/Plus.svg';
 import SendButton from '@assets/images/Chat/SendButton.svg';
 
-interface MessageInputBoxComponentProps {
-  setNewMeesages: SetterOrUpdater<MessageBody[]>;
-}
-
-const MessageInputBoxComponent: React.FC<MessageInputBoxComponentProps> = ({ setNewMeesages }) => {
+const MessageInputBoxComponent: React.FC = () => {
   const { sendMessage } = useChatContext();
   const textInputRef = useRef<TextInput>(null);
 
   const [inputMessage, setInputMessage] = useState<string>('');
 
-  // 채팅 보내기
-  const send = () => {
+  // 텍스트 채팅 보내기
+  const sendText = () => {
     if (inputMessage !== '') {
-      sendMessage(inputMessage);
+      sendMessage(inputMessage, 'CHAT');
       setInputMessage('');
     }
   };
 
-  const focusTextInput = () => {
-    textInputRef.current?.focus();
+  // 이미지 채팅 보내기
+  const sendImage = (imgUrl: string | null) => {
+    if (imgUrl) {
+      sendMessage(imgUrl, 'IMAGE');
+    }
   };
 
-  const selectImage = () => {
-    Alert.alert('뭘로 올릴래?', '선택해', [
+  // 이미지 고르기
+  const selectImage = (): void => {
+    return Alert.alert('뭘로 올릴래?', '선택해', [
       {
         text: '카메라로 찍기',
-        onPress: openCamera,
+        onPress: async () => {
+          const image = await openCamera();
+          sendImage(image);
+        },
       },
       {
         text: '앨범에서 선택',
-        onPress: openAlbum,
+        onPress: async () => {
+          const image = await openAlbum();
+          sendImage(image);
+        },
       },
     ]);
+  };
+
+  const focusTextInput = () => {
+    textInputRef.current?.focus();
   };
 
   return (
@@ -74,7 +83,7 @@ const MessageInputBoxComponent: React.FC<MessageInputBoxComponentProps> = ({ set
           />
         </View>
 
-        <Pressable onPress={send} className="absolute bottom-0 right-0 p-3">
+        <Pressable onPress={sendText} className="absolute bottom-0 right-0 p-3">
           <SendButton />
         </Pressable>
       </Pressable>

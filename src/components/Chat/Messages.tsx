@@ -12,6 +12,7 @@ interface MessagesComponentProps {
   memberId: number;
   newMessages: ChatMessage[];
   openUserInfoModal: () => void;
+  openImageModal: (imageUrl: string) => void;
 }
 
 const MessagesComponent: React.FC<MessagesComponentProps> = ({
@@ -19,6 +20,7 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
   memberId,
   newMessages,
   openUserInfoModal,
+  openImageModal,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const { messages } = useGetMessages(roomId);
@@ -60,6 +62,7 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
             message={chat}
             openUserInfoModal={openUserInfoModal}
             memberId={memberId}
+            openImageModal={openImageModal}
           />
         </View>
       ))}
@@ -71,6 +74,7 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
             message={chat}
             openUserInfoModal={openUserInfoModal}
             memberId={memberId}
+            openImageModal={openImageModal}
           />
         </View>
       ))}

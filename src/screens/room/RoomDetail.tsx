@@ -90,6 +90,8 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
     navigation.navigate('ChatRoomScreen', { roomDetail: roomDetail });
   };
 
+  console.log(roomDetail.participate);
+
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 헤더 */}
@@ -150,12 +152,12 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
         <ParticipateUsersComponent roomMembers={roomMembers.inList} />
 
         {/* 대기 멤버(방장만 확인 가능) */}
-        {/* {myParty && ( */}
-        <WaitingUsersComponent
-          roomWaitingMembers={roomWaitingMembers.waitingList}
-          applyJoinRoom={applyJoinRoom}
-        />
-        {/* )} */}
+        {roomDetail.myRoom && (
+          <WaitingUsersComponent
+            roomWaitingMembers={roomWaitingMembers.waitingList}
+            applyJoinRoom={applyJoinRoom}
+          />
+        )}
 
         {/* 점선 */}
         <DottedLineComponent />
@@ -177,56 +179,9 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
           </View>
         </View>
 
-        {/* {roomDetail.myRoom ? (
-          <View>
-            <View className="mx-5 mt-[78px]">
-              <ButtonComponent
-                color={'bg-white'}
-                borderColor={'border-main'}
-                textColor={'gray500'}
-                text={'채팅방으로 이동'}
-                disabled={false}
-                onPress={toChatRoomScreen}
-              />
-            </View>
-
-            <View className="mx-5 mt-3">
-              <ButtonComponent
-                color={'bg-white'}
-                borderColor={'border-main'}
-                textColor={'gray500'}
-                text={'매칭 수정하기'}
-                disabled={false}
-                onPress={toPatchRoomScreen}
-              />
-            </View>
-
-            <View className="mx-5 mb-10 mt-3">
-              <ButtonComponent
-                color={'bg-main'}
-                borderColor={'border-main'}
-                textColor={'white'}
-                text={'매칭 삭제하기'}
-                disabled={false}
-                onPress={deleteRoom}
-              />
-            </View>
-          </View>
-        ) : (
-          <View className="mx-5 mb-10 mt-3">
-            <ButtonComponent
-              color={'bg-main'}
-              borderColor={'border-main'}
-              textColor={'white'}
-              text={'매칭 참여하기'}
-              disabled={false}
-              onPress={joinRoom}
-            />
-          </View>
-        )} */}
-
-        <View>
-          <View className="mx-5 mt-[78px]">
+        {/* 버튼 */}
+        {roomDetail.myRoom || roomDetail.participate ? (
+          <View className="mx-5 mb-10 mt-[78px]">
             <ButtonComponent
               color={'bg-white'}
               borderColor={'border-main'}
@@ -236,30 +191,8 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
               onPress={toChatRoomScreen}
             />
           </View>
-
-          <View className="mx-5 mt-3">
-            <ButtonComponent
-              color={'bg-white'}
-              borderColor={'border-main'}
-              textColor={'gray500'}
-              text={'매칭 수정하기'}
-              disabled={false}
-              onPress={toPatchRoomScreen}
-            />
-          </View>
-
-          <View className="mx-5 mt-3">
-            <ButtonComponent
-              color={'bg-main'}
-              borderColor={'border-main'}
-              textColor={'white'}
-              text={'매칭 삭제하기'}
-              disabled={false}
-              onPress={deleteRoom}
-            />
-          </View>
-
-          <View className="mx-5 mb-10 mt-3">
+        ) : (
+          <View className="mx-5 mb-10 mt-[78px]">
             <ButtonComponent
               color={'bg-main'}
               borderColor={'border-main'}
@@ -269,7 +202,7 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
               onPress={joinRoom}
             />
           </View>
-        </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

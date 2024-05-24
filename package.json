@@ -12,6 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@bam.tech/react-native-image-resizer": "^3.0.9",
     "@gorhom/bottom-sheet": "^4.6.1",
     "@mj-studio/react-native-naver-map": "^1.2.0",
     "@notifee/react-native": "^7.8.2",
@@ -41,6 +42,7 @@
     "react-native-date-picker": "^5.0.0",
     "react-native-gesture-handler": "^2.16.0",
     "react-native-image-picker": "^7.1.2",
+    "react-native-image-viewing": "^0.2.2",
     "react-native-permissions": "^4.1.4",
     "react-native-reanimated": "^3.8.1",
     "react-native-redash": "^18.1.3",

@@ -1,6 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Image, Pressable } from 'react-native';
 
 import { ChatMessage } from '@type/entity/chat';
 
@@ -10,12 +10,14 @@ interface MessageBoxComponentProps {
   message: ChatMessage;
   memberId: number;
   openUserInfoModal: () => void;
+  openImageModal: (imageUrl: string) => void;
 }
 
 export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
   message,
   memberId,
   openUserInfoModal,
+  openImageModal,
 }) => {
   // Join message인 경우
   if (message.messageType === 'JOIN') {
@@ -93,6 +95,63 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
             </View>
           </View>
         </View>
+      );
+    }
+  }
+
+  if (message.messageType === 'IMAGE') {
+    // 내가 보낸거
+    if (message.memberId === memberId) {
+      return (
+        <Pressable className="my-2 flex-row" onPress={() => openImageModal(message.content)}>
+          <View className="mr-1 flex-1 flex-col items-end justify-end ">
+            <Text className="text-[10px]">2</Text>
+            <Text className="text-[10px] text-gray-300">
+              {dayjs(message.dateTime).format('HH:MM')}
+            </Text>
+          </View>
+
+          {/* 이미지 */}
+          <Image
+            className="h-[240px] w-[240px] rounded-xl"
+            source={{
+              uri: message.content,
+            }}
+          />
+        </Pressable>
+      );
+    } else {
+      // 남이 보낸거
+      return (
+        <Pressable className="my-2 flex-col">
+          <Pressable className="flex-row items-center" onPress={openUserInfoModal}>
+            <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
+              <ProfileImage className="" />
+            </View>
+
+            <View>
+              <Text>{message.sender}</Text>
+            </View>
+          </Pressable>
+
+          <View className="ml-4 mt-2 flex-row">
+            {/* 메세지 */}
+            {/* 이미지 */}
+            <Image
+              className="h-[140px] w-[140px] rounded-xl"
+              source={{
+                uri: message.content,
+              }}
+            />
+
+            <View className="ml-1 flex-1 flex-col items-start justify-end">
+              <Text className="text-[10px]">2</Text>
+              <Text className="text-[10px] text-gray-300">
+                {dayjs(message.dateTime).format('HH:MM')}
+              </Text>
+            </View>
+          </View>
+        </Pressable>
       );
     }
   }
