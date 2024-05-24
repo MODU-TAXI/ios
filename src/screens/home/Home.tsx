@@ -22,8 +22,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   };
 
   const toMapScreen = async () => {
-    // navigation.navigate('MainMapScreen');
-    navigation.navigate('RoomDetailScreen', { roomId: 74 });
+    navigation.navigate('MainMapScreen');
   };
 
   const toSearchScreen = () => {
