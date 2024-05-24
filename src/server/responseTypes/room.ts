@@ -8,6 +8,21 @@ export interface GetRoomCurrentCameraResponse {
   }[];
 }
 
+export interface GetRoomListResponse {
+  roomId: number;
+  spotId: number;
+  arrivalTime: string;
+  arrivalName: string;
+  roomTagBitMaskList: string[];
+  departureTime: string;
+  departureName: string;
+  currentHeadcount: number;
+  wishHeadcount: number;
+  durationMinutes: number;
+  expectedChargePerPerson: number;
+  expectedCharge: number;
+}
+
 // [모집 방 생성] /api/rooms
 export interface CreateRoomResponse {
   managerId: number; // 방장 Id
