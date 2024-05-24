@@ -1,3 +1,4 @@
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {
   Asset,
   launchCamera,
@@ -7,6 +8,36 @@ import {
 } from 'react-native-image-picker';
 
 import { uploadImage } from '@server/api/s3';
+
+type ResizedImage = {
+  path: string;
+  uri: string;
+  name: string;
+  size: number;
+  width: number;
+  height: number;
+};
+
+// 이미지 리사이징
+const resizeImage = async (image: Asset): Promise<ResizedImage | null> => {
+  if (image.uri) {
+    const resizerImage = await ImageResizer.createResizedImage(
+      image.uri,
+      360,
+      360,
+      'JPEG',
+      70,
+      0,
+      null,
+      false,
+      { onlyScaleDown: true },
+    );
+
+    return resizerImage;
+  }
+
+  return null;
+};
 
 // 이미지 업로드
 export const handleUpload = async (image: Asset): Promise<string> => {
@@ -46,8 +77,8 @@ export const openCamera = async (): Promise<string | null> => {
   }
 
   if (result?.assets) {
+    // resize image here
     return handleUpload(result.assets[0]);
-    // return result.assets[0];
   }
 
   return null;
@@ -66,8 +97,20 @@ export const openAlbum = async (): Promise<string | null> => {
   }
 
   if (result?.assets) {
-    return handleUpload(result.assets[0]);
-    // return result.assets[0];
+    const resizedImage = await resizeImage(result.assets[0]);
+
+    if (resizedImage) {
+      const resizedAsset: Asset = {
+        uri: resizedImage.uri,
+        type: 'image/jpeg',
+        fileName: resizedImage.name,
+        fileSize: resizedImage.size,
+        width: resizedImage.width,
+        height: resizedImage.height,
+      };
+
+      return handleUpload(resizedAsset);
+    }
   }
 
   return null;

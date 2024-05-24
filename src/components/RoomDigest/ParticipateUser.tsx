@@ -15,10 +15,10 @@ const ParticipateUserComponent: React.FC<ParticipateUserComponentProps> = ({ roo
       <View className="flex-row items-center">
         <UserBasicImage className="mr-1" />
         <Text className="text-lg font-semibold">{roomMember.name}</Text>
-        {/* 
-        {roomMember.score && (
-          <Text className="text-lg text-disabled2 font-medium ml-1">(나)</Text>
-        )} */}
+
+        {roomMember.thisIsMe && (
+          <Text className="ml-1 text-lg font-medium text-disabled2">(나)</Text>
+        )}
       </View>
 
       <Text className="text-lg font-normal text-disabled2">{roomMember.score}'C</Text>

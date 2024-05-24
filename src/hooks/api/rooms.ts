@@ -108,6 +108,7 @@ export const useGetRoom = (
         expectedCharge: response.expectedCharge,
         roomCategories: convertedRoomTagBitMaskList,
         myRoom: response.myRoom,
+        participate: response.participate,
 
         path: {
           coordinateReferenceSystem: response.path.coordinateReferenceSystem,

@@ -12,6 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@bam.tech/react-native-image-resizer": "^3.0.9",
     "@gorhom/bottom-sheet": "^4.6.1",
     "@mj-studio/react-native-naver-map": "^1.2.0",
     "@notifee/react-native": "^7.8.2",

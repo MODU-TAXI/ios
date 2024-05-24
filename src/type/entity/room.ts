@@ -22,7 +22,9 @@ export interface RoomDetail {
   expectedCharge: number; // 예상 요금
 
   roomCategories: string[];
-  myRoom: boolean;
+  myRoom: boolean; // 내가 방장인지 여부
+  participate: boolean; // 참여여부
+
   path: {
     coordinateReferenceSystem: {
       type: string;
@@ -69,6 +71,7 @@ export interface RoomMember {
   memberId: number;
   name: string;
   score: number;
+  thisIsMe: boolean;
 }
 
 // 방 대기자 정보
