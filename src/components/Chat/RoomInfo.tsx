@@ -2,7 +2,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { Text, View, StyleSheet } from 'react-native';
 
-import { RoomDetail } from '@type/entity/room';
+import { RoomPreview } from '@type/entity/room';
 
 import Dot from '@assets/images/Chat/Dot.svg';
 import Arrow from '@assets/images/Chat/Arrow.svg';
@@ -10,7 +10,7 @@ import Money from '@assets/images/Chat/Money.svg';
 import People from '@assets/images/Chat/People.svg';
 
 interface RoomInfoComponentProps {
-  roomDetail: RoomDetail;
+  roomPreview: RoomPreview;
 }
 
 const styles = StyleSheet.create({
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomDetail }) => {
+const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomPreview }) => {
   return (
     <View className="z-10 bg-white">
       <View style={styles.shadow} className="flex-col rounded-b-3xl bg-white px-4 py-6">
@@ -30,7 +30,7 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomDetail }) => 
           <View className="flex-row items-center justify-center">
             <View>
               <Text className="text-[16px] font-semibold text-[#272727]">
-                {roomDetail.arrivalName}
+                {roomPreview.arrivalName}
               </Text>
             </View>
 
@@ -38,7 +38,7 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomDetail }) => 
 
             <View>
               <Text className="text-[16px] font-semibold text-[#272727]">
-                {roomDetail.departureName}
+                {roomPreview.departureName}
               </Text>
             </View>
           </View>
@@ -57,7 +57,7 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomDetail }) => 
             </View>
 
             <View>
-              <Text className="text-[12px] text-[#7c7c7c]">{roomDetail.arrivalTime} 출발</Text>
+              <Text className="text-[12px] text-[#7c7c7c]">{roomPreview.departureTime} 출발</Text>
             </View>
           </View>
 
@@ -65,13 +65,13 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomDetail }) => 
           <View className="flex-row">
             <View className="mr-2 flex-row items-center justify-center">
               <People className="mr-1" />
-              <Text className="text-[12px] text-[#7c7c7c]">{roomDetail.wishHeadcount} / 3</Text>
+              <Text className="text-[12px] text-[#7c7c7c]">{roomPreview.wishHeadcount} / 3</Text>
             </View>
 
             <View className="flex-row items-center justify-center">
               <Money className="mr-1" />
               <Text className="text-[12px] text-[#7c7c7c]">
-                인당 {roomDetail.expectedChargePerPerson.toLocaleString('ko-KR')}원
+                인당 {roomPreview.expectedChargePerPerson.toLocaleString('ko-KR')}원
               </Text>
             </View>
           </View>

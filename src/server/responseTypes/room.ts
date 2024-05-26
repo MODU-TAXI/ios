@@ -59,6 +59,19 @@ export interface CreateRoomResponse {
   };
 }
 
+// [방 미리보기 조회] /api/rooms/preview/{id}
+export interface GetRoomPreviewResponse {
+  roomId: number;
+  departureTime: string;
+  departureName: string;
+  arrivalName: string;
+  roomStatus: string;
+  currentHeadcount: number;
+  wishHeadcount: number;
+  expectedChargePerPerson: number;
+  expectedCharge: number;
+}
+
 // [경로를 포함한 방 상세 정보 조회] /api/rooms/{id}
 export interface GetRoomDetailResponse {
   managerId: number; // 방장 Id

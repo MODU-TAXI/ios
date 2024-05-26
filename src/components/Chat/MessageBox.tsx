@@ -1,5 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
+import FastImage from 'react-native-fast-image';
 import { View, Text, Image, Pressable } from 'react-native';
 
 import { ChatMessage } from '@type/entity/chat';
@@ -112,7 +113,7 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
           </View>
 
           {/* 이미지 */}
-          <Image
+          <FastImage
             className="h-[240px] w-[240px] rounded-xl"
             source={{
               uri: message.content,
@@ -123,7 +124,7 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
     } else {
       // 남이 보낸거
       return (
-        <Pressable className="my-2 flex-col">
+        <View className="my-2 flex-col">
           <Pressable className="flex-row items-center" onPress={openUserInfoModal}>
             <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
               <ProfileImage className="" />
@@ -134,10 +135,10 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
             </View>
           </Pressable>
 
-          <View className="ml-4 mt-2 flex-row">
+          <Pressable className="ml-4 mt-2 flex-row" onPress={() => openImageModal(message.content)}>
             {/* 메세지 */}
             {/* 이미지 */}
-            <Image
+            <FastImage
               className="h-[140px] w-[140px] rounded-xl"
               source={{
                 uri: message.content,
@@ -150,8 +151,8 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
                 {dayjs(message.dateTime).format('HH:MM')}
               </Text>
             </View>
-          </View>
-        </Pressable>
+          </Pressable>
+        </View>
       );
     }
   }

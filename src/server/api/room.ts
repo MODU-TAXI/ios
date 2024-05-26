@@ -14,6 +14,7 @@ import {
   GetRoomListResponse,
   GetRoomDetailResponse,
   GetRoomMembersResponse,
+  GetRoomPreviewResponse,
   ApproveJoinRoomResponse,
   GetRoomCurrentCameraResponse,
   GetRoomWaitingMembersResponse,
@@ -50,7 +51,7 @@ export const getRoomCurrentCamera = async (
   radius?: number,
   spotId?: number,
   roomTags?: string[],
-  isImminent?: boolean
+  isImminent?: boolean,
 ): Promise<GetRoomCurrentCameraResponse> => {
   const params: any = {
     searchLongitude: searchLongitude,
@@ -99,7 +100,18 @@ export const getRoomList = async (
   });
 
   return response.data;
-}
+};
+
+// [방 미리보기 조회] /api/rooms/preview/{id}
+export const getRoomPreview = async (id: number): Promise<GetRoomPreviewResponse | null> => {
+  if (id > 0) {
+    const response = await GetAxiosInstance<GetRoomDetailResponse>(`/api/rooms/preview/${id}`);
+
+    return response.data;
+  }
+
+  return null;
+};
 
 // [경로를 포함한 방 상세 정보 조회] /api/rooms/{id}
 export const getRoomDetail = async (id: number): Promise<GetRoomDetailResponse> => {

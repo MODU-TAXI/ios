@@ -15,6 +15,7 @@ import {
   getRoomList,
   getRoomDetail,
   getRoomMembers,
+  getRoomPreview,
   approveJoinRoom,
   getRoomCurrentCamera,
   getRoomWaitingMembers,
@@ -34,7 +35,7 @@ import {
 import { translateCategory } from '@utils/room';
 import { InfoToastMessage, ErrorToastMessage } from '@utils/toastMessage';
 
-import { RoomList, RoomDetail, RoomCurrentCamera } from '@type/entity/room';
+import { RoomList, RoomDetail, RoomPreview, RoomCurrentCamera } from '@type/entity/room';
 
 // 방 생성
 export const useCreateRoom = (): UseMutationResult<
@@ -65,12 +66,21 @@ export const useCreateRoom = (): UseMutationResult<
   });
 };
 
+export const useGetRoomPreview = (roomId: number): { roomPreview: RoomPreview | null } => {
+  const { data: roomPreview } = useSuspenseQuery({
+    queryKey: [`/api/rooms/preview/${roomId}`, roomId],
+    queryFn: () => getRoomPreview(roomId),
+  });
+
+  return { roomPreview };
+};
+
 // 특정 방 가져오기
 export const useGetRoom = (
   roomId: number,
 ): { roomDetail: RoomDetail; getRoomRefetch: () => void } => {
   const { data: roomDetail, refetch: getRoomRefetch } = useSuspenseQuery({
-    queryKey: [`/api/rooms`, roomId],
+    queryKey: [`/api/rooms/${roomId}`, roomId],
     queryFn: () => getRoomDetail(roomId),
     // staleTime: 30000,
     // gcTime: 30000,
@@ -84,7 +94,6 @@ export const useGetRoom = (
       const convertedRoomTagBitMaskList = response.roomTagBitMaskList.map((roomTagBitMask) =>
         translateCategory(roomTagBitMask),
       );
-      console.log(response)
       return {
         managerId: response.managerId,
         roomId: response.roomId,
@@ -159,16 +168,25 @@ export const useGetRoomCurrentCamera = (
   radius?: number,
   spotId?: number,
   roomTags?: string[],
-  isImminent?: boolean
+  isImminent?: boolean,
 ): { rooms: RoomCurrentCamera['rooms']; refetch: () => void } => {
   const { data: rooms, refetch } = useSuspenseQuery({
-    queryKey: [`/api/rooms/map`, searchLongitude, searchLatitude, radius, spotId, roomTags, isImminent],
-    queryFn: () => getRoomCurrentCamera(searchLongitude, searchLatitude, radius, spotId, roomTags, isImminent),
+    queryKey: [
+      `/api/rooms/map`,
+      searchLongitude,
+      searchLatitude,
+      radius,
+      spotId,
+      roomTags,
+      isImminent,
+    ],
+    queryFn: () =>
+      getRoomCurrentCamera(searchLongitude, searchLatitude, radius, spotId, roomTags, isImminent),
     select: (response: GetRoomCurrentCameraResponse) => {
       return response.rooms;
     },
   });
-  console.log(rooms)
+  console.log(rooms);
   return { rooms, refetch };
 };
 
@@ -185,8 +203,30 @@ export const useGetRoomList = (
   sortType?: string,
 ): { rooms: RoomList[]; refetch: () => void } => {
   const { data: rooms, refetch } = useSuspenseQuery({
-    queryKey: [`/api/rooms/map`, page, size, searchLongitude, searchLatitude, spotId, radius, roomTags, isImminent, sortType],
-    queryFn: () => getRoomList(page, size, searchLongitude, searchLatitude, spotId, radius, roomTags, isImminent, sortType),
+    queryKey: [
+      `/api/rooms/map`,
+      page,
+      size,
+      searchLongitude,
+      searchLatitude,
+      spotId,
+      radius,
+      roomTags,
+      isImminent,
+      sortType,
+    ],
+    queryFn: () =>
+      getRoomList(
+        page,
+        size,
+        searchLongitude,
+        searchLatitude,
+        spotId,
+        radius,
+        roomTags,
+        isImminent,
+        sortType,
+      ),
     select: (response: GetRoomListResponse[]) => {
       return response;
     },

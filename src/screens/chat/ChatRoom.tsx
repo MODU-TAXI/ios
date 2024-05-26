@@ -14,6 +14,7 @@ import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 import { memberIdState, messagesState } from '@recoil/recoil';
 
 import { useEnterChatRoom } from '@hooks/chat';
+import { useGetRoomPreview } from '@hooks/api/rooms';
 
 import { ChatRoomScreenProps } from '@type/param/loginStack';
 
@@ -23,7 +24,9 @@ Object.assign('global', {
 });
 
 const ChatRoomScreen = ({ route }: ChatRoomScreenProps) => {
-  const { roomDetail } = route.params;
+  const { roomId } = route.params;
+
+  const { roomPreview } = useGetRoomPreview(roomId);
 
   const [newMessages, setNewMeesages] = useRecoilState(messagesState);
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
@@ -66,12 +69,12 @@ const ChatRoomScreen = ({ route }: ChatRoomScreenProps) => {
       />
 
       {/* 방 정보 Component */}
-      <RoomInfoComponent roomDetail={roomDetail} />
+      <RoomInfoComponent roomPreview={roomPreview} />
 
       <KeyboardAvoidingView className="flex-1 bg-white" behavior="padding">
         {/* 메세지 Component */}
         <MessagesComponent
-          roomId={roomDetail.roomId}
+          roomId={roomId}
           memberId={memberId}
           openUserInfoModal={openUserInfoModal}
           newMessages={newMessages}
