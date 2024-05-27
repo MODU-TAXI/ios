@@ -22,19 +22,33 @@ import MapPinGray from '@assets/images/Map/MapPinGray.svg';
 import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 import ChevronBackwardCircle from '@assets/images/Map/chevronBackwardCircle.svg';
 
-const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
+const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
   const insets = useSafeAreaInsets();
   const [isTouching, setIsTouching] = useState<boolean>(false);
   const mapRef = useRef<NaverMapViewRef>(null);
   const [searchBoxValue, setSearchBoxValue] = useState<string>("출발지를 입력하세요");
   const [isSearched, setIsSearched] = useState<boolean>(false);
   const [, setDeparture] = useRecoilState(departureState);
+  const [builingName, setBuildingName] = useState<string>('');
 
   const [currentCamera, setCurrentCamera] = useState<Camera>({
     latitude: 37.451062,
     longitude: 126.656496,
     zoom: 16,
   });
+
+  useEffect(() => {
+    if (route.params) {
+      const searchCamera: Camera = {
+        latitude: route.params?.searchParams.latitude,
+        longitude: route.params?.searchParams.longitude,
+        zoom: 16,
+      }
+      mapRef.current?.animateCameraTo(searchCamera);
+      setBuildingName(route.params?.searchParams.title);
+    }
+  }, [route.params])
+
 
   const { results, refetch } = useReverseGeocoding(
     currentCamera.latitude, 
@@ -109,6 +123,10 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
 
   /** 빌딩 이름 유무에 따른 렌더링 */
   const formatBuildingName = () => {
+    if (route.params) {
+      return route.params?.searchParams.title;
+    }
+
     const value = results?.[1]?.land.addition0.value;
 
     if (value === undefined) {
@@ -273,7 +291,6 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
             {formatBuildingName() === "주소 정보 없음" || isTouching ? (
               <Pressable
                 className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-disabled2"
-                onPress={() => handleSearch()}
                 disabled={true}
               >
                 <Text className="font-semibold text-white">출발지로 설정</Text>

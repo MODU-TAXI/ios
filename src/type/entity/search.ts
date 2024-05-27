@@ -116,3 +116,9 @@ export interface NaverReverseGeocoding {
     },
   }[]
 }
+
+export interface DepartureSearchParams {
+  title: string,
+  latitude: number,
+  longitude: number,
+}

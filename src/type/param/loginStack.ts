@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { RoomDetail } from '@type/entity/room';
+import { DepartureSearchParams } from '@type/entity/search';
 
 export type TabNavigatorParamList = {
   HomeScreen: undefined;
@@ -14,7 +15,7 @@ export type LoginStackParamList = {
   MainMapScreen: undefined;
   NaverMapScreen: undefined;
   SearchScreen: undefined;
-  DepartureMapScreen: undefined;
+  DepartureMapScreen: undefined | { searchParams: DepartureSearchParams };
   CreateRoomScreen: undefined;
   RoomDetailScreen: { roomId: number };
   PatchRoomScreen: { roomDetail: RoomDetail };

@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { convertCoordinates } from '../../utils/map';
+
 import SearchBoxComponent from '@components/Search/SearchBox';
 import SpotSearchComponent from '@components/Search/SpotSearch';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
@@ -33,10 +35,16 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
   /** 선택한 검색어를 전달하며 이동 */
   const toDepartureMapScreen = (
     title: string,
-    latitude: number,
-    longitude: number,
+    mapx: number,
+    mapy: number,
   ) => {
-    navigation.navigate('DepartureMapScreen');
+    const { latitude, longitude } = convertCoordinates(mapx, mapy);
+    console.log(latitude, longitude);
+    navigation.navigate('DepartureMapScreen', {searchParams: {
+      title: title,
+      latitude: latitude,
+      longitude: longitude,
+    }});
   }
 
   return (
