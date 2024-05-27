@@ -6,6 +6,7 @@ import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import React, { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import { Camera, NaverMapView, NaverMapViewRef } from "@mj-studio/react-native-naver-map";
 
+import ButtonComponent from "@components/Button";
 import TransparentSearchBoxComponent from "@components/Search/TransparentSearchBox";
 
 import { departureState } from "@recoil/recoil";
@@ -269,12 +270,23 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
             </Text>
 
             {/** 출발지 설정 버튼 */}
-            <Pressable
-              className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-main"
-              onPress={() => handleSearch()}
-            >
-              <Text className="font-semibold text-white">출발지로 설정</Text>
-            </Pressable>
+            {formatBuildingName() === "주소 정보 없음" || isTouching ? (
+              <Pressable
+                className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-disabled2"
+                onPress={() => handleSearch()}
+                disabled={true}
+              >
+                <Text className="font-semibold text-white">출발지로 설정</Text>
+              </Pressable>
+            ) : (
+              <Pressable
+                className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-main"
+                onPress={() => handleSearch()}
+              >
+                <Text className="font-semibold text-white">출발지로 설정</Text>
+              </Pressable>
+            )}
+
 
           </View>
         </BottomSheetView>
