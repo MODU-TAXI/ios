@@ -2,7 +2,7 @@ import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
 import { useRecoilState } from 'recoil';
 import { View, Text } from 'react-native';
-import React, { useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
@@ -60,12 +60,18 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
     }, [isFocused]),
   );
 
-  // 방 입장
+  // 만약 참여하고 있는 상태라면 socket 재연결
+  useEffect(() => {
+    if (roomDetail.participate) {
+      connect(roomDetail.roomId);
+    }
+  }, [roomDetail.participate, roomDetail.roomId, connect]);
+
+  // 방 입장 요청
   const joinRoom = async () => {
     await joinRoomMutate(roomId);
 
     setSocketRoomId(roomId);
-    connect(roomId);
   };
 
   // 방 입장 수락

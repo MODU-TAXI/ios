@@ -69,7 +69,7 @@ const ChatRoomScreen = ({ route }: ChatRoomScreenProps) => {
       />
 
       {/* 방 정보 Component */}
-      <RoomInfoComponent roomPreview={roomPreview} />
+      {roomPreview && <RoomInfoComponent roomPreview={roomPreview} />}
 
       <KeyboardAvoidingView className="flex-1 bg-white" behavior="padding">
         {/* 메세지 Component */}

@@ -5,8 +5,6 @@ import WaitingUserComponent from './WaitingUser';
 
 import { RoomWaitingMember } from '@type/entity/room';
 
-import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
-
 interface WaitingUsersComponentProps {
   roomWaitingMembers: RoomWaitingMember[];
   applyJoinRoom: (memberId: number) => Promise<void>;
