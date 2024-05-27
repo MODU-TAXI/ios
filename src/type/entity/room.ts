@@ -1,3 +1,16 @@
+// 방 간단 정보
+export interface RoomPreview {
+  roomId: number;
+  departureTime: string;
+  departureName: string;
+  arrivalName: string;
+  roomStatus: string;
+  currentHeadcount: number;
+  wishHeadcount: number;
+  expectedChargePerPerson: number;
+  expectedCharge: number;
+}
+
 // 방 세부 정보
 export interface RoomDetail {
   managerId: number; // 방장 Id
@@ -51,6 +64,7 @@ export interface RoomCurrentCamera {
   }[];
 }
 
+// 방 정보
 export interface RoomList {
   roomId: number;
   spotId: number;

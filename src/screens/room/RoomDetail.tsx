@@ -87,10 +87,8 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
 
   // 채팅방으로 이동
   const toChatRoomScreen = async () => {
-    navigation.navigate('ChatRoomScreen', { roomDetail: roomDetail });
+    navigation.navigate('ChatRoomScreen', { roomId: roomDetail.roomId });
   };
-
-  console.log(roomDetail.participate);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>

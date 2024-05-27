@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
+import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import MainScreen from 'src/screens/main/Main';
@@ -30,8 +31,12 @@ import { useFcmMessage } from '@hooks/fcm';
 import { useNotifee } from '@hooks/notifee';
 import { useCheckLogin } from '@hooks/login';
 
+import { onMessageReceivedBackground } from '@utils/fcm';
+
 import { RootStackParamList } from '@type/param/rootStack';
 import { LoginStackParamList } from '@type/param/loginStack';
+// Background에서 FCM Message 수신
+messaging().setBackgroundMessageHandler(onMessageReceivedBackground);
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();

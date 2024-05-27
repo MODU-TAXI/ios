@@ -6,11 +6,11 @@ import Receipt from '@assets/images/Home/Receipt.svg';
 
 const EtcComponent: React.FC = () => {
   return (
-    <View className="mt-8 flex-row items-center justify-between">
+    <View className="mb-[120px] flex-row items-center justify-between px-4">
       <View>
         <Text className="px-1 text-[18px] font-semibold">이용내역</Text>
 
-        <View className="mt-2 flex-row rounded-2xl border-2 border-[#EBEBEB] px-3 py-4">
+        <View className="mt-4 flex-row rounded-2xl border-2 border-[#EBEBEB] px-3 py-4">
           <Receipt className="mr-1" />
 
           <View>
@@ -27,7 +27,7 @@ const EtcComponent: React.FC = () => {
       <View>
         <Text className="px-1 text-[18px] font-semibold">나의 매칭률</Text>
 
-        <View className="mt-2  flex-row rounded-2xl border-2 border-[#EBEBEB] px-3 py-4">
+        <View className="mt-4 flex-row rounded-2xl border-2 border-[#EBEBEB] px-3 py-4">
           <Check className="mr-1" />
 
           <View className="flex-col">

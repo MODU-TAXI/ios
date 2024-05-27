@@ -10,7 +10,7 @@ export const handleFirebaseMessage = async (
 ): Promise<string> => {
   if (roomId) {
     return notifee.displayNotification({
-      title: title,
+      title: '모두의 택시',
       body: content,
       data: { messageType: messageType, roomId: roomId },
     });
@@ -25,7 +25,7 @@ export const handleFirebaseMessage = async (
 
 // notifee 알림을 클릭했을때 handling
 export const handleNotificationPress = async (detail: EventDetail) => {
-  const messageType = detail.notification?.data?.messageType;
+  const messageType = detail.notification?.data?.MessageType;
   const roomId = detail.notification?.data?.roomId;
 
   switch (messageType) {

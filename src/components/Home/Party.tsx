@@ -8,9 +8,9 @@ import People from '@assets/images/Chat/People.svg';
 
 const PartyComponent: React.FC = () => {
   return (
-    <View className="mr-4 rounded-xl border-2 border-[#EBEBEB] px-4 py-3">
+    <View className="mr-4 rounded-xl border-2 border-[#EBEBEB] py-3 pl-4 pr-8">
       {/* 출발 시각 */}
-      <View className="flex-row items-center rounded-lg bg-[#EBFBF7] px-3 py-1">
+      <View className="w-[100px] flex-row items-center justify-center rounded-lg bg-[#EBFBF7] px-3 py-1">
         <Check className="mr-1" />
         <Text className="text-[12px] font-medium text-main">출발 14:25</Text>
       </View>
@@ -29,7 +29,7 @@ const PartyComponent: React.FC = () => {
       </View>
 
       {/* 인원수, 가격 */}
-      <View className="mt-2  flex-row">
+      <View className="mt-2 flex-row">
         <View className="mr-2 flex-row items-center justify-center">
           <People className="mr-1" />
           <Text className="text-[12px] text-[#7c7c7c]">2 / 3</Text>

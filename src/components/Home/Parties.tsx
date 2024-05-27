@@ -41,12 +41,12 @@ const parties = [
 
 const PartiesComponent: React.FC = () => {
   return (
-    <View className="mt-8">
+    <View className="px-4">
       <View>
         <Text className="text-[18px] font-semibold">실시간 택시팟을 알려드려요!</Text>
       </View>
 
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className="mt-2">
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className="mt-4">
         {parties.map((party) => (
           <PartyComponent key={party.id} />
         ))}

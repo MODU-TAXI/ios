@@ -12,7 +12,7 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({ toSearchScreen })
   return (
     <Pressable
       onPress={toSearchScreen}
-      className="mt-2 flex flex-row items-center rounded-xl border-2 border-[#E2E2E2] py-2 pr-6"
+      className="mt-2 flex flex-row items-center rounded-xl bg-white py-2"
     >
       <Search className="ml-3 mr-1" />
 
