@@ -72,6 +72,11 @@ export function ChatProvider({ children }: any) {
 
   const connect = (roomId: number) => {
     if (accessToken) {
+      // 이미 connect 되어 있을때는 안되게 함
+      if (stompClient.current && stompClient.current.connected) {
+        return;
+      }
+
       stompClient.current = new StompJs.Client({
         brokerURL: Config.SOCKET_URL,
         connectHeaders: {
@@ -80,7 +85,7 @@ export function ChatProvider({ children }: any) {
         debug: function (str) {
           console.log(str);
         },
-        reconnectDelay: 5000,
+        reconnectDelay: 500,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
       });
@@ -104,8 +109,6 @@ export function ChatProvider({ children }: any) {
   // 메세지 받기
   const onMessageReceived = (message: Message) => {
     const decodedMessage: MessageBody = JSON.parse(message.body);
-
-    console.log(decodedMessage);
 
     if (stompClient.current.chatIn) {
       setMessages((prev: MessageBody[]) => [...prev, decodedMessage]);

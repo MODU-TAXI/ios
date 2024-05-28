@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { View, Text, Pressable } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
+import { CommonActions } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -73,7 +74,15 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
 
     connect(room.roomId);
     setSocketRoomId(room.roomId);
-    return navigation.navigate('HomeScreen');
+
+    // stack을 지우며 해당 roomDetail로 이동
+    navigation.reset({
+      index: 0,
+      routes: [
+        { name: 'MainScreen' },
+        { name: 'RoomDetailScreen', params: { roomId: room.roomId } },
+      ],
+    });
   };
 
   // Datepicker open

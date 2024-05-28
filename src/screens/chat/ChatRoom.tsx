@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import TextEncodingPolyfill from 'text-encoding';
+import React, { useState, useEffect } from 'react';
 import ImageView from 'react-native-image-viewing';
 import { KeyboardAvoidingView } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';

@@ -1,7 +1,7 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
 import { useRecoilState } from 'recoil';
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import React, { useEffect, useCallback } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -43,13 +43,13 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
 
   const [, setSocketRoomId] = useRecoilState(roomState);
   const { roomDetail, getRoomRefetch } = useGetRoom(roomId); // 방 상세 정보
-  const { roomMembers } = useGetRoomMembers(roomId); // 참여자 목록
-  const { roomWaitingMembers } = useGetRoomWaitingMembers(roomId); // 대기자 목록
+  const { roomMembers, getRoomMembersRefetch } = useGetRoomMembers(roomId); // 참여자 목록
+  const { roomWaitingMembers, getRoomWaitingMembersRefetch } = useGetRoomWaitingMembers(roomId); // 대기자 목록
   const { mutateAsync: joinRoomMutate } = useJoinRoom(roomId); // 방 입장 mutate
   const { mutateAsync: applyJoinRoomMutate } = useApproveJoinRoom(roomId); // 방 입장 수락 mutate
   const { mutateAsync: deleteRoomMutate } = useDeleteRoom(roomId); // 방 삭제 mutate
 
-  const { connect } = useChatContext();
+  const { disConnect } = useChatContext();
 
   // 방을 수정하고 다시 focusing 되었을때 api 재호출 -> 이 로직은 수정하지 않았을때는 두번 호출됨 수정해야할듯
   useFocusEffect(
@@ -61,29 +61,42 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
   );
 
   // 만약 참여하고 있는 상태라면 socket 재연결
-  useEffect(() => {
-    if (roomDetail.participate) {
-      connect(roomDetail.roomId);
-    }
-  }, [roomDetail.participate, roomDetail.roomId, connect]);
+  // useEffect(() => {
+  //   if (roomDetail.participate) {
+  //     connect(roomDetail.roomId);
+  //     setSocketRoomId(roomId);
+  //   }
+  // }, [roomDetail.participate, roomDetail.roomId, connect]);
 
   // 방 입장 요청
   const joinRoom = async () => {
     await joinRoomMutate(roomId);
 
-    setSocketRoomId(roomId);
+    getRoomMembersRefetch(); // 멤버 refetch
+    getRoomWaitingMembersRefetch(); // 대기 멤버 refetch
   };
 
   // 방 입장 수락
   const applyJoinRoom = async (memberId: number) => {
     await applyJoinRoomMutate(memberId);
+
+    getRoomMembersRefetch(); // 멤버 refetch
+    getRoomWaitingMembersRefetch(); // 대기 멤버 refetch
   };
 
   // 방 삭제
   const deleteRoom = async () => {
     await deleteRoomMutate();
 
-    navigation.navigate('HomeScreen');
+    // socket RoomId도 -1로 초기화
+    setSocketRoomId(-1);
+    disConnect();
+
+    // stack을 지우며 해당 roomDetail로 이동
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'MainScreen' }],
+    });
   };
 
   // 방 수정페이지로 이동
@@ -182,6 +195,10 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
             </Text>
           </View>
         </View>
+
+        <Pressable onPress={deleteRoom}>
+          <Text>삭제</Text>
+        </Pressable>
 
         {/* 버튼 */}
         {roomDetail.myRoom || roomDetail.participate ? (

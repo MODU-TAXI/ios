@@ -51,6 +51,7 @@ function AppInner() {
   return loggedIn ? (
     <ChatProvider>
       <LogInStack.Navigator
+        initialRouteName="MainScreen"
         screenOptions={{
           headerShown: false,
         }}
