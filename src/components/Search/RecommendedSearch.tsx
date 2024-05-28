@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 
+import { modifyDistStr } from '@utils/search';
+
 
 interface RecommendedSearchProps {
   keyword: string;
@@ -48,7 +50,7 @@ const RecommendedSearchComponent: React.FC<RecommendedSearchProps> = ({
                 >
                   {address}
                 </Text>
-                <Text className="w-1/5 text-right text-sm text-gray600">{distance}m</Text>
+                <Text className="w-1/5 text-right text-sm text-gray600">{modifyDistStr(distance)}</Text>
             </View>
         </View>
     </View>

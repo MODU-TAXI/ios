@@ -16,6 +16,21 @@ export interface NaverSearch {
   }[];
 };
 
+export interface SortedItemType {
+  address: string,
+  category: string,
+  description: string,
+  link: string,
+  mapx: number,
+  mapy: number,
+  roadAddress: string,
+  telephone: string,
+  title: string,
+  distance: number;
+  latitude: number;
+  longitude: number;
+}
+
 export interface NaverReverseGeocoding {
   status: {
     code: number,
