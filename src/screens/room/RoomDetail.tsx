@@ -1,10 +1,10 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
 import { useRecoilState } from 'recoil';
-import React, { useState, useCallback } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { View, Text, Modal, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { useChatContext } from 'src/providers/chatProvider';
 
@@ -38,6 +38,8 @@ dayjs.locale('ko');
 const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
   const { roomId } = route.params;
 
+  const { connect, stompClient } = useChatContext();
+
   const [, setSocketRoomId] = useRecoilState(roomState);
   const { roomDetail } = useGetRoom(roomId); // 방 상세 정보
   const { roomMembers, getRoomMembersRefetch } = useGetRoomMembers(roomId); // 참여자 목록
@@ -49,13 +51,13 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
 
   const { disConnect } = useChatContext();
 
-  // 만약 참여하고 있는 상태라면 socket 재연결
-  // useEffect(() => {
-  //   if (roomDetail.participate) {
-  //     connect(roomDetail.roomId);
-  //     setSocketRoomId(roomId);
-  //   }
-  // }, [roomDetail.participate, roomDetail.roomId, connect]);
+  // 만약 참여하고 있는 상태이고 socket이 connected되지 않았다면 socket 재연결
+  useEffect(() => {
+    if (roomDetail.participate && !stompClient.current.conncted) {
+      connect(roomDetail.roomId);
+      setSocketRoomId(roomId);
+    }
+  }, [roomDetail.participate, roomDetail.roomId]);
 
   // 수정, 삭제 모달창 열기
   const openUpdateModal = () => {

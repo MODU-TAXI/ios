@@ -21,7 +21,7 @@ export const onMessageReceivedForeground = async (
     return;
   }
 
-  if (messageType === 'CHAT') {
+  if (messageType === 'CHAT' || messageType === 'IMAGE') {
     if (!chatIn) {
       if (roomId && typeof roomId === 'string') {
         await handleFirebaseMessage(title, body, messageType, roomId);
@@ -98,7 +98,7 @@ export const onMessageReceivedBackground = async (
     return;
   }
 
-  if (messageType === 'CHAT') {
+  if (messageType === 'CHAT' || messageType === 'IMAGE ') {
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }

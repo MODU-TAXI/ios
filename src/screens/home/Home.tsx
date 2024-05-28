@@ -1,6 +1,6 @@
+import React from 'react';
 import { View } from 'react-native';
 import { useRecoilValue } from 'recoil';
-import React, { useCallback } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -19,8 +19,6 @@ import { HomeScreenProps } from '@type/param/loginStack';
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const userInfo = useRecoilValue(userInfoState);
-
-  console.log(userInfo);
 
   const roomId = useRecoilValue(roomState);
 
