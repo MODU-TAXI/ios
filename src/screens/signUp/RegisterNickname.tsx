@@ -22,12 +22,18 @@ const RegisterNicknameScreen = ({ navigation }: RegisterNicknameScreenProps) => 
 
   // 닉네임 유효성 체크
   const checkNickname = async (): Promise<void> => {
-    await registerNickname({ nickname: nickname });
+    if (nickname.trim() === '') {
+      return setErrorMessage('닉네임은 공백일 수 없습니다.');
+    }
+
+    const trimNickname = nickname.trim();
+
+    await registerNickname({ nickname: trimNickname });
 
     setUserInfo({
       id: userInfo.id,
       name: userInfo.name,
-      nickname: nickname,
+      nickname: trimNickname,
       gender: userInfo.gender,
       phoneNumber: userInfo.phoneNumber,
       email: userInfo.email,
