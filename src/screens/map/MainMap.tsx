@@ -14,6 +14,7 @@ import BottomSheet, {
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 import {
+  Coord,
   Camera,
   NaverMapView,
   NaverMapViewRef,
@@ -32,7 +33,7 @@ import { signUpUserState } from '@recoil/recoil';
 
 import { useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
-import { calculateRadius, calculateCenter } from '@utils/map';
+import { calculateRadius, calculateCenter, getCurrentLocation } from '@utils/map';
 
 import { MainMapScreenProps } from '@type/param/loginStack';
 
@@ -103,22 +104,17 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
 
   // 처음 렌더링 시 현재위치 저장 및 방 탐색
   useEffect(() => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        const adjustedLatitude = latitude - 0.01;
-        setCurrentCamera({
-          latitude: adjustedLatitude,
-          longitude: longitude,
-          zoom: 16,
-        });
-      },
-      (error) => console.error(error),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-    );
-
+    const fetchCurrentLocation = async () => {
+      const location = await getCurrentLocation();
+      setCurrentCamera({
+        latitude: location.latitude,
+        longitude: location.longitude,
+      });
+      mapRef.current?.animateCameraTo(location);
+    };
+    fetchCurrentLocation();
     refetch();
-  }, []);
+  }, [])
 
   // timeout 정보 저장 Ref
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -165,22 +161,12 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
 
   /** 현재위치 이동 버튼 */
   const moveToCurrentLocation = async() => {
-    let currentLocation: Camera = {
-      latitude: 37.451062,
-      longitude: 126.656496,
-    }
-
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        currentLocation = {
-          latitude: latitude,
-          longitude: longitude,
-        }
-      },
-      (error) => console.error(error),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-    );
+    const currentLocation = await getCurrentLocation();
+    setCurrentCamera({
+      latitude: currentLocation.latitude,
+      longitude: currentLocation.longitude,
+      zoom: 16,
+    });
 
     mapRef.current?.animateCameraTo(currentLocation);
     refetch();

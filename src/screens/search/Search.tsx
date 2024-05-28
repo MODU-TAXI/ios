@@ -2,9 +2,10 @@ import { useRecoilState } from 'recoil';
 import { View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { convertCoordinates } from '../../utils/map';
+import { convertCoordinates, getCurrentLocation } from '../../utils/map';
 
 import SearchBoxComponent from '@components/Search/SearchBox';
 import SpotSearchComponent from '@components/Search/SpotSearch';
@@ -23,6 +24,21 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
   const { data: items, refetch } = useNaverSearch(keyword);
+  const [currentLocation, setCurrentLocation] = useState<Coord>({
+    latitude: 37.5665,
+    longitude: 126.978,
+  });
+
+  useEffect(() => {
+    const fetchCurrentLocation = async () => {
+      const location = await getCurrentLocation();
+      setCurrentLocation({
+        latitude: location.latitude,
+        longitude: location.longitude,
+      });
+    };
+    fetchCurrentLocation();
+  }, [])
 
   useEffect(() => {
     refetch();
@@ -39,7 +55,6 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
     mapy: number,
   ) => {
     const { latitude, longitude } = convertCoordinates(mapx, mapy);
-    console.log(latitude, longitude);
     navigation.navigate('DepartureMapScreen', {searchParams: {
       title: title,
       latitude: latitude,
@@ -65,6 +80,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
           {items && 
           items.map((item, index) => (
             <Pressable
+              key={index}
               onPress={() => toDepartureMapScreen(
                 deleteTagTitle(item.title),
                 item.mapx,

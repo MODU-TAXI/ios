@@ -16,6 +16,7 @@ export type LoginStackParamList = {
   NaverMapScreen: undefined;
   SearchScreen: undefined;
   DepartureMapScreen: undefined | { searchParams: DepartureSearchParams };
+  ArrivalMapScreen: undefined;
   CreateRoomScreen: undefined;
   RoomDetailScreen: { roomId: number };
   PatchRoomScreen: { roomDetail: RoomDetail };
@@ -29,6 +30,7 @@ export type MainMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'Ma
 export type NaverMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'NaverMapScreen'>;
 export type SearchScreenProps = NativeStackScreenProps<LoginStackParamList, 'SearchScreen'>;
 export type DepartureMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'DepartureMapScreen'>;
+export type ArrivalMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'ArrivalMapScreen'>;
 export type CreateRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateRoomScreen'>;
 export type RoomDetailScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomDetailScreen'>;
 export type PatchRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'PatchRoomScreen'>;

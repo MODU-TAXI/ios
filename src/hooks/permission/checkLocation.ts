@@ -2,7 +2,7 @@ import { Alert, Linking } from 'react-native';
 import { check, RESULTS, PERMISSIONS } from 'react-native-permissions';
 
 /** 위치 권한 BLOCKED 이면 다시 요청 */
-async function useLocationPermission() {
+async function checkLocationPermission() {
   try {
     const result = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
 
@@ -27,7 +27,6 @@ async function useLocationPermission() {
         ],
       );
     } else {
-      console.log(result);
       console.log('위치 권한 부여됨');
     }
   } catch (error) {
@@ -35,4 +34,4 @@ async function useLocationPermission() {
   }
 }
 
-export default useLocationPermission;
+export default checkLocationPermission;

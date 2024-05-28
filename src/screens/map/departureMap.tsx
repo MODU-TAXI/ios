@@ -4,7 +4,7 @@ import Geolocation from "@react-native-community/geolocation";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import React, { useRef, useMemo, useState, useEffect, useCallback } from "react";
-import { Camera, NaverMapView, NaverMapViewRef } from "@mj-studio/react-native-naver-map";
+import { Coord, Camera, NaverMapView, NaverMapViewRef } from "@mj-studio/react-native-naver-map";
 
 import ButtonComponent from "@components/Button";
 import TransparentSearchBoxComponent from "@components/Search/TransparentSearchBox";
@@ -13,7 +13,7 @@ import { departureState } from "@recoil/recoil";
 
 import { useReverseGeocoding } from "@hooks/api/search";
 
-import { calculateCenter } from "@utils/map";
+import { calculateCenter, getCurrentLocation } from "@utils/map";
 
 import { DepartureMapScreenProps } from "@type/param/loginStack";
 
@@ -60,18 +60,16 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
 
   // 처음 렌더링 시 현재위치
   useEffect(() => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setCurrentCamera({
-          latitude: latitude,
-          longitude: longitude,
-          zoom: 16,
-        });
-      },
-      (error) => console.error(error),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-    );
+    const fetchCurrentLocation = async () => {
+      const location = await getCurrentLocation();
+      setCurrentCamera({
+        latitude: location.latitude,
+        longitude: location.longitude,
+        zoom: 16,
+      });
+      !route.params && mapRef.current?.animateCameraTo(location);
+    };
+    fetchCurrentLocation();
   }, []);
 
   // timeout 정보 저장 Ref
@@ -100,22 +98,12 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
 
   /** 현재 위치로 */
   const moveToCurrentLocation = async() => {
-    let currentLocation: Camera = {
-      latitude: 37.451062,
-      longitude: 126.656496,
-    }
-
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        currentLocation = {
-          latitude: latitude,
-          longitude: longitude,
-        }
-      },
-      (error) => console.error(error),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-    );
+    const currentLocation = await getCurrentLocation();
+    setCurrentCamera({
+      latitude: currentLocation.latitude,
+      longitude: currentLocation.longitude,
+      zoom: 16,
+    });
 
     mapRef.current?.animateCameraTo(currentLocation);
     refetch();
@@ -154,7 +142,6 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
     landNumber1 && (addressString += " " + landNumber1);
     landNumber2 && (addressString += "-" + landNumber2);
 
-    console.log(addressString)
     return addressString.trim();
   }
 
