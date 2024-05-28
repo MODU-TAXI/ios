@@ -7,9 +7,10 @@ import CloseButton from '@assets/images/Header/CloseButton.svg';
 
 interface RoomHeaderComponentProps {
   openUpdateModal: () => void;
+  myRoom: boolean;
 }
 
-const RoomHeaderComponent: React.FC<RoomHeaderComponentProps> = ({ openUpdateModal }) => {
+const RoomHeaderComponent: React.FC<RoomHeaderComponentProps> = ({ openUpdateModal, myRoom }) => {
   const navigation = useNavigation();
 
   const goBack = () => {
@@ -21,12 +22,13 @@ const RoomHeaderComponent: React.FC<RoomHeaderComponentProps> = ({ openUpdateMod
       <Pressable onPress={goBack}>
         <BackButton />
       </Pressable>
-
-      <Text className="text-lg font-semibold text-black">매칭 페이지</Text>
-
-      <Pressable onPress={openUpdateModal}>
-        <CloseButton />
-      </Pressable>
+      <Text className="text-lg font-semibold text-black">매칭 페이지</Text>i
+      {/* 방장인 경우에만 수정/삭제 버튼 visible */}
+      {myRoom && (
+        <Pressable onPress={openUpdateModal}>
+          <CloseButton />
+        </Pressable>
+      )}
     </View>
   );
 };

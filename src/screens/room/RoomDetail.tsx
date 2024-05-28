@@ -117,7 +117,7 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 헤더 */}
-      <RoomHeaderComponent openUpdateModal={openUpdateModal} />
+      <RoomHeaderComponent openUpdateModal={openUpdateModal} myRoom={roomDetail.myRoom} />
 
       <ScrollView className="mt-8 flex-1 px-4">
         {/* 카테고리 */}
