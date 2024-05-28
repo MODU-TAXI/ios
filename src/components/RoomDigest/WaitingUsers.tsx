@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
+import ZeroUserComponent from './ZeroUser';
 import WaitingUserComponent from './WaitingUser';
 
 import { RoomWaitingMember } from '@type/entity/room';
@@ -27,6 +28,9 @@ const WaitingUsersComponent: React.FC<WaitingUsersComponentProps> = ({
           applyJoinRoom={applyJoinRoom}
         />
       ))}
+
+      {/* 멤버가 0명일때 보여줄 view */}
+      {roomWaitingMembers.length === 0 && <ZeroUserComponent />}
     </View>
   );
 };

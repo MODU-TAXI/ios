@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
+import ZeroUserComponent from './ZeroUser';
+
 import ParticipateUserComponent from '@components/RoomDigest/ParticipateUser';
 
 import { RoomMember } from '@type/entity/room';
@@ -19,6 +21,9 @@ const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({ r
       {roomMembers.map((roomMember, index) => (
         <ParticipateUserComponent key={index} roomMember={roomMember} />
       ))}
+
+      {/* 멤버가 0명일때 보여줄 view */}
+      {roomMembers.length === 0 && <ZeroUserComponent />}
     </View>
   );
 };
