@@ -22,12 +22,15 @@ const RoomHeaderComponent: React.FC<RoomHeaderComponentProps> = ({ openUpdateMod
       <Pressable onPress={goBack}>
         <BackButton />
       </Pressable>
-      <Text className="text-lg font-semibold text-black">매칭 페이지</Text>i
+      <Text className="text-lg font-semibold text-black">매칭 페이지</Text>
       {/* 방장인 경우에만 수정/삭제 버튼 visible */}
-      {myRoom && (
+
+      {myRoom ? (
         <Pressable onPress={openUpdateModal}>
           <CloseButton />
         </Pressable>
+      ) : (
+        <View />
       )}
     </View>
   );
