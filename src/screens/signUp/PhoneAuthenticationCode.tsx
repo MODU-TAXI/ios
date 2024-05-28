@@ -1,5 +1,5 @@
-import { useRecoilValue } from 'recoil';
 import React, { useState, useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native';
 
@@ -7,7 +7,7 @@ import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 
-import { signUpUserState } from '@recoil/recoil';
+import { userInfoState, signUpUserState } from '@recoil/recoil';
 
 import { signUp } from '@server/api/member';
 
@@ -23,6 +23,7 @@ import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 
 const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeScreenProps) => {
   const signUpUser = useRecoilValue(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
+  const [, setUserInfo] = useRecoilState(userInfoState);
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [time, setTime] = useState(300); // 타이머 시간
@@ -49,12 +50,14 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
 
     const response = await signUp({ ...signUpUser, fcmToken: fcmToken });
 
-    const { accessToken, refreshToken } = response;
+    const { accessToken, refreshToken } = response.tokenResponse;
+
+    setUserInfo(response.memberInfoResponse);
 
     await setAccessToken(accessToken);
     await setRefreshToken(refreshToken);
 
-    navigation.navigate('SchoolAuthenticationScreen');
+    navigation.navigate('RegisterNicknameScreen');
   };
 
   // 인증번호 재전송

@@ -9,7 +9,7 @@ export const onMessageReceivedForeground = async (
 ): Promise<void> => {
   const title = message?.notification?.title;
   const body = message?.notification?.body;
-  const messageType = message?.data?.MessageType;
+  const messageType = message?.data?.messageType;
   const roomId = message?.data?.roomId;
 
   // title, body, messageType이 없을때는 return;
@@ -21,7 +21,7 @@ export const onMessageReceivedForeground = async (
     return;
   }
 
-  if (messageType === 'CHAT') {
+  if (messageType === 'CHAT' || messageType === 'IMAGE') {
     if (!chatIn) {
       if (roomId && typeof roomId === 'string') {
         await handleFirebaseMessage(title, body, messageType, roomId);
@@ -98,7 +98,7 @@ export const onMessageReceivedBackground = async (
     return;
   }
 
-  if (messageType === 'CHAT') {
+  if (messageType === 'CHAT' || messageType === 'IMAGE ') {
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }

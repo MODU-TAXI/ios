@@ -22,6 +22,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
   const roomId = useRecoilValue(roomState);
 
+  // 여기서는 useQuery 사용하지 않으면 해결될듯 -> 이게 된다음 화면을 그려줘서 문제가 생기는 듯 하다
+  // 이 부분은 youtube 글을 작성하도록 하자... useSuspensequery에 대해
   const { roomPreview } = useGetRoomPreview(roomId);
 
   const toCreateRoomScreen = () => {
@@ -37,7 +39,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   };
 
   const toChatRoomScreen = () => {
-    navigation.navigate('ChatRoomScreen', { roomId: roomId });
+    navigation.navigate('RoomDetailScreen', { roomId: roomId });
   };
 
   return (

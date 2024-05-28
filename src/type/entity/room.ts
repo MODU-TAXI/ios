@@ -83,14 +83,15 @@ export interface RoomList {
 // 방 참여자 정보
 export interface RoomMember {
   memberId: number;
-  name: string;
-  score: number;
+  nickname: string;
+  imageUrl: string;
   thisIsMe: boolean;
 }
 
 // 방 대기자 정보
 export interface RoomWaitingMember {
   memberId: number;
-  name: string;
-  score: number;
+  nickname: string;
+  imageUrl: string;
+  thisIsMe: boolean;
 }

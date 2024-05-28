@@ -11,5 +11,5 @@ export const useEnterChatRoom = (): void => {
     setChatIn(true);
 
     return () => setChatIn(false);
-  }, []);
+  }, [setChatIn]);
 };

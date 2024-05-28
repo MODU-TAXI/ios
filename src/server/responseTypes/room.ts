@@ -163,8 +163,8 @@ export interface ApproveJoinRoomResponse {
 export interface GetRoomMembersResponse {
   inList: {
     memberId: number;
-    name: string;
-    score: number;
+    nickname: string;
+    imageUrl: string;
     thisIsMe: boolean;
   }[];
 }
@@ -173,8 +173,8 @@ export interface GetRoomMembersResponse {
 export interface GetRoomWaitingMembersResponse {
   waitingList: {
     memberId: number;
-    name: string;
-    score: number;
+    nickname: string;
+    imageUrl: string;
     thisIsMe: boolean;
   }[];
 }

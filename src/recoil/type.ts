@@ -17,8 +17,9 @@ export type MessageBody = {
 export type UserInfo = {
   id: number;
   name: string;
+  nickname: string;
   gender: string;
   phoneNumber: string;
   email: string;
-  score: number;
+  imageUrl: string;
 };

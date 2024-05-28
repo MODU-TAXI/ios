@@ -31,6 +31,7 @@ const ChatContext = createContext(
     connect: (roomId: number) => void;
     disConnect: () => void;
     sendMessage: (inputMessage: string, type: string) => void;
+    stompClient: any;
   },
 );
 
@@ -71,7 +72,16 @@ export function ChatProvider({ children }: any) {
   }, [chatIn]);
 
   const connect = (roomId: number) => {
+    if (stompClient.current.connected) {
+      return;
+    }
+
     if (accessToken) {
+      // 이미 connect 되어 있을때는 안되게 함
+      if (stompClient.current && stompClient.current.connected) {
+        return;
+      }
+
       stompClient.current = new StompJs.Client({
         brokerURL: Config.SOCKET_URL,
         connectHeaders: {
@@ -80,7 +90,7 @@ export function ChatProvider({ children }: any) {
         debug: function (str) {
           console.log(str);
         },
-        reconnectDelay: 5000,
+        reconnectDelay: 500,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
       });
@@ -96,7 +106,8 @@ export function ChatProvider({ children }: any) {
       };
 
       stompClient.current.onStompError = (error: any) => {
-        console.error('Error 여기서 발생:', error);
+        const test = new TextDecoder('utf-8').decode(new Uint8Array(error._binaryBody));
+        console.log(test);
       };
     }
   };
@@ -104,8 +115,6 @@ export function ChatProvider({ children }: any) {
   // 메세지 받기
   const onMessageReceived = (message: Message) => {
     const decodedMessage: MessageBody = JSON.parse(message.body);
-
-    console.log(decodedMessage);
 
     if (stompClient.current.chatIn) {
       setMessages((prev: MessageBody[]) => [...prev, decodedMessage]);
@@ -135,7 +144,6 @@ export function ChatProvider({ children }: any) {
   // socket 연결 해제
   const disConnect = () => {
     if (stompClient.current.deactivate) {
-      console.log('소켓 연결 종료');
       stompClient.current.deactivate();
     }
   };
@@ -144,6 +152,7 @@ export function ChatProvider({ children }: any) {
     connect,
     disConnect,
     sendMessage,
+    stompClient,
   };
 
   return <ChatContext.Provider value={handlers}>{children}</ChatContext.Provider>;

@@ -7,10 +7,11 @@ export interface RefreshTokenResponse {
   memberInfoResponse: {
     id: number;
     name: string;
+    nickname: string;
     gender: string;
     phoneNumber: string;
     email: string;
-    score: number;
+    imageUrl: string;
   };
 }
 
@@ -24,6 +25,11 @@ export interface KakaoLoginResponse {
   scopes: string[];
 }
 
+// [닉네임 설정] /api/members/nickname
+export interface RegisterNicknameResponse {
+  nickname: string;
+}
+
 // [가입 여부 확인] /api/members/{type}/membership
 export interface CheckMembershipResponse {
   existent: boolean;
@@ -32,12 +38,34 @@ export interface CheckMembershipResponse {
 
 // [소셜 로그인] /api/members/{type}/login
 export interface SocialLoginResponse {
-  accessToken: string;
-  refreshToken: string;
+  tokenResponse: {
+    accessToken: string;
+    refreshToken: string;
+  };
+  memberInfoResponse: {
+    id: number;
+    name: string;
+    nickname: string;
+    gender: string;
+    phoneNumber: string;
+    email: string;
+    imageUrl: string;
+  };
 }
 
 // [소셜 회원가입] /api/members/sign-up
 export interface SignUpResponse {
-  accessToken: string;
-  refreshToken: string;
+  tokenResponse: {
+    accessToken: string;
+    refreshToken: string;
+  };
+  memberInfoResponse: {
+    id: number;
+    name: string;
+    nickname: string;
+    gender: string;
+    phoneNumber: string;
+    email: string;
+    imageUrl: string;
+  };
 }

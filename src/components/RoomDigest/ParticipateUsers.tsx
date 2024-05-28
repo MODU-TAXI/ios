@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
+import ZeroUserComponent from './ZeroUser';
+
 import ParticipateUserComponent from '@components/RoomDigest/ParticipateUser';
 
 import { RoomMember } from '@type/entity/room';
@@ -8,27 +10,6 @@ import { RoomMember } from '@type/entity/room';
 interface ParticipateUsersComponentProps {
   roomMembers: RoomMember[];
 }
-
-const users = [
-  {
-    id: 1,
-    nickname: '졸다가 늦은 판다',
-    temperature: 36.5,
-    me: false,
-  },
-  {
-    id: 2,
-    nickname: '졸다가 늦은 판다',
-    temperature: 36.5,
-    me: false,
-  },
-  {
-    id: 3,
-    nickname: '졸다가 늦은 판다',
-    temperature: 36.5,
-    me: false,
-  },
-];
 
 const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({ roomMembers }) => {
   return (
@@ -40,6 +21,9 @@ const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({ r
       {roomMembers.map((roomMember, index) => (
         <ParticipateUserComponent key={index} roomMember={roomMember} />
       ))}
+
+      {/* 멤버가 0명일때 보여줄 view */}
+      {roomMembers.length === 0 && <ZeroUserComponent />}
     </View>
   );
 };

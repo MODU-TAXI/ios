@@ -25,7 +25,7 @@ export const handleFirebaseMessage = async (
 
 // notifee 알림을 클릭했을때 handling
 export const handleNotificationPress = async (detail: EventDetail) => {
-  const messageType = detail.notification?.data?.MessageType;
+  const messageType = detail.notification?.data?.messageType;
   const roomId = detail.notification?.data?.roomId;
 
   switch (messageType) {

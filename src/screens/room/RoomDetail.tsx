@@ -1,18 +1,18 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
 import { useRecoilState } from 'recoil';
-import { View, Text } from 'react-native';
-import React, { useCallback } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
+import { View, Text, Modal, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useIsFocused, useFocusEffect } from '@react-navigation/native';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { useChatContext } from 'src/providers/chatProvider';
 
 import ButtonComponent from '@components/Button';
-import HeaderComponent from '@components/Header';
 import DottedLineComponent from '@components/DottedLine';
 import RoomMapComponent from '@components/RoomDigest/RoomMap';
+import RoomHeaderComponent from '@components/Home/RoomHeader';
+import UpdateModalComponent from '@components/RoomDigest/UpdateModal';
 import WaitingUsersComponent from '@components/RoomDigest/WaitingUsers';
 import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
 import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
@@ -36,52 +36,76 @@ import StartCircle from '@assets/images/Match/StartCircle.svg';
 dayjs.locale('ko');
 
 const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
-  // 이거를 쓰라~
-  const isFocused = useIsFocused();
-
   const { roomId } = route.params;
 
+  const { connect, stompClient } = useChatContext();
+
   const [, setSocketRoomId] = useRecoilState(roomState);
-  const { roomDetail, getRoomRefetch } = useGetRoom(roomId); // 방 상세 정보
-  const { roomMembers } = useGetRoomMembers(roomId); // 참여자 목록
-  const { roomWaitingMembers } = useGetRoomWaitingMembers(roomId); // 대기자 목록
+  const { roomDetail } = useGetRoom(roomId); // 방 상세 정보
+  const { roomMembers, getRoomMembersRefetch } = useGetRoomMembers(roomId); // 참여자 목록
+  const { roomWaitingMembers, getRoomWaitingMembersRefetch } = useGetRoomWaitingMembers(roomId); // 대기자 목록
   const { mutateAsync: joinRoomMutate } = useJoinRoom(roomId); // 방 입장 mutate
   const { mutateAsync: applyJoinRoomMutate } = useApproveJoinRoom(roomId); // 방 입장 수락 mutate
   const { mutateAsync: deleteRoomMutate } = useDeleteRoom(roomId); // 방 삭제 mutate
+  const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
 
-  const { connect } = useChatContext();
+  const { disConnect } = useChatContext();
 
-  // 방을 수정하고 다시 focusing 되었을때 api 재호출 -> 이 로직은 수정하지 않았을때는 두번 호출됨 수정해야할듯
-  useFocusEffect(
-    useCallback(() => {
-      if (isFocused) {
-        getRoomRefetch();
-      }
-    }, [isFocused]),
-  );
+  // 만약 참여하고 있는 상태이고 socket이 connected되지 않았다면 socket 재연결
+  useEffect(() => {
+    if (roomDetail.participate && !stompClient.current.conncted) {
+      connect(roomDetail.roomId);
+      setSocketRoomId(roomId);
+    }
+  }, [roomDetail.participate, roomDetail.roomId]);
 
-  // 방 입장
+  // 수정, 삭제 모달창 열기
+  const openUpdateModal = () => {
+    setUpdateModalVisible(true);
+  };
+
+  // 수정, 삭제 모달창 닫기
+  const closeUpdateModal = () => {
+    setUpdateModalVisible(false);
+  };
+
+  // 방 입장 요청
   const joinRoom = async () => {
     await joinRoomMutate(roomId);
 
-    setSocketRoomId(roomId);
-    connect(roomId);
+    getRoomMembersRefetch(); // 멤버 refetch
+    getRoomWaitingMembersRefetch(); // 대기 멤버 refetch
   };
 
   // 방 입장 수락
   const applyJoinRoom = async (memberId: number) => {
     await applyJoinRoomMutate(memberId);
+
+    getRoomMembersRefetch(); // 멤버 refetch
+    getRoomWaitingMembersRefetch(); // 대기 멤버 refetch
   };
 
   // 방 삭제
   const deleteRoom = async () => {
     await deleteRoomMutate();
 
-    navigation.navigate('HomeScreen');
+    setUpdateModalVisible(false);
+
+    // socket RoomId도 -1로 초기화
+    setSocketRoomId(-1);
+    disConnect();
+
+    // stack을 지우며 해당 roomDetail로 이동
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'MainScreen' }],
+    });
   };
 
   // 방 수정페이지로 이동
   const toPatchRoomScreen = useCallback(async (): Promise<void> => {
+    setUpdateModalVisible(false);
+
     navigation.navigate('PatchRoomScreen', { roomDetail: roomDetail });
   }, []);
 
@@ -93,7 +117,7 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 헤더 */}
-      <HeaderComponent title={'매칭 페이지'} />
+      <RoomHeaderComponent openUpdateModal={openUpdateModal} myRoom={roomDetail.myRoom} />
 
       <ScrollView className="mt-8 flex-1 px-4">
         {/* 카테고리 */}
@@ -149,13 +173,11 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
         {/* 참여멤버 */}
         <ParticipateUsersComponent roomMembers={roomMembers.inList} />
 
-        {/* 대기 멤버(방장만 확인 가능) */}
-        {roomDetail.myRoom && (
-          <WaitingUsersComponent
-            roomWaitingMembers={roomWaitingMembers.waitingList}
-            applyJoinRoom={applyJoinRoom}
-          />
-        )}
+        {/* 대기 멤버 */}
+        <WaitingUsersComponent
+          roomWaitingMembers={roomWaitingMembers.waitingList}
+          applyJoinRoom={applyJoinRoom}
+        />
 
         {/* 점선 */}
         <DottedLineComponent />
@@ -201,6 +223,14 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
             />
           </View>
         )}
+
+        {/* 수정,삭제 모달 */}
+        <UpdateModalComponent
+          updateModalVisible={updateModalVisible}
+          closeUpdateModal={closeUpdateModal}
+          patchRoom={toPatchRoomScreen}
+          deleteRoom={deleteRoom}
+        />
       </ScrollView>
     </SafeAreaView>
   );
