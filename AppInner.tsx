@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import MainScreen from 'src/screens/main/Main';
 import { ChatProvider } from 'src/providers/chatProvider';
+import RegisterNicknameScreen from 'src/screens/signUp/RegisterNickname';
 
 import TestScreen from './src/screens/test';
 import HomeScreen from './src/screens/home/Home';
@@ -81,6 +82,7 @@ function AppInner() {
         name="PhoneAuthenticationCodeScreen"
         component={PhoneAuthenticationCodeScreen}
       />
+      <RootStack.Screen name="RegisterNicknameScreen" component={RegisterNicknameScreen} />
       <RootStack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthenticationScreen} />
       <RootStack.Screen
         name="EmailAuthenticationCodeScreen"

@@ -1,16 +1,15 @@
-import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import Config from 'react-native-config';
 import Toast from 'react-native-toast-message';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 import { SignUpUser } from '@recoil/type';
-import { loggedInState, signUpUserState } from '@recoil/recoil';
+import { loggedInState, userInfoState, signUpUserState } from '@recoil/recoil';
 
-import { socialLogin, checkMembership } from '@server/api/member';
-import { KakaoLoginResponse } from '@server/responseTypes/member';
+import { memberErrorHandler } from '@server/errorHandler/member';
+import { RegisterNicknameRequest } from '@server/requestTypes/member';
+import { socialLogin, checkMembership, registerNickname } from '@server/api/member';
+import { KakaoLoginResponse, RegisterNicknameResponse } from '@server/responseTypes/member';
 
 import { useFcmToken } from '@hooks/fcm';
 
@@ -21,29 +20,37 @@ export const useKakaoLogin = (
   navigation: any,
 ): UseMutationResult<KakaoOAuthToken, Error, void, unknown> => {
   const [fcmToken] = useFcmToken();
+  const [, setUserInfo] = useRecoilState(userInfoState);
   const [, setLoggedIn] = useRecoilState(loggedInState);
   const [, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
 
   return useMutation({
     mutationFn: () => login(),
     onSuccess: async (response: KakaoLoginResponse) => {
-      const { accessToken } = response;
+      const { accessToken: kakaoAccessToken } = response;
 
       const { existent, key } = await checkMembership('KAKAO', {
-        accessToken: accessToken,
+        accessToken: kakaoAccessToken,
         fcmToken: fcmToken,
       });
 
       if (existent) {
         const response = await socialLogin('KAKAO', {
-          accessToken: accessToken,
+          accessToken: kakaoAccessToken,
           fcmToken: fcmToken,
         });
 
-        await setAccessToken(response.accessToken);
+        const { accessToken, refreshToken } = response.tokenResponse;
 
-        await setRefreshToken(response.refreshToken);
+        // 토큰 저장
+        await setAccessToken(accessToken);
 
+        await setRefreshToken(refreshToken);
+
+        // 유저 정보 저장
+        setUserInfo(response.memberInfoResponse);
+
+        // 로그인 여부 수정
         setLoggedIn(true);
       } else {
         if (key) {
@@ -65,6 +72,20 @@ export const useKakaoLogin = (
         text2: '로그인 재시도 하세요',
         position: 'bottom',
       });
+    },
+  });
+};
+
+// 닉네임 설정
+export const useRegisterNickname = (
+  setErrorMessage?: React.Dispatch<React.SetStateAction<string>>,
+): UseMutationResult<RegisterNicknameResponse, void, RegisterNicknameRequest> => {
+  return useMutation({
+    mutationFn: (registerNicknameRequest: RegisterNicknameRequest) =>
+      registerNickname(registerNicknameRequest),
+
+    onError: (error: any) => {
+      memberErrorHandler(error, setErrorMessage);
     },
   });
 };

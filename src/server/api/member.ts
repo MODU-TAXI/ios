@@ -1,18 +1,21 @@
 import axios from 'axios';
 import Config from 'react-native-config';
 
+import { PostAxiosInstance } from '@axios/axios.method';
 import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
 
 import {
   SignUpRequest,
   SocialLoginRequest,
   CheckMembershipRequest,
+  RegisterNicknameRequest,
 } from '@server/requestTypes/member';
 import {
   SignUpResponse,
   SocialLoginResponse,
   RefreshTokenResponse,
   CheckMembershipResponse,
+  RegisterNicknameResponse,
 } from '@server/responseTypes/member';
 
 // [토큰 재발급] /api/members/refresh
@@ -22,6 +25,15 @@ export const refreshAccessToken = async (refreshToken: string): Promise<RefreshT
     {},
     { headers: { refreshToken: refreshToken } },
   );
+
+  return response.data;
+};
+
+// [닉네임 설정] /api/members/nickname
+export const registerNickname = async (
+  data: RegisterNicknameRequest,
+): Promise<RegisterNicknameResponse> => {
+  const response = await PostAxiosInstance<RegisterNicknameResponse>('/api/members/nickname', data);
 
   return response.data;
 };

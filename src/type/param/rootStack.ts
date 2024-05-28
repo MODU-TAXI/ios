@@ -6,6 +6,7 @@ export type RootStackParamList = {
   CheckPermissionScreen: undefined;
   AuthenticationScreen: undefined;
   PhoneAuthenticationCodeScreen: undefined;
+  RegisterNicknameScreen: undefined;
   SchoolAuthenticationScreen: undefined;
   EmailAuthenticationCodeScreen: undefined;
   CompleteSignUpScreen: undefined;
@@ -26,6 +27,10 @@ export type AuthenticationScreenProps = NativeStackScreenProps<
 export type PhoneAuthenticationCodeScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'PhoneAuthenticationCodeScreen'
+>;
+export type RegisterNicknameScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'RegisterNicknameScreen'
 >;
 export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
   RootStackParamList,

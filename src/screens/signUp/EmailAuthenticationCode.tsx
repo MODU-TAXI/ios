@@ -1,5 +1,5 @@
-import { useRecoilValue } from 'recoil';
 import React, { useState, useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native';
 
@@ -7,7 +7,7 @@ import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 
-import { emailState } from '@recoil/recoil';
+import { emailState, userInfoState } from '@recoil/recoil';
 
 import { useEmailConfirm, useEmailAuthentication } from '@hooks/api/member.mail';
 
@@ -18,7 +18,8 @@ import { EmailAuthenticationCodeScreenProps } from '@type/param/rootStack';
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 
 const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeScreenProps) => {
-  const email = useRecoilValue(emailState); // 재전송할 이메일 (recoil value 사용)
+  const email = useRecoilValue(emailState); // 재전송할 이메일
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [time, setTime] = useState(180); // 타이머 시간
@@ -36,6 +37,17 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
   // 인증 코드확인
   const confirmEmail = async (): Promise<void> => {
     await emailConfirm({ certCode: code });
+
+    setUserInfo({
+      id: userInfo.id,
+      name: userInfo.name,
+      nickname: userInfo.nickname,
+      gender: userInfo.gender,
+      phoneNumber: userInfo.phoneNumber,
+      email: email,
+      imageUrl: userInfo.imageUrl,
+    });
+
     navigation.navigate('SurveyFirstScreen');
   };
 

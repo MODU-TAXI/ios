@@ -1,3 +1,8 @@
+// [닉네임 설정] /api/members/nickname
+export interface RegisterNicknameRequest {
+  nickname: string;
+}
+
 // [가입 여부 확인] /api/members/{type}/membership
 export interface CheckMembershipRequest {
   accessToken: string;

@@ -96,8 +96,11 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
       wishHeadcount: passangersNumber,
     });
 
-    // 다시 매칭 페이지로 이동
-    return navigation.navigate('RoomDetailScreen', { roomId: roomDetail.roomId });
+    // stack을 지우며 해당 roomDetail로 이동
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'RoomDetailScreen', params: { roomId: roomDetail.roomId } }],
+    });
   };
 
   // Datepicker open

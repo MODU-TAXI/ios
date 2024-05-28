@@ -24,10 +24,11 @@ export const userInfoState = atom<UserInfo>({
   default: {
     id: 0,
     name: '',
+    nickname: '',
     gender: '',
     phoneNumber: '',
     email: '',
-    score: 0,
+    imageUrl: '',
   },
 });
 

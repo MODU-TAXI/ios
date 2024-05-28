@@ -9,27 +9,6 @@ interface ParticipateUsersComponentProps {
   roomMembers: RoomMember[];
 }
 
-const users = [
-  {
-    id: 1,
-    nickname: '졸다가 늦은 판다',
-    temperature: 36.5,
-    me: false,
-  },
-  {
-    id: 2,
-    nickname: '졸다가 늦은 판다',
-    temperature: 36.5,
-    me: false,
-  },
-  {
-    id: 3,
-    nickname: '졸다가 늦은 판다',
-    temperature: 36.5,
-    me: false,
-  },
-];
-
 const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({ roomMembers }) => {
   return (
     <View className="px-1 py-8">

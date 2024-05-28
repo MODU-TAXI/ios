@@ -65,7 +65,7 @@ const MyPartyComponent: React.FC<MyPartyComponentProps> = ({ roomPreview, toChat
           className="mt-4 rounded-[8px] border-[1px] border-main px-4 py-3"
           onPress={toChatRoomScreen}
         >
-          <Text className="text-center font-medium text-main">채팅창 바로가기</Text>
+          <Text className="text-center font-medium text-main">매칭방 바로가기</Text>
         </Pressable>
       </View>
     </View>

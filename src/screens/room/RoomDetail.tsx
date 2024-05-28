@@ -36,13 +36,10 @@ import StartCircle from '@assets/images/Match/StartCircle.svg';
 dayjs.locale('ko');
 
 const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
-  // 이거를 쓰라~
-  const isFocused = useIsFocused();
-
   const { roomId } = route.params;
 
   const [, setSocketRoomId] = useRecoilState(roomState);
-  const { roomDetail, getRoomRefetch } = useGetRoom(roomId); // 방 상세 정보
+  const { roomDetail } = useGetRoom(roomId); // 방 상세 정보
   const { roomMembers, getRoomMembersRefetch } = useGetRoomMembers(roomId); // 참여자 목록
   const { roomWaitingMembers, getRoomWaitingMembersRefetch } = useGetRoomWaitingMembers(roomId); // 대기자 목록
   const { mutateAsync: joinRoomMutate } = useJoinRoom(roomId); // 방 입장 mutate
@@ -50,15 +47,6 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
   const { mutateAsync: deleteRoomMutate } = useDeleteRoom(roomId); // 방 삭제 mutate
 
   const { disConnect } = useChatContext();
-
-  // 방을 수정하고 다시 focusing 되었을때 api 재호출 -> 이 로직은 수정하지 않았을때는 두번 호출됨 수정해야할듯
-  useFocusEffect(
-    useCallback(() => {
-      if (isFocused) {
-        getRoomRefetch();
-      }
-    }, [isFocused]),
-  );
 
   // 만약 참여하고 있는 상태라면 socket 재연결
   // useEffect(() => {
@@ -168,13 +156,11 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
         {/* 참여멤버 */}
         <ParticipateUsersComponent roomMembers={roomMembers.inList} />
 
-        {/* 대기 멤버(방장만 확인 가능) */}
-        {roomDetail.myRoom && (
-          <WaitingUsersComponent
-            roomWaitingMembers={roomWaitingMembers.waitingList}
-            applyJoinRoom={applyJoinRoom}
-          />
-        )}
+        {/* 대기 멤버 */}
+        <WaitingUsersComponent
+          roomWaitingMembers={roomWaitingMembers.waitingList}
+          applyJoinRoom={applyJoinRoom}
+        />
 
         {/* 점선 */}
         <DottedLineComponent />
