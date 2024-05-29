@@ -53,11 +53,11 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
 
   // 만약 참여하고 있는 상태이고 socket이 connected되지 않았다면 socket 재연결
   useEffect(() => {
-    if (roomDetail.participate && !stompClient.current.conncted) {
+    if (roomDetail.participate && !stompClient.current.connected) {
       connect(roomDetail.roomId);
       setSocketRoomId(roomId);
     }
-  }, [roomDetail.participate, roomDetail.roomId]);
+  }, [roomDetail, stompClient, roomId, connect, setSocketRoomId]);
 
   // 수정, 삭제 모달창 열기
   const openUpdateModal = () => {
