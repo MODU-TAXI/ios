@@ -18,6 +18,7 @@ export type LoginStackParamList = {
   RoomDetailScreen: { roomId: number };
   PatchRoomScreen: { roomDetail: RoomDetail };
   ChatRoomScreen: { roomId: number };
+  AlarmScreen: undefined;
   TestScreen: undefined;
 };
 
@@ -29,4 +30,5 @@ export type CreateRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 
 export type RoomDetailScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomDetailScreen'>;
 export type PatchRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'PatchRoomScreen'>;
 export type ChatRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'ChatRoomScreen'>;
+export type AlarmScreenProps = NativeStackScreenProps<LoginStackParamList, 'AlarmScreen'>;
 export type TestScreenProps = NativeStackScreenProps<LoginStackParamList, 'TestScreen'>;
