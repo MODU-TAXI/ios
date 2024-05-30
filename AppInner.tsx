@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainScreen from 'src/screens/main/Main';
 import AlarmScreen from 'src/screens/alarm/alarm';
 import { ChatProvider } from 'src/providers/chatProvider';
-import DepartureMapScreen from 'src/screens/map/departureMap';
+import DepartureMapScreen from 'src/screens/map/DepartureMap';
 import RegisterNicknameScreen from 'src/screens/signUp/RegisterNickname';
 
 import TestScreen from './src/screens/test';

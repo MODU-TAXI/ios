@@ -1,19 +1,17 @@
 import { useRecoilState } from "recoil";
 import { Text, View, Pressable } from "react-native";
-import Geolocation from "@react-native-community/geolocation";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import React, { useRef, useMemo, useState, useEffect, useCallback } from "react";
-import { Coord, Camera, NaverMapView, NaverMapViewRef } from "@mj-studio/react-native-naver-map";
+import { Camera, NaverMapView, NaverMapViewRef } from "@mj-studio/react-native-naver-map";
 
-import ButtonComponent from "@components/Button";
 import TransparentSearchBoxComponent from "@components/Search/TransparentSearchBox";
 
 import { departureState } from "@recoil/recoil";
 
 import { useReverseGeocoding } from "@hooks/api/search";
 
-import { calculateCenter, getCurrentLocation } from "@utils/map";
+import { getCurrentLocation } from "@utils/map";
 
 import { DepartureMapScreenProps } from "@type/param/loginStack";
 
@@ -92,7 +90,6 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
     timeoutRef.current = setTimeout(() => {
       // 다시 탐색
       refetch();
-      console.log(results)
     }, 100);
   }, []);
 
