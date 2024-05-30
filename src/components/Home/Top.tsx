@@ -10,11 +10,17 @@ import Bell from '@assets/images/Home/Bell.svg';
 
 interface TopComponentProps {
   userInfo: User;
-  toSearchScreen: () => void;
   roomId: number;
+  toSearchScreen: () => void;
+  toAlarmScreen: () => void;
 }
 
-const TopComponent: React.FC<TopComponentProps> = ({ userInfo, toSearchScreen, roomId }) => {
+const TopComponent: React.FC<TopComponentProps> = ({
+  userInfo,
+  roomId,
+  toSearchScreen,
+  toAlarmScreen,
+}) => {
   const roomIn = roomId > 0;
 
   const topStyle = roomIn
@@ -28,9 +34,9 @@ const TopComponent: React.FC<TopComponentProps> = ({ userInfo, toSearchScreen, r
           <Logo />
         </View>
 
-        <View>
+        <Pressable onPress={toAlarmScreen}>
           <Bell />
-        </View>
+        </Pressable>
       </View>
 
       {/* 이름 */}

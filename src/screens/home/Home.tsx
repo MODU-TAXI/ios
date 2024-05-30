@@ -42,10 +42,19 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('RoomDetailScreen', { roomId: roomId });
   };
 
+  const toAlarmScreen = () => {
+    navigation.navigate('AlarmScreen');
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['left', 'right']}>
       {/* 로고, 알림 */}
-      <TopComponent userInfo={userInfo} toSearchScreen={toSearchScreen} roomId={roomId} />
+      <TopComponent
+        userInfo={userInfo}
+        toSearchScreen={toSearchScreen}
+        toAlarmScreen={toAlarmScreen}
+        roomId={roomId}
+      />
 
       <ScrollView>
         {/* 지도, 택시팟 */}

@@ -4,6 +4,7 @@ import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import MainScreen from 'src/screens/main/Main';
+import AlarmScreen from 'src/screens/alarm/alarm';
 import { ChatProvider } from 'src/providers/chatProvider';
 import RegisterNicknameScreen from 'src/screens/signUp/RegisterNickname';
 
@@ -66,6 +67,7 @@ function AppInner() {
         <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
         <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
         <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
+        <LogInStack.Screen name="AlarmScreen" component={AlarmScreen} />
         <LogInStack.Screen name="TestScreen" component={TestScreen} />
       </LogInStack.Navigator>
     </ChatProvider>
