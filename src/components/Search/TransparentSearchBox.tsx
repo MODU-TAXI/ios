@@ -12,7 +12,7 @@ interface TransparentSearchBoxComponentProps {
   isSearched: boolean;
 }
 
-/** 검색 바 */
+/** 메인맵 반투명 검색 바 */
 const TransparentSearchBoxComponent: React.FC<TransparentSearchBoxComponentProps> = ({
   value,
   isSearched,

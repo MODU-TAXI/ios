@@ -28,8 +28,7 @@ import RoomMarkerComponent from '@components/Marker/RoomMarker';
 import CreateRoomButtonComponent from '@components/CreateRoomButton';
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 
-import { SignUpUser } from '@recoil/type';
-import { signUpUserState } from '@recoil/recoil';
+import { userInfoState } from '@recoil/recoil';
 
 import { useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
@@ -52,18 +51,15 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   const mapRef = useRef<NaverMapViewRef>(null);
   const buttonSizeRef = useRef<View>(null);
   const [buttonWidth, setButtonWidth] = useState(0);
-  const [keyword, setKeyword] = useState<string>('');
-  const signUpUser = useRecoilValue<SignUpUser>(signUpUserState);
+  const userInfo = useRecoilValue(userInfoState);
 
   // 화면의 어디에서 멈추는지 snap point
   const snapPoints = useMemo(() => ['40%', '100%'], []);
   const [isFullSnap, setIsFullSnap] = useState<boolean>(false);
-  // const [snapIndex, setSnapIndex] = useState<number>(0);
 
   /** 바텀시트 100% 차지 시 isFullSnap === true */
   const handleSheetChanges = useCallback((index: number) => {
     setIsFullSnap(index === 1);
-    // setSnapIndex(index);
   }, []);
 
   /** 배경 터치시 복귀 (현재 불필요) */
@@ -255,7 +251,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
           onPress={toSearchScreen}
         >
           <TransparentSearchBoxComponent 
-            value={`${signUpUser}님 우리 어디로 갈까요?`}
+            value={`${userInfo.name}님 우리 어디로 갈까요?`}
             isSearched={false}
           />
         </Pressable>
