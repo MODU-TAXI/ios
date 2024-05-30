@@ -13,6 +13,7 @@ import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 
 import { searchKeywordState } from '@recoil/recoil';
 
+import { useGetSpotList } from '@hooks/api/spot';
 import { useNaverSearch } from '@hooks/api/search';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
@@ -23,8 +24,8 @@ import { NaverSearch, SortedItemType } from '@type/entity/search';
 const SearchScreen = ({ navigation }: SearchScreenProps) => {
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
-  const { data: items, refetch } = useNaverSearch(keyword);
-  const [sortedItems, setSortedItems] = useState<SortedItemType[] | undefined>([]);
+  const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
+  const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({
     latitude: 37.5665,
     longitude: 126.978,
@@ -41,22 +42,54 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
     fetchCurrentLocation();
   }, [])
 
+  // 검색어에 따른 처리
   useEffect(() => {
-    refetch();
-  }, [keyword, refetch])
+    if (keyword === "") {
+      setSortedItems([]);
+    }
+    refetchNaverSearch();
+  }, [keyword, refetchNaverSearch])
 
   // 좌표계 변환, 두 지점 사이 거리 계산하여 새 배열에 저장
   useEffect(() => {
-    const updateItems = items?.map((item) => {
-      const { latitude, longitude } = convertCoordinates(item.mapx, item.mapy);
-      const distance = calculateDist(currentLocation.latitude, currentLocation.longitude, latitude, longitude);
-      return { ...item, latitude: latitude, longitude: longitude, distance: distance };
-    })
-    // 정렬하여 sortedItems에 저장
-    updateItems?.sort((a, b) => a.distance - b.distance);
-    setSortedItems(updateItems);
-    console.log(updateItems);
-  }, [items])
+    if (items && items.length > 0) {
+      const updatedItems = items?.map((item) => {
+        const { latitude, longitude } = convertCoordinates(item.mapx, item.mapy);
+        const distance = calculateDist(currentLocation.latitude, currentLocation.longitude, latitude, longitude);
+        return { ...item, latitude: latitude, longitude: longitude, distance: distance };
+      })
+      // 정렬하여 sortedItems에 저장
+      updatedItems?.sort((a, b) => a.distance - b.distance);
+      setSortedItems(updatedItems);
+    }
+  }, [items, currentLocation])
+
+  const [spotSearchParams, setSpotSearchParams] = useState({
+    currentLongitude: currentLocation.longitude,
+    currentLatitude: currentLocation.latitude,
+    departureLongitude: currentLocation.longitude,
+    departureLatitude: currentLocation.latitude,
+  });
+
+  // sortedItems 바뀔 때마다 거점탐색의 파라미터 변경
+  useEffect(() => {
+    if (sortedItems.length > 0) {
+      setSpotSearchParams({
+        currentLongitude: currentLocation.longitude,
+        currentLatitude: currentLocation.latitude,
+        departureLongitude: sortedItems[0].longitude,
+        departureLatitude: sortedItems[0].latitude,
+      })
+    }
+  }, [sortedItems])
+
+  const { spots, refetch: refetchSpotList } = useGetSpotList(
+    1, 1, 
+    spotSearchParams?.currentLongitude,
+    spotSearchParams?.currentLatitude,
+    spotSearchParams?.departureLongitude,
+    spotSearchParams?.departureLatitude,
+  );
 
   /** 선택한 검색어를 전달하며 이동 */
   const toDepartureMapScreen = (
@@ -81,7 +114,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
         </View>
 
         {keyword && (
-          <SpotSearchComponent spotName={keyword} />
+          <SpotSearchComponent spotName={spots[0].name} />
         )}
 
         {/** 추천 검색어 */}
