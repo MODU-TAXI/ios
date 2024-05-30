@@ -29,3 +29,8 @@ export type Departure = {
   latitude: number;
   longitude: number;
 }
+
+export type Arrival = {
+  name: string;
+  spotId: number;
+}

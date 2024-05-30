@@ -16,7 +16,7 @@ import DescriptionComponent from '@components/Description';
 import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
 
-import { roomState, departureState, arrivalNameState } from '@recoil/recoil';
+import { roomState, arrivalState, departureState } from '@recoil/recoil';
 
 import { useCreateRoom } from '@hooks/api/rooms';
 
@@ -41,7 +41,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
 
   const [, setSocketRoomId] = useRecoilState(roomState);
   const [departure, setDeparture] = useRecoilState(departureState); // 출발지 이름, 좌표
-  const [arrivalName, setArrivalName] = useRecoilState(arrivalNameState); // 도착지
+  const [arrival, setArrival] = useRecoilState(arrivalState); // 도착지 이름, 거점 id
   const [departureTime, setDepartureTime] = useState<Date>(new Date()); // 설정 날짜
   const [datePicked, setDatePicked] = useState<boolean>(false); // 날짜 선택 여부
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
@@ -63,7 +63,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
     departureTime.setHours(departureTime.getHours() + 9);
 
     const room = await createRoomMutate({
-      spotId: 1,
+      spotId: arrival.spotId,
       departureLongitude: departure.longitude,
       departureLatitude: departure.latitude,
       roomTagBitMask: filteredCategories,
@@ -76,12 +76,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
     setSocketRoomId(room.roomId);
 
     // 출발지, 도착지 초기화
-    setDeparture({
-      name: '',
-      latitude: 0,
-      longitude: 0,
-    });
-    setArrivalName("");
+    resetRecoilValue();
 
     // stack을 지우며 해당 roomDetail로 이동
     navigation.reset({
@@ -108,6 +103,19 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
     navigation.navigate('SearchScreen');
   };
 
+  /** 출발, 도착지 초기화 */
+  const resetRecoilValue = () => {
+    setDeparture({
+      name: '',
+      latitude: 0,
+      longitude: 0,
+    });
+    setArrival({
+      name: '',
+      spotId: 0,
+    });
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* 헤더 */}
@@ -130,7 +138,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
             </View>
 
             <View className="my-2 ml-[6px] flex-row">
-              {departure.name !== "" && arrivalName !== "" ? (
+              {departure.name !== "" && arrival.name !== "" ? (
                 <View className="h-[43px] w-px bg-main" />
               ) : (
                 <View className="h-[43px] w-px bg-gray300" />
@@ -150,18 +158,18 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
 
             <View>
               <View className="flex-row items-center">
-                {arrivalName !== "" ? <EndCircle width={12} /> : <EndGrayCircle width={12} />}
+                {arrival.name !== "" ? <EndCircle width={12} /> : <EndGrayCircle width={12} />}
                 <Text className="ml-4 text-sm font-normal text-gray700">도착지</Text>
               </View>
 
               <Pressable onPress={handleArrival}>
-                {arrivalName === "" ? (
+                {arrival.name === "" ? (
                   <Text className="ml-7 pt-2 text-[16px] font-semibold text-gray300">
                     도착지를 입력해주세요
                   </Text>
                 ) : (
                   <Text className="ml-7 pt-2 text-[16px] font-semibold text-gray900">
-                    {arrivalName}
+                    {arrival.name}
                   </Text>
                 )}
               </Pressable>

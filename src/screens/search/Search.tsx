@@ -11,13 +11,14 @@ import SearchBoxComponent from '@components/Search/SearchBox';
 import SpotSearchComponent from '@components/Search/SpotSearch';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 
-import { searchKeywordState } from '@recoil/recoil';
+import { arrivalState, searchKeywordState } from '@recoil/recoil';
 
 import { useGetSpotList } from '@hooks/api/spot';
 import { useNaverSearch } from '@hooks/api/search';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
 
+import { Spot } from '@type/entity/spot';
 import { SearchScreenProps } from '@type/param/loginStack';
 import { NaverSearch, SortedItemType } from '@type/entity/search';
 
@@ -104,6 +105,15 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
     }});
   }
 
+  const [, setArrival] = useRecoilState(arrivalState);
+  const toSpotMapScreen = (spots: Spot) => {
+    navigation.goBack();
+    setArrival({
+      name: spots.name,
+      spotId: spots.id,
+    });
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="mx-4 flex-1">
@@ -114,7 +124,9 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
         </View>
 
         {keyword && (
-          <SpotSearchComponent spotName={spots[0].name} />
+          <Pressable onPress={() => toSpotMapScreen(spots[0])}>
+            <SpotSearchComponent spotName={spots[0].name} />
+          </Pressable>
         )}
 
         {/** 추천 검색어 */}
