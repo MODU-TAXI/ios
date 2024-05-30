@@ -18,7 +18,7 @@ const WaitingUsersComponent: React.FC<WaitingUsersComponentProps> = ({
   return (
     <View className="px-1 py-8">
       <View>
-        <Text className="text-[20px] font-semibold">대기멤버</Text>
+        <Text className="text-lg font-semibold">대기멤버</Text>
       </View>
 
       {roomWaitingMembers.map((roomWaitingMember, index) => (

@@ -18,13 +18,13 @@ const PartyComponent: React.FC = () => {
       {/* 출발지, 도착지 */}
       <View className="mt-2 flex-row">
         <View>
-          <Text className="text-[16px] font-semibold text-[#272727]">인하대학교</Text>
+          <Text className="text-[14px] font-semibold text-[#272727]">인하대학교</Text>
         </View>
 
         <Arrow className="mx-2" />
 
         <View>
-          <Text className="text-[16px] font-semibold text-[#272727]">주안역</Text>
+          <Text className="text-[14px] font-semibold text-[#272727]">주안역</Text>
         </View>
       </View>
 

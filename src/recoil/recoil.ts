@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-import { UserInfo, SignUpUser, MessageBody } from '@recoil/type';
+import { Arrival, UserInfo, Departure, SignUpUser, MessageBody } from '@recoil/type';
 
 export const signUpUserState = atom<SignUpUser>({
   key: 'tempUser',
@@ -60,3 +60,27 @@ export const messagesState = atom<MessageBody[]>({
   key: 'messages',
   default: [],
 });
+
+// 방 생성 시 출발지
+export const departureState = atom<Departure>({
+  key: 'departure',
+  default: {
+    name: '',
+    latitude: 0,
+    longitude: 0,
+  },
+});
+
+// 방 생성 시 도착거점
+export const arrivalState = atom<Arrival>({
+  key: 'arrivalName',
+  default: {
+    name: '',
+    spotId: 0,
+  },
+});
+
+export const searchKeywordState = atom<string>({
+  key: 'searchKeyword',
+  default: '',
+})

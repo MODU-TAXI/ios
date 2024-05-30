@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { RoomDetail } from '@type/entity/room';
+import { DepartureSearchParams } from '@type/entity/search';
 
 export type TabNavigatorParamList = {
   HomeScreen: undefined;
@@ -14,6 +15,8 @@ export type LoginStackParamList = {
   MainMapScreen: undefined;
   NaverMapScreen: undefined;
   SearchScreen: undefined;
+  DepartureMapScreen: undefined | { searchParams: DepartureSearchParams };
+  ArrivalMapScreen: undefined;
   CreateRoomScreen: undefined;
   RoomDetailScreen: { roomId: number };
   PatchRoomScreen: { roomDetail: RoomDetail };
@@ -26,6 +29,8 @@ export type HomeScreenProps = NativeStackScreenProps<LoginStackParamList, 'HomeS
 export type MainMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'MainMapScreen'>;
 export type NaverMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'NaverMapScreen'>;
 export type SearchScreenProps = NativeStackScreenProps<LoginStackParamList, 'SearchScreen'>;
+export type DepartureMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'DepartureMapScreen'>;
+export type ArrivalMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'ArrivalMapScreen'>;
 export type CreateRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateRoomScreen'>;
 export type RoomDetailScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomDetailScreen'>;
 export type PatchRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'PatchRoomScreen'>;

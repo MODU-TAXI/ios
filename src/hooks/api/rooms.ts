@@ -186,7 +186,7 @@ export const useGetRoomCurrentCamera = (
       return response.rooms;
     },
   });
-  console.log(rooms);
+  // console.log(rooms);
   return { rooms, refetch };
 };
 

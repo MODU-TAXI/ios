@@ -7,3 +7,15 @@ export interface CheckSpotResponse {
   distance: number;
   liked: boolean;
 }
+
+export interface GetSpotListResponse {
+  spots: {
+    id: number;
+    name: string;
+    address: string;
+    longitude: number;
+    latitude: number;
+    distance: number;
+    liked: boolean; 
+  }[]
+}

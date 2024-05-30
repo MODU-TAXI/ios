@@ -17,7 +17,7 @@ const WaitingUserComponent: React.FC<WaitingUserComponentProps> = ({
     <View className="mt-4 flex-row items-center justify-between">
       <View className="flex-row items-center">
         <UserBasicImage className="mr-1" />
-        <Text className="mr-1 text-lg font-semibold">{roomWaitingMember.nickname}</Text>
+        <Text className="mr-1 font-normal text-base">{roomWaitingMember.nickname}</Text>
       </View>
 
       <Pressable

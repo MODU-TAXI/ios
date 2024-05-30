@@ -15,7 +15,7 @@ const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({ r
   return (
     <View className="px-1 py-8">
       <View>
-        <Text className="text-[20px] font-semibold">참여멤버</Text>
+        <Text className="text-lg font-semibold">참여멤버</Text>
       </View>
 
       {roomMembers.map((roomMember, index) => (

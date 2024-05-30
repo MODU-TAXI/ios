@@ -1,58 +1,155 @@
+import { useRecoilState } from 'recoil';
+import { View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, View, Pressable, TextInput } from 'react-native';
 
-import InputBoxComponent from '@components/InputBox';
-import SearchBoxComponent from '@components/SearchBox';
-import LatestSearchComponent from '@components/LatestSearch';
-import FilterButtonComponent from '@components/RoomDigest/FilterButton';
+import { convertCoordinates, getCurrentLocation } from '../../utils/map';
 
-import ChevronDownSvg from '@assets/images/RoomDigest/ChevronDown.svg';
-import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
+import SearchBoxComponent from '@components/Search/SearchBox';
+import SpotSearchComponent from '@components/Search/SpotSearch';
+import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 
-const SearchScreen = () => {
+import { arrivalState, searchKeywordState } from '@recoil/recoil';
+
+import { useGetSpotList } from '@hooks/api/spot';
+import { useNaverSearch } from '@hooks/api/search';
+
+import { calculateDist, deleteTagTitle } from '@utils/search';
+
+import { Spot } from '@type/entity/spot';
+import { SearchScreenProps } from '@type/param/loginStack';
+import { NaverSearch, SortedItemType } from '@type/entity/search';
+
+const SearchScreen = ({ navigation }: SearchScreenProps) => {
   /** 검색어 저장 변수 */
-  const [keyword, setKeyword] = useState<string>('');
+  const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
+  const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
+  const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
+  const [currentLocation, setCurrentLocation] = useState<Coord>({
+    latitude: 37.5665,
+    longitude: 126.978,
+  });
+
+  useEffect(() => {
+    const fetchCurrentLocation = async () => {
+      const location = await getCurrentLocation();
+      setCurrentLocation({
+        latitude: location.latitude,
+        longitude: location.longitude,
+      });
+    };
+    fetchCurrentLocation();
+  }, [])
+
+  // 검색어에 따른 처리
+  useEffect(() => {
+    if (keyword === "") {
+      setSortedItems([]);
+    }
+    refetchNaverSearch();
+  }, [keyword, refetchNaverSearch])
+
+  // 좌표계 변환, 두 지점 사이 거리 계산하여 새 배열에 저장
+  useEffect(() => {
+    if (items && items.length > 0) {
+      const updatedItems = items?.map((item) => {
+        const { latitude, longitude } = convertCoordinates(item.mapx, item.mapy);
+        const distance = calculateDist(currentLocation.latitude, currentLocation.longitude, latitude, longitude);
+        return { ...item, latitude: latitude, longitude: longitude, distance: distance };
+      })
+      // 정렬하여 sortedItems에 저장
+      updatedItems?.sort((a, b) => a.distance - b.distance);
+      setSortedItems(updatedItems);
+    }
+  }, [items, currentLocation])
+
+  const [spotSearchParams, setSpotSearchParams] = useState({
+    currentLongitude: currentLocation.longitude,
+    currentLatitude: currentLocation.latitude,
+    departureLongitude: currentLocation.longitude,
+    departureLatitude: currentLocation.latitude,
+  });
+
+  // sortedItems 바뀔 때마다 거점탐색의 파라미터 변경
+  useEffect(() => {
+    if (sortedItems.length > 0) {
+      setSpotSearchParams({
+        currentLongitude: currentLocation.longitude,
+        currentLatitude: currentLocation.latitude,
+        departureLongitude: sortedItems[0].longitude,
+        departureLatitude: sortedItems[0].latitude,
+      })
+    }
+  }, [sortedItems])
+
+  const { spots, refetch: refetchSpotList } = useGetSpotList(
+    1, 1, 
+    spotSearchParams?.currentLongitude,
+    spotSearchParams?.currentLatitude,
+    spotSearchParams?.departureLongitude,
+    spotSearchParams?.departureLatitude,
+  );
+
+  /** 선택한 검색어를 전달하며 이동 */
+  const toDepartureMapScreen = (
+    title: string,
+    latitude: number,
+    longitude: number,
+  ) => {
+    navigation.navigate('DepartureMapScreen', {searchParams: {
+      title: title,
+      latitude: latitude,
+      longitude: longitude,
+    }});
+  }
+
+  const [, setArrival] = useRecoilState(arrivalState);
+  const toSpotMapScreen = (spots: Spot) => {
+    navigation.goBack();
+    setArrival({
+      name: spots.name,
+      spotId: spots.id,
+    });
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="mx-4 flex-1">
+        
         {/** 검색창 */}
-        <View className="mb-3 mt-4">
-          <SearchBoxComponent value={keyword} setValue={setKeyword} />
+        <View className="mb-3 mt-2">
+          <SearchBoxComponent />
         </View>
 
-        {/** 최근검색 탭 */}
-        <View className="flex flex-row px-1 py-2">
-          <Pressable>
-            <Text className="pr-4 text-lg font-semibold">최근 검색</Text>
+        {keyword && (
+          <Pressable onPress={() => toSpotMapScreen(spots[0])}>
+            <SpotSearchComponent spotName={spots[0].name} />
           </Pressable>
-          <Pressable>
-            <Text className="pr-4 text-lg font-medium text-gray500">거점 리스트</Text>
-          </Pressable>
-          <Pressable>
-            <Text className="text-lg font-medium text-gray500">즐겨찾기</Text>
-          </Pressable>
-        </View>
+        )}
 
-        {/** 시군구 태그, 최신순 */}
-        <View className="mb-3 mt-[6.5px] flex flex-row justify-between">
-          <View className="flex flex-row">
-            <FilterButtonComponent label="서울특별시" />
-            <FilterButtonComponent label="강서구" />
-            <FilterButtonComponent label="주안역" />
-          </View>
-          <View className="flex flex-row items-center">
-            <Text className="pr-1 text-gray700">최신순</Text>
-            <ChevronDownSvg />
-          </View>
-        </View>
-
-        {/** 최근 검색어 */}
+        {/** 추천 검색어 */}
         <View className="flex-1">
-          <LatestSearchComponent keyword="가양역 1번 출구" distance={500} />
-          <LatestSearchComponent keyword="간재울역 4번 출구" distance={500} />
+          {sortedItems && 
+          sortedItems.map((item, index) => (
+            <Pressable
+              key={index}
+              onPress={() => toDepartureMapScreen(
+                deleteTagTitle(item.title),
+                item.latitude,
+                item.longitude,
+              )}
+            >
+              <RecommendedSearchComponent 
+                key={index}
+                keyword={keyword}
+                fullKeyword={deleteTagTitle(item.title)}
+                address={item.address} 
+                distance={item.distance}
+              />
+            </Pressable>
+          ))}
         </View>
       </View>
     </SafeAreaView>

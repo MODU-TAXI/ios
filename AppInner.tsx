@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainScreen from 'src/screens/main/Main';
 import AlarmScreen from 'src/screens/alarm/alarm';
 import { ChatProvider } from 'src/providers/chatProvider';
+import DepartureMapScreen from 'src/screens/map/DepartureMap';
 import RegisterNicknameScreen from 'src/screens/signUp/RegisterNickname';
 
 import TestScreen from './src/screens/test';
@@ -62,6 +63,7 @@ function AppInner() {
         <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
         <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
         <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
+        <LogInStack.Screen name="DepartureMapScreen" component={DepartureMapScreen} />
         <LogInStack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
         <LogInStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
         <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
