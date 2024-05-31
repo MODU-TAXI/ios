@@ -160,9 +160,7 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
                 </Text>
               </View>
 
-              <Text className="ml-[31px] mt-1 text-lg font-semibold">
-                {roomDetail.arrivalName}
-              </Text>
+              <Text className="ml-[31px] mt-1 text-lg font-semibold">{roomDetail.arrivalName}</Text>
             </View>
           </View>
         </View>

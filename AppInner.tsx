@@ -3,27 +3,28 @@ import { useRecoilState } from 'recoil';
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import MainScreen from 'src/screens/main/Main';
-import AlarmScreen from 'src/screens/alarm/alarm';
-import { ChatProvider } from 'src/providers/chatProvider';
-import DepartureMapScreen from 'src/screens/map/DepartureMap';
-import RegisterNicknameScreen from 'src/screens/signUp/RegisterNickname';
+import CheckDepartureScreen from 'src/screens/calculate/checkDeparture';
 
 import TestScreen from './src/screens/test';
+import MainScreen from './src/screens/main/Main';
 import HomeScreen from './src/screens/home/Home';
+import AlarmScreen from './src/screens/alarm/alarm';
 import NaverMapScreen from './src/screens/NaverMap';
 import PatchRoom from './src/screens/room/PatchRoom';
 import MainMapScreen from './src/screens/map/MainMap';
 import SearchScreen from './src/screens/search/Search';
 import SignInScreen from './src/screens/signIn/SignIn';
 import ChatRoomScreen from './src/screens/chat/ChatRoom';
+import { ChatProvider } from './src/providers/chatProvider';
 import CreateRoomScreen from './src/screens/room/CreateRoom';
 import RoomDetailScreen from './src/screens/room/RoomDetail';
+import DepartureMapScreen from './src/screens/map/departureMap';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
 import AuthenticationScreen from './src/screens/signUp/Authentication';
 import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
 import CheckPermissionScreen from './src/screens/signUp/CheckPermission';
+import RegisterNicknameScreen from './src/screens/signUp/RegisterNickname';
 import SchoolAuthenticationScreen from './src/screens/signUp/SchoolAuthentication';
 import EmailAuthenticationCodeScreen from './src/screens/signUp/EmailAuthenticationCode';
 import PhoneAuthenticationCodeScreen from './src/screens/signUp/PhoneAuthenticationCode';
@@ -70,6 +71,7 @@ function AppInner() {
         <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
         <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
         <LogInStack.Screen name="AlarmScreen" component={AlarmScreen} />
+        <LogInStack.Screen name="CheckDepartureScreen" component={CheckDepartureScreen} />
         <LogInStack.Screen name="TestScreen" component={TestScreen} />
       </LogInStack.Navigator>
     </ChatProvider>
