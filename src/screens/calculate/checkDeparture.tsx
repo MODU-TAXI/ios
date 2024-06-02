@@ -15,8 +15,8 @@ const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) 
 
   const { roomMembers } = useGetRoomMembers(roomPreview.roomId); // 참여자 목록
 
-  const toAmountPage = async () => {
-    console.log('!');
+  const toAmountScreen = async () => {
+    navigation.navigate('AmountScreen');
   };
 
   return (
@@ -41,9 +41,9 @@ const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) 
           color={'bg-main'}
           borderColor={'border-main'}
           textColor={'white'}
-          text={'매칭 참여하기'}
+          text={'확인'}
           disabled={false}
-          onPress={toAmountPage}
+          onPress={toAmountScreen}
         />
       </View>
     </SafeAreaView>

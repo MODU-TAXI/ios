@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import AmountScreen from 'src/screens/calculate/Amount';
 import CheckDepartureScreen from 'src/screens/calculate/checkDeparture';
 
 import TestScreen from './src/screens/test';
@@ -72,6 +73,7 @@ function AppInner() {
         <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
         <LogInStack.Screen name="AlarmScreen" component={AlarmScreen} />
         <LogInStack.Screen name="CheckDepartureScreen" component={CheckDepartureScreen} />
+        <LogInStack.Screen name="AmountScreen" component={AmountScreen} />
         <LogInStack.Screen name="TestScreen" component={TestScreen} />
       </LogInStack.Navigator>
     </ChatProvider>
