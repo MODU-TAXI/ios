@@ -52,6 +52,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   const [isTouching, setIsTouching] = useState<boolean>(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const mapRef = useRef<NaverMapViewRef>(null);
+  const [selectedRoom, setSelectedRoom] = useState<number>(0);
 
   // 택시팟 생성 버튼 위치 설정용
   const buttonSizeRef = useRef<View>(null);
@@ -188,7 +189,10 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
               onTap={() => toRoomDetailScreen(room.id)}
               anchor={{ x: 0.5, y: 0.5 }}
             >
-              <RoomMarkerComponent spotName={room.spotName} />
+              <RoomMarkerComponent 
+                spotName={room.spotName}
+                selected={true}
+              />
             </NaverMapMarkerOverlay>
           ))
         }
@@ -241,6 +245,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
       >
         <Pressable
           ref={buttonSizeRef}
+          onPress={toCreateRoomScreen}
         >
           <CreateRoomButtonComponent />
         </Pressable>
