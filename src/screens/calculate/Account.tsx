@@ -1,5 +1,5 @@
 import { useRecoilState } from 'recoil';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
