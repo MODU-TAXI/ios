@@ -47,8 +47,8 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
         <View className="flex-1 px-3">
           {/* 글씨 */}
           <View className="flex-col">
-            <Text className="text-xl font-bold tracking-tight">정산받을</Text>
-            <Text className="text-xl font-bold tracking-tight">계좌번호를 알려주세요!</Text>
+            <Text className="text-xl font-semibold tracking-tight">정산받을</Text>
+            <Text className="text-xl font-semibold tracking-tight">계좌번호를 알려주세요!</Text>
           </View>
 
           {/* 입력창 */}

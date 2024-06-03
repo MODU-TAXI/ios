@@ -11,7 +11,7 @@ import { calculateState } from '@recoil/recoil';
 
 import { useGetRoomMembers } from '@hooks/api/rooms';
 
-import { User, UserPreview } from '@type/entity/user';
+import { UserPreview } from '@type/entity/user';
 import { CheckDepartureScreenProps } from '@type/param/loginStack';
 
 const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) => {

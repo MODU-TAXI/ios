@@ -34,8 +34,10 @@ const AmountScreen = ({ navigation }: AmountScreenProps) => {
         <View className="flex-1 px-3">
           {/* 글씨 */}
           <View className="flex-col">
-            <Text className="text-xl font-bold tracking-tight">목적지 도착 완료!</Text>
-            <Text className="text-xl font-bold tracking-tight">총 얼마가 나왔는지 알려주세요</Text>
+            <Text className="text-xl font-semibold tracking-tight">목적지 도착 완료!</Text>
+            <Text className="text-xl font-semibold tracking-tight">
+              총 얼마가 나왔는지 알려주세요
+            </Text>
           </View>
 
           {/* 입력창 */}
