@@ -4,6 +4,7 @@ import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import CheckCalculateScreen from 'src/screens/calculate/CheckCalculate';
+import CompleteCalculateScreen from 'src/screens/calculate/CompeleteCalculate';
 
 import TestScreen from './src/screens/test';
 import MainScreen from './src/screens/main/Main';
@@ -82,6 +83,7 @@ function AppInner() {
         <LogInStack.Screen name="AccountScreen" component={AccountScreen} />
         <LogInStack.Screen name="CheckAccountScreen" component={CheckAccountScreen} />
         <LogInStack.Screen name="CheckCalculateScreen" component={CheckCalculateScreen} />
+        <LogInStack.Screen name="CompleteCalculateScreen" component={CompleteCalculateScreen} />
 
         <LogInStack.Screen name="TestScreen" component={TestScreen} />
       </LogInStack.Navigator>

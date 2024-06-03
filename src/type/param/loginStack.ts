@@ -29,6 +29,7 @@ export type LoginStackParamList = {
   AccountScreen: undefined;
   CheckAccountScreen: undefined;
   CheckCalculateScreen: undefined;
+  CompleteCalculateScreen: undefined;
 
   // 테스트
   TestScreen: undefined;
@@ -63,6 +64,10 @@ export type CheckAccountScreenProps = NativeStackScreenProps<
 export type CheckCalculateScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'CheckCalculateScreen'
+>;
+export type CompleteCalculateScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'CompleteCalculateScreen'
 >;
 
 // 테스트 페이지

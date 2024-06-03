@@ -23,8 +23,8 @@ const CheckCalculateScreen = ({ navigation }: CheckCalculateScreenProps) => {
   const amount = parseInt(calculateData.amount);
   const amountPerPerson = parseInt(calculateData.amount) / calculateData.users.length;
 
-  const toNext = () => {
-    console.log('next!');
+  const toCompleteCalculateScreen = () => {
+    navigation.navigate('CompleteCalculateScreen');
   };
 
   const copyAccount = () => {
@@ -97,7 +97,7 @@ const CheckCalculateScreen = ({ navigation }: CheckCalculateScreenProps) => {
               textColor={'white'}
               text={'확인'}
               disabled={false}
-              onPress={toNext}
+              onPress={toCompleteCalculateScreen}
             />
           </View>
         </View>
