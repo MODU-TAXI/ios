@@ -7,11 +7,13 @@ import BanksComponent from '@components/Calculate/Banks';
 interface BankModalComponentProps {
   bankModalIndex: number;
   closeBankModal: (index: number) => void;
+  setBank: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const BankModalComponent: React.FC<BankModalComponentProps> = ({
   bankModalIndex,
   closeBankModal,
+  setBank,
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -50,7 +52,7 @@ const BankModalComponent: React.FC<BankModalComponentProps> = ({
         </View>
 
         {/* 은행들 */}
-        <BanksComponent />
+        <BanksComponent closeBankModal={closeBankModal} setBank={setBank} />
       </View>
     </BottomSheet>
   );

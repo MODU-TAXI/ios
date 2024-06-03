@@ -1,3 +1,5 @@
+import { UserPreview } from '@type/entity/user';
+
 export type SignUpUser = {
   key: string;
   name: string;
@@ -28,9 +30,16 @@ export type Departure = {
   name: string;
   latitude: number;
   longitude: number;
-}
+};
 
 export type Arrival = {
   name: string;
   spotId: number;
-}
+};
+
+export type Calculate = {
+  account: string;
+  bank: string;
+  amount: string;
+  users: UserPreview[];
+};

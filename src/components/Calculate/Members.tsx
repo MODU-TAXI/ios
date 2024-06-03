@@ -7,13 +7,21 @@ import { UserPreview } from '@type/entity/user';
 
 interface MembersComponentProps {
   members: UserPreview[];
+  setUnParticipateMembers: React.Dispatch<React.SetStateAction<UserPreview[]>>;
 }
 
-const MembersComponent: React.FC<MembersComponentProps> = ({ members }) => {
+const MembersComponent: React.FC<MembersComponentProps> = ({
+  members,
+  setUnParticipateMembers,
+}) => {
   return (
     <View className="flex-col px-3">
       {members.map((member) => (
-        <MemberComponent member={member} />
+        <MemberComponent
+          key={member.memberId}
+          member={member}
+          setUnParticipateMembers={setUnParticipateMembers}
+        />
       ))}
     </View>
   );

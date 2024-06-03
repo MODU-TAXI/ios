@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 
 import K from '@assets/images/Banks/K.svg';
 import NH from '@assets/images/Banks/NH.svg';
@@ -46,16 +46,26 @@ const banks = [
   { name: '제주', icon: JEJU },
 ];
 
-const BanksComponent: React.FC = () => {
+interface BanksComponentProps {
+  closeBankModal: (index: number) => void;
+  setBank: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const BanksComponent: React.FC<BanksComponentProps> = ({ closeBankModal, setBank }) => {
+  const selectBank = (bank: string) => {
+    setBank(bank);
+    closeBankModal(0);
+  };
+
   return (
     <View style={styles.gridContainer}>
       {banks.map((bank, index) => {
         const Icon = bank.icon;
         return (
-          <View key={index} style={styles.bankItem}>
+          <Pressable key={index} style={styles.bankItem} onPress={() => selectBank(bank.name)}>
             <Icon />
             <Text style={styles.bankText}>{bank.name}</Text>
-          </View>
+          </Pressable>
         );
       })}
     </View>

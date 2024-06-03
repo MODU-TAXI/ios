@@ -1,13 +1,17 @@
-import React from 'react';
+import { useRecoilState } from 'recoil';
 import { Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import MembersComponent from '@components/Calculate/Members';
 
+import { calculateState } from '@recoil/recoil';
+
 import { useGetRoomMembers } from '@hooks/api/rooms';
 
+import { User, UserPreview } from '@type/entity/user';
 import { CheckDepartureScreenProps } from '@type/param/loginStack';
 
 const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) => {
@@ -15,7 +19,23 @@ const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) 
 
   const { roomMembers } = useGetRoomMembers(roomPreview.roomId); // 참여자 목록
 
+  const [unParticipateMembers, setUnParticipateMembers] = useState<UserPreview[]>([]);
+
+  const [, setCalculate] = useRecoilState(calculateState);
+
   const toAmountScreen = async () => {
+    const filteredMembers = roomMembers.inList.filter(
+      (member) =>
+        !unParticipateMembers.some(
+          (unParticipateMember) => unParticipateMember.memberId === member.memberId,
+        ),
+    );
+
+    setCalculate((prev) => ({
+      ...prev,
+      users: filteredMembers,
+    }));
+
     navigation.navigate('AmountScreen');
   };
 
@@ -33,7 +53,10 @@ const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) 
         </View>
 
         {/* 멤버 */}
-        <MembersComponent members={roomMembers.inList} />
+        <MembersComponent
+          members={roomMembers.inList}
+          setUnParticipateMembers={setUnParticipateMembers}
+        />
       </View>
 
       <View className="mb-4 px-8">

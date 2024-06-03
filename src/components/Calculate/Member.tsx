@@ -10,13 +10,24 @@ import BasicProfileWhite from '@assets/images/Common/Basic_Profile_White.svg';
 
 interface MemberComponentProps {
   member: UserPreview;
+  setUnParticipateMembers: React.Dispatch<React.SetStateAction<UserPreview[]>>;
 }
 
-const MemberComponent: React.FC<MemberComponentProps> = ({ member }) => {
+const MemberComponent: React.FC<MemberComponentProps> = ({ member, setUnParticipateMembers }) => {
   const [isClicked, setIsClicked] = useState(false);
 
   const handlePress = () => {
     setIsClicked(!isClicked);
+
+    setUnParticipateMembers((prevMembers) => {
+      if (isClicked) {
+        // Remove member
+        return prevMembers.filter((m) => m.memberId !== member.memberId);
+      } else {
+        // Add member
+        return [...prevMembers, member];
+      }
+    });
   };
 
   return (

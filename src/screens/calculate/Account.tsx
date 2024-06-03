@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import React, { useState, useEffect } from 'react';
 import { Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -7,12 +8,16 @@ import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/Calculate/InputBox';
 import BankModalComponent from '@components/Calculate/BankModal';
 
+import { calculateState } from '@recoil/recoil';
+
 import { AccountScreenProps } from '@type/param/loginStack';
 
 import SelectBank from '@assets/images/Calculate/SelectBank.svg';
 
 const AccountScreen = ({ navigation }: AccountScreenProps) => {
+  const [, setCalculate] = useRecoilState(calculateState);
   const [account, setAccount] = useState<string>(''); // 계좌번호
+  const [bank, setBank] = useState<string>(''); // 은행
   const [bankModalIndex, setBankModalIndex] = useState<number>(0); // modal index
 
   // bank modal 열기
@@ -26,7 +31,13 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
   };
 
   const toNext = () => {
-    console.log('next!');
+    setCalculate((prev) => ({
+      ...prev,
+      account: account,
+      bank: bank,
+    }));
+
+    navigation.navigate('CheckAccountScreen');
   };
 
   return (
@@ -69,7 +80,11 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
         </View>
       </View>
 
-      <BankModalComponent bankModalIndex={bankModalIndex} closeBankModal={closeBankModal} />
+      <BankModalComponent
+        bankModalIndex={bankModalIndex}
+        closeBankModal={closeBankModal}
+        setBank={setBank}
+      />
     </SafeAreaView>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -6,15 +7,23 @@ import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/Calculate/InputBox';
 
+import { calculateState } from '@recoil/recoil';
+
 import { AmountScreenProps } from '@type/param/loginStack';
 
 const AmountScreen = ({ navigation }: AmountScreenProps) => {
+  const [, setCalculate] = useRecoilState(calculateState);
   const [amount, setAmount] = useState<string>('');
   const [expectedAmount, setExpectedAmount] = useState<string>('12000');
 
   const amountError = parseInt(amount) > parseInt(expectedAmount);
 
   const toAccountPage = async () => {
+    setCalculate((prev) => ({
+      ...prev,
+      amount: amount,
+    }));
+
     navigation.navigate('AccountScreen');
   };
 

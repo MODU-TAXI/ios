@@ -27,6 +27,7 @@ export type LoginStackParamList = {
   CheckDepartureScreen: { roomPreview: RoomPreview };
   AmountScreen: undefined;
   AccountScreen: undefined;
+  CheckAccountScreen: undefined;
 
   // 테스트
   TestScreen: undefined;
@@ -54,6 +55,10 @@ export type CheckDepartureScreenProps = NativeStackScreenProps<
 >;
 export type AmountScreenProps = NativeStackScreenProps<LoginStackParamList, 'AmountScreen'>;
 export type AccountScreenProps = NativeStackScreenProps<LoginStackParamList, 'AccountScreen'>;
+export type CheckAccountScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'CheckAccountScreen'
+>;
 
 // 테스트 페이지
 export type TestScreenProps = NativeStackScreenProps<LoginStackParamList, 'TestScreen'>;

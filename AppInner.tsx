@@ -3,10 +3,6 @@ import { useRecoilState } from 'recoil';
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import AmountScreen from 'src/screens/calculate/Amount';
-import AccountScreen from 'src/screens/calculate/Account';
-import CheckDepartureScreen from 'src/screens/calculate/checkDeparture';
-
 import TestScreen from './src/screens/test';
 import MainScreen from './src/screens/main/Main';
 import HomeScreen from './src/screens/home/Home';
@@ -17,15 +13,19 @@ import MainMapScreen from './src/screens/map/MainMap';
 import SearchScreen from './src/screens/search/Search';
 import SignInScreen from './src/screens/signIn/SignIn';
 import ChatRoomScreen from './src/screens/chat/ChatRoom';
+import AmountScreen from './src/screens/calculate/Amount';
+import AccountScreen from './src/screens/calculate/Account';
 import { ChatProvider } from './src/providers/chatProvider';
 import CreateRoomScreen from './src/screens/room/CreateRoom';
 import RoomDetailScreen from './src/screens/room/RoomDetail';
 import DepartureMapScreen from './src/screens/map/departureMap';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
+import CheckAccountScreen from './src/screens/calculate/CheckAccount';
 import AuthenticationScreen from './src/screens/signUp/Authentication';
 import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
 import CheckPermissionScreen from './src/screens/signUp/CheckPermission';
+import CheckDepartureScreen from './src/screens/calculate/CheckDeparture';
 import RegisterNicknameScreen from './src/screens/signUp/RegisterNickname';
 import SchoolAuthenticationScreen from './src/screens/signUp/SchoolAuthentication';
 import EmailAuthenticationCodeScreen from './src/screens/signUp/EmailAuthenticationCode';
@@ -78,6 +78,7 @@ function AppInner() {
         <LogInStack.Screen name="CheckDepartureScreen" component={CheckDepartureScreen} />
         <LogInStack.Screen name="AmountScreen" component={AmountScreen} />
         <LogInStack.Screen name="AccountScreen" component={AccountScreen} />
+        <LogInStack.Screen name="CheckAccountScreen" component={CheckAccountScreen} />
 
         <LogInStack.Screen name="TestScreen" component={TestScreen} />
       </LogInStack.Navigator>
