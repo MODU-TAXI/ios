@@ -1,9 +1,9 @@
+import React, { useState } from 'react';
 import TextEncodingPolyfill from 'text-encoding';
-import React, { useState, useEffect } from 'react';
 import ImageView from 'react-native-image-viewing';
-import { KeyboardAvoidingView } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text, Pressable, KeyboardAvoidingView } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import MessagesComponent from '@components/Chat/Messages';
@@ -23,7 +23,7 @@ Object.assign('global', {
   TextDecoder: TextEncodingPolyfill.TextDecoder,
 });
 
-const ChatRoomScreen = ({ route }: ChatRoomScreenProps) => {
+const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
   const { roomId } = route.params;
 
   const { roomPreview } = useGetRoomPreview(roomId);
@@ -57,9 +57,18 @@ const ChatRoomScreen = ({ route }: ChatRoomScreenProps) => {
     setNewMeesages([]);
   };
 
+  // 정산페이지로 이동
+  const toCalculateScreen = () => {
+    navigation.navigate('CheckDepartureScreen', { roomPreview: roomPreview });
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <HeaderComponent title={'채팅 페이지'} clearMessages={clearMessages} />
+
+      <Pressable onPress={toCalculateScreen}>
+        <Text>정산 페이지로 이동</Text>
+      </Pressable>
 
       <ImageView
         images={viewImages}

@@ -1,6 +1,6 @@
 import React from 'react';
+import { View, Text, Image } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
-import { View, Text, Image, StyleSheet } from 'react-native';
 
 const LoadingComponent = () => {
   return (

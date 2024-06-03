@@ -1,8 +1,8 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
 import { useRecoilState } from 'recoil';
+import { View, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { View, Text, Modal, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, useEffect, useCallback } from 'react';
 
@@ -160,9 +160,7 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
                 </Text>
               </View>
 
-              <Text className="ml-[31px] mt-1 text-lg font-semibold">
-                {roomDetail.arrivalName}
-              </Text>
+              <Text className="ml-[31px] mt-1 text-lg font-semibold">{roomDetail.arrivalName}</Text>
             </View>
           </View>
         </View>

@@ -7,3 +7,10 @@ export type User = {
   email: string;
   imageUrl: string;
 };
+
+export type UserPreview = {
+  memberId: number;
+  nickname: string;
+  imageUrl: string;
+  thisIsMe: boolean;
+};

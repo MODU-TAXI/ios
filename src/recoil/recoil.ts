@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-import { Arrival, UserInfo, Departure, SignUpUser, MessageBody } from '@recoil/type';
+import { Arrival, UserInfo, Departure, Calculate, SignUpUser, MessageBody } from '@recoil/type';
 
 export const signUpUserState = atom<SignUpUser>({
   key: 'tempUser',
@@ -83,4 +83,15 @@ export const arrivalState = atom<Arrival>({
 export const searchKeywordState = atom<string>({
   key: 'searchKeyword',
   default: '',
-})
+});
+
+// 정산 관련
+export const calculateState = atom<Calculate>({
+  key: 'calculate',
+  default: {
+    amount: '',
+    account: '',
+    bank: '',
+    users: [],
+  },
+});

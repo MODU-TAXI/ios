@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { RoomDetail } from '@type/entity/room';
+import { RoomDetail, RoomPreview } from '@type/entity/room';
 import { DepartureSearchParams } from '@type/entity/search';
 
 export type TabNavigatorParamList = {
@@ -22,6 +22,16 @@ export type LoginStackParamList = {
   PatchRoomScreen: { roomDetail: RoomDetail };
   ChatRoomScreen: { roomId: number };
   AlarmScreen: undefined;
+
+  // 정산
+  CheckDepartureScreen: { roomPreview: RoomPreview };
+  AmountScreen: undefined;
+  AccountScreen: undefined;
+  CheckAccountScreen: undefined;
+  CheckCalculateScreen: undefined;
+  CompleteCalculateScreen: undefined;
+
+  // 테스트
   TestScreen: undefined;
 };
 
@@ -29,11 +39,36 @@ export type HomeScreenProps = NativeStackScreenProps<LoginStackParamList, 'HomeS
 export type MainMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'MainMapScreen'>;
 export type NaverMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'NaverMapScreen'>;
 export type SearchScreenProps = NativeStackScreenProps<LoginStackParamList, 'SearchScreen'>;
-export type DepartureMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'DepartureMapScreen'>;
+export type DepartureMapScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'DepartureMapScreen'
+>;
 export type ArrivalMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'ArrivalMapScreen'>;
 export type CreateRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateRoomScreen'>;
 export type RoomDetailScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomDetailScreen'>;
 export type PatchRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'PatchRoomScreen'>;
 export type ChatRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'ChatRoomScreen'>;
 export type AlarmScreenProps = NativeStackScreenProps<LoginStackParamList, 'AlarmScreen'>;
+
+// 정산페이지들
+export type CheckDepartureScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'CheckDepartureScreen'
+>;
+export type AmountScreenProps = NativeStackScreenProps<LoginStackParamList, 'AmountScreen'>;
+export type AccountScreenProps = NativeStackScreenProps<LoginStackParamList, 'AccountScreen'>;
+export type CheckAccountScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'CheckAccountScreen'
+>;
+export type CheckCalculateScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'CheckCalculateScreen'
+>;
+export type CompleteCalculateScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'CompleteCalculateScreen'
+>;
+
+// 테스트 페이지
 export type TestScreenProps = NativeStackScreenProps<LoginStackParamList, 'TestScreen'>;
