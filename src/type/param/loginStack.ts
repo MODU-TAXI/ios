@@ -22,8 +22,13 @@ export type LoginStackParamList = {
   PatchRoomScreen: { roomDetail: RoomDetail };
   ChatRoomScreen: { roomId: number };
   AlarmScreen: undefined;
+
+  // 정산
   CheckDepartureScreen: { roomPreview: RoomPreview };
   AmountScreen: undefined;
+  AccountScreen: undefined;
+
+  // 테스트
   TestScreen: undefined;
 };
 
@@ -48,6 +53,7 @@ export type CheckDepartureScreenProps = NativeStackScreenProps<
   'CheckDepartureScreen'
 >;
 export type AmountScreenProps = NativeStackScreenProps<LoginStackParamList, 'AmountScreen'>;
+export type AccountScreenProps = NativeStackScreenProps<LoginStackParamList, 'AccountScreen'>;
 
 // 테스트 페이지
 export type TestScreenProps = NativeStackScreenProps<LoginStackParamList, 'TestScreen'>;

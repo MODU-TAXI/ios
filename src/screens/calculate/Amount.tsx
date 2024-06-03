@@ -15,7 +15,7 @@ const AmountScreen = ({ navigation }: AmountScreenProps) => {
   const amountError = parseInt(amount) > parseInt(expectedAmount);
 
   const toAccountPage = async () => {
-    console.log('!');
+    navigation.navigate('AccountScreen');
   };
 
   return (
