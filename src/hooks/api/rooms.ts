@@ -1,5 +1,6 @@
 import { Coord } from '@mj-studio/react-native-naver-map';
 import {
+  useQuery,
   useMutation,
   useSuspenseQuery,
   UseMutationResult,
@@ -238,7 +239,7 @@ export const useGetRoomCurrentCamera = (
 ): { rooms: RoomCurrentCamera['rooms']; refetch: () => void } => {
   const { data: rooms, refetch } = useSuspenseQuery({
     queryKey: [
-      `/api/rooms/map`,
+      'getRoomCurrentCamera',
       searchLongitude,
       searchLatitude,
       radius,
@@ -252,7 +253,7 @@ export const useGetRoomCurrentCamera = (
       return response.rooms;
     },
   });
-  // console.log(rooms);
+  console.log(rooms)
   return { rooms, refetch };
 };
 
