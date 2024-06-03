@@ -102,7 +102,6 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
       mapRef.current?.animateCameraTo(location);
     };
     fetchCurrentLocation();
-    refetch();
   }, [])
 
   // timeout 정보 저장 Ref
@@ -115,29 +114,34 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
       clearTimeout(timeoutRef.current);
     }
 
-    let newRadius = 2500;
-    let adjustValue = 0.001;
-    if (e.zoom) {
-      adjustValue = calculateCenter(e.zoom);
-      newRadius = calculateRadius(e.zoom);
-      setRadius(newRadius);
-    }
+    timeoutRef.current = setTimeout(() => {
+      // radius 계산
+      let newRadius = 2500;
+      if (e.zoom) {
+        newRadius = calculateRadius(e.zoom);
+        setRadius(newRadius);
+      }
 
-    // 카메라 센터를 zoom 레벨에 따라 하단으로 조정
-    const adjustedLatitude = e.latitude - adjustValue;
+      // 조정된 센터 저장
+      setCurrentCamera({
+        latitude: e.latitude,
+        longitude: e.longitude,
+        zoom: e.zoom,
+      });
+    }, 500);
+  }, []);
 
-    // 조정된 센터 저장
+  /** 현재위치 이동 버튼 */
+  const moveToCurrentLocation = async() => {
+    const currentLocation = await getCurrentLocation();
     setCurrentCamera({
-      latitude: adjustedLatitude,
-      longitude: e.longitude,
-      zoom: e.zoom,
+      latitude: currentLocation.latitude,
+      longitude: currentLocation.longitude,
+      zoom: 16,
     });
 
-    timeoutRef.current = setTimeout(() => {
-      // 방 다시 탐색
-      refetch();
-    }, 1000);
-  }, []);
+    mapRef.current?.animateCameraTo(currentLocation);
+  }
 
   /** 해당 마커의 room 으로 이동 */
   const toRoomDetailScreen = (roomId: number) => {
@@ -171,22 +175,23 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
           isShowScaleBar={false}
           logoAlign="BottomLeft"
         >
-                      {rooms &&
-              rooms.map((room) => (
-                /** 매칭방 하나의 마커 */
-                /** TODO :
-                 * 마커 탭 했을 때의 동작 (바텀시트에 정보 출력 등)
-                 */
-                <NaverMapMarkerOverlay
-                  key={room.id}
-                  latitude={room.departureLatitude}
-                  longitude={room.departureLongitude}
-                  onTap={() => toRoomDetailScreen(room.id)}
-                  anchor={{ x: 0.5, y: 0.5 }}
-                >
-                  <RoomMarkerComponent spotName={room.spotName} />
-                </NaverMapMarkerOverlay>
-              ))}
+        {rooms &&
+          rooms.map((room) => (
+            /** 매칭방 하나의 마커 */
+            /** TODO :
+             * 마커 탭 했을 때의 동작 (바텀시트에 정보 출력 등)
+             */
+            <NaverMapMarkerOverlay
+              key={room.id}
+              latitude={room.departureLatitude}
+              longitude={room.departureLongitude}
+              onTap={() => toRoomDetailScreen(room.id)}
+              anchor={{ x: 0.5, y: 0.5 }}
+            >
+              <RoomMarkerComponent spotName={room.spotName} />
+            </NaverMapMarkerOverlay>
+          ))
+        }
         </NaverMapView>
       </Pressable>
 
@@ -223,12 +228,15 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         )}
       </View>
 
-      
+      {/** 생성, 내위치, 새로고침 버튼 */}
       <Animated.View 
         className="absolute left-1/2 flex flex-row"
         style={{
           top: bottomSheetPosition,
-          transform: [{ translateX: -(buttonSize.width/2) }, { translateY: -(buttonSize.height*1.5) }],
+          transform: [
+            { translateX: -(buttonSize.width/2) }, 
+            { translateY: -(buttonSize.height*1.5) }
+          ],
         }}
       >
         <Pressable
@@ -239,13 +247,13 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
 
         <Pressable
           className='ml-2'
-          // onPress={moveToCurrentLocation}
+          onPress={moveToCurrentLocation}
         >
           <CurrentLocationButton />
         </Pressable>
 
         <Pressable
-          // onPress={() => refetch()}
+          onPress={() => refetch()}
         >
           <RefreshButton />
         </Pressable>
