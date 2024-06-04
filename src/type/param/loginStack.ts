@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import { UserPreview } from '@type/entity/user';
 import { RoomDetail, RoomPreview } from '@type/entity/room';
 import { DepartureSearchParams } from '@type/entity/search';
 
@@ -31,6 +32,9 @@ export type LoginStackParamList = {
   CheckCalculateScreen: undefined;
   CompleteCalculateScreen: undefined;
 
+  // 신고
+  DeclarationScreen: { userInfo: UserPreview };
+
   // 테스트
   TestScreen: undefined;
 };
@@ -50,7 +54,7 @@ export type PatchRoomScreenProps = NativeStackScreenProps<LoginStackParamList, '
 export type ChatRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'ChatRoomScreen'>;
 export type AlarmScreenProps = NativeStackScreenProps<LoginStackParamList, 'AlarmScreen'>;
 
-// 정산페이지들
+// 정산 페이지들
 export type CheckDepartureScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'CheckDepartureScreen'
@@ -68,6 +72,12 @@ export type CheckCalculateScreenProps = NativeStackScreenProps<
 export type CompleteCalculateScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'CompleteCalculateScreen'
+>;
+
+// 신고 페이지
+export type DeclarationScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'DeclarationScreen'
 >;
 
 // 테스트 페이지

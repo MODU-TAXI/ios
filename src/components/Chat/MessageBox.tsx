@@ -1,16 +1,17 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import FastImage from 'react-native-fast-image';
-import { View, Text, Image, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 
 import { ChatMessage } from '@type/entity/chat';
+import { UserPreview } from '@type/entity/user';
 
 import ProfileImage from '@assets/images/Chat/ProfileImage.svg';
 
 interface MessageBoxComponentProps {
   message: ChatMessage;
   memberId: number;
-  openUserInfoModal: () => void;
+  openUserInfoModal: (user: UserPreview) => void;
   openImageModal: (imageUrl: string) => void;
 }
 
@@ -70,7 +71,17 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
       // 남이 보낸 메세지일 경우
       return (
         <View className="my-4 flex-col">
-          <Pressable className="flex-row items-center" onPress={openUserInfoModal}>
+          <Pressable
+            className="flex-row items-center"
+            onPress={() =>
+              openUserInfoModal({
+                memberId: message.memberId,
+                nickname: message.sender,
+                imageUrl: 'test',
+                thisIsMe: false,
+              })
+            }
+          >
             <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
               <ProfileImage className="" />
             </View>
@@ -125,7 +136,17 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
       // 남이 보낸거
       return (
         <View className="my-2 flex-col">
-          <Pressable className="flex-row items-center" onPress={openUserInfoModal}>
+          <Pressable
+            className="flex-row items-center"
+            onPress={() =>
+              openUserInfoModal({
+                memberId: message.memberId,
+                nickname: message.sender,
+                imageUrl: 'test',
+                thisIsMe: false,
+              })
+            }
+          >
             <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
               <ProfileImage className="" />
             </View>
@@ -156,6 +177,38 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
       );
     }
   }
+
+  // if (message.messageType === 'CHAT_BOT') {
+  //   <View className="my-2 flex-col">
+  //     <Pressable className="flex-row items-center" onPress={openUserInfoModal}>
+  //       <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
+  //         <ProfileImage className="" />
+  //       </View>
+
+  //       <View>
+  //         <Text>{message.sender}</Text>
+  //       </View>
+  //     </Pressable>
+
+  //     <Pressable className="ml-4 mt-2 flex-row" onPress={() => openImageModal(message.content)}>
+  //       {/* 메세지 */}
+  //       {/* 이미지 */}
+  //       <FastImage
+  //         className="h-[140px] w-[140px] rounded-xl"
+  //         source={{
+  //           uri: message.content,
+  //         }}
+  //       />
+
+  //       <View className="ml-1 flex-1 flex-col items-start justify-end">
+  //         <Text className="text-[10px]">2</Text>
+  //         <Text className="text-[10px] text-gray-300">
+  //           {dayjs(message.dateTime).format('HH:MM')}
+  //         </Text>
+  //       </View>
+  //     </Pressable>
+  //   </View>;
+  // }
 
   return <View></View>;
 };

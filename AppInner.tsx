@@ -25,6 +25,7 @@ import DepartureMapScreen from './src/screens/map/departureMap';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
 import CheckAccountScreen from './src/screens/calculate/CheckAccount';
+import DeclarationScreen from './src/screens/declaration/Declaration';
 import AuthenticationScreen from './src/screens/signUp/Authentication';
 import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
 import CheckPermissionScreen from './src/screens/signUp/CheckPermission';
@@ -84,6 +85,9 @@ function AppInner() {
         <LogInStack.Screen name="CheckAccountScreen" component={CheckAccountScreen} />
         <LogInStack.Screen name="CheckCalculateScreen" component={CheckCalculateScreen} />
         <LogInStack.Screen name="CompleteCalculateScreen" component={CompleteCalculateScreen} />
+
+        {/* 신고 Screen */}
+        <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />
 
         <LogInStack.Screen name="TestScreen" component={TestScreen} />
       </LogInStack.Navigator>

@@ -16,6 +16,7 @@ import { memberIdState, messagesState } from '@recoil/recoil';
 import { useEnterChatRoom } from '@hooks/chat';
 import { useGetRoomPreview } from '@hooks/api/rooms';
 
+import { UserPreview } from '@type/entity/user';
 import { ChatRoomScreenProps } from '@type/param/loginStack';
 
 Object.assign('global', {
@@ -32,6 +33,7 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
   const [imageModalVisible, setImageModalVisible] = useState(false); // 이미지 뷰 모달
   const [viewImages, setViewImages] = useState([{ uri: '' }]);
+  const [userInfo, setUserInfo] = useState<UserPreview>();
   const memberId = useRecoilValue(memberIdState);
 
   useEnterChatRoom(); // 채팅스크린에 있을때는 알람안오게 해야하므로 recoil로 상태 저장
@@ -43,7 +45,8 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
   };
 
   // 유저 인포 모달 열기
-  const openUserInfoModal = () => {
+  const openUserInfoModal = (user: UserPreview) => {
+    setUserInfo(user);
     setModalVisible(true);
   };
 
@@ -59,7 +62,17 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
 
   // 정산페이지로 이동
   const toCalculateScreen = () => {
-    navigation.navigate('CheckDepartureScreen', { roomPreview: roomPreview });
+    if (roomPreview) {
+      navigation.navigate('CheckDepartureScreen', { roomPreview: roomPreview });
+    }
+  };
+
+  // 신고페이지로 이동
+  const toDeclarationScreen = () => {
+    if (userInfo) {
+      closeUserInfoModal();
+      navigation.navigate('DeclarationScreen', { userInfo: userInfo! });
+    }
   };
 
   return (
@@ -95,7 +108,14 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
       </KeyboardAvoidingView>
 
       {/* 유저 정보 modal */}
-      <UserModalComponent modalVisible={modalVisible} closeUserInfoModal={closeUserInfoModal} />
+      {userInfo && (
+        <UserModalComponent
+          userInfo={userInfo}
+          modalVisible={modalVisible}
+          closeUserInfoModal={closeUserInfoModal}
+          toDeclarationScreen={toDeclarationScreen}
+        />
+      )}
     </SafeAreaView>
   );
 };

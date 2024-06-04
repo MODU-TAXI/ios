@@ -30,7 +30,7 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomPreview }) =>
           <View className="flex-row items-center justify-center">
             <View>
               <Text className="text-[16px] font-semibold text-[#272727]">
-                {roomPreview.arrivalName}
+                {roomPreview.departureName}
               </Text>
             </View>
 
@@ -38,7 +38,7 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomPreview }) =>
 
             <View>
               <Text className="text-[16px] font-semibold text-[#272727]">
-                {roomPreview.departureName}
+                {roomPreview.arrivalName}
               </Text>
             </View>
           </View>

@@ -132,7 +132,6 @@ export function ChatProvider({ children }: any) {
           roomId: roomId,
           type: type,
           content: inputMessage,
-          sender: '',
         }),
         headers: {
           token: accessToken,

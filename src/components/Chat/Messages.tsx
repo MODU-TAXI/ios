@@ -6,12 +6,13 @@ import { MessageBoxComponent } from '@components/Chat/MessageBox';
 import { useGetMessages } from '@hooks/api/chat';
 
 import { ChatMessage } from '@type/entity/chat';
+import { UserPreview } from '@type/entity/user';
 
 interface MessagesComponentProps {
   roomId: number;
   memberId: number;
   newMessages: ChatMessage[];
-  openUserInfoModal: () => void;
+  openUserInfoModal: (user: UserPreview) => void;
   openImageModal: (imageUrl: string) => void;
 }
 
