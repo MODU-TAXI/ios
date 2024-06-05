@@ -93,7 +93,7 @@ const DeclarationScreen = ({ navigation, route }: DeclarationScreenProps) => {
             </View>
           </View>
 
-          <View className="mx-5 mb-10 mt-[78px]">
+          <View className="mx-7 mb-10 mt-[78px]">
             <ButtonComponent
               color={'bg-main'}
               borderColor={'border-main'}
