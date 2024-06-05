@@ -29,13 +29,11 @@ function App(): React.JSX.Element {
         <GestureHandlerRootView>
           <SafeAreaProvider>
             <NavigationContainer linking={linking} fallback={<LoadingComponent />}>
-              <CustomErrorHandler>
-                <Suspense fallback={<LoadingComponent />}>
-                  <QueryClientProvider client={queryClient}>
-                    <AppInner />
-                  </QueryClientProvider>
-                </Suspense>
-              </CustomErrorHandler>
+              <QueryClientProvider client={queryClient}>
+                <CustomErrorHandler>
+                  <AppInner />
+                </CustomErrorHandler>
+              </QueryClientProvider>
             </NavigationContainer>
           </SafeAreaProvider>
         </GestureHandlerRootView>

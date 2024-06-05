@@ -1,6 +1,6 @@
 import React from 'react';
-import { View } from 'react-native';
 import { useRecoilValue } from 'recoil';
+import { View, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -24,7 +24,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
   // 여기서는 useQuery 사용하지 않으면 해결될듯 -> 이게 된다음 화면을 그려줘서 문제가 생기는 듯 하다
   // 이 부분은 youtube 글을 작성하도록 하자... useSuspensequery에 대해
-  const { roomPreview } = useGetRoomPreview(roomId);
+  const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(roomId);
 
   const toCreateRoomScreen = () => {
     navigation.navigate('CreateRoomScreen');
@@ -46,6 +46,14 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('AlarmScreen');
   };
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    await refetchRoomPreview();
+    setRefreshing(false);
+  }, [refetchRoomPreview]);
+
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['left', 'right']}>
       {/* 로고, 알림 */}
@@ -56,7 +64,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         roomId={roomId}
       />
 
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {/* 지도, 택시팟 */}
         <MiddleComponent toMapScreen={toMapScreen} toCreateRoomScreen={toCreateRoomScreen} />
 

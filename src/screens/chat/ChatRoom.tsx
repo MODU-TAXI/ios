@@ -27,7 +27,7 @@ Object.assign('global', {
 const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
   const { roomId } = route.params;
 
-  const { roomPreview } = useGetRoomPreview(roomId);
+  const { data: roomPreview } = useGetRoomPreview(roomId);
 
   const [newMessages, setNewMeesages] = useRecoilState(messagesState);
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달

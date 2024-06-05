@@ -126,6 +126,8 @@ export const getRoomMembers = async (roomId: number): Promise<GetRoomMembersResp
     `/api/rooms/${roomId}/members/in`,
   );
 
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
   return response.data;
 };
 
