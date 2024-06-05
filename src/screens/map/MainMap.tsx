@@ -2,11 +2,10 @@ import { useRecoilValue } from 'recoil';
 import { useSharedValue } from 'react-native-reanimated';
 import { View, Pressable, LayoutChangeEvent } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomSheet, {
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
+import Animated, { runOnJS, useAnimatedStyle } from 'react-native-reanimated';
 import React, {
   useRef,
   useMemo,
@@ -14,6 +13,7 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
+import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
   Coord,
   Camera,
@@ -78,7 +78,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         setButtonSize({width: width, height: height});
       });
     }
-  }, [buttonSizeRef.current])
+  }, [])
 
   // const animatedButtonStyle = useAnimatedStyle(() => {
   //   return {
@@ -132,8 +132,10 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
     }
 
     timeoutRef.current = setTimeout(() => {
-      // 바텀시트 20% 복귀
+      // 바텀시트 20% 복귀, 방 선택 초기화
       bottomSheetRef.current?.snapToIndex(1);
+      setSelectedRoom(null);
+
       // radius 계산
       let newRadius = 2500;
       if (e.zoom) {
@@ -147,8 +149,6 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         longitude: e.longitude,
         zoom: e.zoom,
       });
-
-      setSelectedRoom(null);
     }, 300);
   }, []);
 
@@ -160,20 +160,27 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
       longitude: currentLocation.longitude,
       zoom: 16,
     });
-
     mapRef.current?.animateCameraTo(currentLocation);
   }
 
-  /** 방 선택 및 바텀시트 내리기 */
+  /** 방 선택 및 바텀시트 10% 내리기 */
   const handleSelectRoom = (room: RoomCurrentCamera) => {
     setSelectedRoom(room);
     bottomSheetRef.current?.snapToIndex(2);
   }
 
+  // 지도화면 터치 시 selectedRoom 초기화 및 바텀시트 20% 복귀
+  const tap = Gesture.Tap()
+    .onTouchesDown(() => {
+      runOnJS(setSelectedRoom)(null);
+      // 여기서 바텀시트 접근시 동작하지 않는 버그 존재
+      // bottomSheetRef.current?.snapToIndex(1);
+    });
+
   /** 해당 마커의 room 으로 이동 */
-  const toRoomDetailScreen = (roomId: number) => {
+  const toRoomDetailScreen = useCallback((roomId: number) => {
     navigation.navigate('RoomDetailScreen', {roomId: roomId});
-  }
+  }, []);
 
   /** 매칭방 생성으로 이동 */
   const toCreateRoomScreen = () => {
@@ -191,62 +198,64 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         onPressIn={() => setIsTouching(true)}
         onPressOut={() => setIsTouching(false)}
       >
-        <NaverMapView 
-          ref={mapRef}
-          style={{ flex: 1 }}
-          mapType="Basic"
-          initialCamera={currentCamera}
-          onCameraChanged={onCameraChange}
-          locale="ko"
-          isShowLocationButton={false}
-          isShowScaleBar={false}
-          logoAlign="BottomLeft"
-        >
-          {selectedRoom ? (
-            // Room 선택시 마커 변경하여 렌더링
-            <>
-              {rooms
-                .filter((room) => room.id === selectedRoom.id)
-                .map((room) => (
-                  <NaverMapMarkerOverlay
-                    key={room.id}
-                    latitude={room.departureLatitude}
-                    longitude={room.departureLongitude}
-                    onTap={() => handleSelectRoom(room)}
-                    anchor={{ x: 0.5, y: 0.5 }}
-                  >
-                    <RoomMarkerComponent roomId={selectedRoom.id} spotName={selectedRoom.spotName} selected />
-                  </NaverMapMarkerOverlay>
-                ))}
-              {rooms
-                .filter((room) => room.id !== selectedRoom.id)
-                .map((room) => (
-                  <NaverMapMarkerOverlay
-                    key={room.id}
-                    latitude={room.departureLatitude}
-                    longitude={room.departureLongitude}
-                    onTap={() => handleSelectRoom(room)}
-                    anchor={{ x: 0.5, y: 0.5 }}
-                  >
-                    <RoomMarkerComponent roomId={room.id} spotName={room.spotName} selected={false} />
-                  </NaverMapMarkerOverlay>
-                ))}
-            </>
-          ) : (
-            // Room 선택하지 않을 시 일반 렌더링
-            rooms.map((room) => (
-              <NaverMapMarkerOverlay
-                key={room.id}
-                latitude={room.departureLatitude}
-                longitude={room.departureLongitude}
-                onTap={() => handleSelectRoom(room)}
-                anchor={{ x: 0.5, y: 0.5 }}
-              >
-                <RoomMarkerComponent roomId={room.id} spotName={room.spotName} selected={false} />
-              </NaverMapMarkerOverlay>
-            ))
-          )}
-        </NaverMapView>
+        <GestureDetector gesture={tap} >
+          <NaverMapView 
+            ref={mapRef}
+            style={{ flex: 1 }}
+            mapType="Basic"
+            initialCamera={currentCamera}
+            onCameraChanged={onCameraChange}
+            locale="ko"
+            isShowLocationButton={false}
+            isShowScaleBar={false}
+            logoAlign="BottomLeft"
+          >
+            {selectedRoom ? (
+              // Room 선택시 마커 변경하여 렌더링
+              <>
+                {rooms
+                  .filter((room) => room.id === selectedRoom.id)
+                  .map((room) => (
+                    <NaverMapMarkerOverlay
+                      key={`selected-${room.id}`}
+                      latitude={room.departureLatitude}
+                      longitude={room.departureLongitude}
+                      onTap={() => handleSelectRoom(room)}
+                      anchor={{ x: 0.5, y: 0.5 }}
+                    >
+                      <RoomMarkerComponent roomId={selectedRoom.id} spotName={selectedRoom.spotName} selected />
+                    </NaverMapMarkerOverlay>
+                  ))}
+                {rooms
+                  .filter((room) => room.id !== selectedRoom.id)
+                  .map((room) => (
+                    <NaverMapMarkerOverlay
+                      key={`unselected-${room.id}`}
+                      latitude={room.departureLatitude}
+                      longitude={room.departureLongitude}
+                      onTap={() => handleSelectRoom(room)}
+                      anchor={{ x: 0.5, y: 0.5 }}
+                    >
+                      <RoomMarkerComponent roomId={room.id} spotName={room.spotName} selected={false} />
+                    </NaverMapMarkerOverlay>
+                  ))}
+              </>
+            ) : (
+              // Room 선택하지 않을 시 일반 렌더링
+              rooms.map((room) => (
+                <NaverMapMarkerOverlay
+                  key={`initial-${room.id}`}
+                  latitude={room.departureLatitude}
+                  longitude={room.departureLongitude}
+                  onTap={() => handleSelectRoom(room)}
+                  anchor={{ x: 0.5, y: 0.5 }}
+                >
+                  <RoomMarkerComponent roomId={room.id} spotName={room.spotName} selected={false} />
+                </NaverMapMarkerOverlay>
+              ))
+            )}
+          </NaverMapView>
+        </GestureDetector>
       </Pressable>
 
       {/** 검색창 */}
@@ -348,7 +357,6 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
           <MapBottomSheetScreen />
         </BottomSheetView>
       </BottomSheet>
-
     </GestureHandlerRootView>
   )
 }

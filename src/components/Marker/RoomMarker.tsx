@@ -12,8 +12,6 @@ interface RoomMarkerProps {
 
 /** 매칭방 한개 마커 */
 const RoomMarkerComponent: React.FC<RoomMarkerProps> = ({ roomId, spotName, selected }) => {
-  console.log(roomId + spotName + "는 " + selected)
-  
   return (
     <View className="flex-1 items-center justify-center">
       <View
@@ -43,4 +41,4 @@ const RoomMarkerComponent: React.FC<RoomMarkerProps> = ({ roomId, spotName, sele
   )
 };
 
-export default RoomMarkerComponent;
+export default React.memo(RoomMarkerComponent);
