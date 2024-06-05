@@ -14,6 +14,7 @@ interface MessagesComponentProps {
   newMessages: ChatMessage[];
   openUserInfoModal: (user: UserPreview) => void;
   openImageModal: (imageUrl: string) => void;
+  toCalculateScreen: () => void;
 }
 
 const MessagesComponent: React.FC<MessagesComponentProps> = ({
@@ -22,6 +23,7 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
   newMessages,
   openUserInfoModal,
   openImageModal,
+  toCalculateScreen,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const { messages } = useGetMessages(roomId);
@@ -64,6 +66,7 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
             openUserInfoModal={openUserInfoModal}
             memberId={memberId}
             openImageModal={openImageModal}
+            toCalculateScreen={toCalculateScreen}
           />
         </View>
       ))}
@@ -76,6 +79,7 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
             openUserInfoModal={openUserInfoModal}
             memberId={memberId}
             openImageModal={openImageModal}
+            toCalculateScreen={toCalculateScreen}
           />
         </View>
       ))}

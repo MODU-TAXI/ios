@@ -79,10 +79,6 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
     <SafeAreaView className="flex-1 bg-white">
       <HeaderComponent title={'채팅 페이지'} clearMessages={clearMessages} />
 
-      <Pressable onPress={toCalculateScreen}>
-        <Text>정산 페이지로 이동</Text>
-      </Pressable>
-
       <ImageView
         images={viewImages}
         imageIndex={0}
@@ -101,6 +97,7 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
           openUserInfoModal={openUserInfoModal}
           newMessages={newMessages}
           openImageModal={openImageModal}
+          toCalculateScreen={toCalculateScreen}
         />
 
         {/* 입력창 Component */}
