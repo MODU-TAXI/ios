@@ -7,11 +7,13 @@ import WaitingUserComponent from './WaitingUser';
 import { RoomWaitingMember } from '@type/entity/room';
 
 interface WaitingUsersComponentProps {
+  myRoom: boolean;
   roomWaitingMembers: RoomWaitingMember[];
   applyJoinRoom: (memberId: number) => Promise<void>;
 }
 
 const WaitingUsersComponent: React.FC<WaitingUsersComponentProps> = ({
+  myRoom,
   roomWaitingMembers,
   applyJoinRoom,
 }) => {
@@ -24,6 +26,7 @@ const WaitingUsersComponent: React.FC<WaitingUsersComponentProps> = ({
       {roomWaitingMembers.map((roomWaitingMember, index) => (
         <WaitingUserComponent
           key={index}
+          myRoom={myRoom}
           roomWaitingMember={roomWaitingMember}
           applyJoinRoom={applyJoinRoom}
         />

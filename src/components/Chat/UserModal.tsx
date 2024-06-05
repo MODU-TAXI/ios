@@ -1,19 +1,25 @@
 import React from 'react';
 import { Text, View, Modal, Pressable } from 'react-native';
 
+import { UserPreview } from '@type/entity/user';
+
 import Question from '@assets/images/Chat/Question.svg';
 import UserImage from '@assets/images/Chat/UserImage.svg';
 import Declaration from '@assets/images/Chat/Declaration.svg';
 import SchoolBadge from '@assets/images/Chat/SchoolBadge.svg';
 
 interface UserModalComponentProps {
+  userInfo: UserPreview;
   modalVisible: boolean;
   closeUserInfoModal: () => void;
+  toDeclarationScreen: () => void;
 }
 
 const UserModalComponent: React.FC<UserModalComponentProps> = ({
+  userInfo,
   modalVisible,
   closeUserInfoModal,
+  toDeclarationScreen,
 }) => {
   return (
     <Modal animationType="fade" transparent={true} visible={modalVisible}>
@@ -31,7 +37,9 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
 
           {/* 이름 */}
           <View className="my-4">
-            <Text className="text-[18px] font-semibold">헤일/이하연</Text>
+            <Text className="text-[18px] font-semibold tracking-tight text-[#272727]">
+              {userInfo.nickname}
+            </Text>
           </View>
 
           <View className="flex-row items-center">
@@ -42,15 +50,15 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
 
             <View className="flex-row items-center">
               <Question className="mr-1" />
-              <Text className="mr-1">최근 매칭 확률</Text>
+              <Text className="mr-1 tracking-tight text-[#272727]">최근 매칭 확률</Text>
               <Text className="font-medium text-[#5d5d5d]">80%</Text>
             </View>
           </View>
 
           {/* 신고하기 */}
-          <View className="mb-8 mt-4 p-4">
+          <Pressable className="mb-8 mt-4 p-4" onPress={toDeclarationScreen}>
             <Declaration />
-          </View>
+          </Pressable>
         </View>
       </View>
     </Modal>

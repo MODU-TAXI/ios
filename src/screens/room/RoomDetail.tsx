@@ -173,6 +173,7 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
 
         {/* 대기 멤버 */}
         <WaitingUsersComponent
+          myRoom={roomDetail.myRoom}
           roomWaitingMembers={roomWaitingMembers.waitingList}
           applyJoinRoom={applyJoinRoom}
         />
