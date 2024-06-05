@@ -38,7 +38,7 @@ import {
 import { translateCategory } from '@utils/room';
 import { InfoToastMessage, ErrorToastMessage } from '@utils/toastMessage';
 
-import { RoomList, RoomDetail, RoomCurrentCamera } from '@type/entity/room';
+import { RoomList, RoomDetail, RoomPreview, RoomsCurrentCamera } from '@type/entity/room';
 
 // 방 생성
 export const useCreateRoom = (): UseMutationResult<
@@ -236,7 +236,7 @@ export const useGetRoomCurrentCamera = (
   spotId?: number,
   roomTags?: string[],
   isImminent?: boolean,
-): { rooms: RoomCurrentCamera['rooms']; refetch: () => void } => {
+): { rooms: RoomsCurrentCamera['rooms']; refetch: () => void } => {
   const { data: rooms, refetch } = useSuspenseQuery({
     queryKey: [
       'getRoomCurrentCamera',
@@ -253,7 +253,6 @@ export const useGetRoomCurrentCamera = (
       return response.rooms;
     },
   });
-  console.log(rooms)
   return { rooms, refetch };
 };
 

@@ -1,9 +1,12 @@
 import { useRecoilValue } from 'recoil';
-import Animated from 'react-native-reanimated';
 import { useSharedValue } from 'react-native-reanimated';
-import Geolocation from '@react-native-community/geolocation';
+import { View, Pressable, LayoutChangeEvent } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { View, Text, Pressable, LayoutChangeEvent } from 'react-native';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import BottomSheet, {
+  BottomSheetView,
+} from '@gorhom/bottom-sheet';
 import React, {
   useRef,
   useMemo,
@@ -11,18 +14,12 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import BottomSheet, {
-  BottomSheetView,
-  BottomSheetBackdrop,
-  BottomSheetHandleProps,
-} from '@gorhom/bottom-sheet';
 import {
   Coord,
   Camera,
   NaverMapView,
   NaverMapViewRef,
   NaverMapMarkerOverlay,
-  NaverMapCircleOverlay,
 } from '@mj-studio/react-native-naver-map';
 
 import MapBottomSheetScreen from './MapBottomSheet';
@@ -30,19 +27,19 @@ import MapBottomSheetScreen from './MapBottomSheet';
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
 import CreateRoomButtonComponent from '@components/CreateRoomButton';
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
+import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDigest';
 
 import { userInfoState } from '@recoil/recoil';
 
 import { useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
-import { calculateRadius, calculateCenter, getCurrentLocation } from '@utils/map';
+import { calculateRadius, getCurrentLocation } from '@utils/map';
 
+import { RoomCurrentCamera } from '@type/entity/room';
 import { MainMapScreenProps } from '@type/param/loginStack';
 
 import MapPin from '@assets/images/Map/MapPin.svg';
 import MapPinGray from '@assets/images/Map/MapPinGray.svg';
-import BackButton from '@assets/images/Header/BackButton.svg';
-import CloseButton from '@assets/images/Header/CloseButton.svg';
 import RefreshButton from '@assets/images/Map/refreshButton.svg';
 import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 
@@ -52,7 +49,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   const [isTouching, setIsTouching] = useState<boolean>(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const mapRef = useRef<NaverMapViewRef>(null);
-  const [selectedRoom, setSelectedRoom] = useState<number>(0);
+  const [selectedRoom, setSelectedRoom] = useState<RoomCurrentCamera | null>(null);
 
   // 택시팟 생성 버튼 위치 설정용
   const buttonSizeRef = useRef<View>(null);
@@ -62,9 +59,17 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   });
 
   // 바텀시트 snap point
-  const snapPoints = useMemo(() => ['40%', '20%', '85%'], []);
+  const snapPoints = useMemo(() => ['40%', '20%', '10%', '85%'], []);
+  // const [isShowButton, setIsShowButton] = useState<boolean>(true);
 
   const bottomSheetPosition = useSharedValue<number>(0);
+  // useEffect(() => {
+  //   if (bottomSheetPosition.value > 500) {
+  //     setIsShowButton(true)
+  //   } else {
+  //     setIsShowButton(false)
+  //   }
+  // }, [bottomSheetPosition.value])
 
   /** 택시팟 버튼 크기 계산 */
   useEffect(() => {
@@ -74,6 +79,17 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
       });
     }
   }, [buttonSizeRef.current])
+
+  // const animatedButtonStyle = useAnimatedStyle(() => {
+  //   return {
+  //     transform: [
+  //       { translateX: -(buttonSize.width / 2) },
+  //       { translateY: bottomSheetPosition.value > Number(snapPoints[0].replace('%','')) ? 0 : -(buttonSize.height * 1.5) },
+  //     ],
+  //     top: bottomSheetPosition.value > Number(snapPoints[0].replace('%','')) ? 'auto' : bottomSheetPosition.value,
+  //     bottom: bottomSheetPosition.value > Number(snapPoints[0].replace('%','')) ? Number(snapPoints[0].replace('%','')) : 'auto',
+  //   };
+  // });
 
   // 현재 카메라 중심좌표 저장, 초기값 인하대 후문
   const [currentCamera, setCurrentCamera] = useState<Camera>({
@@ -108,7 +124,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   // timeout 정보 저장 Ref
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  /** 카메라 이동시 1000ms 딜레이 주며 함수호출 */
+  /** 카메라 이동시 딜레이 주며 함수호출: radius 계산, selectedRoom 초기화 */
   const onCameraChange = useCallback((e: Camera) => {
     // timeout 시
     if (timeoutRef.current) {
@@ -116,6 +132,8 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
     }
 
     timeoutRef.current = setTimeout(() => {
+      // 바텀시트 20% 복귀
+      bottomSheetRef.current?.snapToIndex(1);
       // radius 계산
       let newRadius = 2500;
       if (e.zoom) {
@@ -129,7 +147,9 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         longitude: e.longitude,
         zoom: e.zoom,
       });
-    }, 500);
+
+      setSelectedRoom(null);
+    }, 300);
   }, []);
 
   /** 현재위치 이동 버튼 */
@@ -142,6 +162,12 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
     });
 
     mapRef.current?.animateCameraTo(currentLocation);
+  }
+
+  /** 방 선택 및 바텀시트 내리기 */
+  const handleSelectRoom = (room: RoomCurrentCamera) => {
+    setSelectedRoom(room);
+    bottomSheetRef.current?.snapToIndex(2);
   }
 
   /** 해당 마커의 room 으로 이동 */
@@ -159,7 +185,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   }
   
   return (
-    <View className="flex-1">
+    <GestureHandlerRootView className="flex-1">
       <Pressable 
         className="flex-1" 
         onPressIn={() => setIsTouching(true)}
@@ -176,26 +202,50 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
           isShowScaleBar={false}
           logoAlign="BottomLeft"
         >
-        {rooms &&
-          rooms.map((room) => (
-            /** 매칭방 하나의 마커 */
-            /** TODO :
-             * 마커 탭 했을 때의 동작 (바텀시트에 정보 출력 등)
-             */
-            <NaverMapMarkerOverlay
-              key={room.id}
-              latitude={room.departureLatitude}
-              longitude={room.departureLongitude}
-              onTap={() => toRoomDetailScreen(room.id)}
-              anchor={{ x: 0.5, y: 0.5 }}
-            >
-              <RoomMarkerComponent 
-                spotName={room.spotName}
-                selected={true}
-              />
-            </NaverMapMarkerOverlay>
-          ))
-        }
+          {selectedRoom ? (
+            // Room 선택시 마커 변경하여 렌더링
+            <>
+              {rooms
+                .filter((room) => room.id === selectedRoom.id)
+                .map((room) => (
+                  <NaverMapMarkerOverlay
+                    key={room.id}
+                    latitude={room.departureLatitude}
+                    longitude={room.departureLongitude}
+                    onTap={() => handleSelectRoom(room)}
+                    anchor={{ x: 0.5, y: 0.5 }}
+                  >
+                    <RoomMarkerComponent roomId={selectedRoom.id} spotName={selectedRoom.spotName} selected />
+                  </NaverMapMarkerOverlay>
+                ))}
+              {rooms
+                .filter((room) => room.id !== selectedRoom.id)
+                .map((room) => (
+                  <NaverMapMarkerOverlay
+                    key={room.id}
+                    latitude={room.departureLatitude}
+                    longitude={room.departureLongitude}
+                    onTap={() => handleSelectRoom(room)}
+                    anchor={{ x: 0.5, y: 0.5 }}
+                  >
+                    <RoomMarkerComponent roomId={room.id} spotName={room.spotName} selected={false} />
+                  </NaverMapMarkerOverlay>
+                ))}
+            </>
+          ) : (
+            // Room 선택하지 않을 시 일반 렌더링
+            rooms.map((room) => (
+              <NaverMapMarkerOverlay
+                key={room.id}
+                latitude={room.departureLatitude}
+                longitude={room.departureLongitude}
+                onTap={() => handleSelectRoom(room)}
+                anchor={{ x: 0.5, y: 0.5 }}
+              >
+                <RoomMarkerComponent roomId={room.id} spotName={room.spotName} selected={false} />
+              </NaverMapMarkerOverlay>
+            ))
+          )}
         </NaverMapView>
       </Pressable>
 
@@ -231,6 +281,15 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
           </View>
         )}
       </View>
+
+      {/** 방 미리보기 */}
+      {selectedRoom &&
+        <View className='absolute top-[68%] w-full'>
+          <Pressable onPress={() => toRoomDetailScreen(selectedRoom.id)}>
+            <SelectedRoomDigestComponent roomId={selectedRoom.id} />
+          </Pressable>
+        </View>
+      }
 
       {/** 생성, 내위치, 새로고침 버튼 */}
       <Animated.View 
@@ -290,7 +349,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         </BottomSheetView>
       </BottomSheet>
 
-    </View>
+    </GestureHandlerRootView>
   )
 }
 

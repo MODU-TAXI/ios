@@ -55,13 +55,20 @@ export interface RoomCategory {
 }
 
 // 원형 영역 방 리스트
-export interface RoomCurrentCamera {
+export interface RoomsCurrentCamera {
   rooms: {
     id: number;
     departureLongitude: number;
     departureLatitude: number;
     spotName: string;
   }[];
+}
+
+export interface RoomCurrentCamera {
+  id: number;
+  departureLongitude: number;
+  departureLatitude: number;
+  spotName: string;
 }
 
 // 방 정보

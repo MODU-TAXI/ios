@@ -42,7 +42,7 @@ const RoomMapComponent: React.FC<RoomMapComponentProps> = ({ roomDetail }) => {
 
   return (
     <View className="shadow-md">
-      <View className="mt-2 h-[200px] w-full overflow-hidden rounded-xl">
+      <View className="mt-2 h-[240px] w-full overflow-hidden rounded-xl">
         <NaverMapView
           style={{ flex: 1 }}
           ref={mapRef}
