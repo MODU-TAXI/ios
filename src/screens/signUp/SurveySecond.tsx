@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ButtonComponent from '@components/Button';
 import SelectBoxComponent from '@components/SelectBox';
 import ProgressBarComponent from '@components/ProgressBar';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { useSurvey } from '@hooks/api/onboarding';
 
@@ -29,7 +30,7 @@ const ServeySecondScreen = ({ navigation }: SurveySecondScreenProps) => {
     return surveyLists.filter((surveyList) => surveyList.select === true).length;
   }, [surveyLists]);
 
-  const { mutateAsync: survey } = useSurvey();
+  const { mutateAsync: survey, isPending: surveyPending } = useSurvey();
 
   // 설문조사 제출
   const sendSurvey = async (): Promise<void> => {
@@ -45,6 +46,8 @@ const ServeySecondScreen = ({ navigation }: SurveySecondScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {surveyPending && <TransparentLoadingComponent />}
+
       {/* 진행사항 progressBar */}
       <View className="mt-[11px] h-1">
         <ProgressBarComponent previousDealt={0} dealt={80} />

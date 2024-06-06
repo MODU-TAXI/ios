@@ -2,6 +2,8 @@ import React from 'react';
 import { Text, View, Linking, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
+
 import { useKakaoLogin } from '@hooks/api/member';
 
 import { SignInScreenProps } from '@type/param/rootStack';
@@ -10,7 +12,7 @@ import AppleLogo from '@assets/images/SignIn/AppleLogo.svg';
 import KakaoLogo from '@assets/images/SignIn/KakaoLogo.svg';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
-  const { mutateAsync: kakaoLogin } = useKakaoLogin(navigation);
+  const { mutateAsync: kakaoLogin, isPaused: kakaoLoginPending } = useKakaoLogin(navigation);
 
   const appleLogin = async (): Promise<void> => {
     await Linking.openURL('modutaxi://main');
@@ -20,6 +22,8 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1" edges={['top', 'left', 'right']}>
+      {kakaoLoginPending && <TransparentLoadingComponent />}
+
       <View className="mx-6 flex-1">
         {/* 모두의 택시 로고*/}
         <View className="flex-1 items-center justify-center">

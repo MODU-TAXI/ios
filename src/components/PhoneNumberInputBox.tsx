@@ -8,9 +8,12 @@ interface PhoneNumberInputBoxComponentProps {
   placeholder: string;
 }
 
-const PhoneNumberInputBoxComponent: React.FC<
-  PhoneNumberInputBoxComponentProps
-> = ({ title, value, setValue, placeholder }) => {
+const PhoneNumberInputBoxComponent: React.FC<PhoneNumberInputBoxComponentProps> = ({
+  title,
+  value,
+  setValue,
+  placeholder,
+}) => {
   const [isFocused, setIsFocused] = useState(false); // focusing 여부 판별 변수
 
   const inputRef = React.useRef<TextInput>(null); // focusing ref
@@ -68,6 +71,7 @@ const PhoneNumberInputBoxComponent: React.FC<
           onChangeText={valueHandleChange}
           placeholder={placeholder}
           placeholderTextColor="#C0C0C0"
+          keyboardType="numeric"
           className="mr-2 flex-1 font-semibold"
         />
       </View>

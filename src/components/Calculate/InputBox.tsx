@@ -56,6 +56,7 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
           onChangeText={valueHandleChange}
           placeholder={placeholder}
           placeholderTextColor="#C0C0C0"
+          keyboardType="numeric"
           className="text-[16px] font-medium"
         />
       </View>

@@ -6,6 +6,7 @@ import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { emailState } from '@recoil/recoil';
 
@@ -17,7 +18,8 @@ const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenPr
   const [email, setEmail] = useRecoilState<string>(emailState); // 이메일
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
 
-  const { mutateAsync: emailAuthentication } = useEmailAuthentication(setErrorMessage);
+  const { mutateAsync: emailAuthentication, isPending: emailAuthenticationPending } =
+    useEmailAuthentication(setErrorMessage);
 
   // 인증 메일 보내기
   const sendMail = async (): Promise<void> => {
@@ -32,6 +34,8 @@ const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenPr
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {emailAuthenticationPending && <TransparentLoadingComponent />}
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1">
           {/* 진행사항 progressBar */}

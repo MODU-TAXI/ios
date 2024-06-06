@@ -6,6 +6,7 @@ import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { userInfoState, signUpUserState } from '@recoil/recoil';
 
@@ -29,9 +30,10 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
   const [time, setTime] = useState(300); // 타이머 시간
   const [fcmToken] = useFcmToken();
 
-  const { mutateAsync: smsConfirm } = useSmsConfirm(setErrorMessage);
+  const { mutateAsync: smsConfirm, isPending: smsConfirmPending } = useSmsConfirm(setErrorMessage);
 
-  const { mutateAsync: smsAuthentication } = useSmsAuthentication(setErrorMessage);
+  const { mutateAsync: smsAuthentication, isPending: smsAuthenticationPending } =
+    useSmsAuthentication(setErrorMessage);
 
   // 인증번호 만료시 에러 메세지 생성
   useEffect(() => {
@@ -72,6 +74,8 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {(smsConfirmPending || smsAuthenticationPending) && <TransparentLoadingComponent />}
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1">
           {/* 진행사항 progressBar */}

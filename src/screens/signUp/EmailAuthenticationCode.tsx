@@ -6,6 +6,7 @@ import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { emailState, userInfoState } from '@recoil/recoil';
 
@@ -24,8 +25,10 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [time, setTime] = useState(180); // 타이머 시간
 
-  const { mutateAsync: emailConfirm } = useEmailConfirm(setErrorMessage);
-  const { mutateAsync: emailAuthentication } = useEmailAuthentication(setErrorMessage);
+  const { mutateAsync: emailConfirm, isPending: emailConfirmPending } =
+    useEmailConfirm(setErrorMessage);
+  const { mutateAsync: emailAuthentication, isPending: emailAuthenticationPending } =
+    useEmailAuthentication(setErrorMessage);
 
   // 인증번호 재전송
   const resendMail = async (): Promise<void> => {
@@ -60,6 +63,8 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {(emailConfirmPending || emailAuthenticationPending) && <TransparentLoadingComponent />}
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1">
           {/* 진행사항 progressBar */}
