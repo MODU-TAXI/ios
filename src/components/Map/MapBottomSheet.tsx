@@ -30,7 +30,7 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
   };
 
   return (
-    <View className={`w-full flex-1 p-4 ${index === 3 ? "pb-40" : "pb-[500px]"}`}>
+    <View className={`w-full flex-1 p-4 ${index === 2 ? "pb-[500px]" : "pb-40"}`}>
       {/** 필터링 태그 선택 (가로 스크롤 적용) */}
       <View className="h-fit">
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
