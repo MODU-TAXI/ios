@@ -21,7 +21,7 @@ import AccountScreen from './src/screens/calculate/Account';
 import { ChatProvider } from './src/providers/chatProvider';
 import CreateRoomScreen from './src/screens/room/CreateRoom';
 import RoomDetailScreen from './src/screens/room/RoomDetail';
-import DepartureMapScreen from './src/screens/map/departureMap';
+import DepartureMapScreen from './src/screens/map/DepartureMap';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
 import CheckAccountScreen from './src/screens/calculate/CheckAccount';

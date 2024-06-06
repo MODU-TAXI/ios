@@ -216,6 +216,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
             onCameraChanged={onCameraChange}
             locale="ko"
             isShowLocationButton={false}
+            isShowZoomControls={false}
             isShowScaleBar={false}
             logoAlign="BottomLeft"
           >
