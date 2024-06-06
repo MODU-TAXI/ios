@@ -1,8 +1,8 @@
 import React, { Suspense } from 'react';
 import { useRecoilValue } from 'recoil';
-import { View, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Vibration, RefreshControl } from 'react-native';
 
 import EtcComponent from '@components/Home/Etc';
 import TopComponent from '@components/Home/Top';
@@ -18,7 +18,7 @@ import { useGetRoomPreview } from '@hooks/api/rooms';
 
 import { HomeScreenProps } from '@type/param/loginStack';
 
-const HomeScreen = ({ navigation }: HomeScreenProps) => {
+const HomeComponent = ({ navigation }: HomeScreenProps) => {
   const userInfo = useRecoilValue(userInfoState);
 
   const roomId = useRecoilValue(roomState);
@@ -32,7 +32,9 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
+    Vibration.vibrate(40); // 새로고침시 진동
     await refetchRoomPreview();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setRefreshing(false);
   }, [refetchRoomPreview]);
 
@@ -95,7 +97,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   );
 };
 
-const HomeComponent = ({ route, navigation }: HomeScreenProps) => {
+const HomeScreen = ({ route, navigation }: HomeScreenProps) => {
   return (
     <Suspense fallback={<LoadingComponent />}>
       <HomeComponent navigation={navigation} route={route} />

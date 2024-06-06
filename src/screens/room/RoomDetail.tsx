@@ -1,9 +1,9 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
 import { useRecoilState } from 'recoil';
-import { View, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, Vibration, RefreshControl } from 'react-native';
 import React, { useState, Suspense, useEffect, useCallback } from 'react';
 
 import { useChatContext } from 'src/providers/chatProvider';
@@ -36,6 +36,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const { connect, disConnect, stompClient } = useChatContext();
 
   const [, setSocketRoomId] = useRecoilState(roomState);
+  const [refreshing, setRefreshing] = React.useState(false); // 새로고침시 필요한 변수
 
   const {
     roomDetail,
@@ -59,6 +60,15 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
       setSocketRoomId(roomId);
     }
   }, [roomDetail, stompClient, roomId, connect, setSocketRoomId]);
+
+  // 방정보 새로고침
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    Vibration.vibrate(40); // 새로고침시 진동
+    await refetchRoomDetail();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setRefreshing(false);
+  }, [refetchRoomDetail]);
 
   // 수정, 삭제 모달창 열기
   const openUpdateModal = () => {
@@ -124,7 +134,10 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
 
       {/* 헤더 */}
       <RoomHeaderComponent openUpdateModal={openUpdateModal} myRoom={roomDetail.myRoom} />
-      <ScrollView className="mt-8 flex-1 px-4">
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        className="mt-8 flex-1 px-4"
+      >
         {/* 카테고리 */}
         <RoomCategoriesComponent roomCategories={roomDetail.roomCategories} />
 
