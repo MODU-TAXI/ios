@@ -1,7 +1,7 @@
 import { useRecoilState } from 'recoil';
 import React, { useState } from 'react';
-import { Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
@@ -44,53 +44,55 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <HeaderComponent title="도착완료 정산하기" />
-      <View className="flex-1 px-4 pt-8">
-        <View className="flex-1 px-3">
-          {/* 글씨 */}
-          <View className="flex-col">
-            <Text className="text-xl font-semibold tracking-tight">정산받을</Text>
-            <Text className="text-xl font-semibold tracking-tight">계좌번호를 알려주세요!</Text>
-          </View>
-
-          {/* 입력창 */}
-          <View className="mt-4">
-            <InputBoxComponent
-              value={account}
-              setValue={setAccount}
-              error={false}
-              placeholder="계좌번호를 입력해주세요"
-            />
-          </View>
-
-          <View className="mt-2 flex-row justify-between px-2">
-            <View className="flex-row items-center">
-              <GetBankComponent bank={bank} />
-              <Text className="ml-1 font-medium tracking-tight">{bank}</Text>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View className="flex-1 px-4 pt-8">
+          <View className="flex-1 px-3">
+            {/* 글씨 */}
+            <View className="flex-col">
+              <Text className="text-xl font-semibold tracking-tight">정산받을</Text>
+              <Text className="text-xl font-semibold tracking-tight">계좌번호를 알려주세요!</Text>
             </View>
 
-            <Pressable onPress={openBankModal}>
-              <SelectBank />
-            </Pressable>
+            {/* 입력창 */}
+            <View className="mt-4">
+              <InputBoxComponent
+                value={account}
+                setValue={setAccount}
+                error={false}
+                placeholder="계좌번호를 입력해주세요"
+              />
+            </View>
+
+            <View className="mt-2 flex-row justify-between px-2">
+              <View className="flex-row items-center">
+                <GetBankComponent bank={bank} />
+                <Text className="ml-1 font-medium tracking-tight">{bank}</Text>
+              </View>
+
+              <Pressable onPress={openBankModal}>
+                <SelectBank />
+              </Pressable>
+            </View>
+          </View>
+
+          <View className="mb-4 px-3">
+            <ButtonComponent
+              color={'bg-main'}
+              borderColor={'border-main'}
+              textColor={'white'}
+              text={'확인'}
+              disabled={!account || !bank}
+              onPress={toNext}
+            />
           </View>
         </View>
 
-        <View className="mb-4 px-3">
-          <ButtonComponent
-            color={'bg-main'}
-            borderColor={'border-main'}
-            textColor={'white'}
-            text={'확인'}
-            disabled={!account || !bank}
-            onPress={toNext}
-          />
-        </View>
-      </View>
-
-      <BankModalComponent
-        bankModalIndex={bankModalIndex}
-        closeBankModal={closeBankModal}
-        setBank={setBank}
-      />
+        <BankModalComponent
+          bankModalIndex={bankModalIndex}
+          closeBankModal={closeBankModal}
+          setBank={setBank}
+        />
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };

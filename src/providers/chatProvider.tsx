@@ -92,7 +92,7 @@ export function ChatProvider({ children }: any) {
         debug: function (str) {
           console.log(str);
         },
-        reconnectDelay: 5000,
+        reconnectDelay: 500000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
       });

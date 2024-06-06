@@ -23,3 +23,9 @@ export interface SignUpRequest {
   phoneNumber: string;
   fcmToken: string;
 }
+
+// [멤버 프로필 변경] /api/members
+export interface PatchMemberRequest {
+  nickname: string;
+  imageUrl: string;
+}
