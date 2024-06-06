@@ -8,6 +8,7 @@ import InputBoxComponent from '@components/InputBox';
 import RadioBoxComponent from '@components/RadioBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { SignUpUser } from '@recoil/type';
 import { signUpUserState } from '@recoil/recoil';
@@ -28,7 +29,8 @@ const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
     { index: 2, item: '여자', select: false },
   ]);
 
-  const { mutateAsync: smsAuthentication } = useSmsAuthentication(setErrorMessage);
+  const { mutateAsync: smsAuthentication, isPaused: smsAuthenticationPending } =
+    useSmsAuthentication(setErrorMessage);
 
   // 다음으로
   const toNext = async (): Promise<void> => {
@@ -49,6 +51,8 @@ const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {smsAuthenticationPending && <TransparentLoadingComponent />}
+
       {/* TouchableWithoutFeedback로 화면의 다른 부분 터치 시 키보드 내리기 */}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1">

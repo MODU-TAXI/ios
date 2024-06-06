@@ -1,31 +1,26 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
 import { useRecoilState } from 'recoil';
-import { View, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, Vibration, RefreshControl } from 'react-native';
+import React, { useState, Suspense, useEffect, useCallback } from 'react';
 
 import { useChatContext } from 'src/providers/chatProvider';
 
 import ButtonComponent from '@components/Button';
+import LoadingComponent from '@components/Common/Loading';
 import RoomMapComponent from '@components/RoomDigest/RoomMap';
 import RoomHeaderComponent from '@components/Home/RoomHeader';
 import UpdateModalComponent from '@components/RoomDigest/UpdateModal';
 import WaitingUsersComponent from '@components/RoomDigest/WaitingUsers';
 import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
 import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { roomState } from '@recoil/recoil';
 
-import {
-  useGetRoom,
-  useJoinRoom,
-  useDeleteRoom,
-  useGetRoomMembers,
-  useApproveJoinRoom,
-  useGetRoomWaitingMembers,
-} from '@hooks/api/rooms';
+import { useJoinRoom, useDeleteRoom, useGetRoomDetail, useApproveJoinRoom } from '@hooks/api/rooms';
 
 import { RoomDetailScreenProps } from '@type/param/loginStack';
 
@@ -35,21 +30,28 @@ import StartCircle from '@assets/images/Match/StartCircle.svg';
 
 dayjs.locale('ko');
 
-const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
+const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const { roomId } = route.params;
 
-  const { connect, stompClient } = useChatContext();
+  const { connect, disConnect, stompClient } = useChatContext();
 
   const [, setSocketRoomId] = useRecoilState(roomState);
-  const { roomDetail } = useGetRoom(roomId); // 방 상세 정보
-  const { roomMembers, getRoomMembersRefetch } = useGetRoomMembers(roomId); // 참여자 목록
-  const { roomWaitingMembers, getRoomWaitingMembersRefetch } = useGetRoomWaitingMembers(roomId); // 대기자 목록
-  const { mutateAsync: joinRoomMutate } = useJoinRoom(roomId); // 방 입장 mutate
-  const { mutateAsync: applyJoinRoomMutate } = useApproveJoinRoom(roomId); // 방 입장 수락 mutate
-  const { mutateAsync: deleteRoomMutate } = useDeleteRoom(roomId); // 방 삭제 mutate
-  const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
+  const [refreshing, setRefreshing] = React.useState(false); // 새로고침시 필요한 변수
 
-  const { disConnect } = useChatContext();
+  const {
+    roomDetail,
+    participateMembers,
+    waitingMembers,
+    refetchRoomDetail,
+    refetcParticipateMembers,
+    refetchWaitingMembers,
+  } = useGetRoomDetail(roomId); // 방정보들 가져오기
+
+  const { mutateAsync: joinRoomMutate, isPending: joinRoomPending } = useJoinRoom(roomId); // 방 입장 mutate
+  const { mutateAsync: applyJoinRoomMutate, isPending: approveRoomPending } =
+    useApproveJoinRoom(roomId); // 방 입장 수락 mutate
+  const { mutateAsync: deleteRoomMutate, isPending: deleteRoomPending } = useDeleteRoom(roomId); // 방 삭제 mutate
+  const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
 
   // 만약 참여하고 있는 상태이고 socket이 connected되지 않았다면 socket 재연결
   useEffect(() => {
@@ -58,6 +60,15 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
       setSocketRoomId(roomId);
     }
   }, [roomDetail, stompClient, roomId, connect, setSocketRoomId]);
+
+  // 방정보 새로고침
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    Vibration.vibrate(40); // 새로고침시 진동
+    await refetchRoomDetail();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setRefreshing(false);
+  }, [refetchRoomDetail]);
 
   // 수정, 삭제 모달창 열기
   const openUpdateModal = () => {
@@ -73,23 +84,23 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
   const joinRoom = async () => {
     await joinRoomMutate(roomId);
 
-    getRoomMembersRefetch(); // 멤버 refetch
-    getRoomWaitingMembersRefetch(); // 대기 멤버 refetch
+    refetcParticipateMembers(); // 멤버 refetch
+    refetchWaitingMembers(); // 대기 멤버 refetch
   };
 
   // 방 입장 수락
   const applyJoinRoom = async (memberId: number) => {
     await applyJoinRoomMutate(memberId);
 
-    getRoomMembersRefetch(); // 멤버 refetch
-    getRoomWaitingMembersRefetch(); // 대기 멤버 refetch
+    refetcParticipateMembers(); // 멤버 refetch
+    refetchWaitingMembers(); // 대기 멤버 refetch
   };
 
   // 방 삭제
   const deleteRoom = async () => {
-    await deleteRoomMutate();
-
     setUpdateModalVisible(false);
+
+    await deleteRoomMutate();
 
     // socket RoomId도 -1로 초기화
     setSocketRoomId(-1);
@@ -116,10 +127,17 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {/* 삭제, 입장, 수락시 로딩 */}
+      {(deleteRoomPending || joinRoomPending || approveRoomPending) && (
+        <TransparentLoadingComponent />
+      )}
+
       {/* 헤더 */}
       <RoomHeaderComponent openUpdateModal={openUpdateModal} myRoom={roomDetail.myRoom} />
-
-      <ScrollView className="mt-8 flex-1 px-4">
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        className="mt-8 flex-1 px-4"
+      >
         {/* 카테고리 */}
         <RoomCategoriesComponent roomCategories={roomDetail.roomCategories} />
 
@@ -169,13 +187,13 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
         <DottedLine width="100%" />
 
         {/* 참여멤버 */}
-        <ParticipateUsersComponent roomMembers={roomMembers.inList} />
+        <ParticipateUsersComponent roomMembers={participateMembers.inList} />
 
         {/* 대기 멤버 */}
         <WaitingUsersComponent
-          myRoom={roomDetail.myRoom}
-          roomWaitingMembers={roomWaitingMembers.waitingList}
+          roomWaitingMembers={waitingMembers.waitingList}
           applyJoinRoom={applyJoinRoom}
+          myRoom={roomDetail.myRoom}
         />
 
         {/* 점선 */}
@@ -232,6 +250,14 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
         />
       </ScrollView>
     </SafeAreaView>
+  );
+};
+
+const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
+  return (
+    <Suspense fallback={<LoadingComponent />}>
+      <RoomDetailComponent navigation={navigation} route={route} />
+    </Suspense>
   );
 };
 

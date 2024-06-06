@@ -1,8 +1,8 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { Suspense } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Vibration, RefreshControl } from 'react-native';
 
 import EtcComponent from '@components/Home/Etc';
 import TopComponent from '@components/Home/Top';
@@ -10,6 +10,7 @@ import MiddleComponent from '@components/Home/Middle';
 import PartiesComponent from '@components/Home/Parties';
 import MyPartyComponent from '@components/Home/MyParty';
 import NoPartyComponent from '@components/Home/NoParty';
+import LoadingComponent from '@components/Common/Loading';
 
 import { roomState, userInfoState } from '@recoil/recoil';
 
@@ -17,14 +18,25 @@ import { useGetRoomPreview } from '@hooks/api/rooms';
 
 import { HomeScreenProps } from '@type/param/loginStack';
 
-const HomeScreen = ({ navigation }: HomeScreenProps) => {
+const HomeComponent = ({ navigation }: HomeScreenProps) => {
   const userInfo = useRecoilValue(userInfoState);
 
   const roomId = useRecoilValue(roomState);
 
   // 여기서는 useQuery 사용하지 않으면 해결될듯 -> 이게 된다음 화면을 그려줘서 문제가 생기는 듯 하다
   // 이 부분은 youtube 글을 작성하도록 하자... useSuspensequery에 대해
-  const { roomPreview } = useGetRoomPreview(roomId);
+  const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(roomId);
+
+  // 새로고침시 필요한 변수
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    Vibration.vibrate(40); // 새로고침시 진동
+    await refetchRoomPreview();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setRefreshing(false);
+  }, [refetchRoomPreview]);
 
   const toCreateRoomScreen = () => {
     navigation.navigate('CreateRoomScreen');
@@ -46,6 +58,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('AlarmScreen');
   };
 
+  if (!userInfo || !roomId) return <LoadingComponent />;
+
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['left', 'right']}>
       {/* 로고, 알림 */}
@@ -56,7 +70,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         roomId={roomId}
       />
 
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {/* 지도, 택시팟 */}
         <MiddleComponent toMapScreen={toMapScreen} toCreateRoomScreen={toCreateRoomScreen} />
 
@@ -80,6 +94,14 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         <EtcComponent />
       </ScrollView>
     </SafeAreaView>
+  );
+};
+
+const HomeScreen = ({ route, navigation }: HomeScreenProps) => {
+  return (
+    <Suspense fallback={<LoadingComponent />}>
+      <HomeComponent navigation={navigation} route={route} />
+    </Suspense>
   );
 };
 

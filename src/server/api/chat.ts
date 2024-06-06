@@ -5,15 +5,11 @@ import {
   DeleteAxiosInstance,
 } from '@axios/axios.method';
 
-import {
-  GetChatInfoResponse,
-  GetChatMessagesResponse,
-} from '@server/responseTypes/chat';
+import { GetChatInfoResponse, GetChatMessagesResponse } from '@server/responseTypes/chat';
 
 // [나의 채팅방 정보] /api/chats/info
 export const getMyChatInfo = async (): Promise<GetChatInfoResponse> => {
-  const response =
-    await GetAxiosInstance<GetChatInfoResponse>(`/api/chats/info`);
+  const response = await GetAxiosInstance<GetChatInfoResponse>(`/api/chats/info`);
 
   return response.data;
 };
@@ -26,9 +22,7 @@ export const deleteMyChatInfo = async (): Promise<string> => {
 };
 
 // [채팅 전부 조회] /api/chats/rooms/{roomId}/messages
-export const getChatMessages = async (
-  roomId: number,
-): Promise<GetChatMessagesResponse> => {
+export const getChatMessages = async (roomId: number): Promise<GetChatMessagesResponse> => {
   const response = await GetAxiosInstance<GetChatMessagesResponse>(
     `/api/chats/rooms/${roomId}/messages`,
   );

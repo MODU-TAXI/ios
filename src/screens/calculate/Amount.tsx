@@ -14,7 +14,7 @@ import { AmountScreenProps } from '@type/param/loginStack';
 const AmountScreen = ({ navigation }: AmountScreenProps) => {
   const [, setCalculate] = useRecoilState(calculateState);
   const [amount, setAmount] = useState<string>('');
-  const [expectedAmount, setExpectedAmount] = useState<string>('12000');
+  const [expectedAmount] = useState<string>('12000');
 
   const amountError = parseInt(amount) > parseInt(expectedAmount);
 

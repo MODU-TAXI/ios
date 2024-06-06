@@ -2,6 +2,8 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { Text, View, StyleSheet } from 'react-native';
 
+import { truncateText } from '@utils/text';
+
 import { RoomPreview } from '@type/entity/room';
 
 import Dot from '@assets/images/Chat/Dot.svg';
@@ -30,7 +32,7 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomPreview }) =>
           <View className="flex-row items-center justify-center">
             <View>
               <Text className="text-[16px] font-semibold text-[#272727]">
-                {roomPreview.departureName}
+                {truncateText(roomPreview.departureName, 7)}
               </Text>
             </View>
 
@@ -38,7 +40,7 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomPreview }) =>
 
             <View>
               <Text className="text-[16px] font-semibold text-[#272727]">
-                {roomPreview.arrivalName}
+                {truncateText(roomPreview.arrivalName, 7)}
               </Text>
             </View>
           </View>

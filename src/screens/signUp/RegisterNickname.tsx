@@ -6,6 +6,7 @@ import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { userInfoState } from '@recoil/recoil';
 
@@ -18,7 +19,8 @@ const RegisterNicknameScreen = ({ navigation }: RegisterNicknameScreenProps) => 
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
-  const { mutateAsync: registerNickname } = useRegisterNickname(setErrorMessage);
+  const { mutateAsync: registerNickname, isPending: registerNicknamePending } =
+    useRegisterNickname(setErrorMessage);
 
   // 닉네임 유효성 체크
   const checkNickname = async (): Promise<void> => {
@@ -45,6 +47,8 @@ const RegisterNicknameScreen = ({ navigation }: RegisterNicknameScreenProps) => 
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {registerNicknamePending && <TransparentLoadingComponent />}
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1">
           {/* 진행사항 progressBar */}

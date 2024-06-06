@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { View, Text, Pressable } from 'react-native';
-import { BlurView } from '@react-native-community/blur';
-import { CommonActions } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -11,10 +9,10 @@ import { useChatContext } from 'src/providers/chatProvider';
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import DatePickerComponent from '@components/DatePicker';
-import LoadingComponent from '@components/Common/Loading';
 import DescriptionComponent from '@components/Description';
 import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { roomState, arrivalState, departureState } from '@recoil/recoil';
 
@@ -37,7 +35,7 @@ import UnSelectedPerson2 from '@assets/images/Match/UnSelectedPerson2.svg';
 import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
 
 const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
-  const { mutateAsync: createRoomMutate, isPending } = useCreateRoom();
+  const { mutateAsync: createRoomMutate, isPending: createRoomPending } = useCreateRoom();
 
   const [, setSocketRoomId] = useRecoilState(roomState);
   const [departure, setDeparture] = useRecoilState(departureState); // 출발지 이름, 좌표
@@ -114,16 +112,17 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
       name: '',
       spotId: 0,
     });
-  }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {/* 생성시 로딩 */}
+      {createRoomPending && <TransparentLoadingComponent />}
+
       {/* 헤더 */}
       <HeaderComponent title={'생성 페이지'} />
 
       <ScrollView className="flex-1 px-4 ">
-        {isPending && <LoadingComponent />}
-
         {/* 출발지, 도착지 선택*/}
         <View className="px-2 py-8">
           <DescriptionComponent description="출발지, 도착지를 생성해주세요" />
@@ -131,20 +130,24 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
           <View className="mt-6">
             <View>
               <View className="flex-row items-center">
-                {departure.name !== "" ? <StartCircle width={12} /> : <StartGrayCircle width={12} />}
+                {departure.name !== '' ? (
+                  <StartCircle width={12} />
+                ) : (
+                  <StartGrayCircle width={12} />
+                )}
 
                 <Text className="ml-4 text-sm font-normal text-gray700">출발지</Text>
               </View>
             </View>
 
             <View className="my-2 ml-[6px] flex-row">
-              {departure.name !== "" && arrival.name !== "" ? (
+              {departure.name !== '' && arrival.name !== '' ? (
                 <View className="h-[43px] w-px bg-main" />
               ) : (
                 <View className="h-[43px] w-px bg-gray300" />
               )}
               <Pressable onPress={handleDeparture}>
-                {departure.name === "" ? (
+                {departure.name === '' ? (
                   <Text className="ml-[21px] text-[16px] font-semibold text-gray300">
                     출발지를 입력해주세요
                   </Text>
@@ -158,12 +161,12 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
 
             <View>
               <View className="flex-row items-center">
-                {arrival.name !== "" ? <EndCircle width={12} /> : <EndGrayCircle width={12} />}
+                {arrival.name !== '' ? <EndCircle width={12} /> : <EndGrayCircle width={12} />}
                 <Text className="ml-4 text-sm font-normal text-gray700">도착지</Text>
               </View>
 
               <Pressable onPress={handleArrival}>
-                {arrival.name === "" ? (
+                {arrival.name === '' ? (
                   <Text className="ml-7 pt-2 text-[16px] font-semibold text-gray300">
                     도착지를 입력해주세요
                   </Text>

@@ -1,9 +1,10 @@
 import { Coord } from '@mj-studio/react-native-naver-map';
 import {
   useMutation,
-  useQueryClient,
   useSuspenseQuery,
   UseMutationResult,
+  useSuspenseQueries,
+  UseSuspenseQueryResult,
 } from '@tanstack/react-query';
 
 import { PatchRoomRequest, CreateRoomRequest } from '@server/requestTypes/room';
@@ -27,6 +28,7 @@ import {
   GetRoomListResponse,
   GetRoomDetailResponse,
   GetRoomMembersResponse,
+  GetRoomPreviewResponse,
   ApproveJoinRoomResponse,
   GetRoomCurrentCameraResponse,
   GetRoomWaitingMembersResponse,
@@ -35,7 +37,7 @@ import {
 import { translateCategory } from '@utils/room';
 import { InfoToastMessage, ErrorToastMessage } from '@utils/toastMessage';
 
-import { RoomList, RoomDetail, RoomPreview, RoomCurrentCamera } from '@type/entity/room';
+import { RoomList, RoomDetail, RoomCurrentCamera } from '@type/entity/room';
 
 // 방 생성
 export const useCreateRoom = (): UseMutationResult<
@@ -44,18 +46,9 @@ export const useCreateRoom = (): UseMutationResult<
   CreateRoomRequest,
   unknown
 > => {
-  // const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: (createRoomRequest: CreateRoomRequest) => createRoom(createRoomRequest),
     onSuccess: async (data: CreateRoomResponse) => {
-      // const roomId = data.roomId;
-
-      // queryClient.setQueryData<GetRoomDetailResponse>(
-      //   [`/api/rooms`, roomId],
-      //   data,
-      // );
-
       InfoToastMessage('파티 생성 성공!');
     },
     onError: (error: any) => {
@@ -66,13 +59,87 @@ export const useCreateRoom = (): UseMutationResult<
   });
 };
 
-export const useGetRoomPreview = (roomId: number): { roomPreview: RoomPreview | null } => {
-  const { data: roomPreview } = useSuspenseQuery({
-    queryKey: [`/api/rooms/preview/${roomId}`, roomId],
+// 특정 방 간략정보 가져오기
+export const useGetRoomPreview = (
+  roomId: number,
+): UseSuspenseQueryResult<GetRoomPreviewResponse, void> => {
+  return useSuspenseQuery({
+    queryKey: [`/api/rooms/preview/${roomId}`],
     queryFn: () => getRoomPreview(roomId),
   });
+};
 
-  return { roomPreview };
+// 특정 방 정보 모두 가져오기
+export const useGetRoomDetail = (roomId: number) => {
+  return useSuspenseQueries({
+    queries: [
+      {
+        queryKey: [`/api/rooms/${roomId}`, roomId],
+        queryFn: async () => getRoomDetail(roomId),
+        select: (response: GetRoomDetailResponse) => {
+          const coords = response.path.coordinates;
+          const convertedCoords: Coord[] = coords.map(({ values: [longitude, latitude] }) => ({
+            latitude,
+            longitude,
+          }));
+
+          const convertedRoomTagBitMaskList = response.roomTagBitMaskList.map((roomTagBitMask) =>
+            translateCategory(roomTagBitMask),
+          );
+          return {
+            managerId: response.managerId,
+            roomId: response.roomId,
+            spotId: response.spotId,
+            departureDairyDate: response.departureDairyDate,
+
+            arrivalLongitude: response.arrivalLongitude,
+            arrivalLatitude: response.arrivalLatitude,
+            arrivalTime: response.arrivalTime,
+            arrivalName: response.arrivalName,
+
+            departureLongitude: response.departureLongitude,
+            departureLatitude: response.departureLatitude,
+            departureTime: response.departureTime,
+            departureName: response.departureName,
+
+            currentHeadcount: response.currentHeadcount,
+            wishHeadcount: response.wishHeadcount,
+            durationMinutes: response.durationMinutes,
+            expectedChargePerPerson: response.expectedChargePerPerson,
+            expectedCharge: response.expectedCharge,
+            roomCategories: convertedRoomTagBitMaskList,
+            myRoom: response.myRoom,
+            participate: response.participate,
+
+            path: {
+              coordinateReferenceSystem: response.path.coordinateReferenceSystem,
+              coordinates: convertedCoords,
+              type: response.path.type,
+            },
+          };
+        },
+      },
+      {
+        queryKey: [`/api/rooms/${roomId}/members/in`, roomId],
+        queryFn: async () => getRoomMembers(roomId),
+      },
+      {
+        queryKey: [`/api/rooms/${roomId}/members/waiting`, roomId],
+        queryFn: async () => getRoomWaitingMembers(roomId),
+      },
+    ],
+    combine: (results) => {
+      return {
+        roomDetail: results[0].data,
+        participateMembers: results[1].data,
+        waitingMembers: results[2].data,
+        refetchRoomDetail: results[0].refetch,
+        refetcParticipateMembers: results[1].refetch,
+        refetchWaitingMembers: results[2].refetch,
+        pending: results.some((result) => result.isPending),
+      };
+    },
+  });
 };
 
 // 특정 방 가져오기
@@ -81,9 +148,8 @@ export const useGetRoom = (
 ): { roomDetail: RoomDetail; getRoomRefetch: () => void } => {
   const { data: roomDetail, refetch: getRoomRefetch } = useSuspenseQuery({
     queryKey: [`/api/rooms/${roomId}`, roomId],
-    queryFn: () => getRoomDetail(roomId),
-    // staleTime: 30000,
-    // gcTime: 30000,
+    queryFn: async () => getRoomDetail(roomId),
+
     select: (response: GetRoomDetailResponse) => {
       const coords = response.path.coordinates;
       const convertedCoords: Coord[] = coords.map(({ values: [longitude, latitude] }) => ({
@@ -140,7 +206,7 @@ export const useGetRoomMembers = (
 } => {
   const { data: roomMembers, refetch: getRoomMembersRefetch } = useSuspenseQuery({
     queryKey: [`/api/rooms/${roomId}/members/in`, roomId],
-    queryFn: () => getRoomMembers(roomId),
+    queryFn: async () => getRoomMembers(roomId),
   });
 
   return { roomMembers, getRoomMembersRefetch };
@@ -155,7 +221,7 @@ export const useGetRoomWaitingMembers = (
 } => {
   const { data: roomWaitingMembers, refetch: getRoomWaitingMembersRefetch } = useSuspenseQuery({
     queryKey: [`/api/rooms/${roomId}/members/waiting`, roomId],
-    queryFn: () => getRoomWaitingMembers(roomId),
+    queryFn: async () => getRoomWaitingMembers(roomId),
   });
 
   return { roomWaitingMembers, getRoomWaitingMembersRefetch };

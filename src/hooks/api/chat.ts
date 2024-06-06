@@ -21,10 +21,10 @@ export const useGetMyInfo = () => {
 
 // 채팅 가져오기
 export const useGetMessages = (roomId: number) => {
-  const { data: messages, isLoading } = useSuspenseQuery({
+  const { data: messages, isPending } = useSuspenseQuery({
     queryKey: [`/api/chat-messages/${roomId}`],
     queryFn: () => getChatMessages(roomId),
   });
 
-  return { messages, isLoading };
+  return { messages, isPending };
 };
