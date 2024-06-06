@@ -8,7 +8,7 @@ import {
   UseSuspenseQueryResult,
 } from '@tanstack/react-query';
 
-import { PatchRoomRequest, CreateRoomRequest, GetRoomListRequest } from '@server/requestTypes/room';
+import { PatchRoomRequest, CreateRoomRequest, GetRoomListRequest, GetRoomCurrentCameraRequest } from '@server/requestTypes/room';
 import {
   joinRoom,
   patchRoom,
@@ -38,7 +38,7 @@ import {
 import { translateCategory } from '@utils/room';
 import { InfoToastMessage, ErrorToastMessage } from '@utils/toastMessage';
 
-import { RoomList, RoomDetail, RoomPreview, RoomsCurrentCamera } from '@type/entity/room';
+import { RoomList, RoomDetail, RoomPreview, RoomCurrentCamera } from '@type/entity/room';
 
 // 방 생성
 export const useCreateRoom = (): UseMutationResult<
@@ -230,25 +230,20 @@ export const useGetRoomWaitingMembers = (
 
 // 원형 영역 방 조회
 export const useGetRoomCurrentCamera = (
-  searchLongitude: number,
-  searchLatitude: number,
-  radius?: number,
-  spotId?: number,
-  roomTags?: string[],
-  isImminent?: boolean,
-): { rooms: RoomsCurrentCamera['rooms']; refetch: () => void } => {
+  data: GetRoomCurrentCameraRequest
+): { rooms: RoomCurrentCamera[]; refetch: () => void } => {
   const { data: rooms, refetch } = useSuspenseQuery({
     queryKey: [
-      'getRoomCurrentCamera',
-      searchLongitude,
-      searchLatitude,
-      radius,
-      spotId,
-      roomTags,
-      isImminent,
+      '/api/rooms/map',
+      data.searchLongitude,
+      data.searchLatitude,
+      data.radius,
+      data.spotId,
+      data.roomTags,
+      data.isImminent,
     ],
     queryFn: () =>
-      getRoomCurrentCamera(searchLongitude, searchLatitude, radius, spotId, roomTags, isImminent),
+      getRoomCurrentCamera(data),
     select: (response: GetRoomCurrentCameraResponse) => {
       return response.rooms;
     },
@@ -262,7 +257,7 @@ export const useGetRoomList = (
 ): { rooms: RoomList[]; refetch: () => void } => {
   const { data: rooms, refetch } = useSuspenseQuery({
     queryKey: [
-      `/api/rooms/map`,
+      `/api/rooms/list`,
       data.page,
       data.size,
       data.searchLongitude,

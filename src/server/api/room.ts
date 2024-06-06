@@ -5,7 +5,7 @@ import {
   DeleteAxiosInstance,
 } from '@axios/axios.method';
 
-import { PatchRoomRequest, CreateRoomRequest, GetRoomListRequest } from '@server/requestTypes/room';
+import { PatchRoomRequest, CreateRoomRequest, GetRoomListRequest, GetRoomCurrentCameraRequest } from '@server/requestTypes/room';
 import {
   JoinRoomResponse,
   PatchRoomResponse,
@@ -46,22 +46,17 @@ export const deleteRoom = async (roomId: number): Promise<DeleteRoomResponse> =>
 
 // [원형 영역 내 방 조회] /api/rooms/map
 export const getRoomCurrentCamera = async (
-  searchLongitude: number,
-  searchLatitude: number,
-  radius?: number,
-  spotId?: number,
-  roomTags?: string[],
-  isImminent?: boolean,
+  data: GetRoomCurrentCameraRequest
 ): Promise<GetRoomCurrentCameraResponse> => {
   const params: any = {
-    searchLongitude: searchLongitude,
-    searchLatitude: searchLatitude,
+    searchLongitude: data.searchLongitude,
+    searchLatitude: data.searchLatitude,
   };
 
-  radius && (params.radius = radius);
-  spotId && (params.spotId = spotId);
-  roomTags && (params.roomTags = roomTags);
-  isImminent && (params.isImminent = isImminent);
+  data.radius && (params.radius = data.radius);
+  data.spotId && (params.spotId = data.spotId);
+  data.roomTags && (params.roomTags = data.roomTags);
+  data.isImminent && (params.isImminent = data.isImminent);
 
   const response = await GetAxiosInstance<GetRoomCurrentCameraResponse>(`/api/rooms/map`, {
     params: params,
@@ -91,7 +86,6 @@ export const getRoomList = async (
     params: params,
   });
 
-  console.log(response.data.result)
   return response.data.result;
 };
 

@@ -57,7 +57,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
     width: 0,
     height: 0,
   });
-
+  
   // 바텀시트 snap point
   const snapPoints = useMemo(() => ['40%', '20%', '10%', '85%'], []);
   // const [isShowButton, setIsShowButton] = useState<boolean>(true);
@@ -78,7 +78,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         setButtonSize({width: width, height: height});
       });
     }
-  }, [])
+  }, [buttonSizeRef.current])
 
   // const animatedButtonStyle = useAnimatedStyle(() => {
   //   return {
@@ -102,11 +102,11 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   const [radius, setRadius] = useState<number>(600);
 
   // 매칭방 리스트 객체
-  const { rooms: rooms, refetch: refetch } = useGetRoomCurrentCamera(
-    currentCamera.longitude,
-    currentCamera.latitude,
-    radius,
-  );
+  const { rooms: rooms, refetch: refetch } = useGetRoomCurrentCamera({
+    "searchLongitude": currentCamera.longitude,
+    "searchLatitude": currentCamera.latitude,
+    "radius": radius,
+  });
 
   const { rooms: roomList, refetch: refetchRoomList } = useGetRoomList({
     "page": 0,
