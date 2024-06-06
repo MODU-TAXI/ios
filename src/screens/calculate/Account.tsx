@@ -86,13 +86,13 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
             />
           </View>
         </View>
-
-        <BankModalComponent
-          bankModalIndex={bankModalIndex}
-          closeBankModal={closeBankModal}
-          setBank={setBank}
-        />
       </TouchableWithoutFeedback>
+
+      <BankModalComponent
+        bankModalIndex={bankModalIndex}
+        closeBankModal={closeBankModal}
+        setBank={setBank}
+      />
     </SafeAreaView>
   );
 };
