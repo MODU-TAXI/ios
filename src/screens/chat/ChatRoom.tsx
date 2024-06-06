@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
 import TextEncodingPolyfill from 'text-encoding';
+import React, { Suspense, useState } from 'react';
 import ImageView from 'react-native-image-viewing';
+import { KeyboardAvoidingView } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, Pressable, KeyboardAvoidingView } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import MessagesComponent from '@components/Chat/Messages';
 import RoomInfoComponent from '@components/Chat/RoomInfo';
+import LoadingComponent from '@components/Common/Loading';
 import UserModalComponent from '@components/Chat/UserModal';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 
@@ -24,7 +25,7 @@ Object.assign('global', {
   TextDecoder: TextEncodingPolyfill.TextDecoder,
 });
 
-const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
+const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const { roomId } = route.params;
 
   const { data: roomPreview } = useGetRoomPreview(roomId);
@@ -71,7 +72,7 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
   const toDeclarationScreen = () => {
     if (userInfo) {
       closeUserInfoModal();
-      navigation.navigate('DeclarationScreen', { userInfo: userInfo! });
+      navigation.navigate('DeclarationScreen', { userInfo: userInfo });
     }
   };
 
@@ -114,6 +115,14 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
         />
       )}
     </SafeAreaView>
+  );
+};
+
+const ChatRoomScreen = ({ route, navigation }: ChatRoomScreenProps) => {
+  return (
+    <Suspense fallback={<LoadingComponent />}>
+      <ChatRoomComponent navigation={navigation} route={route} />
+    </Suspense>
   );
 };
 

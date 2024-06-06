@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useRecoilValue } from 'recoil';
 import { View, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -10,6 +10,7 @@ import MiddleComponent from '@components/Home/Middle';
 import PartiesComponent from '@components/Home/Parties';
 import MyPartyComponent from '@components/Home/MyParty';
 import NoPartyComponent from '@components/Home/NoParty';
+import LoadingComponent from '@components/Common/Loading';
 
 import { roomState, userInfoState } from '@recoil/recoil';
 
@@ -25,6 +26,15 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   // 여기서는 useQuery 사용하지 않으면 해결될듯 -> 이게 된다음 화면을 그려줘서 문제가 생기는 듯 하다
   // 이 부분은 youtube 글을 작성하도록 하자... useSuspensequery에 대해
   const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(roomId);
+
+  // 새로고침시 필요한 변수
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    await refetchRoomPreview();
+    setRefreshing(false);
+  }, [refetchRoomPreview]);
 
   const toCreateRoomScreen = () => {
     navigation.navigate('CreateRoomScreen');
@@ -46,13 +56,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('AlarmScreen');
   };
 
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
-    await refetchRoomPreview();
-    setRefreshing(false);
-  }, [refetchRoomPreview]);
+  if (!userInfo || !roomId) return <LoadingComponent />;
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['left', 'right']}>
@@ -88,6 +92,14 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         <EtcComponent />
       </ScrollView>
     </SafeAreaView>
+  );
+};
+
+const HomeComponent = ({ route, navigation }: HomeScreenProps) => {
+  return (
+    <Suspense fallback={<LoadingComponent />}>
+      <HomeComponent navigation={navigation} route={route} />
+    </Suspense>
   );
 };
 

@@ -7,10 +7,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import DatePickerComponent from '@components/DatePicker';
-import LoadingComponent from '@components/Common/Loading';
 import DescriptionComponent from '@components/Description';
 import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { usePatchRoom } from '@hooks/api/rooms';
 
@@ -34,12 +34,9 @@ dayjs.locale('ko');
 const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
   const { roomDetail } = route.params;
 
-  // TODO: 이부분 어떻게 할지 고민하기
-  if (!roomDetail) {
-    throw new Error('존재하지 않는 방 정보');
-  }
-
-  const { mutateAsync: patchRoomMutate, isPending } = usePatchRoom(roomDetail.roomId);
+  const { mutateAsync: patchRoomMutate, isPending: patchRoomPending } = usePatchRoom(
+    roomDetail.roomId,
+  );
 
   const [start, setStart] = useState<string>(roomDetail.departureName); // 출발지
   const [end, setEnd] = useState<string>(roomDetail.arrivalName); // 도착지
@@ -99,7 +96,10 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
     // stack을 지우며 해당 roomDetail로 이동
     navigation.reset({
       index: 0,
-      routes: [{ name: 'RoomDetailScreen', params: { roomId: roomDetail.roomId } }],
+      routes: [
+        { name: 'MainScreen' },
+        { name: 'RoomDetailScreen', params: { roomId: roomDetail.roomId } },
+      ],
     });
   };
 
@@ -123,12 +123,13 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {/* 수정시 로딩 */}
+      {patchRoomPending && <TransparentLoadingComponent />}
+
       {/* 헤더 */}
       <HeaderComponent title={'수정 페이지'} />
 
       <ScrollView className="flex-1 px-4">
-        {isPending && <LoadingComponent />}
-
         {/* 출발지, 도착지 선택*/}
         <View className="px-2 py-8">
           <DescriptionComponent description="출발지, 도착지를 생성해주세요" />

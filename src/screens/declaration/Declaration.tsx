@@ -13,6 +13,7 @@ import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/Declaration/InputBox';
 import SelectBoxComponent from '@components/Declaration/SelectBox';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { useReport } from '@hooks/api/report';
 
@@ -29,7 +30,7 @@ const DeclarationScreen = ({ navigation, route }: DeclarationScreenProps) => {
   const [declareType, setDeclareType] = useState<string>(''); // 신구 유형
   const [declareContent, setDeclareContent] = useState<string>(''); // 신고 내용
 
-  const { mutateAsync: reportMutation } = useReport();
+  const { mutateAsync: reportMutation, isPending: reportPending } = useReport();
 
   // 신고하기
   const delcareUser = async () => {
@@ -45,6 +46,9 @@ const DeclarationScreen = ({ navigation, route }: DeclarationScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {/* 신고 시 로딩 */}
+      {reportPending && <TransparentLoadingComponent />}
+
       <HeaderComponent title={'신고'} />
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

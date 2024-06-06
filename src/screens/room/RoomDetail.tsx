@@ -16,18 +16,11 @@ import UpdateModalComponent from '@components/RoomDigest/UpdateModal';
 import WaitingUsersComponent from '@components/RoomDigest/WaitingUsers';
 import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
 import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { roomState } from '@recoil/recoil';
 
-import {
-  useGetRoom,
-  useJoinRoom,
-  useDeleteRoom,
-  useGetRoomDetail,
-  useGetRoomMembers,
-  useApproveJoinRoom,
-  useGetRoomWaitingMembers,
-} from '@hooks/api/rooms';
+import { useJoinRoom, useDeleteRoom, useGetRoomDetail, useApproveJoinRoom } from '@hooks/api/rooms';
 
 import { RoomDetailScreenProps } from '@type/param/loginStack';
 
@@ -37,7 +30,7 @@ import StartCircle from '@assets/images/Match/StartCircle.svg';
 
 dayjs.locale('ko');
 
-const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
+const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const { roomId } = route.params;
 
   const { connect, disConnect, stompClient } = useChatContext();
@@ -51,12 +44,12 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
     refetchRoomDetail,
     refetcParticipateMembers,
     refetchWaitingMembers,
-    pending,
   } = useGetRoomDetail(roomId); // 방정보들 가져오기
 
-  const { mutateAsync: joinRoomMutate } = useJoinRoom(roomId); // 방 입장 mutate
-  const { mutateAsync: applyJoinRoomMutate } = useApproveJoinRoom(roomId); // 방 입장 수락 mutate
-  const { mutateAsync: deleteRoomMutate } = useDeleteRoom(roomId); // 방 삭제 mutate
+  const { mutateAsync: joinRoomMutate, isPending: joinRoomPending } = useJoinRoom(roomId); // 방 입장 mutate
+  const { mutateAsync: applyJoinRoomMutate, isPending: approveRoomPending } =
+    useApproveJoinRoom(roomId); // 방 입장 수락 mutate
+  const { mutateAsync: deleteRoomMutate, isPending: deleteRoomPending } = useDeleteRoom(roomId); // 방 삭제 mutate
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
 
   // 만약 참여하고 있는 상태이고 socket이 connected되지 않았다면 socket 재연결
@@ -95,9 +88,9 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
 
   // 방 삭제
   const deleteRoom = async () => {
-    await deleteRoomMutate();
-
     setUpdateModalVisible(false);
+
+    await deleteRoomMutate();
 
     // socket RoomId도 -1로 초기화
     setSocketRoomId(-1);
@@ -123,127 +116,135 @@ const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
   };
 
   return (
-    <React.Suspense fallback={<LoadingComponent />}>
-      <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
-        {/* 헤더 */}
-        <RoomHeaderComponent openUpdateModal={openUpdateModal} myRoom={roomDetail.myRoom} />
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {/* 삭제, 입장, 수락시 로딩 */}
+      {(deleteRoomPending || joinRoomPending || approveRoomPending) && (
+        <TransparentLoadingComponent />
+      )}
 
-        <ScrollView className="mt-8 flex-1 px-4">
-          {/* 카테고리 */}
-          <RoomCategoriesComponent roomCategories={roomDetail.roomCategories} />
+      {/* 헤더 */}
+      <RoomHeaderComponent openUpdateModal={openUpdateModal} myRoom={roomDetail.myRoom} />
+      <ScrollView className="mt-8 flex-1 px-4">
+        {/* 카테고리 */}
+        <RoomCategoriesComponent roomCategories={roomDetail.roomCategories} />
 
-          {/* 지도 */}
-          <RoomMapComponent roomDetail={roomDetail} />
+        {/* 지도 */}
+        <RoomMapComponent roomDetail={roomDetail} />
 
-          {/* 날짜, 출발지, 도착지 정보 */}
-          <View className="px-2 py-8">
+        {/* 날짜, 출발지, 도착지 정보 */}
+        <View className="px-2 py-8">
+          <View>
+            <Text className="text-lg font-medium text-emphasized">
+              {roomDetail.departureDairyDate}
+            </Text>
+          </View>
+
+          <View className="mt-5">
             <View>
-              <Text className="text-lg font-medium text-emphasized">
-                {roomDetail.departureDairyDate}
-              </Text>
-            </View>
+              <View className="flex-row items-center">
+                <StartCircle />
 
-            <View className="mt-5">
-              <View>
-                <View className="flex-row items-center">
-                  <StartCircle />
-
-                  <Text className="ml-4 text-lg font-normal text-disabled2">
-                    {roomDetail.departureTime}
-                  </Text>
-                </View>
-              </View>
-
-              <View className="my-1 ml-[6px] flex-row">
-                <View className="h-[46px] w-px bg-main" />
-
-                <Text className="ml-6 text-lg font-semibold">{roomDetail.departureName}</Text>
-              </View>
-
-              <View>
-                <View className="flex-row items-center">
-                  <EndCircle />
-
-                  <Text className="ml-4 text-lg font-normal text-disabled2">
-                    {roomDetail.arrivalTime}
-                  </Text>
-                </View>
-
-                <Text className="ml-[31px] mt-1 text-lg font-semibold">
-                  {roomDetail.arrivalName}
+                <Text className="ml-4 text-lg font-normal text-disabled2">
+                  {roomDetail.departureTime}
                 </Text>
               </View>
             </View>
-          </View>
 
-          {/* 점선 */}
-          <DottedLine width="100%" />
+            <View className="my-1 ml-[6px] flex-row">
+              <View className="h-[46px] w-px bg-main" />
 
-          {/* 참여멤버 */}
-          <ParticipateUsersComponent roomMembers={participateMembers.inList} />
-
-          {/* 대기 멤버 */}
-          <WaitingUsersComponent
-            roomWaitingMembers={waitingMembers.waitingList}
-            applyJoinRoom={applyJoinRoom}
-            myRoom={roomDetail.myRoom}
-          />
-
-          {/* 점선 */}
-          <DottedLine width="100%" />
-
-          {/* 금액 */}
-          <View className="px-3 py-8">
-            <View className="flex-row justify-between">
-              <Text className="font-medium text-base text-disabled2">총액</Text>
-              <Text className="font-medium text-base text-black">
-                {roomDetail.expectedCharge.toLocaleString('ko-KR')}원
-              </Text>
+              <Text className="ml-6 text-lg font-semibold">{roomDetail.departureName}</Text>
             </View>
 
-            <View className="mt-4 flex-row justify-between">
-              <Text className="font-medium text-base text-disabled2">최소인원 매칭시</Text>
-              <Text className="font-medium text-base text-black">
-                {roomDetail.expectedChargePerPerson.toLocaleString('ko-KR')}원
-              </Text>
+            <View>
+              <View className="flex-row items-center">
+                <EndCircle />
+
+                <Text className="ml-4 text-lg font-normal text-disabled2">
+                  {roomDetail.arrivalTime}
+                </Text>
+              </View>
+
+              <Text className="ml-[31px] mt-1 text-lg font-semibold">{roomDetail.arrivalName}</Text>
             </View>
           </View>
+        </View>
 
-          {/* 버튼 */}
-          {roomDetail.myRoom || roomDetail.participate ? (
-            <View className="mx-5 mb-10 mt-[78px]">
-              <ButtonComponent
-                color={'bg-white'}
-                borderColor={'border-main'}
-                textColor={'gray500'}
-                text={'채팅방으로 이동'}
-                disabled={false}
-                onPress={toChatRoomScreen}
-              />
-            </View>
-          ) : (
-            <View className="mx-5 mb-10 mt-[78px]">
-              <ButtonComponent
-                color={'bg-main'}
-                borderColor={'border-main'}
-                textColor={'white'}
-                text={'매칭 참여하기'}
-                disabled={false}
-                onPress={joinRoom}
-              />
-            </View>
-          )}
+        {/* 점선 */}
+        <DottedLine width="100%" />
 
-          {/* 수정,삭제 모달 */}
-          <UpdateModalComponent
-            updateModalVisible={updateModalVisible}
-            closeUpdateModal={closeUpdateModal}
-            patchRoom={toPatchRoomScreen}
-            deleteRoom={deleteRoom}
-          />
-        </ScrollView>
-      </SafeAreaView>
-    </React.Suspense>
+        {/* 참여멤버 */}
+        <ParticipateUsersComponent roomMembers={participateMembers.inList} />
+
+        {/* 대기 멤버 */}
+        <WaitingUsersComponent
+          roomWaitingMembers={waitingMembers.waitingList}
+          applyJoinRoom={applyJoinRoom}
+          myRoom={roomDetail.myRoom}
+        />
+
+        {/* 점선 */}
+        <DottedLine width="100%" />
+
+        {/* 금액 */}
+        <View className="px-3 py-8">
+          <View className="flex-row justify-between">
+            <Text className="font-medium text-base text-disabled2">총액</Text>
+            <Text className="font-medium text-base text-black">
+              {roomDetail.expectedCharge.toLocaleString('ko-KR')}원
+            </Text>
+          </View>
+
+          <View className="mt-4 flex-row justify-between">
+            <Text className="font-medium text-base text-disabled2">최소인원 매칭시</Text>
+            <Text className="font-medium text-base text-black">
+              {roomDetail.expectedChargePerPerson.toLocaleString('ko-KR')}원
+            </Text>
+          </View>
+        </View>
+
+        {/* 버튼 */}
+        {roomDetail.myRoom || roomDetail.participate ? (
+          <View className="mx-5 mb-10 mt-[78px]">
+            <ButtonComponent
+              color={'bg-white'}
+              borderColor={'border-main'}
+              textColor={'gray500'}
+              text={'채팅방으로 이동'}
+              disabled={false}
+              onPress={toChatRoomScreen}
+            />
+          </View>
+        ) : (
+          <View className="mx-5 mb-10 mt-[78px]">
+            <ButtonComponent
+              color={'bg-main'}
+              borderColor={'border-main'}
+              textColor={'white'}
+              text={'매칭 참여하기'}
+              disabled={false}
+              onPress={joinRoom}
+            />
+          </View>
+        )}
+
+        {/* 수정,삭제 모달 */}
+        <UpdateModalComponent
+          updateModalVisible={updateModalVisible}
+          closeUpdateModal={closeUpdateModal}
+          patchRoom={toPatchRoomScreen}
+          deleteRoom={deleteRoom}
+        />
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
+  return (
+    <Suspense fallback={<LoadingComponent />}>
+      <RoomDetailComponent navigation={navigation} route={route} />
+    </Suspense>
   );
 };
 

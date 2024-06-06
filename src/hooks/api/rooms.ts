@@ -1,11 +1,9 @@
 import { Coord } from '@mj-studio/react-native-naver-map';
 import {
   useMutation,
-  useQueryClient,
   useSuspenseQuery,
   UseMutationResult,
   useSuspenseQueries,
-  QueryObserverResult,
   UseSuspenseQueryResult,
 } from '@tanstack/react-query';
 
@@ -39,7 +37,7 @@ import {
 import { translateCategory } from '@utils/room';
 import { InfoToastMessage, ErrorToastMessage } from '@utils/toastMessage';
 
-import { RoomList, RoomDetail, RoomPreview, RoomCurrentCamera } from '@type/entity/room';
+import { RoomList, RoomDetail, RoomCurrentCamera } from '@type/entity/room';
 
 // 방 생성
 export const useCreateRoom = (): UseMutationResult<
@@ -48,18 +46,9 @@ export const useCreateRoom = (): UseMutationResult<
   CreateRoomRequest,
   unknown
 > => {
-  // const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: (createRoomRequest: CreateRoomRequest) => createRoom(createRoomRequest),
     onSuccess: async (data: CreateRoomResponse) => {
-      // const roomId = data.roomId;
-
-      // queryClient.setQueryData<GetRoomDetailResponse>(
-      //   [`/api/rooms`, roomId],
-      //   data,
-      // );
-
       InfoToastMessage('파티 생성 성공!');
     },
     onError: (error: any) => {
@@ -75,7 +64,7 @@ export const useGetRoomPreview = (
   roomId: number,
 ): UseSuspenseQueryResult<GetRoomPreviewResponse, void> => {
   return useSuspenseQuery({
-    queryKey: [`/api/rooms/preview/${roomId}`, roomId],
+    queryKey: [`/api/rooms/preview/${roomId}`],
     queryFn: () => getRoomPreview(roomId),
   });
 };
@@ -86,7 +75,7 @@ export const useGetRoomDetail = (roomId: number) => {
     queries: [
       {
         queryKey: [`/api/rooms/${roomId}`, roomId],
-        queryFn: () => getRoomDetail(roomId),
+        queryFn: async () => getRoomDetail(roomId),
         select: (response: GetRoomDetailResponse) => {
           const coords = response.path.coordinates;
           const convertedCoords: Coord[] = coords.map(({ values: [longitude, latitude] }) => ({
@@ -132,11 +121,11 @@ export const useGetRoomDetail = (roomId: number) => {
       },
       {
         queryKey: [`/api/rooms/${roomId}/members/in`, roomId],
-        queryFn: () => getRoomMembers(roomId),
+        queryFn: async () => getRoomMembers(roomId),
       },
       {
         queryKey: [`/api/rooms/${roomId}/members/waiting`, roomId],
-        queryFn: () => getRoomWaitingMembers(roomId),
+        queryFn: async () => getRoomWaitingMembers(roomId),
       },
     ],
     combine: (results) => {
