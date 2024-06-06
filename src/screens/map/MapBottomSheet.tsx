@@ -7,6 +7,7 @@ import RoomDigestBoxComponent from '@components/RoomDigest/RoomDigestBox';
 import SpotFilterButtonComponent from '@components/RoomDigest/SpotFilterButton';
 
 import { RoomList } from '@type/entity/room';
+import { MainMapScreenProps } from '@type/param/loginStack';
 
 import RadioButtonBoxSvg from '@assets/images/RadioBox/RadioButtonBox.svg';
 import ChevronDownBoxSvg from '@assets/images/RoomDigest/ChevronDownBox.svg';
@@ -14,13 +15,20 @@ import SelectedRadioButtonSvg from '@assets/images/RadioBox/SelectedRadioButton.
 
 interface MapBottomSheetProps {
   roomList: RoomList[];
+  navigation: MainMapScreenProps['navigation'];
 }
 
 const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
-  roomList
+  roomList,
+  navigation
 }) => {
+  /** 해당 마커의 room 으로 이동 */
+  const toRoomDetailScreen = (roomId: number) => {
+    navigation.navigate('RoomDetailScreen', {roomId: roomId});
+  };
+
   return (
-    <View className="w-full flex-1 bg-white p-4">
+    <View className="w-full flex-1 p-4 pb-40">
       {/** 필터링 태그 선택 (가로 스크롤 적용) */}
       <View className="h-fit">
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -51,16 +59,18 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
       {/** (세로 스크롤 적용) */}
       <ScrollView className="flex-1">
         {roomList && roomList.map((room, index) => (
-          <RoomDigestBoxComponent
-            key={index}
-            lastChatTime={3}
-            departureTime={room.departureTime}
-            departureName={room.departureName}
-            arrivalName={room.arrivalName}
-            currentHeadCount={room.currentHeadcount}
-            wishHeadCount={room.wishHeadcount}
-            expectedChargePerPerson={room.expectedChargePerPerson}
-          />
+          <Pressable key={index} onPress={() => toRoomDetailScreen(room.roomId)}>
+            <RoomDigestBoxComponent
+              roomTagBitMaskList={room.roomTagBitMaskList}
+              lastChatTime={3}
+              departureTime={room.departureTime}
+              departureName={room.departureName}
+              arrivalName={room.arrivalName}
+              currentHeadCount={room.currentHeadcount}
+              wishHeadCount={room.wishHeadcount}
+              expectedChargePerPerson={room.expectedChargePerPerson}
+            />
+          </Pressable>
         ))}
       </ScrollView>
     </View>

@@ -363,7 +363,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         <BottomSheetView
           className="flex-1 items-center"
         >
-          <MapBottomSheetScreen roomList={roomList} />
+          <MapBottomSheetScreen roomList={roomList} navigation={navigation} />
         </BottomSheetView>
       </BottomSheet>
     </GestureHandlerRootView>

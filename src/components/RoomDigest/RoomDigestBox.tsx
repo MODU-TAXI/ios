@@ -4,6 +4,8 @@ import { Text, View, Pressable } from 'react-native';
 
 import RoomCategoryComponent from './RoomCategory';
 
+import { translateCategory } from '@utils/room';
+
 import SpotGraySvg from '@assets/images/RoomDigest/SpotGray.svg';
 import DottedLineSvg from '@assets/images/RoomDigest/DottedLine.svg';
 import EndgrayCircleSvg from '@assets/images/Match/EndGrayCircle.svg';
@@ -14,7 +16,7 @@ import Person2FillSvg from '@assets/images/RoomDigest/Person2Fill.svg';
 const StyledView = styled(View);
 
 interface RoomDigestBoxProps {
-  //tags: string[];
+  roomTagBitMaskList: string[];
   lastChatTime: number;
   departureTime: string;
   departureName: string;
@@ -26,6 +28,7 @@ interface RoomDigestBoxProps {
 
 /** 카풀팟 방 미리보기 컴포넌트 */
 const RoomDigestBoxComponent: React.FC<RoomDigestBoxProps> = ({
+  roomTagBitMaskList,
   lastChatTime,
   departureTime,
   departureName,
@@ -39,8 +42,12 @@ const RoomDigestBoxComponent: React.FC<RoomDigestBoxProps> = ({
       {/** 카테고리, 채팅시각 */}
       <View className="mb-4 flex h-auto flex-row items-center justify-between">
         <View className="flex flex-row">
-          {/** TODO: tags에서 RoomTagComponent 인자 받아오기 */}
-          <RoomCategoryComponent roomCategory={'학생인증'} />
+          {roomTagBitMaskList.map((roomTag, idx) => (
+            <RoomCategoryComponent
+              key={idx}
+              roomCategory={translateCategory(roomTag)}
+            />
+          ))}
         </View>
         <Text className="text-xs font-medium text-gray500">
           {lastChatTime}분전 채팅
