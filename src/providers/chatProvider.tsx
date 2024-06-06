@@ -92,7 +92,7 @@ export function ChatProvider({ children }: any) {
         debug: function (str) {
           console.log(str);
         },
-        reconnectDelay: 500,
+        reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
       });
@@ -109,7 +109,7 @@ export function ChatProvider({ children }: any) {
 
       stompClient.current.onStompError = (error: any) => {
         const test = new TextDecoder('utf-8').decode(new Uint8Array(error._binaryBody));
-        console.log(test);
+        console.log('stompError:', test);
       };
     }
   };
@@ -127,18 +127,22 @@ export function ChatProvider({ children }: any) {
 
   // 메세지 보내기
   const sendMessage = (inputMessage: string, type: string) => {
-    if (stompClient) {
-      stompClient.current.publish({
-        destination: '/pub/chat',
-        body: JSON.stringify({
-          roomId: roomId,
-          type: type,
-          content: inputMessage,
-        }),
-        headers: {
-          token: accessToken,
-        },
-      });
+    try {
+      if (stompClient) {
+        stompClient.current.publish({
+          destination: '/pub/chat',
+          body: JSON.stringify({
+            roomId: roomId,
+            type: type,
+            content: inputMessage,
+          }),
+          headers: {
+            token: accessToken,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
