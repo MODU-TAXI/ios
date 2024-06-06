@@ -6,12 +6,19 @@ import FilterButtonComponent from '@components/RoomDigest/FilterButton';
 import RoomDigestBoxComponent from '@components/RoomDigest/RoomDigestBox';
 import SpotFilterButtonComponent from '@components/RoomDigest/SpotFilterButton';
 
+import { RoomList } from '@type/entity/room';
+
 import RadioButtonBoxSvg from '@assets/images/RadioBox/RadioButtonBox.svg';
 import ChevronDownBoxSvg from '@assets/images/RoomDigest/ChevronDownBox.svg';
 import SelectedRadioButtonSvg from '@assets/images/RadioBox/SelectedRadioButton.svg';
 
+interface MapBottomSheetProps {
+  roomList: RoomList[];
+}
 
-const MapBottomSheetScreen = () => {
+const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
+  roomList
+}) => {
   return (
     <View className="w-full flex-1 bg-white p-4">
       {/** 필터링 태그 선택 (가로 스크롤 적용) */}
@@ -43,51 +50,18 @@ const MapBottomSheetScreen = () => {
 
       {/** (세로 스크롤 적용) */}
       <ScrollView className="flex-1">
-        <RoomDigestBoxComponent
-          lastChatTime={3}
-          departureTime={'14:25'}
-          departureName={'인하대학교 후문'}
-          arrivalName={'주안역'}
-          currentHeadCount={2}
-          wishHeadCount={3}
-          expectedChargePerPerson={8300}
-        />
-        <RoomDigestBoxComponent
-          lastChatTime={3}
-          departureTime={'14:25'}
-          departureName={'인하대학교 후문'}
-          arrivalName={'주안역'}
-          currentHeadCount={2}
-          wishHeadCount={3}
-          expectedChargePerPerson={8300}
-        />
-        <RoomDigestBoxComponent
-          lastChatTime={3}
-          departureTime={'14:25'}
-          departureName={'인하대학교 후문'}
-          arrivalName={'주안역'}
-          currentHeadCount={2}
-          wishHeadCount={3}
-          expectedChargePerPerson={8300}
-        />
-        <RoomDigestBoxComponent
-          lastChatTime={3}
-          departureTime={'14:25'}
-          departureName={'인하대학교 후문'}
-          arrivalName={'주안역'}
-          currentHeadCount={2}
-          wishHeadCount={3}
-          expectedChargePerPerson={8300}
-        />
-        <RoomDigestBoxComponent
-          lastChatTime={3}
-          departureTime={'14:25'}
-          departureName={'인하대학교 후문'}
-          arrivalName={'주안역'}
-          currentHeadCount={2}
-          wishHeadCount={3}
-          expectedChargePerPerson={8300}
-        />
+        {roomList && roomList.map((room, index) => (
+          <RoomDigestBoxComponent
+            key={index}
+            lastChatTime={3}
+            departureTime={room.departureTime}
+            departureName={room.departureName}
+            arrivalName={room.arrivalName}
+            currentHeadCount={room.currentHeadcount}
+            wishHeadCount={room.wishHeadcount}
+            expectedChargePerPerson={room.expectedChargePerPerson}
+          />
+        ))}
       </ScrollView>
     </View>
   );

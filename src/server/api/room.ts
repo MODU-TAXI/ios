@@ -5,7 +5,7 @@ import {
   DeleteAxiosInstance,
 } from '@axios/axios.method';
 
-import { PatchRoomRequest, CreateRoomRequest } from '@server/requestTypes/room';
+import { PatchRoomRequest, CreateRoomRequest, GetRoomListRequest } from '@server/requestTypes/room';
 import {
   JoinRoomResponse,
   PatchRoomResponse,
@@ -72,34 +72,27 @@ export const getRoomCurrentCamera = async (
 
 // [경로를 제외한 방 리스트 조회] /api/rooms/list
 export const getRoomList = async (
-  page: number,
-  size: number,
-  searchLongitude: number,
-  searchLatitude: number,
-  spotId?: number,
-  radius?: number,
-  roomTags?: string[],
-  isImminent?: boolean,
-  sortType?: string,
+  data: GetRoomListRequest
 ): Promise<GetRoomListResponse[]> => {
   const params: any = {
-    page: page,
-    size: size,
-    searchLongitude: searchLongitude,
-    searchLatitude: searchLatitude,
+    page: data.page,
+    size: data.size,
+    searchLongitude: data.searchLongitude,
+    searchLatitude: data.searchLatitude,
+    sortType: data.sortType,
   };
 
-  radius && (params.radius = radius);
-  spotId && (params.spotId = spotId);
-  roomTags && (params.roomTags = roomTags);
-  isImminent && (params.isImminent = isImminent);
-  sortType && (params.sortType = sortType);
+  data.radius && (params.radius = data.radius);
+  data.spotId && (params.spotId = data.spotId);
+  data.roomTags && (params.roomTags = data.roomTags);
+  data.isImminent && (params.isImminent = data.isImminent);
 
   const response = await GetAxiosInstance<GetRoomListResponse[]>(`/api/rooms/list`, {
     params: params,
   });
 
-  return response.data;
+  console.log(response.data.result)
+  return response.data.result;
 };
 
 // [방 미리보기 조회] /api/rooms/preview/{id}

@@ -31,7 +31,7 @@ import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDige
 
 import { userInfoState } from '@recoil/recoil';
 
-import { useGetRoomCurrentCamera } from '@hooks/api/rooms';
+import { useGetRoomList, useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
 import { calculateRadius, getCurrentLocation } from '@utils/map';
 
@@ -102,11 +102,20 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
   const [radius, setRadius] = useState<number>(600);
 
   // 매칭방 리스트 객체
-  const { rooms, refetch } = useGetRoomCurrentCamera(
+  const { rooms: rooms, refetch: refetch } = useGetRoomCurrentCamera(
     currentCamera.longitude,
     currentCamera.latitude,
     radius,
   );
+
+  const { rooms: roomList, refetch: refetchRoomList } = useGetRoomList({
+    "page": 0,
+    "size": 10,
+    "searchLongitude": currentCamera.longitude,
+    "searchLatitude": currentCamera.latitude,
+    "sortType": "NEW",
+    "radius": radius,
+  })
 
   // 처음 렌더링 시 현재위치 저장 및 방 탐색
   useEffect(() => {
@@ -295,7 +304,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
       {selectedRoom &&
         <View className='absolute top-[68%] w-full'>
           <Pressable onPress={() => toRoomDetailScreen(selectedRoom.id)}>
-            <SelectedRoomDigestComponent roomId={selectedRoom.id} />
+            <SelectedRoomDigestComponent roomId={selectedRoom.id} roomList={roomList} />
           </Pressable>
         </View>
       }
@@ -354,7 +363,7 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         <BottomSheetView
           className="flex-1 items-center"
         >
-          <MapBottomSheetScreen />
+          <MapBottomSheetScreen roomList={roomList} />
         </BottomSheetView>
       </BottomSheet>
     </GestureHandlerRootView>

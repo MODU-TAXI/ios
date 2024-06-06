@@ -3,6 +3,8 @@ import { View, Text } from 'react-native';
 
 import { useGetRoom } from "@hooks/api/rooms";
 
+import { RoomList } from "@type/entity/room";
+
 import Arrow from '@assets/images/Chat/Arrow.svg';
 import Money from '@assets/images/Chat/Money.svg';
 import Check from '@assets/images/Home/Check.svg';
@@ -10,13 +12,16 @@ import People from '@assets/images/Chat/People.svg';
 
 interface SelectedRoomDigestProps {
   roomId: number;
+  roomList: RoomList[];
 }
 
 const SelectedRoomDigestComponent: React.FC<SelectedRoomDigestProps> = ({
-  roomId
+  roomId,
+  roomList,
 }) => {
-  // 해당 roomId로 방 정보 호출
-  const { roomDetail, getRoomRefetch } = useGetRoom(roomId);
+  const roomDetail = roomList.find(room => room.roomId === roomId);
+  
+  if (!roomDetail) return null;
 
   return (
     <View className="mx-6 flex w-auto flex-col rounded-xl bg-white p-4 shadow-lg">

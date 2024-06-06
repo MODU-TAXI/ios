@@ -8,7 +8,7 @@ import {
   UseSuspenseQueryResult,
 } from '@tanstack/react-query';
 
-import { PatchRoomRequest, CreateRoomRequest } from '@server/requestTypes/room';
+import { PatchRoomRequest, CreateRoomRequest, GetRoomListRequest } from '@server/requestTypes/room';
 import {
   joinRoom,
   patchRoom,
@@ -258,41 +258,23 @@ export const useGetRoomCurrentCamera = (
 
 // 경로를 제외한 방 리스트 조회
 export const useGetRoomList = (
-  page: number,
-  size: number,
-  searchLongitude: number,
-  searchLatitude: number,
-  spotId?: number,
-  radius?: number,
-  roomTags?: string[],
-  isImminent?: boolean,
-  sortType?: string,
+  data: GetRoomListRequest
 ): { rooms: RoomList[]; refetch: () => void } => {
   const { data: rooms, refetch } = useSuspenseQuery({
     queryKey: [
       `/api/rooms/map`,
-      page,
-      size,
-      searchLongitude,
-      searchLatitude,
-      spotId,
-      radius,
-      roomTags,
-      isImminent,
-      sortType,
+      data.page,
+      data.size,
+      data.searchLongitude,
+      data.searchLatitude,
+      data.sortType,
+      data.spotId,
+      data.radius,
+      data.roomTags,
+      data.isImminent,
     ],
     queryFn: () =>
-      getRoomList(
-        page,
-        size,
-        searchLongitude,
-        searchLatitude,
-        spotId,
-        radius,
-        roomTags,
-        isImminent,
-        sortType,
-      ),
+      getRoomList(data),
     select: (response: GetRoomListResponse[]) => {
       return response;
     },
