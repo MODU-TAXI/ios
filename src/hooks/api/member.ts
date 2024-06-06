@@ -7,12 +7,17 @@ import { SignUpUser } from '@recoil/type';
 import { loggedInState, userInfoState, signUpUserState } from '@recoil/recoil';
 
 import { memberErrorHandler } from '@server/errorHandler/member';
-import { RegisterNicknameRequest } from '@server/requestTypes/member';
-import { socialLogin, checkMembership, registerNickname } from '@server/api/member';
-import { KakaoLoginResponse, RegisterNicknameResponse } from '@server/responseTypes/member';
+import { PatchMemberRequest, RegisterNicknameRequest } from '@server/requestTypes/member';
+import { socialLogin, patchMember, checkMembership, registerNickname } from '@server/api/member';
+import {
+  KakaoLoginResponse,
+  PatchMemberResponse,
+  RegisterNicknameResponse,
+} from '@server/responseTypes/member';
 
 import { useFcmToken } from '@hooks/fcm';
 
+import { ErrorToastMessage } from '@utils/toastMessage';
 import { setAccessToken, setRefreshToken } from '@utils/token';
 
 // 카카오 로그인
@@ -86,6 +91,20 @@ export const useRegisterNickname = (
 
     onError: (error: any) => {
       memberErrorHandler(error, setErrorMessage);
+    },
+  });
+};
+
+// 멤버 프로필 변경
+export const usePatchMember = (): UseMutationResult<
+  PatchMemberResponse,
+  void,
+  PatchMemberRequest
+> => {
+  return useMutation({
+    mutationFn: (patchMemberRequest: PatchMemberRequest) => patchMember(patchMemberRequest),
+    onError: () => {
+      ErrorToastMessage('프로필 변경에 실패하였습니다.');
     },
   });
 };

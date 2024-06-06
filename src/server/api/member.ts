@@ -1,18 +1,20 @@
 import axios from 'axios';
 import Config from 'react-native-config';
 
-import { PostAxiosInstance } from '@axios/axios.method';
 import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
+import { PostAxiosInstance, PatchAxiosInstance } from '@axios/axios.method';
 
 import {
   SignUpRequest,
   SocialLoginRequest,
+  PatchMemberRequest,
   CheckMembershipRequest,
   RegisterNicknameRequest,
 } from '@server/requestTypes/member';
 import {
   SignUpResponse,
   SocialLoginResponse,
+  PatchMemberResponse,
   RefreshTokenResponse,
   CheckMembershipResponse,
   RegisterNicknameResponse,
@@ -67,6 +69,13 @@ export const socialLogin = async (
 // [소셜 회원가입] /api/members/sign-up
 export const signUp = async (data: SignUpRequest): Promise<SignUpResponse> => {
   const response = await GuestPostAxiosInstance<SignUpResponse>(`/api/members/sign-up`, data);
+
+  return response.data;
+};
+
+// [맴버 프로필 변경] /api/members
+export const patchMember = async (data: PatchMemberRequest): Promise<PatchMemberResponse> => {
+  const response = await PatchAxiosInstance<PatchMemberResponse>('/api/members', data);
 
   return response.data;
 };

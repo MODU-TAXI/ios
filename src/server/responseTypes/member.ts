@@ -69,3 +69,9 @@ export interface SignUpResponse {
     imageUrl: string;
   };
 }
+
+// [멤버 프로필 변경] /api/members
+export interface PatchMemberResponse {
+  nickname: string;
+  imageUrl: string;
+}
