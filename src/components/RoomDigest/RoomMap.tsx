@@ -41,8 +41,8 @@ const RoomMapComponent: React.FC<RoomMapComponentProps> = ({ roomDetail }) => {
   }, [roomDetail]);
 
   return (
-    <View className="shadow-md">
-      <View className="mt-2 h-[200px] w-full overflow-hidden rounded-xl">
+    <View className="mt-2 rounded-xl bg-white shadow-sm">
+      <View className="h-[240px] w-full overflow-hidden rounded-xl">
         <NaverMapView
           style={{ flex: 1 }}
           ref={mapRef}
@@ -52,20 +52,6 @@ const RoomMapComponent: React.FC<RoomMapComponentProps> = ({ roomDetail }) => {
           isShowCompass={false}
           isShowLocationButton={false}
           isShowZoomControls={false}
-          // 카메라 고정 -> 뺄 수도 ?
-          onCameraChanged={() =>
-            mapRef.current?.animateCameraWithTwoCoords({
-              coord1: {
-                latitude: roomDetail.departureLatitude,
-                longitude: roomDetail.departureLongitude,
-              },
-              coord2: {
-                latitude: roomDetail.arrivalLatitude,
-                longitude: roomDetail.arrivalLongitude,
-              },
-              duration: 500,
-            })
-          }
         >
           {roomDetail.path.coordinates.length > 2 && (
             <NaverMapPathOverlay coords={roomDetail.path.coordinates} width={8} color={'#40CEAC'} />

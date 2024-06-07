@@ -2,17 +2,22 @@ import React from 'react';
 import { View, Text } from 'react-native';
 
 import ChevronForwardSvg from '@assets/images/Map/chevronForward.svg';
+import ChevronForwardEnabledSvg from '@assets/images/Map/chevronForwardEnabled.svg';
 
 interface RoomMarkerProps {
+  roomId: number;
   spotName: string;
+  selected: boolean;
 }
 
 /** 매칭방 한개 마커 */
-const RoomMarkerComponent: React.FC<RoomMarkerProps> = ({ spotName }) => {
+const RoomMarkerComponent: React.FC<RoomMarkerProps> = ({ roomId, spotName, selected }) => {
   return (
     <View className="flex-1 items-center justify-center">
       <View
-        className="m-4 flex w-auto flex-row rounded-full border-gray100 bg-white"
+        className={`m-4 flex w-auto flex-row rounded-full bg-white ${
+          selected && "border border-main"
+        }`}
         style={{
           shadowColor: 'rgba(102, 102, 102, 0.25)',
           shadowOffset: {
@@ -23,15 +28,17 @@ const RoomMarkerComponent: React.FC<RoomMarkerProps> = ({ spotName }) => {
           elevation: 8,
         }}
       >
-        <Text className="w-fit py-2 pl-4 text-center text-base text-gray600">
+        <Text className={`w-fit py-2 pl-4 text-center text-base ${
+          selected ? "font-semibold text-main" : "text-gray600"
+        }`}>
           {spotName}
         </Text>
         <View className="flex justify-center pr-2">
-          <ChevronForwardSvg />
+          {selected ? <ChevronForwardEnabledSvg /> : <ChevronForwardSvg />}
         </View>
       </View>
     </View>
-  );
+  )
 };
 
-export default RoomMarkerComponent;
+export default React.memo(RoomMarkerComponent);

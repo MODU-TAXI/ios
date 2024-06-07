@@ -23,6 +23,12 @@ const RoomCategoryComponent: React.FC<RoomCategoryComponentProps> = ({ roomCateg
         textColor: 'text-main',
         bgColor: 'bg-sub100',
       });
+    } else {
+      setRoomTag({
+        label: roomCategory,
+        textColor: 'text-gray500',
+        bgColor: 'bg-box',
+      });
     }
   }, [roomCategory]);
 

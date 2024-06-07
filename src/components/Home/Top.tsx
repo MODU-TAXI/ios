@@ -24,12 +24,12 @@ const TopComponent: React.FC<TopComponentProps> = ({
   const roomIn = roomId > 0;
 
   const topStyle = roomIn
-    ? 'flex-col bg-main pt-10 px-4 rounded-[18px] pb-[18px]'
-    : 'flex-col bg-[#4F4F4F] pt-10 px-4 rounded-[18px] pb-[18px]';
+    ? 'flex-col bg-main pt-10 px-4 rounded-b-[18px] pb-[18px]'
+    : 'flex-col bg-[#4F4F4F] pt-10 px-4 rounded-b-[18px] pb-[18px]';
 
   return (
     <View className={topStyle}>
-      <View className="mt-6 flex-row items-center justify-between ">
+      <View className="mt-6 flex-row items-center justify-between">
         <View>
           <Logo />
         </View>

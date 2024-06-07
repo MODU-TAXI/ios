@@ -86,7 +86,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         <View className="my-6 h-2 bg-[#F2F2F2]" />
 
         {/* 실시간 택시팟 */}
-        <PartiesComponent />
+        <PartiesComponent navigation={navigation} />
 
         <View className="my-6 h-2 bg-[#F2F2F2]" />
 

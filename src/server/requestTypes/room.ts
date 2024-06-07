@@ -19,3 +19,24 @@ export interface PatchRoomRequest {
   departureName: string;
   wishHeadcount: number;
 }
+
+export interface GetRoomCurrentCameraRequest {
+  searchLongitude: number,
+  searchLatitude: number,
+  radius?: number,
+  spotId?: number,
+  roomTags?: string[],
+  isImminent?: boolean,
+}
+
+export interface GetRoomListRequest {
+  page: number,
+  size: number,
+  searchLongitude: number,
+  searchLatitude: number,
+  sortType: string,
+  spotId?: number,
+  radius?: number,
+  roomTags?: string[],
+  isImminent?: boolean,
+}
