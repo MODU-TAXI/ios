@@ -26,7 +26,6 @@ const MyPageScreen = () => {
   const userInfo = useRecoilValue(userInfoState);
 
   const { mutateAsync: patchMemberMutate, isPending: patchMemberPending } = usePatchMember();
-  const [nickname] = useState<string>(userInfo.nickname);
   const [profileImage, setProfileImage] = useState<string>(userInfo.imageUrl);
   const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
 
@@ -49,11 +48,16 @@ const MyPageScreen = () => {
   const selectImageFromCamera = async (): Promise<void> => {
     closeSelectImageModal();
 
-    const image = await openCamera();
+    const imageUrl = await openCamera();
 
-    if (image) {
-      patchMemberMutate({ nickname: nickname, imageUrl: image });
-      setProfileImage(image);
+    if (imageUrl) {
+      patchMemberMutate({
+        name: userInfo.name,
+        gender: userInfo.gender,
+        phoneNumber: userInfo.phoneNumber,
+        imageUrl: imageUrl,
+      });
+      setProfileImage(imageUrl);
     }
   };
 
@@ -61,20 +65,27 @@ const MyPageScreen = () => {
   const selectImageFromAlbum = async (): Promise<void> => {
     closeSelectImageModal();
 
-    const image = await openAlbum();
+    const imageUrl = await openAlbum();
 
-    if (image) {
-      patchMemberMutate({ nickname: nickname, imageUrl: image });
-      setProfileImage(image);
+    if (imageUrl) {
+      if (imageUrl) {
+        patchMemberMutate({
+          name: userInfo.name,
+          gender: userInfo.gender,
+          phoneNumber: userInfo.phoneNumber,
+          imageUrl: imageUrl,
+        });
+        setProfileImage(imageUrl);
+      }
     }
   };
 
   if (!userInfo) return <LoadingComponent />;
 
-  if (patchMemberPending) return <TransparentLoadingComponent />;
-
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {patchMemberPending && <TransparentLoadingComponent />}
+
       <ScrollView className="px-4">
         <View className="py-3">
           <Text className="text-center text-[18px] font-semibold tracking-tight text-[#272727]">
@@ -99,7 +110,7 @@ const MyPageScreen = () => {
         <View className="mt-8 rounded-xl border-[1px] border-[#EBEBEB] px-4">
           <Pressable className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4">
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">닉네임</Text>
-            <Text className="font-medium tracking-tight text-[#7C7C7C]">{nickname}</Text>
+            <Text className="font-medium tracking-tight text-[#7C7C7C]">{userInfo.nickname}</Text>
           </Pressable>
 
           <Pressable className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4">

@@ -72,6 +72,8 @@ export interface SignUpResponse {
 
 // [멤버 프로필 변경] /api/members
 export interface PatchMemberResponse {
-  nickname: string;
+  name: string;
+  gender: string;
+  phoneNumber: string;
   imageUrl: string;
 }
