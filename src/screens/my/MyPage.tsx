@@ -6,6 +6,7 @@ import { Text, View, Alert, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import LoadingComponent from '@components/Common/Loading';
+import SelectImageModal from '@components/Common/SelectImageModal';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { userInfoState } from '@recoil/recoil';
@@ -27,41 +28,48 @@ const MyPageScreen = () => {
   const { mutateAsync: patchMemberMutate, isPending: patchMemberPending } = usePatchMember();
   const [nickname] = useState<string>(userInfo.nickname);
   const [profileImage, setProfileImage] = useState<string>(userInfo.imageUrl);
-
-  if (!userInfo) return <LoadingComponent />;
+  const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
 
   // 로그아웃
   const logOut = () => {
     console.log('logout!');
   };
 
-  // 이미지 고르기
-  const selectImage = (): void => {
-    return Alert.alert('뭘로 올릴래?', '선택해', [
-      {
-        text: '카메라로 찍기',
-        onPress: async () => {
-          const image = await openCamera();
-
-          if (image) {
-            patchMemberMutate({ nickname: nickname, imageUrl: image });
-            setProfileImage(image);
-          }
-        },
-      },
-      {
-        text: '앨범에서 선택',
-        onPress: async () => {
-          const image = await openAlbum();
-
-          if (image) {
-            patchMemberMutate({ nickname: nickname, imageUrl: image });
-            setProfileImage(image);
-          }
-        },
-      },
-    ]);
+  // 이미지 선택 모달 띄우기
+  const openSelectImageModal = () => {
+    setSelectImageModalVisible(true);
   };
+
+  // 이미지 선택 모달 내리기
+  const closeSelectImageModal = () => {
+    setSelectImageModalVisible(false);
+  };
+
+  // 카메라로 이미지 고르기
+  const selectImageFromCamera = async (): Promise<void> => {
+    closeSelectImageModal();
+
+    const image = await openCamera();
+
+    if (image) {
+      patchMemberMutate({ nickname: nickname, imageUrl: image });
+      setProfileImage(image);
+    }
+  };
+
+  // 앨범에서 이미지 고르기
+  const selectImageFromAlbum = async (): Promise<void> => {
+    closeSelectImageModal();
+
+    const image = await openAlbum();
+
+    if (image) {
+      patchMemberMutate({ nickname: nickname, imageUrl: image });
+      setProfileImage(image);
+    }
+  };
+
+  if (!userInfo) return <LoadingComponent />;
 
   if (patchMemberPending) return <TransparentLoadingComponent />;
 
@@ -75,7 +83,7 @@ const MyPageScreen = () => {
         </View>
 
         <View className="mt-9 flex items-center">
-          <Pressable className="h-[120px] w-[120px] rounded-full" onPress={selectImage}>
+          <Pressable className="h-[120px] w-[120px] rounded-full" onPress={openSelectImageModal}>
             <FastImage
               source={{ uri: profileImage }}
               className="h-[120px] w-[120px] rounded-full"
@@ -154,6 +162,13 @@ const MyPageScreen = () => {
           </Pressable>
         </View>
       </ScrollView>
+
+      <SelectImageModal
+        modalVisible={selectImageModalVisible}
+        closeSelectImageModal={closeSelectImageModal}
+        selectImageFromCamera={selectImageFromCamera}
+        selectImageFromAlbum={selectImageFromAlbum}
+      />
     </SafeAreaView>
   );
 };
