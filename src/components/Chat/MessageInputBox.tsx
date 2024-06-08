@@ -1,16 +1,18 @@
-import { SetterOrUpdater } from 'recoil';
-import { Asset } from 'react-native-image-picker';
-import { View, Alert, TextInput, Pressable } from 'react-native';
-import React, { useRef, Dispatch, useState, SetStateAction } from 'react';
+import React, { useRef, useState } from 'react';
+import { View, TextInput, Pressable } from 'react-native';
 
 import { useChatContext } from 'src/providers/chatProvider';
-
-import { openAlbum, openCamera } from '@utils/image';
 
 import Plus from '@assets/images/Chat/Plus.svg';
 import SendButton from '@assets/images/Chat/SendButton.svg';
 
-const MessageInputBoxComponent: React.FC = () => {
+interface MessageInputBoxComponentProps {
+  openSelectImageModal: () => void;
+}
+
+const MessageInputBoxComponent: React.FC<MessageInputBoxComponentProps> = ({
+  openSelectImageModal,
+}) => {
   const { sendMessage } = useChatContext();
   const textInputRef = useRef<TextInput>(null);
 
@@ -24,40 +26,13 @@ const MessageInputBoxComponent: React.FC = () => {
     }
   };
 
-  // 이미지 채팅 보내기
-  const sendImage = (imgUrl: string | null) => {
-    if (imgUrl) {
-      sendMessage(imgUrl, 'IMAGE');
-    }
-  };
-
-  // 이미지 고르기
-  const selectImage = (): void => {
-    return Alert.alert('뭘로 올릴래?', '선택해', [
-      {
-        text: '카메라로 찍기',
-        onPress: async () => {
-          const image = await openCamera();
-          sendImage(image);
-        },
-      },
-      {
-        text: '앨범에서 선택',
-        onPress: async () => {
-          const image = await openAlbum();
-          sendImage(image);
-        },
-      },
-    ]);
-  };
-
   const focusTextInput = () => {
     textInputRef.current?.focus();
   };
 
   return (
     <View className="flex-row items-center justify-center bg-white px-8 py-2">
-      <Pressable className="p-3" onPress={selectImage}>
+      <Pressable className="p-3" onPress={openSelectImageModal}>
         <Plus />
       </Pressable>
 
