@@ -48,9 +48,9 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
   // 카메라로 이미지 고르기
   const selectImageFromCamera = async (): Promise<void> => {
-    closeSelectImageModal();
-
     const imageUrl = await openCamera();
+
+    closeSelectImageModal();
 
     if (imageUrl) {
       patchMemberMutate({
@@ -77,7 +77,6 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
         imageUrl: imageUrl,
       });
 
-      console.log(imageUrl);
       setProfileImage(imageUrl);
     }
   };

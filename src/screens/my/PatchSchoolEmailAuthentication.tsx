@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native';
 
 import ButtonComponent from '@components/Button';
+import HeaderComponent from '@components/Header';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
@@ -14,11 +15,13 @@ import { useEmailConfirm, useEmailAuthentication } from '@hooks/api/member.mail'
 
 import { InfoToastMessage } from '@utils/toastMessage';
 
-import { EmailAuthenticationCodeScreenProps } from '@type/param/rootStack';
+import { PatchSchoolEmailAuthenticationScreenProps } from '@type/param/loginStack';
 
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 
-const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeScreenProps) => {
+const PatchSchoolEmailAuthenticationScreen = ({
+  navigation,
+}: PatchSchoolEmailAuthenticationScreenProps) => {
   const email = useRecoilValue(emailState); // 재전송할 이메일
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [code, setCode] = useState<string>(''); // 인증코드
@@ -51,7 +54,10 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
       imageUrl: userInfo.imageUrl,
     });
 
-    navigation.navigate('SurveyFirstScreen');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'MainScreen' }],
+    });
   };
 
   // 인증번호 만료시 에러 메세지 생성
@@ -65,20 +71,11 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {(emailConfirmPending || emailAuthenticationPending) && <TransparentLoadingComponent />}
 
+      <HeaderComponent title="학교 이메일 인증" />
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1">
-          {/* 진행사항 progressBar */}
-          <View className="mt-[11px] h-1">
-            <ProgressBarComponent previousDealt={40} dealt={40} />
-          </View>
-
           <View className="mx-6 flex-1">
-            {/* 입력란 설명 */}
-            <View className="mt-14 flex">
-              <Text className="text-xl font-bold">적어주신 이메일로</Text>
-              <Text className="text-xl font-bold">인증번호가 전송됐어요!</Text>
-            </View>
-
             {/* Input 컴포넌트 */}
             <View className="mt-6">
               <InputBoxComponent
@@ -107,8 +104,8 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
             {/* 확인 버튼 */}
             <View className="mx-3 mb-11">
               <ButtonComponent
-                color={'bg-black'}
-                borderColor={'border-black'}
+                color={'bg-main'}
+                borderColor={'border-main'}
                 textColor={'white'}
                 text={'확인'}
                 disabled={!code}
@@ -122,4 +119,4 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
   );
 };
 
-export default EmailAuthenticationCodeScreen;
+export default PatchSchoolEmailAuthenticationScreen;

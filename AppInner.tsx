@@ -39,6 +39,7 @@ import SchoolAuthenticationScreen from './src/screens/signUp/SchoolAuthenticatio
 import EmailAuthenticationCodeScreen from './src/screens/signUp/EmailAuthenticationCode';
 import PhoneAuthenticationCodeScreen from './src/screens/signUp/PhoneAuthenticationCode';
 import PatchUserInfoAuthenticationScreen from './src/screens/my/PatchUserInfoAuthentication';
+import PatchSchoolEmailAuthenticationScreen from './src/screens/my/PatchSchoolEmailAuthentication';
 
 import { loggedInState } from '@recoil/recoil';
 
@@ -100,6 +101,10 @@ function AppInner() {
         <LogInStack.Screen
           name="PatchUserInfoAuthenticationScreen"
           component={PatchUserInfoAuthenticationScreen}
+        />
+        <LogInStack.Screen
+          name="PatchSchoolEmailAuthenticationScreen"
+          component={PatchSchoolEmailAuthenticationScreen}
         />
 
         {/* 신고 Screen */}

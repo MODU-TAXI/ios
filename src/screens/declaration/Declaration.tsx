@@ -25,7 +25,7 @@ import DeclarationBell from '@assets/images/Declaration/DeclarationBell.svg';
 import DeclarationAlert from '@assets/images/Declaration/DeclarationAlert.svg';
 
 const DeclarationScreen = ({ navigation, route }: DeclarationScreenProps) => {
-  const { userInfo } = route.params;
+  const { userInfo, roomId } = route.params;
 
   const [declareType, setDeclareType] = useState<string>(''); // 신구 유형
   const [declareContent, setDeclareContent] = useState<string>(''); // 신고 내용
@@ -38,7 +38,12 @@ const DeclarationScreen = ({ navigation, route }: DeclarationScreenProps) => {
       return Alert.alert('신고를 10글자 이상 입력해주세요!');
     }
 
-    reportMutation({ targetId: userInfo.memberId, type: declareType, content: declareContent });
+    await reportMutation({
+      roomId: roomId,
+      targetId: userInfo.memberId,
+      type: declareType,
+      content: declareContent,
+    });
     InfoToastMessage('신고가 접수되었습니다.');
 
     navigation.goBack();
