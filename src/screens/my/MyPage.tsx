@@ -15,6 +15,8 @@ import { usePatchMember } from '@hooks/api/member';
 
 import { openAlbum, openCamera } from '@utils/image';
 
+import { MyPageScreenProps } from '@type/param/loginStack';
+
 import Camera from '@assets/images/My/Camera.svg';
 import SplitLine from '@assets/images/My/SplitLine.svg';
 import NextButton from '@assets/images/My/NextButton.svg';
@@ -22,7 +24,7 @@ import LogoutButton from '@assets/images/My/LogoutButton.svg';
 import ResignButton from '@assets/images/My/ResignButton.svg';
 import ContactButton from '@assets/images/My/ContactButton.svg';
 
-const MyPageScreen = () => {
+const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const userInfo = useRecoilValue(userInfoState);
 
   const { mutateAsync: patchMemberMutate, isPending: patchMemberPending } = usePatchMember();
@@ -68,16 +70,36 @@ const MyPageScreen = () => {
     const imageUrl = await openAlbum();
 
     if (imageUrl) {
-      if (imageUrl) {
-        patchMemberMutate({
-          name: userInfo.name,
-          gender: userInfo.gender,
-          phoneNumber: userInfo.phoneNumber,
-          imageUrl: imageUrl,
-        });
-        setProfileImage(imageUrl);
-      }
+      patchMemberMutate({
+        name: userInfo.name,
+        gender: userInfo.gender,
+        phoneNumber: userInfo.phoneNumber,
+        imageUrl: imageUrl,
+      });
+
+      console.log(imageUrl);
+      setProfileImage(imageUrl);
     }
+  };
+
+  // 닉네임 수정 페이지 이동
+  const toPatchNicknameScreen = () => {
+    navigation.navigate('PatchNicknameScreen');
+  };
+
+  // 개인정보 수정 페이지 이동
+  const toPatchUserInfoScreen = () => {
+    navigation.navigate('PatchUserInfoScreen');
+  };
+
+  // 학교인증 수정 페이지 이동
+  const toPatchSchoolEmailScreen = () => {
+    navigation.navigate('PatchSchoolEmailScreen');
+  };
+
+  // 계좌 수정 페이지 이동
+  const toPatchAccountScreen = () => {
+    navigation.navigate('PatchAccountScreen');
   };
 
   if (!userInfo) return <LoadingComponent />;
@@ -108,7 +130,10 @@ const MyPageScreen = () => {
 
         {/* 윗 부분 */}
         <View className="mt-8 rounded-xl border-[1px] border-[#EBEBEB] px-4">
-          <Pressable className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4">
+          <Pressable
+            className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
+            onPress={toPatchNicknameScreen}
+          >
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">닉네임</Text>
             <Text className="font-medium tracking-tight text-[#7C7C7C]">{userInfo.nickname}</Text>
           </Pressable>
@@ -118,21 +143,35 @@ const MyPageScreen = () => {
             <Text className="font-medium tracking-tight text-[#7C7C7C]">{userInfo.name}</Text>
           </Pressable>
 
-          <Pressable className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4">
+          <Pressable
+            className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
+            onPress={toPatchSchoolEmailScreen}
+          >
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">학교 인증</Text>
             <Text className="font-medium tracking-tight text-[#7C7C7C]">
               {userInfo.email ? '인증' : '미인증'}
             </Text>
           </Pressable>
 
-          <Pressable className="flex-row items-center justify-between py-4">
-            <Text className="font-semibold tracking-tight text-[#3E3E3E]">휴대폰 번호 변경</Text>
+          <Pressable
+            className="flex-row items-center justify-between py-4"
+            onPress={toPatchUserInfoScreen}
+          >
+            <Text className="font-semibold tracking-tight text-[#3E3E3E]">개인정보 수정</Text>
             <NextButton />
           </Pressable>
         </View>
 
         {/* 아랫 부분 */}
         <View className="mt-4 rounded-xl border-[1px] border-[#EBEBEB] px-4">
+          <Pressable
+            className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
+            onPress={toPatchAccountScreen}
+          >
+            <Text className="font-semibold tracking-tight text-[#3E3E3E]">계좌관리</Text>
+            <NextButton />
+          </Pressable>
+
           <Pressable className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4">
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">이용내역</Text>
             <NextButton />
