@@ -13,8 +13,8 @@ const declarationTypes: DeclarationType[] = [
   { type: 'FIRST_GONE', content: '먼저 출발했어요' },
   { type: 'OUT_OF_TOUCH', content: '연락이 되지 않아요' },
   { type: 'UNEXPECTED_ACCOUNTS', content: '정산 금액이 예상과 달라요' },
-  { type: 'NON_REMIT', content: '정산 금액을 보내주지 않았어요' },
-  { type: 'NON_REMIT', content: '기타(직접 입력하세요)' },
+  { type: 'NOT_REMIT', content: '정산 금액을 보내주지 않았어요' },
+  { type: 'ETC', content: '기타(직접 입력하세요)' },
 ];
 
 interface SelectBoxComponentProps {
@@ -61,7 +61,7 @@ const SelectBoxComponent: React.FC<SelectBoxComponentProps> = ({ setDeclareType 
               <Text className="font-medium tracking-tight text-[#5D5D5D]">{item.content}</Text>
 
               {index !== declarationTypes.length - 1 && (
-                <View className="mt-2 border-[1px] border-[#D9D9D9]" />
+                <View className="mt-2 border-[0.5px] border-[#D9D9D9]" />
               )}
             </View>
           );

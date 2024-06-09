@@ -73,9 +73,9 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   // 카메라로 이미지 고르기
   const selectImageFromCamera = async (): Promise<void> => {
-    closeSelectImageModal();
-
     const image = await openCamera();
+
+    closeSelectImageModal();
 
     if (image) {
       sendImage(image);
@@ -126,7 +126,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const toDeclarationScreen = () => {
     if (userInfo) {
       closeUserInfoModal();
-      navigation.navigate('DeclarationScreen', { userInfo: userInfo });
+      navigation.navigate('DeclarationScreen', { userInfo: userInfo, roomId: roomId });
     }
   };
 
