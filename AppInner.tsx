@@ -38,6 +38,7 @@ import CompleteCalculateScreen from './src/screens/calculate/CompeleteCalculate'
 import SchoolAuthenticationScreen from './src/screens/signUp/SchoolAuthentication';
 import EmailAuthenticationCodeScreen from './src/screens/signUp/EmailAuthenticationCode';
 import PhoneAuthenticationCodeScreen from './src/screens/signUp/PhoneAuthenticationCode';
+import PatchUserInfoAuthenticationScreen from './src/screens/my/PatchUserInfoAuthentication';
 
 import { loggedInState } from '@recoil/recoil';
 
@@ -96,6 +97,10 @@ function AppInner() {
         <LogInStack.Screen name="PatchUserInfoScreen" component={PatchUserInfoScreen} />
         <LogInStack.Screen name="PatchSchoolEmailScreen" component={PatchSchoolEmailScreen} />
         <LogInStack.Screen name="PatchAccountScreen" component={PatchAccountScreen} />
+        <LogInStack.Screen
+          name="PatchUserInfoAuthenticationScreen"
+          component={PatchUserInfoAuthenticationScreen}
+        />
 
         {/* 신고 Screen */}
         <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />

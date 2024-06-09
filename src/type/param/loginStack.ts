@@ -38,6 +38,7 @@ export type LoginStackParamList = {
   PatchUserInfoScreen: undefined;
   PatchSchoolEmailScreen: undefined;
   PatchAccountScreen: undefined;
+  PatchUserInfoAuthenticationScreen: undefined;
 
   // 신고
   DeclarationScreen: { userInfo: UserPreview };
@@ -98,6 +99,10 @@ export type PatchSchoolEmailScreenProps = NativeStackScreenProps<
 export type PatchAccountScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'PatchAccountScreen'
+>;
+export type PatchUserInfoAuthenticationScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'PatchUserInfoAuthenticationScreen'
 >;
 
 // 신고 페이지
