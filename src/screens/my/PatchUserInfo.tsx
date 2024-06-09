@@ -1,18 +1,96 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
+import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
+import InputBoxComponent from '@components/InputBox';
+import RadioBoxComponent from '@components/RadioBox';
+import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
 
-import { PatchNicknameScreenProps, PatchUserInfoScreenProps } from '@type/param/loginStack';
+import { userInfoState } from '@recoil/recoil';
+
+import { PatchUserInfoScreenProps } from '@type/param/loginStack';
 
 const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+
+  const [name, setName] = useState<string>(userInfo.name);
+  const [gender, setGender] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>(userInfo.phoneNumber);
+  const [items, setItems] = useState([
+    { index: 1, item: '남자', select: userInfo.gender === 'MALE' },
+    { index: 2, item: '여자', select: userInfo.gender === 'FEMALE' },
+  ]);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  // 다음으로
+  const toNext = async (): Promise<void> => {
+    navigation.navigate('PatchUserInfoAuthenticationScreen');
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       <HeaderComponent title="개인정보 수정" />
-      <View>
-        <Text>개인정보 수정 페이지</Text>
-      </View>
+
+      {/* TouchableWithoutFeedback로 화면의 다른 부분 터치 시 키보드 내리기 */}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View className="flex-1">
+          <View className="mx-6 flex-1">
+            {/* 이름 입력란 */}
+            <View className="mt-6">
+              <InputBoxComponent
+                title="이름"
+                value={name}
+                setValue={setName}
+                placeholder="김모두"
+              />
+            </View>
+
+            {/* 성별 선택란 */}
+            <View className="mt-4">
+              <RadioBoxComponent
+                title="성별"
+                value={gender}
+                setValue={setGender}
+                items={items}
+                setItems={setItems}
+              />
+            </View>
+
+            {/* 전화번호 */}
+            <View className="mt-4">
+              <PhoneNumberInputBoxComponent
+                title="전화번호"
+                value={phoneNumber}
+                setValue={setPhoneNumber}
+                placeholder="010-XXXX-XXXX"
+              />
+            </View>
+
+            {/* 경고 메세지 */}
+            <View className="mt-2 flex-row justify-between px-2">
+              <Text className="font-medium text-error">{errorMessage}</Text>
+            </View>
+
+            {/* 버튼을 아래로 내리기 위한 View */}
+            <View className="flex-1"></View>
+
+            {/* 확인 버튼 */}
+            <View className="mx-3 mb-11">
+              <ButtonComponent
+                color={'bg-main'}
+                borderColor={'border-main'}
+                textColor={'white'}
+                text={'확인'}
+                disabled={!name || !gender || !phoneNumber}
+                onPress={toNext}
+              />
+            </View>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };
