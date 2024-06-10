@@ -82,7 +82,11 @@ axiosInstance.interceptors.response.use(
     }
 
     if (Config.ENV === 'DEVELOP') {
-      console.log(error.response);
+      console.log('==================================');
+      console.log('URI:', error.response.config.url);
+      console.log('CODE:', error.response.data.code);
+      console.log('MESSAGE:', error.response.data.message);
+      console.log('==================================');
     }
 
     return Promise.reject(error);

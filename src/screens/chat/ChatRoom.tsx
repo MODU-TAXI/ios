@@ -1,23 +1,30 @@
 import TextEncodingPolyfill from 'text-encoding';
-import React, { Suspense, useState } from 'react';
 import ImageView from 'react-native-image-viewing';
-import { KeyboardAvoidingView } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useChatContext } from '@providers/chatProvider';
+import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Alert, AppState, KeyboardAvoidingView } from 'react-native';
+import React, { Suspense, useState, useEffect, useCallback } from 'react';
 
 import HeaderComponent from '@components/Header';
 import MessagesComponent from '@components/Chat/Messages';
 import RoomInfoComponent from '@components/Chat/RoomInfo';
 import LoadingComponent from '@components/Common/Loading';
 import UserModalComponent from '@components/Chat/UserModal';
+
+import ChatErrorBoundary from '@components/Fallback/ChatErrorBoundary';
+
 import SelectImageModal from '@components/Common/SelectImageModal';
+
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 
 import { memberIdState, messagesState } from '@recoil/recoil';
 
 import { useEnterChatRoom } from '@hooks/chat';
-import { useGetRoomPreview } from '@hooks/api/rooms';
+import { useChatDetail } from '@hooks/api/chat';
+
+import { openAlbum, openCamera } from '@utils/image';
 
 import { openAlbum, openCamera } from '@utils/image';
 
@@ -30,9 +37,13 @@ Object.assign('global', {
 });
 
 const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
+  const [appState, setAppState] = useState(AppState.currentState);
+
   const { roomId } = route.params;
 
-  const { data: roomPreview } = useGetRoomPreview(roomId);
+  const { roomPreview, messages, messagesRefetch } = useChatDetail(roomId);
+
+  const { sendMessage } = useChatContext();
 
   const { sendMessage } = useChatContext();
 
@@ -103,9 +114,9 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   };
 
   // 메세지 초기화
-  const clearMessages = () => {
+  const clearMessages = useCallback(() => {
     setNewMeesages([]);
-  };
+  }, [setNewMeesages]);
 
   // 정산페이지로 이동
   const toCalculateScreen = () => {
@@ -121,6 +132,26 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
       navigation.navigate('DeclarationScreen', { userInfo: userInfo, roomId: roomId });
     }
   };
+
+  // 화면 껏다 켰을때 그동안 메세지 가져오기
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (appState.match(/inactive|background/) && nextAppState === 'active') {
+        clearMessages();
+        messagesRefetch();
+      }
+      setAppState(nextAppState);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [appState, clearMessages, messagesRefetch]);
+
+  // 나갔을때 메세지 clear
+  useEffect(() => {
+    return () => clearMessages();
+  }, [clearMessages]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -139,7 +170,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
       <KeyboardAvoidingView className="flex-1 bg-white" behavior="padding">
         {/* 메세지 Component */}
         <MessagesComponent
-          roomId={roomId}
+          messages={messages.messages}
           memberId={memberId}
           openUserInfoModal={openUserInfoModal}
           newMessages={newMessages}
@@ -173,9 +204,11 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
 const ChatRoomScreen = ({ route, navigation }: ChatRoomScreenProps) => {
   return (
-    <Suspense fallback={<LoadingComponent />}>
-      <ChatRoomComponent navigation={navigation} route={route} />
-    </Suspense>
+    <ChatErrorBoundary navigation={navigation}>
+      <Suspense fallback={<LoadingComponent />}>
+        <ChatRoomComponent navigation={navigation} route={route} />
+      </Suspense>
+    </ChatErrorBoundary>
   );
 };
 

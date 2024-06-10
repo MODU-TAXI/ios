@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Toast from 'react-native-toast-message';
 import { View, Text, Button } from 'react-native';
 import { ErrorBoundary } from 'react-error-boundary';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -27,11 +26,9 @@ const ErrorFallback = ({
       resetErrorBoundary();
       return ErrorToastMessage(error.response.data.message);
     }
-  }, [
-    error?.response?.status,
-    error?.response?.data?.message,
-    resetErrorBoundary,
-  ]);
+  }, [error?.response?.status, error?.response?.data?.message, resetErrorBoundary]);
+
+  console.log('error comes to here~');
 
   // 500 에러시에는 재시도 화면 보여주기
   return (
@@ -44,19 +41,11 @@ const ErrorFallback = ({
   );
 };
 
-export const CustomErrorHandler = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const CustomErrorHandler = ({ children }: { children: React.ReactNode }) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
-    <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-      onError={errorHandler}
-      onReset={reset}
-    >
+    <ErrorBoundary FallbackComponent={ErrorFallback} onError={errorHandler} onReset={reset}>
       {children}
     </ErrorBoundary>
   );

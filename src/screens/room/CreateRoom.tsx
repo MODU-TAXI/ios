@@ -115,14 +115,14 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 생성시 로딩 */}
       {createRoomPending && <TransparentLoadingComponent />}
 
       {/* 헤더 */}
       <HeaderComponent title={'생성 페이지'} />
 
-      <ScrollView className="flex-1 px-4 ">
+      <ScrollView className="flex-1 px-4">
         {/* 출발지, 도착지 선택*/}
         <View className="px-2 py-8">
           <DescriptionComponent description="출발지, 도착지를 생성해주세요" />
