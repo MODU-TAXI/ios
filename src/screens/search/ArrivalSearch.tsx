@@ -94,12 +94,12 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
   );
 
   /** 선택한 검색어를 전달하며 이동 */
-  const toDepartureMapScreen = (
+  const toArrivalMapScreen = (
     title: string,
     latitude: number,
     longitude: number,
   ) => {
-    navigation.navigate('DepartureMapScreen', {searchParams: {
+    navigation.navigate('ArrivalMapScreen', {searchParams: {
       title: title,
       latitude: latitude,
       longitude: longitude,
@@ -136,7 +136,7 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
           sortedItems.map((item, index) => (
             <Pressable
               key={index}
-              onPress={() => toDepartureMapScreen(
+              onPress={() => toArrivalMapScreen(
                 deleteTagTitle(item.title),
                 item.latitude,
                 item.longitude,

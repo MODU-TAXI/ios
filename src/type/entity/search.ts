@@ -132,7 +132,7 @@ export interface NaverReverseGeocoding {
   }[]
 }
 
-export interface DepartureSearchParams {
+export interface SearchResultParams {
   title: string,
   latitude: number,
   longitude: number,
