@@ -1,9 +1,9 @@
 import TextEncodingPolyfill from 'text-encoding';
 import ImageView from 'react-native-image-viewing';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { useFocusEffect } from '@react-navigation/native';
 
 import { useChatContext } from '@providers/chatProvider';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, AppState, KeyboardAvoidingView } from 'react-native';
