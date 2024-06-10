@@ -1,10 +1,8 @@
 import TextEncodingPolyfill from 'text-encoding';
 import ImageView from 'react-native-image-viewing';
 import { useRecoilState, useRecoilValue } from 'recoil';
-
 import { useChatContext } from '@providers/chatProvider';
 import { useFocusEffect } from '@react-navigation/native';
-
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, AppState, KeyboardAvoidingView } from 'react-native';
 import React, { Suspense, useState, useEffect, useCallback } from 'react';
@@ -28,6 +26,8 @@ import { useChatDetail } from '@hooks/api/chat';
 
 import { openAlbum, openCamera } from '@utils/image';
 
+import { openAlbum, openCamera } from '@utils/image';
+
 import { UserPreview } from '@type/entity/user';
 import { ChatRoomScreenProps } from '@type/param/loginStack';
 
@@ -42,6 +42,8 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const { roomId } = route.params;
 
   const { roomPreview, messages, messagesRefetch } = useChatDetail(roomId);
+
+  const { sendMessage } = useChatContext();
 
   const { sendMessage } = useChatContext();
 
