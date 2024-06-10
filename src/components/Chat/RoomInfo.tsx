@@ -18,7 +18,7 @@ interface RoomInfoComponentProps {
 const styles = StyleSheet.create({
   shadow: {
     shadowColor: 'rgba(150, 150, 150, 0.25)',
-    shadowOffset: { width: 0, height: 12 },
+    shadowOffset: { width: 0, height: 20 },
     shadowOpacity: 1,
     shadowRadius: 10,
   },

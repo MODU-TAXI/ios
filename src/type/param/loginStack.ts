@@ -23,6 +23,7 @@ export type LoginStackParamList = {
   PatchRoomScreen: { roomDetail: RoomDetail };
   ChatRoomScreen: { roomId: number };
   AlarmScreen: undefined;
+  MyPageScreen: undefined;
 
   // 정산
   CheckDepartureScreen: { roomPreview: RoomPreview };
@@ -32,8 +33,16 @@ export type LoginStackParamList = {
   CheckCalculateScreen: undefined;
   CompleteCalculateScreen: undefined;
 
+  // 마이 페이지
+  PatchNicknameScreen: undefined;
+  PatchUserInfoScreen: undefined;
+  PatchSchoolEmailScreen: undefined;
+  PatchAccountScreen: undefined;
+  PatchUserInfoAuthenticationScreen: undefined;
+  PatchSchoolEmailAuthenticationScreen: undefined;
+
   // 신고
-  DeclarationScreen: { userInfo: UserPreview };
+  DeclarationScreen: { userInfo: UserPreview; roomId: number };
 
   // 테스트
   TestScreen: undefined;
@@ -52,6 +61,7 @@ export type CreateRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 
 export type RoomDetailScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomDetailScreen'>;
 export type PatchRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'PatchRoomScreen'>;
 export type ChatRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'ChatRoomScreen'>;
+export type MyPageScreenProps = NativeStackScreenProps<LoginStackParamList, 'MyPageScreen'>;
 export type AlarmScreenProps = NativeStackScreenProps<LoginStackParamList, 'AlarmScreen'>;
 
 // 정산 페이지들
@@ -72,6 +82,32 @@ export type CheckCalculateScreenProps = NativeStackScreenProps<
 export type CompleteCalculateScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'CompleteCalculateScreen'
+>;
+
+// 마이 페이지
+export type PatchNicknameScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'PatchNicknameScreen'
+>;
+export type PatchUserInfoScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'PatchUserInfoScreen'
+>;
+export type PatchSchoolEmailScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'PatchSchoolEmailScreen'
+>;
+export type PatchAccountScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'PatchAccountScreen'
+>;
+export type PatchUserInfoAuthenticationScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'PatchUserInfoAuthenticationScreen'
+>;
+export type PatchSchoolEmailAuthenticationScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'PatchSchoolEmailAuthenticationScreen'
 >;
 
 // 신고 페이지

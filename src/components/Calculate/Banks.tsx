@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   bankItem: {
-    width: '30%',
+    width: 100,
+    height: 64,
     alignItems: 'center',
     padding: 8,
     marginBottom: 18,

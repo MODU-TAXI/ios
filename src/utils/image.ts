@@ -77,8 +77,20 @@ export const openCamera = async (): Promise<string | null> => {
   }
 
   if (result?.assets) {
-    // resize image here
-    return handleUpload(result.assets[0]);
+    const resizedImage = await resizeImage(result.assets[0]);
+
+    if (resizedImage) {
+      const resizedAsset: Asset = {
+        uri: resizedImage.uri,
+        type: 'image/jpeg',
+        fileName: resizedImage.name,
+        fileSize: resizedImage.size,
+        width: resizedImage.width,
+        height: resizedImage.height,
+      };
+
+      return handleUpload(resizedAsset);
+    }
   }
 
   return null;

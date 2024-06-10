@@ -26,6 +26,8 @@ export interface SignUpRequest {
 
 // [멤버 프로필 변경] /api/members
 export interface PatchMemberRequest {
-  nickname: string;
+  name: string;
+  gender: string;
+  phoneNumber: string;
   imageUrl: string;
 }

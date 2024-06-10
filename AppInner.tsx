@@ -3,12 +3,10 @@ import { useRecoilState } from 'recoil';
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import CheckCalculateScreen from 'src/screens/calculate/CheckCalculate';
-import CompleteCalculateScreen from 'src/screens/calculate/CompeleteCalculate';
-
 import TestScreen from './src/screens/test';
 import MainScreen from './src/screens/main/Main';
 import HomeScreen from './src/screens/home/Home';
+import MyPageScreen from './src/screens/my/MyPage';
 import AlarmScreen from './src/screens/alarm/alarm';
 import NaverMapScreen from './src/screens/NaverMap';
 import PatchRoom from './src/screens/room/PatchRoom';
@@ -21,19 +19,27 @@ import AccountScreen from './src/screens/calculate/Account';
 import { ChatProvider } from './src/providers/chatProvider';
 import CreateRoomScreen from './src/screens/room/CreateRoom';
 import RoomDetailScreen from './src/screens/room/RoomDetail';
+import PatchAccountScreen from './src/screens/my/PatchAccount';
 import DepartureMapScreen from './src/screens/map/DepartureMap';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
+import PatchNicknameScreen from './src/screens/my/PatchNickname';
+import PatchUserInfoScreen from './src/screens/my/PatchUserInfo';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
 import CheckAccountScreen from './src/screens/calculate/CheckAccount';
 import DeclarationScreen from './src/screens/declaration/Declaration';
 import AuthenticationScreen from './src/screens/signUp/Authentication';
 import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
+import PatchSchoolEmailScreen from './src/screens/my/PatchSchoolEmail';
 import CheckPermissionScreen from './src/screens/signUp/CheckPermission';
+import CheckCalculateScreen from './src/screens/calculate/CheckCalculate';
 import CheckDepartureScreen from './src/screens/calculate/CheckDeparture';
 import RegisterNicknameScreen from './src/screens/signUp/RegisterNickname';
+import CompleteCalculateScreen from './src/screens/calculate/CompeleteCalculate';
 import SchoolAuthenticationScreen from './src/screens/signUp/SchoolAuthentication';
 import EmailAuthenticationCodeScreen from './src/screens/signUp/EmailAuthenticationCode';
 import PhoneAuthenticationCodeScreen from './src/screens/signUp/PhoneAuthenticationCode';
+import PatchUserInfoAuthenticationScreen from './src/screens/my/PatchUserInfoAuthentication';
+import PatchSchoolEmailAuthenticationScreen from './src/screens/my/PatchSchoolEmailAuthentication';
 
 import { loggedInState } from '@recoil/recoil';
 
@@ -68,6 +74,7 @@ function AppInner() {
       >
         <LogInStack.Screen name="MainScreen" component={MainScreen} />
         <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
+        <LogInStack.Screen name="MyPageScreen" component={MyPageScreen} />
         <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
         <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
         <LogInStack.Screen name="DepartureMapScreen" component={DepartureMapScreen} />
@@ -85,6 +92,20 @@ function AppInner() {
         <LogInStack.Screen name="CheckAccountScreen" component={CheckAccountScreen} />
         <LogInStack.Screen name="CheckCalculateScreen" component={CheckCalculateScreen} />
         <LogInStack.Screen name="CompleteCalculateScreen" component={CompleteCalculateScreen} />
+
+        {/* 마이페이지 Screen */}
+        <LogInStack.Screen name="PatchNicknameScreen" component={PatchNicknameScreen} />
+        <LogInStack.Screen name="PatchUserInfoScreen" component={PatchUserInfoScreen} />
+        <LogInStack.Screen name="PatchSchoolEmailScreen" component={PatchSchoolEmailScreen} />
+        <LogInStack.Screen name="PatchAccountScreen" component={PatchAccountScreen} />
+        <LogInStack.Screen
+          name="PatchUserInfoAuthenticationScreen"
+          component={PatchUserInfoAuthenticationScreen}
+        />
+        <LogInStack.Screen
+          name="PatchSchoolEmailAuthenticationScreen"
+          component={PatchSchoolEmailAuthenticationScreen}
+        />
 
         {/* 신고 Screen */}
         <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />

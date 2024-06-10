@@ -4,55 +4,34 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native';
 
 import ButtonComponent from '@components/Button';
+import HeaderComponent from '@components/Header';
 import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { emailState, userInfoState } from '@recoil/recoil';
+import { userInfoState, signUpUserState } from '@recoil/recoil';
 
-import { useEmailConfirm, useEmailAuthentication } from '@hooks/api/member.mail';
+import { signUp } from '@server/api/member';
+
+import { useFcmToken } from '@hooks/fcm';
+import { useSmsConfirm, useSmsAuthentication } from '@hooks/api/member.sms';
 
 import { InfoToastMessage } from '@utils/toastMessage';
+import { setAccessToken, setRefreshToken } from '@utils/token';
 
-import { EmailAuthenticationCodeScreenProps } from '@type/param/rootStack';
+import { PhoneAuthenticationCodeScreenProps } from '@type/param/rootStack';
+import { PatchUserInfoAuthenticationScreenProps } from '@type/param/loginStack';
 
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 
-const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeScreenProps) => {
-  const email = useRecoilValue(emailState); // 재전송할 이메일
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+const PatchUserInfoAuthenticationScreen = ({
+  navigation,
+}: PatchUserInfoAuthenticationScreenProps) => {
+  const signUpUser = useRecoilValue(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
+  const [, setUserInfo] = useRecoilState(userInfoState);
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
-  const [time, setTime] = useState(180); // 타이머 시간
-
-  const { mutateAsync: emailConfirm, isPending: emailConfirmPending } =
-    useEmailConfirm(setErrorMessage);
-  const { mutateAsync: emailAuthentication, isPending: emailAuthenticationPending } =
-    useEmailAuthentication(setErrorMessage);
-
-  // 인증번호 재전송
-  const resendMail = async (): Promise<void> => {
-    await emailAuthentication({ mailAddress: email });
-    InfoToastMessage('인증번호가 재전송 되었습니다');
-    setTime(180); // 재전송시 timer 재설정
-  };
-
-  // 인증 코드확인
-  const confirmEmail = async (): Promise<void> => {
-    await emailConfirm({ certCode: code });
-
-    setUserInfo({
-      id: userInfo.id,
-      name: userInfo.name,
-      nickname: userInfo.nickname,
-      gender: userInfo.gender,
-      phoneNumber: userInfo.phoneNumber,
-      email: email,
-      imageUrl: userInfo.imageUrl,
-    });
-
-    navigation.navigate('SurveyFirstScreen');
-  };
+  const [time, setTime] = useState(300); // 타이머 시간
 
   // 인증번호 만료시 에러 메세지 생성
   useEffect(() => {
@@ -61,25 +40,36 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
     }
   }, [time]);
 
+  // 회원정보 수정
+  const sendCode = async (): Promise<void> => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'MainScreen' }],
+    });
+
+    InfoToastMessage('개인정보가 수정되었습니다');
+  };
+
+  // 인증번호 재전송
+  const resendCode = async () => {
+    InfoToastMessage('인증번호가 재전송 되었습니다');
+    setTime(300); // 재전송시 timer 재설정
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
-      {(emailConfirmPending || emailAuthenticationPending) && <TransparentLoadingComponent />}
-
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1">
-          {/* 진행사항 progressBar */}
-          <View className="mt-[11px] h-1">
-            <ProgressBarComponent previousDealt={40} dealt={40} />
-          </View>
+          <HeaderComponent title="개인정보 수정" />
 
           <View className="mx-6 flex-1">
             {/* 입력란 설명 */}
             <View className="mt-14 flex">
-              <Text className="text-xl font-bold">적어주신 이메일로</Text>
+              <Text className="text-xl font-bold">적어주신 번호로</Text>
               <Text className="text-xl font-bold">인증번호가 전송됐어요!</Text>
             </View>
 
-            {/* Input 컴포넌트 */}
+            {/* code Input 컴포넌트 */}
             <View className="mt-6">
               <InputBoxComponent
                 title="인증번호"
@@ -92,11 +82,11 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
               />
             </View>
 
-            {/* 경고 메세지 */}
+            {/* 경고 메세지 및 재전송 버튼 */}
             <View className="mt-2 flex-row justify-between px-2">
               <Text className="font-medium text-error">{errorMessage}</Text>
 
-              <Pressable onPress={resendMail}>
+              <Pressable onPress={resendCode}>
                 <ReSendCodeButtonSvg />
               </Pressable>
             </View>
@@ -107,12 +97,12 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
             {/* 확인 버튼 */}
             <View className="mx-3 mb-11">
               <ButtonComponent
-                color={'bg-black'}
-                borderColor={'border-black'}
+                color={'bg-main'}
+                borderColor={'border-main'}
                 textColor={'white'}
                 text={'확인'}
-                disabled={!code}
-                onPress={confirmEmail}
+                disabled={!code || !time}
+                onPress={sendCode}
               />
             </View>
           </View>
@@ -122,4 +112,4 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
   );
 };
 
-export default EmailAuthenticationCodeScreen;
+export default PatchUserInfoAuthenticationScreen;
