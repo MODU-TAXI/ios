@@ -1,4 +1,4 @@
-import { Linking } from 'react-native';
+import { Linking, Vibration } from 'react-native';
 import notifee, { EventDetail } from '@notifee/react-native';
 
 // notifee로 알림 보여주는 handling
@@ -9,6 +9,7 @@ export const handleFirebaseMessage = async (
   roomId?: string,
 ): Promise<string> => {
   if (roomId) {
+    Vibration.vibrate(1);
     return notifee.displayNotification({
       title: '모두의 택시',
       body: content,
@@ -16,6 +17,7 @@ export const handleFirebaseMessage = async (
     });
   }
 
+  Vibration.vibrate(1);
   return notifee.displayNotification({
     title: '모두의 택시',
     body: content,
