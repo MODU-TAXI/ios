@@ -39,6 +39,7 @@ export const useChatDetail = (roomId: number) => {
       return {
         roomPreview: results[0].data,
         messages: results[1].data,
+        messagesRefetch: results[1].refetch,
       };
     },
   });

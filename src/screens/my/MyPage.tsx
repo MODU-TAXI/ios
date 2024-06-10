@@ -66,7 +66,7 @@ const MyPageScreen = () => {
   if (patchMemberPending) return <TransparentLoadingComponent />;
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       <ScrollView className="px-4">
         <View className="py-3">
           <Text className="text-center text-[18px] font-semibold tracking-tight text-[#272727]">

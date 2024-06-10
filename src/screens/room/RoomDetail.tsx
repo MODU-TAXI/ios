@@ -46,6 +46,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     refetchRoomDetail,
     refetcParticipateMembers,
     refetchWaitingMembers,
+    pending,
   } = useGetRoomDetail(roomId); // 방정보들 가져오기
 
   const { mutateAsync: joinRoomMutate, isPending: joinRoomPending } = useJoinRoom(roomId); // 방 입장 mutate
@@ -65,9 +66,8 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   // 방정보 새로고침
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    Vibration.vibrate(5); // 새로고침시 진동
-    await refetchRoomDetail();
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    Vibration.vibrate(1); // 새로고침시 진동
+    await Promise.all([refetchRoomDetail(), refetcParticipateMembers(), refetchWaitingMembers()]);
     setRefreshing(false);
   }, [refetchRoomDetail]);
 
@@ -125,6 +125,8 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const toChatRoomScreen = async () => {
     navigation.navigate('ChatRoomScreen', { roomId: roomDetail.roomId });
   };
+
+  if (pending) return <LoadingComponent />;
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
