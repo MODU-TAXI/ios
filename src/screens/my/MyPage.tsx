@@ -86,29 +86,6 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('PatchNicknameScreen');
   };
 
-  // 앨범에서 이미지 고르기
-  const selectImageFromAlbum = async (): Promise<void> => {
-    closeSelectImageModal();
-
-    const imageUrl = await openAlbum();
-
-    if (imageUrl) {
-      patchMemberMutate({
-        name: userInfo.name,
-        gender: userInfo.gender,
-        phoneNumber: userInfo.phoneNumber,
-        imageUrl: imageUrl,
-      });
-
-      setProfileImage(imageUrl);
-    }
-  };
-
-  // 닉네임 수정 페이지 이동
-  const toPatchNicknameScreen = () => {
-    navigation.navigate('PatchNicknameScreen');
-  };
-
   // 개인정보 수정 페이지 이동
   const toPatchUserInfoScreen = () => {
     navigation.navigate('PatchUserInfoScreen');
@@ -129,7 +106,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {patchMemberPending && <TransparentLoadingComponent />}
-      
+
       <ScrollView className="px-4">
         <View className="py-3">
           <Text className="text-center text-[18px] font-semibold tracking-tight text-[#272727]">

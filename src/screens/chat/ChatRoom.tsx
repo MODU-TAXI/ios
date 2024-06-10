@@ -12,19 +12,14 @@ import MessagesComponent from '@components/Chat/Messages';
 import RoomInfoComponent from '@components/Chat/RoomInfo';
 import LoadingComponent from '@components/Common/Loading';
 import UserModalComponent from '@components/Chat/UserModal';
-
-import ChatErrorBoundary from '@components/Fallback/ChatErrorBoundary';
-
 import SelectImageModal from '@components/Common/SelectImageModal';
-
+import ChatErrorBoundary from '@components/Fallback/ChatErrorBoundary';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 
 import { memberIdState, messagesState } from '@recoil/recoil';
 
 import { useEnterChatRoom } from '@hooks/chat';
 import { useChatDetail } from '@hooks/api/chat';
-
-import { openAlbum, openCamera } from '@utils/image';
 
 import { openAlbum, openCamera } from '@utils/image';
 
@@ -42,8 +37,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const { roomId } = route.params;
 
   const { roomPreview, messages, messagesRefetch } = useChatDetail(roomId);
-
-  const { sendMessage } = useChatContext();
 
   const { sendMessage } = useChatContext();
 
