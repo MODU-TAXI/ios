@@ -13,6 +13,7 @@ import LoadingComponent from '@components/Common/Loading';
 import RoomMapComponent from '@components/RoomDigest/RoomMap';
 import RoomHeaderComponent from '@components/Home/RoomHeader';
 import UpdateModalComponent from '@components/RoomDigest/UpdateModal';
+import RoomErrorBoundary from '@components/Fallback/RoomErrorBoundary';
 import WaitingUsersComponent from '@components/RoomDigest/WaitingUsers';
 import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
 import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
@@ -36,7 +37,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const { connect, disConnect, stompClient } = useChatContext();
 
   const [, setSocketRoomId] = useRecoilState(roomState);
-  const [refreshing, setRefreshing] = React.useState(false); // 새로고침시 필요한 변수
+  const [refreshing, setRefreshing] = useState(false); // 새로고침시 필요한 변수
 
   const {
     roomDetail,
@@ -64,7 +65,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   // 방정보 새로고침
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    Vibration.vibrate(40); // 새로고침시 진동
+    Vibration.vibrate(5); // 새로고침시 진동
     await refetchRoomDetail();
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setRefreshing(false);
@@ -255,9 +256,11 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
 
 const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
   return (
-    <Suspense fallback={<LoadingComponent />}>
-      <RoomDetailComponent navigation={navigation} route={route} />
-    </Suspense>
+    <RoomErrorBoundary navigation={navigation}>
+      <Suspense fallback={<LoadingComponent />}>
+        <RoomDetailComponent navigation={navigation} route={route} />
+      </Suspense>
+    </RoomErrorBoundary>
   );
 };
 

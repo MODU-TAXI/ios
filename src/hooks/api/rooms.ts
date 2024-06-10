@@ -1,6 +1,5 @@
 import { Coord } from '@mj-studio/react-native-naver-map';
 import {
-  useQuery,
   useMutation,
   useSuspenseQuery,
   UseMutationResult,
@@ -8,7 +7,12 @@ import {
   UseSuspenseQueryResult,
 } from '@tanstack/react-query';
 
-import { PatchRoomRequest, CreateRoomRequest, GetRoomListRequest, GetRoomCurrentCameraRequest } from '@server/requestTypes/room';
+import {
+  PatchRoomRequest,
+  CreateRoomRequest,
+  GetRoomListRequest,
+  GetRoomCurrentCameraRequest,
+} from '@server/requestTypes/room';
 import {
   joinRoom,
   patchRoom,
@@ -38,7 +42,7 @@ import {
 import { translateCategory } from '@utils/room';
 import { InfoToastMessage, ErrorToastMessage } from '@utils/toastMessage';
 
-import { RoomList, RoomDetail, RoomPreview, RoomCurrentCamera } from '@type/entity/room';
+import { RoomList, RoomDetail, RoomCurrentCamera } from '@type/entity/room';
 
 // 방 생성
 export const useCreateRoom = (): UseMutationResult<
@@ -75,6 +79,7 @@ export const useGetRoomDetail = (roomId: number) => {
   return useSuspenseQueries({
     queries: [
       {
+        retry: 0,
         queryKey: [`/api/rooms/${roomId}`, roomId],
         queryFn: async () => getRoomDetail(roomId),
         select: (response: GetRoomDetailResponse) => {
@@ -121,14 +126,17 @@ export const useGetRoomDetail = (roomId: number) => {
         },
       },
       {
+        retry: 0,
         queryKey: [`/api/rooms/${roomId}/members/in`, roomId],
         queryFn: async () => getRoomMembers(roomId),
       },
       {
+        retry: 0,
         queryKey: [`/api/rooms/${roomId}/members/waiting`, roomId],
         queryFn: async () => getRoomWaitingMembers(roomId),
       },
     ],
+
     combine: (results) => {
       return {
         roomDetail: results[0].data,
@@ -138,6 +146,7 @@ export const useGetRoomDetail = (roomId: number) => {
         refetcParticipateMembers: results[1].refetch,
         refetchWaitingMembers: results[2].refetch,
         pending: results.some((result) => result.isPending),
+        error: results.some((result) => result.error),
       };
     },
   });
@@ -230,7 +239,7 @@ export const useGetRoomWaitingMembers = (
 
 // 원형 영역 방 조회
 export const useGetRoomCurrentCamera = (
-  data: GetRoomCurrentCameraRequest
+  data: GetRoomCurrentCameraRequest,
 ): { rooms: RoomCurrentCamera[]; refetch: () => void } => {
   const { data: rooms, refetch } = useSuspenseQuery({
     queryKey: [
@@ -242,8 +251,7 @@ export const useGetRoomCurrentCamera = (
       data.roomTags,
       data.isImminent,
     ],
-    queryFn: () =>
-      getRoomCurrentCamera(data),
+    queryFn: () => getRoomCurrentCamera(data),
     select: (response: GetRoomCurrentCameraResponse) => {
       return response.rooms;
     },
@@ -253,7 +261,7 @@ export const useGetRoomCurrentCamera = (
 
 // 경로를 제외한 방 리스트 조회
 export const useGetRoomList = (
-  data: GetRoomListRequest
+  data: GetRoomListRequest,
 ): { rooms: RoomList[]; refetch: () => void } => {
   const { data: rooms, refetch } = useSuspenseQuery({
     queryKey: [
@@ -268,8 +276,7 @@ export const useGetRoomList = (
       data.roomTags,
       data.isImminent,
     ],
-    queryFn: () =>
-      getRoomList(data),
+    queryFn: () => getRoomList(data),
     select: (response: GetRoomListResponse[]) => {
       return response;
     },

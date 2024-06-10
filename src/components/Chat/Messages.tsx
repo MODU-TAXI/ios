@@ -3,14 +3,12 @@ import { View, Keyboard, ScrollView } from 'react-native';
 
 import { MessageBoxComponent } from '@components/Chat/MessageBox';
 
-import { useGetMessages } from '@hooks/api/chat';
-
 import { ChatMessage } from '@type/entity/chat';
 import { UserPreview } from '@type/entity/user';
 
 interface MessagesComponentProps {
-  roomId: number;
   memberId: number;
+  messages: ChatMessage[];
   newMessages: ChatMessage[];
   openUserInfoModal: (user: UserPreview) => void;
   openImageModal: (imageUrl: string) => void;
@@ -18,15 +16,14 @@ interface MessagesComponentProps {
 }
 
 const MessagesComponent: React.FC<MessagesComponentProps> = ({
-  roomId,
   memberId,
+  messages,
   newMessages,
   openUserInfoModal,
   openImageModal,
   toCalculateScreen,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
-  const { messages } = useGetMessages(roomId);
 
   // 키보드 밑으로 내리기 위함
   useEffect(() => {
@@ -58,7 +55,7 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
         }
       }}
     >
-      {messages.messages.map((chat, index) => (
+      {messages.map((chat, index) => (
         <View key={index} className="px-2">
           {/* 말풍선 */}
           <MessageBoxComponent

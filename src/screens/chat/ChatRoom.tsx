@@ -10,11 +10,13 @@ import MessagesComponent from '@components/Chat/Messages';
 import RoomInfoComponent from '@components/Chat/RoomInfo';
 import LoadingComponent from '@components/Common/Loading';
 import UserModalComponent from '@components/Chat/UserModal';
+import ChatErrorBoundary from '@components/Fallback/ChatErrorBoundary';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 
 import { memberIdState, messagesState } from '@recoil/recoil';
 
 import { useEnterChatRoom } from '@hooks/chat';
+import { useChatDetail } from '@hooks/api/chat';
 import { useGetRoomPreview } from '@hooks/api/rooms';
 
 import { UserPreview } from '@type/entity/user';
@@ -28,7 +30,7 @@ Object.assign('global', {
 const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const { roomId } = route.params;
 
-  const { data: roomPreview } = useGetRoomPreview(roomId);
+  const { roomPreview, messages } = useChatDetail(roomId);
 
   const [newMessages, setNewMeesages] = useRecoilState(messagesState);
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
@@ -93,7 +95,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
       <KeyboardAvoidingView className="flex-1 bg-white" behavior="padding">
         {/* 메세지 Component */}
         <MessagesComponent
-          roomId={roomId}
+          messages={messages.messages}
           memberId={memberId}
           openUserInfoModal={openUserInfoModal}
           newMessages={newMessages}
@@ -120,9 +122,11 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
 const ChatRoomScreen = ({ route, navigation }: ChatRoomScreenProps) => {
   return (
-    <Suspense fallback={<LoadingComponent />}>
-      <ChatRoomComponent navigation={navigation} route={route} />
-    </Suspense>
+    <ChatErrorBoundary navigation={navigation}>
+      <Suspense fallback={<LoadingComponent />}>
+        <ChatRoomComponent navigation={navigation} route={route} />
+      </Suspense>
+    </ChatErrorBoundary>
   );
 };
 
