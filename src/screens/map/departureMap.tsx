@@ -165,7 +165,7 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
   }
 
   const toSearchScreen = () => {
-    navigation.navigate('SearchScreen');
+    navigation.navigate('DepartureSearchScreen');
   }
 
   const toBack = () => {

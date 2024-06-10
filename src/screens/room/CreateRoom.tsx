@@ -98,7 +98,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
 
   /** 도착지 선택시 검색창 오픈 */
   const handleArrival = () => {
-    navigation.navigate('SearchScreen');
+    navigation.navigate('ArrivalSearchScreen');
   };
 
   /** 출발, 도착지 초기화 */

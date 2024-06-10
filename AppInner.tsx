@@ -15,6 +15,7 @@ import SearchScreen from './src/screens/search/Search';
 import SignInScreen from './src/screens/signIn/SignIn';
 import ChatRoomScreen from './src/screens/chat/ChatRoom';
 import AmountScreen from './src/screens/calculate/Amount';
+import ArrivalMapScreen from 'src/screens/map/ArrivalMap';
 import AccountScreen from './src/screens/calculate/Account';
 import { ChatProvider } from './src/providers/chatProvider';
 import CreateRoomScreen from './src/screens/room/CreateRoom';
@@ -25,11 +26,13 @@ import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import PatchNicknameScreen from './src/screens/my/PatchNickname';
 import PatchUserInfoScreen from './src/screens/my/PatchUserInfo';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
+import ArrivalSearchScreen from 'src/screens/search/ArrivalSearch';
 import CheckAccountScreen from './src/screens/calculate/CheckAccount';
 import DeclarationScreen from './src/screens/declaration/Declaration';
 import AuthenticationScreen from './src/screens/signUp/Authentication';
 import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
 import PatchSchoolEmailScreen from './src/screens/my/PatchSchoolEmail';
+import DepartureSearchScreen from 'src/screens/search/DepartureSearch';
 import CheckPermissionScreen from './src/screens/signUp/CheckPermission';
 import CheckCalculateScreen from './src/screens/calculate/CheckCalculate';
 import CheckDepartureScreen from './src/screens/calculate/CheckDeparture';
@@ -51,6 +54,7 @@ import { onMessageReceivedBackground } from '@utils/fcm';
 
 import { RootStackParamList } from '@type/param/rootStack';
 import { LoginStackParamList } from '@type/param/loginStack';
+
 // Background에서 FCM Message 수신
 messaging().setBackgroundMessageHandler(onMessageReceivedBackground);
 
@@ -77,13 +81,20 @@ function AppInner() {
         <LogInStack.Screen name="MyPageScreen" component={MyPageScreen} />
         <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
         <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
-        <LogInStack.Screen name="DepartureMapScreen" component={DepartureMapScreen} />
-        <LogInStack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
-        <LogInStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
-        <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
-        <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
         <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
         <LogInStack.Screen name="AlarmScreen" component={AlarmScreen} />
+
+        {/* 생성 Screen */}
+        <LogInStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
+        <LogInStack.Screen name="DepartureMapScreen" component={DepartureMapScreen} />
+        <LogInStack.Screen name="DepartureSearchScreen" component={DepartureSearchScreen} />
+        <LogInStack.Screen name="ArrivalMapScreen" component={ArrivalMapScreen} />
+        <LogInStack.Screen name="ArrivalSearchScreen" component={ArrivalSearchScreen} />
+        <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
+
+        {/* 조회, 수정 Screen */}
+        <LogInStack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
+        <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
 
         {/* 정산 Screen */}
         <LogInStack.Screen name="CheckDepartureScreen" component={CheckDepartureScreen} />
