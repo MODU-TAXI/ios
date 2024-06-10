@@ -66,8 +66,10 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   // 방정보 새로고침
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
+
     Vibration.vibrate(1); // 새로고침시 진동
     await Promise.all([refetchRoomDetail(), refetcParticipateMembers(), refetchWaitingMembers()]);
+
     setRefreshing(false);
   }, [refetchRoomDetail]);
 

@@ -18,6 +18,7 @@ import UserModalComponent from '@components/Chat/UserModal';
 import ChatErrorBoundary from '@components/Fallback/ChatErrorBoundary';
 
 import SelectImageModal from '@components/Common/SelectImageModal';
+
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 
 import { memberIdState, messagesState } from '@recoil/recoil';

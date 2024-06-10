@@ -32,7 +32,9 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
+
     Vibration.vibrate(1); // 새로고침시 진동
+
     await refetchRoomPreview();
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setRefreshing(false);
