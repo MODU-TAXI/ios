@@ -66,33 +66,6 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
     }
   }, [items, currentLocation])
 
-  const [spotSearchParams, setSpotSearchParams] = useState({
-    currentLongitude: currentLocation.longitude,
-    currentLatitude: currentLocation.latitude,
-    departureLongitude: currentLocation.longitude,
-    departureLatitude: currentLocation.latitude,
-  });
-
-  // sortedItems 바뀔 때마다 거점탐색의 파라미터 변경
-  useEffect(() => {
-    if (sortedItems.length > 0) {
-      setSpotSearchParams({
-        currentLongitude: currentLocation.longitude,
-        currentLatitude: currentLocation.latitude,
-        departureLongitude: sortedItems[0].longitude,
-        departureLatitude: sortedItems[0].latitude,
-      })
-    }
-  }, [sortedItems])
-
-  const { spots, refetch: refetchSpotList } = useGetSpotList(
-    1, 1, 
-    spotSearchParams?.currentLongitude,
-    spotSearchParams?.currentLatitude,
-    spotSearchParams?.departureLongitude,
-    spotSearchParams?.departureLatitude,
-  );
-
   /** 선택한 검색어를 전달하며 이동 */
   const toDepartureMapScreen = (
     title: string,
@@ -106,15 +79,6 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
     }});
   }
 
-  const [, setArrival] = useRecoilState(arrivalState);
-  const toSpotMapScreen = (spots: Spot) => {
-    navigation.goBack();
-    setArrival({
-      name: spots.name,
-      spotId: spots.id,
-    });
-  }
-
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="mx-4 flex-1">
@@ -123,12 +87,6 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
         <View className="mb-3 mt-2">
           <SearchBoxComponent />
         </View>
-
-        {keyword && (
-          <Pressable onPress={() => toSpotMapScreen(spots[0])}>
-            <SpotSearchComponent spotName={spots[0].name} />
-          </Pressable>
-        )}
 
         {/** 추천 검색어 */}
         <View className="flex-1">
@@ -148,6 +106,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
                 distance={item.distance}
+                isFirst={index===0}
               />
             </Pressable>
           ))}
