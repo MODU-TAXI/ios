@@ -58,16 +58,15 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   // 만약 참여하고 있는 상태이고 socket이 connected되지 않았다면 socket 재연결
   useEffect(() => {
     if (roomDetail.participate && !stompClient.current.connected) {
-      connect(roomDetail.roomId);
       setSocketRoomId(roomId);
     }
-  }, [roomDetail, stompClient, roomId, connect, setSocketRoomId]);
+  }, []);
 
   // 방정보 새로고침
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
 
-    Vibration.vibrate(1); // 새로고침시 진동
+    Vibration.vibrate(0.1); // 새로고침시 진동
     await Promise.all([refetchRoomDetail(), refetcParticipateMembers(), refetchWaitingMembers()]);
 
     setRefreshing(false);

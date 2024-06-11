@@ -1,8 +1,9 @@
-import React, { Suspense } from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { Suspense, useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Vibration, RefreshControl } from 'react-native';
+import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 
 import EtcComponent from '@components/Home/Etc';
 import TopComponent from '@components/Home/Top';
@@ -14,6 +15,8 @@ import LoadingComponent from '@components/Common/Loading';
 
 import { roomState, userInfoState } from '@recoil/recoil';
 
+import { getMyChatInfo } from '@server/api/chat';
+
 import { useGetRoomPreview } from '@hooks/api/rooms';
 
 import { HomeScreenProps } from '@type/param/loginStack';
@@ -21,22 +24,40 @@ import { HomeScreenProps } from '@type/param/loginStack';
 const HomeComponent = ({ navigation }: HomeScreenProps) => {
   const userInfo = useRecoilValue(userInfoState);
 
-  const roomId = useRecoilValue(roomState);
+  const [socketRoomId, setSocketRoomId] = useRecoilState(roomState);
 
-  // 여기서는 useQuery 사용하지 않으면 해결될듯 -> 이게 된다음 화면을 그려줘서 문제가 생기는 듯 하다
-  // 이 부분은 youtube 글을 작성하도록 하자... useSuspensequery에 대해
-  const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(roomId);
+  const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(socketRoomId);
 
   // 새로고침시 필요한 변수
   const [refreshing, setRefreshing] = React.useState(false);
 
+  const checkMyRoom = async () => {
+    const response = await getMyChatInfo();
+    const { roomId } = response;
+
+    setSocketRoomId(roomId);
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      checkMyRoom();
+    }, []),
+  );
+
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
 
-    Vibration.vibrate(1); // 새로고침시 진동
+    Vibration.vibrate(0.1); // 새로고침시 진동
 
-    await refetchRoomPreview();
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const response = await getMyChatInfo();
+    const { roomId } = response;
+
+    setSocketRoomId(roomId);
+
+    if (roomId > 0) {
+      await refetchRoomPreview();
+    }
+
     setRefreshing(false);
   }, [refetchRoomPreview]);
 
@@ -53,14 +74,14 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
   };
 
   const toChatRoomScreen = () => {
-    navigation.navigate('RoomDetailScreen', { roomId: roomId });
+    navigation.navigate('RoomDetailScreen', { roomId: socketRoomId });
   };
 
   const toAlarmScreen = () => {
     navigation.navigate('AlarmScreen');
   };
 
-  if (!userInfo || !roomId) return <LoadingComponent />;
+  if (!userInfo || !socketRoomId) return <LoadingComponent />;
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['left', 'right']}>
@@ -69,7 +90,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         userInfo={userInfo}
         toSearchScreen={toSearchScreen}
         toAlarmScreen={toAlarmScreen}
-        roomId={roomId}
+        roomId={socketRoomId}
       />
 
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>

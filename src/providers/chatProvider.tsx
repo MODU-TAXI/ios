@@ -74,10 +74,6 @@ export function ChatProvider({ children }: any) {
   }, [chatIn]);
 
   const connect = (roomId: number) => {
-    if (stompClient.current.connected) {
-      return;
-    }
-
     if (accessToken) {
       // 이미 connect 되어 있을때는 안되게 함
       if (stompClient.current && stompClient.current.connected) {
@@ -92,7 +88,7 @@ export function ChatProvider({ children }: any) {
         debug: function (str) {
           console.log(str);
         },
-        reconnectDelay: 500000,
+        reconnectDelay: 50,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
       });
@@ -108,8 +104,8 @@ export function ChatProvider({ children }: any) {
       };
 
       stompClient.current.onStompError = (error: any) => {
-        const test = new TextDecoder('utf-8').decode(new Uint8Array(error._binaryBody));
-        console.log('stompError:', test);
+        const stompError = new TextDecoder('utf-8').decode(new Uint8Array(error._binaryBody));
+        console.log('stompError:', stompError);
       };
     }
   };
