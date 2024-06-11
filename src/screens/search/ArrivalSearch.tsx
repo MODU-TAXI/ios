@@ -19,13 +19,13 @@ import { useNaverSearch } from '@hooks/api/search';
 import { calculateDist, deleteTagTitle } from '@utils/search';
 
 import { Spot } from '@type/entity/spot';
-import { NaverSearch, SortedItemType } from '@type/entity/search';
-import { SearchScreenProps, ArrivalSearchScreenProps, DepartureSearchScreenProps } from '@type/param/loginStack';
+import { SortedItemType } from '@type/entity/search';
+import { ArrivalSearchScreenProps } from '@type/param/loginStack';
 
 /** 도착 거점 검색 */
 const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
   /** 검색어 저장 변수 */
-  const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
+  const [keyword, ] = useRecoilState<string>(searchKeywordState);
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({
@@ -93,25 +93,27 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
     spotSearchParams?.departureLatitude,
   );
 
-  /** 선택한 검색어를 전달하며 이동 */
+  /** 검색어 선택: 선택한 검색어를 전달하며 이동 */
   const toArrivalMapScreen = (
     title: string,
     latitude: number,
     longitude: number,
   ) => {
-    navigation.navigate('ArrivalMapScreen', {searchParams: {
-      title: title,
-      latitude: latitude,
-      longitude: longitude,
-    }});
+    navigation.navigate('ArrivalMapScreen', {
+      type: 'search',
+      searchParams: {
+        title: title,
+        latitude: latitude,
+        longitude: longitude,
+      }
+    });
   }
 
-  const [, setArrival] = useRecoilState(arrivalState);
-  const toSpotMapScreen = (spots: Spot) => {
-    navigation.goBack();
-    setArrival({
-      name: spots.name,
-      spotId: spots.id,
+  /** 거점 선택: 거점 정보 가져가며 이동 */
+  const toArrivalMapScreenWithSpot = (spot: Spot) => {
+    navigation.navigate('ArrivalMapScreen', {
+      type: 'spot',
+      spot: spot,
     });
   }
 
@@ -125,7 +127,7 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
         </View>
 
         {keyword && (
-          <Pressable onPress={() => toSpotMapScreen(spots[0])}>
+          <Pressable onPress={() => toArrivalMapScreenWithSpot(spots[0])}>
             <SpotSearchComponent spotName={spots[0].name} />
           </Pressable>
         )}
@@ -148,6 +150,7 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
                 distance={item.distance}
+                isFirst={false}
               />
             </Pressable>
           ))}

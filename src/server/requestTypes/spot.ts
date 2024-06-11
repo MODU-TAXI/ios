@@ -3,3 +3,9 @@ export interface CheckSpotRequest {
   longitude: number;
   latitude: number;
 }
+
+export interface GetSpotMapRequest {
+  count: number;
+  searchLongitude: number;
+  searchLatitude: number;
+}

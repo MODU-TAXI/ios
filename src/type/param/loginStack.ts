@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import { Spot } from '@type/entity/spot';
 import { UserPreview } from '@type/entity/user';
 import { SearchResultParams } from '@type/entity/search';
 import { RoomDetail, RoomPreview } from '@type/entity/room';
@@ -23,7 +24,7 @@ export type LoginStackParamList = {
   CreateRoomScreen: undefined;
   DepartureMapScreen: undefined | { searchParams: SearchResultParams };
   DepartureSearchScreen: undefined;
-  ArrivalMapScreen: undefined | { searchParams: SearchResultParams };
+  ArrivalMapScreen: undefined | { type: string, searchParams?: SearchResultParams, spot?: Spot };
   ArrivalSearchScreen: undefined;
 
   // 조회, 수정

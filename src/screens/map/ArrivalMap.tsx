@@ -1,13 +1,16 @@
 import { useRecoilState } from "recoil";
 import { View, Text, Pressable } from "react-native";
-import React, { useRef, useMemo, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React, { useRef, useMemo, useState, useEffect } from "react";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { Camera, NaverMapView, NaverMapViewRef } from "@mj-studio/react-native-naver-map";
+import { Camera, NaverMapView, NaverMapViewRef, NaverMapMarkerOverlay } from "@mj-studio/react-native-naver-map";
 
+import SpotMarker from "@components/Marker/SpotMarker";
 import TransparentSearchBoxComponent from "@components/Search/TransparentSearchBox";
 
 import { arrivalState } from "@recoil/recoil";
+
+import { useGetSpotMap } from "@hooks/api/spot";
 
 import { Spot } from "@type/entity/spot";
 import { ArrivalMapScreenProps } from "@type/param/loginStack";
@@ -19,7 +22,8 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
   const mapRef = useRef<NaverMapViewRef>(null);
   const [searchBoxValue, setSearchBoxValue] = useState<string>("출발지를 입력하세요");
   const [isSearched, setIsSearched] = useState<boolean>(false);
-  const [selectedSpot, setSelectedSpot] = useState<Spot>();
+  const [selectedSpot, setSelectedSpot] = useState<Spot | undefined>(route.params?.spot);
+  const snapPoints = useMemo(() => ['27%'], []);
 
   const [currentCamera, setCurrentCamera] = useState<Camera>({
     latitude: 37.451062,
@@ -27,10 +31,33 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
     zoom: 16,
   });
 
-  const snapPoints = useMemo(() => ['27%'], []);
+  useEffect(() => {
+    if (route.params?.type === "spot" && route.params.spot) {
+      setSelectedSpot(route.params.spot);
+      setCurrentCamera({
+        latitude: route.params.spot?.latitude,
+        longitude: route.params.spot?.longitude,
+        zoom: 16,
+      });
+    } else if (route.params?.type === "search" && route.params.searchParams) {
+      setSelectedSpot(undefined);
+      setCurrentCamera({
+        latitude: route.params.searchParams?.latitude,
+        longitude: route.params.searchParams?.longitude,
+        zoom: 16,
+      });
+    }
+  }, []);
+
+  // 거점 3개와 distance
+  const { spots, refetch } = useGetSpotMap({
+    "count": 3,
+    "searchLongitude": currentCamera.longitude,
+    "searchLatitude": currentCamera.latitude,
+  });
 
   const handleCameraChange = () => {
-    console.log()
+    setSelectedSpot(undefined);
   }
 
   const toBack = () => {
@@ -63,9 +90,18 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
         locale="ko"
         isShowLocationButton={false}
         isShowScaleBar={false}
+        isShowZoomControls={false}
         logoAlign="BottomLeft"
         onCameraChanged={handleCameraChange}
-      />
+      >
+        <NaverMapMarkerOverlay
+          latitude={currentCamera.latitude}
+          longitude={currentCamera.longitude}
+          anchor={{ x: 0.5, y: 0.5 }}
+        >
+          <SpotMarker selected={false} spotName="주안역" />
+        </NaverMapMarkerOverlay>
+      </NaverMapView>
 
       {/** 검색창 */}
       <View
@@ -115,7 +151,7 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
           className="flex-1 items-center"
         >
           <View className="flex-1 flex-col px-6 py-2">
-            {/** 출발지 설정 버튼 */}
+            {/** 도착지 설정 버튼 */}
             <Pressable
               className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-main"
               onPress={() => handleSelectSpot}
