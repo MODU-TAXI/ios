@@ -61,6 +61,7 @@ export type NaverMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'N
 export type SearchScreenProps = NativeStackScreenProps<LoginStackParamList, 'SearchScreen'>;
 export type ChatRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'ChatRoomScreen'>;
 export type AlarmScreenProps = NativeStackScreenProps<LoginStackParamList, 'AlarmScreen'>;
+export type MyPageScreenProps = NativeStackScreenProps<LoginStackParamList, 'MyPageScreen'>;
 
 // 생성 페이지들
 export type CreateRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateRoomScreen'>;
