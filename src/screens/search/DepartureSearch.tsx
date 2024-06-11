@@ -1,31 +1,27 @@
 import { useRecoilState } from 'recoil';
 import { View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { convertCoordinates, getCurrentLocation } from '../../utils/map';
 
 import SearchBoxComponent from '@components/Search/SearchBox';
-import SpotSearchComponent from '@components/Search/SpotSearch';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 
-import { arrivalState, searchKeywordState } from '@recoil/recoil';
+import { searchKeywordState } from '@recoil/recoil';
 
-import { useGetSpotList } from '@hooks/api/spot';
 import { useNaverSearch } from '@hooks/api/search';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
 
-import { Spot } from '@type/entity/spot';
-import { NaverSearch, SortedItemType } from '@type/entity/search';
-import { SearchScreenProps, DepartureSearchScreenProps } from '@type/param/loginStack';
+import { SortedItemType } from '@type/entity/search';
+import { DepartureSearchScreenProps } from '@type/param/loginStack';
 
 /** 출발지 검색: 거점검색 기능 제외 */
 const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
   /** 검색어 저장 변수 */
-  const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
+  const [keyword, ] = useRecoilState<string>(searchKeywordState);
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({

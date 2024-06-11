@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import React from 'react';
+import { View, Text } from 'react-native';
 
 import { modifyDistStr } from '@utils/search';
 

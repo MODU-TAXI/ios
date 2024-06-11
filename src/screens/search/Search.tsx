@@ -8,7 +8,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { convertCoordinates, getCurrentLocation } from '../../utils/map';
 
 import SearchBoxComponent from '@components/Search/SearchBox';
-import SpotSearchComponent from '@components/Search/SpotSearch';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 
 import { arrivalState, searchKeywordState } from '@recoil/recoil';
@@ -84,14 +83,6 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
     }
   }, [sortedItems])
 
-  const { spots, refetch: refetchSpotList } = useGetSpotList(
-    1, 1, 
-    spotSearchParams?.currentLongitude,
-    spotSearchParams?.currentLatitude,
-    spotSearchParams?.departureLongitude,
-    spotSearchParams?.departureLatitude,
-  );
-
   /** 선택한 검색어를 전달하며 이동 */
   const toDepartureMapScreen = (
     title: string,
@@ -123,12 +114,6 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
           <SearchBoxComponent />
         </View>
 
-        {keyword && (
-          <Pressable onPress={() => toSpotMapScreen(spots[0])}>
-            <SpotSearchComponent spotName={spots[0].name} />
-          </Pressable>
-        )}
-
         {/** 추천 검색어 */}
         <View className="flex-1">
           {sortedItems && 
@@ -147,6 +132,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
                 distance={item.distance}
+                isFirst={index === 0}
               />
             </Pressable>
           ))}
