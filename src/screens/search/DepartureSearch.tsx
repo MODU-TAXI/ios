@@ -4,16 +4,15 @@ import React, { useState, useEffect } from 'react';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { convertCoordinates, getCurrentLocation } from '../../utils/map';
-
-import SearchBoxComponent from '@components/Search/SearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
+import DepartureSearchBoxComponent from '@components/Search/DepartureSearchBox';
 
 import { searchKeywordState } from '@recoil/recoil';
 
 import { useNaverSearch } from '@hooks/api/search';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
+import { convertCoordinates, getCurrentLocation } from '@utils/map';
 
 import { SortedItemType } from '@type/entity/search';
 import { DepartureSearchScreenProps } from '@type/param/loginStack';
@@ -81,7 +80,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
         
         {/** 검색창 */}
         <View className="mb-3 mt-2">
-          <SearchBoxComponent />
+          <DepartureSearchBoxComponent />
         </View>
 
         {/** 추천 검색어 */}

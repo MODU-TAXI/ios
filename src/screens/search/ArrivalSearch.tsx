@@ -5,10 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { convertCoordinates, getCurrentLocation } from '../../utils/map';
-
-import SearchBoxComponent from '@components/Search/SearchBox';
 import SpotSearchComponent from '@components/Search/SpotSearch';
+import ArrivalSearchBoxComponent from '@components/Search/ArrivalSearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 
 import { arrivalState, searchKeywordState } from '@recoil/recoil';
@@ -17,6 +15,7 @@ import { useGetSpotList } from '@hooks/api/spot';
 import { useNaverSearch } from '@hooks/api/search';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
+import { convertCoordinates, getCurrentLocation } from '@utils/map';
 
 import { Spot } from '@type/entity/spot';
 import { SortedItemType } from '@type/entity/search';
@@ -123,7 +122,7 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
         
         {/** 검색창 */}
         <View className="mb-3 mt-2">
-          <SearchBoxComponent />
+          <ArrivalSearchBoxComponent />
         </View>
 
         {keyword && (
