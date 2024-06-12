@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 import { useRecoilState } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState, Suspense, useCallback } from 'react';
 import { View, Text, Vibration, RefreshControl } from 'react-native';
-import React, { useState, Suspense, useEffect, useCallback } from 'react';
 
 import ButtonComponent from '@components/Button';
 import LoadingComponent from '@components/Common/Loading';
@@ -32,8 +32,6 @@ dayjs.locale('ko');
 const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const { roomId } = route.params;
 
-  // const { connect, disConnect, stompClient } = useChatContext();
-
   const [, setSocketRoomId] = useRecoilState(roomState);
   const [refreshing, setRefreshing] = useState(false); // 새로고침시 필요한 변수
 
@@ -52,13 +50,6 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     useApproveJoinRoom(roomId); // 방 입장 수락 mutate
   const { mutateAsync: deleteRoomMutate, isPending: deleteRoomPending } = useDeleteRoom(roomId); // 방 삭제 mutate
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
-
-  // 만약 참여하고 있는 상태이고 socket이 connected되지 않았다면 socket 재연결
-  // useEffect(() => {
-  //   if (roomDetail.participate && !stompClient.current.connected) {
-  //     setSocketRoomId(roomId);
-  //   }
-  // }, []);
 
   // 방정보 새로고침
   const onRefresh = React.useCallback(async () => {
@@ -104,7 +95,6 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
 
     // socket RoomId도 -1로 초기화
     setSocketRoomId(-1);
-    // disConnect();
 
     // stack을 지우며 해당 roomDetail로 이동
     navigation.reset({

@@ -1,9 +1,8 @@
+import { useRecoilValue } from 'recoil';
 import Config from 'react-native-config';
 import TextEncodingPolyfill from 'text-encoding';
 import StompJs, { Message } from '@stomp/stompjs';
 import ImageView from 'react-native-image-viewing';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, AppState, KeyboardAvoidingView } from 'react-native';
 import React, { useRef, Suspense, useState, useEffect, useCallback } from 'react';
@@ -18,7 +17,7 @@ import ChatErrorBoundary from '@components/Fallback/ChatErrorBoundary';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 
 import { MessageBody } from '@recoil/type';
-import { memberIdState, messagesState, userInfoState } from '@recoil/recoil';
+import { userInfoState } from '@recoil/recoil';
 
 import { refreshAccessToken } from '@server/api/member';
 
@@ -89,6 +88,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   // 메세지 받기
   const onMessageReceived = (message: Message) => {
     const newMessage: MessageBody = JSON.parse(message.body);
+
     setNewMeesages((prev: MessageBody[]) => [...prev, newMessage]);
   };
 

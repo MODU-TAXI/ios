@@ -1,9 +1,9 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Vibration, RefreshControl } from 'react-native';
-import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 
 import EtcComponent from '@components/Home/Etc';
 import TopComponent from '@components/Home/Top';
@@ -26,11 +26,6 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
   const [socketRoomId, setSocketRoomId] = useRecoilState(roomState);
 
-  const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(socketRoomId);
-
-  // 새로고침시 필요한 변수
-  const [refreshing, setRefreshing] = React.useState(false);
-
   const checkMyRoom = async () => {
     const response = await getMyChatInfo();
     const { roomId } = response;
@@ -43,6 +38,11 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
       checkMyRoom();
     }, []),
   );
+
+  const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(socketRoomId);
+
+  // 새로고침시 필요한 변수
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);

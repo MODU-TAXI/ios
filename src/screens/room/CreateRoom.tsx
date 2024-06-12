@@ -43,7 +43,6 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
   const [passangersNumber, setPassengersNumber] = useState<number | null>(null); // 탑승 인원
   const [checkedCategorys, setCheckedCategorys] = useState<boolean[]>([false, false, false]); // 카테고리
-  // const { connect } = useChatContext();
 
   // 파티 생성
   const createMatch = async () => {
@@ -68,7 +67,6 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
       wishHeadcount: passangersNumber,
     });
 
-    // connect(room.roomId);
     setSocketRoomId(room.roomId);
 
     // 출발지, 도착지 초기화
