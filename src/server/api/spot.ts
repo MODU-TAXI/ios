@@ -5,8 +5,8 @@ import {
   DeleteAxiosInstance,
 } from '@axios/axios.method';
 
-import { CheckSpotRequest } from '@server/requestTypes/spot';
-import { CheckSpotResponse, GetSpotListResponse } from '@server/responseTypes/spot';
+import { CheckSpotRequest, GetSpotMapRequest } from '@server/requestTypes/spot';
+import { CheckSpotResponse, GetSpotMapResponse, GetSpotListResponse } from '@server/responseTypes/spot';
 
 export const checkSpot = async ({
   id,
@@ -36,6 +36,19 @@ export const getSpotList = async (
       currentLatitude: currentLatitude,
       searchLongitude: searchLongitude,
       searchLatitude: searchLatitude,
+    },
+  });
+  return response.data;
+}
+
+export const getSpotMap = async (
+  data: GetSpotMapRequest
+): Promise<GetSpotMapResponse> => {
+  const response = await GetAxiosInstance<GetSpotMapResponse>(`/api/spots/map`, {
+    params: {
+      count: data.count,
+      searchLongitude: data.searchLongitude,
+      searchLatitude: data.searchLatitude,
     },
   });
   return response.data;

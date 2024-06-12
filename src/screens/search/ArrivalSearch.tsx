@@ -5,9 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { convertCoordinates, getCurrentLocation } from '../../utils/map';
-
-import SearchBoxComponent from '@components/Search/SearchBox';
+import SpotSearchComponent from '@components/Search/SpotSearch';
+import ArrivalSearchBoxComponent from '@components/Search/ArrivalSearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 
 import { arrivalState, searchKeywordState } from '@recoil/recoil';
@@ -16,14 +15,16 @@ import { useGetSpotList } from '@hooks/api/spot';
 import { useNaverSearch } from '@hooks/api/search';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
+import { convertCoordinates, getCurrentLocation } from '@utils/map';
 
 import { Spot } from '@type/entity/spot';
-import { SearchScreenProps } from '@type/param/loginStack';
-import { NaverSearch, SortedItemType } from '@type/entity/search';
+import { SortedItemType } from '@type/entity/search';
+import { ArrivalSearchScreenProps } from '@type/param/loginStack';
 
-const SearchScreen = ({ navigation }: SearchScreenProps) => {
+/** 도착 거점 검색 */
+const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
   /** 검색어 저장 변수 */
-  const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
+  const [keyword, ] = useRecoilState<string>(searchKeywordState);
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({
@@ -83,25 +84,35 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
     }
   }, [sortedItems])
 
-  /** 선택한 검색어를 전달하며 이동 */
-  const toDepartureMapScreen = (
+  const { spots, refetch: refetchSpotList } = useGetSpotList(
+    1, 1, 
+    spotSearchParams?.currentLongitude,
+    spotSearchParams?.currentLatitude,
+    spotSearchParams?.departureLongitude,
+    spotSearchParams?.departureLatitude,
+  );
+
+  /** 검색어 선택: 선택한 검색어를 전달하며 이동 */
+  const toArrivalMapScreen = (
     title: string,
     latitude: number,
     longitude: number,
   ) => {
-    navigation.navigate('DepartureMapScreen', {searchParams: {
-      title: title,
-      latitude: latitude,
-      longitude: longitude,
-    }});
+    navigation.navigate('ArrivalMapScreen', {
+      type: 'search',
+      searchParams: {
+        title: title,
+        latitude: latitude,
+        longitude: longitude,
+      }
+    });
   }
 
-  const [, setArrival] = useRecoilState(arrivalState);
-  const toSpotMapScreen = (spots: Spot) => {
-    navigation.goBack();
-    setArrival({
-      name: spots.name,
-      spotId: spots.id,
+  /** 거점 선택: 거점 정보 가져가며 이동 */
+  const toArrivalMapScreenWithSpot = (spot: Spot) => {
+    navigation.navigate('ArrivalMapScreen', {
+      type: 'spot',
+      spot: spot,
     });
   }
 
@@ -111,8 +122,14 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
         
         {/** 검색창 */}
         <View className="mb-3 mt-2">
-          <SearchBoxComponent />
+          <ArrivalSearchBoxComponent />
         </View>
+
+        {keyword && (
+          <Pressable onPress={() => toArrivalMapScreenWithSpot(spots[0])}>
+            <SpotSearchComponent spotName={spots[0].name} />
+          </Pressable>
+        )}
 
         {/** 추천 검색어 */}
         <View className="flex-1">
@@ -120,7 +137,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
           sortedItems.map((item, index) => (
             <Pressable
               key={index}
-              onPress={() => toDepartureMapScreen(
+              onPress={() => toArrivalMapScreen(
                 deleteTagTitle(item.title),
                 item.latitude,
                 item.longitude,
@@ -132,7 +149,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
                 distance={item.distance}
-                isFirst={index === 0}
+                isFirst={false}
               />
             </Pressable>
           ))}
@@ -142,4 +159,4 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
   );
 };
 
-export default SearchScreen;
+export default ArrivalSearchScreen;

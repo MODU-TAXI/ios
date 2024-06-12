@@ -1,8 +1,9 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import { Spot } from '@type/entity/spot';
 import { UserPreview } from '@type/entity/user';
+import { SearchResultParams } from '@type/entity/search';
 import { RoomDetail, RoomPreview } from '@type/entity/room';
-import { DepartureSearchParams } from '@type/entity/search';
 
 export type TabNavigatorParamList = {
   HomeScreen: undefined;
@@ -16,13 +17,19 @@ export type LoginStackParamList = {
   MainMapScreen: undefined;
   NaverMapScreen: undefined;
   SearchScreen: undefined;
-  DepartureMapScreen: undefined | { searchParams: DepartureSearchParams };
-  ArrivalMapScreen: undefined;
-  CreateRoomScreen: undefined;
-  RoomDetailScreen: { roomId: number };
-  PatchRoomScreen: { roomDetail: RoomDetail };
   ChatRoomScreen: { roomId: number };
   AlarmScreen: undefined;
+
+  // 생성
+  CreateRoomScreen: undefined;
+  DepartureMapScreen: undefined | { searchParams: SearchResultParams };
+  DepartureSearchScreen: undefined;
+  ArrivalMapScreen: undefined | { type: string, searchParams?: SearchResultParams, spot?: Spot };
+  ArrivalSearchScreen: undefined;
+
+  // 조회, 수정
+  RoomDetailScreen: { roomId: number };
+  PatchRoomScreen: { roomDetail: RoomDetail };
   MyPageScreen: undefined;
 
   // 정산
@@ -52,17 +59,23 @@ export type HomeScreenProps = NativeStackScreenProps<LoginStackParamList, 'HomeS
 export type MainMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'MainMapScreen'>;
 export type NaverMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'NaverMapScreen'>;
 export type SearchScreenProps = NativeStackScreenProps<LoginStackParamList, 'SearchScreen'>;
+export type ChatRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'ChatRoomScreen'>;
+export type AlarmScreenProps = NativeStackScreenProps<LoginStackParamList, 'AlarmScreen'>;
+export type MyPageScreenProps = NativeStackScreenProps<LoginStackParamList, 'MyPageScreen'>;
+
+// 생성 페이지들
+export type CreateRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateRoomScreen'>;
 export type DepartureMapScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'DepartureMapScreen'
 >;
+export type DepartureSearchScreenProps = NativeStackScreenProps<LoginStackParamList,'DepartureSearchScreen'>;
 export type ArrivalMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'ArrivalMapScreen'>;
-export type CreateRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateRoomScreen'>;
+export type ArrivalSearchScreenProps = NativeStackScreenProps<LoginStackParamList, 'ArrivalSearchScreen'>;
+
+// 조회, 수정
 export type RoomDetailScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomDetailScreen'>;
 export type PatchRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'PatchRoomScreen'>;
-export type ChatRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'ChatRoomScreen'>;
-export type MyPageScreenProps = NativeStackScreenProps<LoginStackParamList, 'MyPageScreen'>;
-export type AlarmScreenProps = NativeStackScreenProps<LoginStackParamList, 'AlarmScreen'>;
 
 // 정산 페이지들
 export type CheckDepartureScreenProps = NativeStackScreenProps<

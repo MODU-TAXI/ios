@@ -1,29 +1,26 @@
 import { useRecoilState } from 'recoil';
 import { View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { convertCoordinates, getCurrentLocation } from '../../utils/map';
-
-import SearchBoxComponent from '@components/Search/SearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
+import DepartureSearchBoxComponent from '@components/Search/DepartureSearchBox';
 
-import { arrivalState, searchKeywordState } from '@recoil/recoil';
+import { searchKeywordState } from '@recoil/recoil';
 
-import { useGetSpotList } from '@hooks/api/spot';
 import { useNaverSearch } from '@hooks/api/search';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
+import { convertCoordinates, getCurrentLocation } from '@utils/map';
 
-import { Spot } from '@type/entity/spot';
-import { SearchScreenProps } from '@type/param/loginStack';
-import { NaverSearch, SortedItemType } from '@type/entity/search';
+import { SortedItemType } from '@type/entity/search';
+import { DepartureSearchScreenProps } from '@type/param/loginStack';
 
-const SearchScreen = ({ navigation }: SearchScreenProps) => {
+/** 출발지 검색: 거점검색 기능 제외 */
+const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
   /** 검색어 저장 변수 */
-  const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
+  const [keyword, ] = useRecoilState<string>(searchKeywordState);
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({
@@ -64,25 +61,6 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
     }
   }, [items, currentLocation])
 
-  const [spotSearchParams, setSpotSearchParams] = useState({
-    currentLongitude: currentLocation.longitude,
-    currentLatitude: currentLocation.latitude,
-    departureLongitude: currentLocation.longitude,
-    departureLatitude: currentLocation.latitude,
-  });
-
-  // sortedItems 바뀔 때마다 거점탐색의 파라미터 변경
-  useEffect(() => {
-    if (sortedItems.length > 0) {
-      setSpotSearchParams({
-        currentLongitude: currentLocation.longitude,
-        currentLatitude: currentLocation.latitude,
-        departureLongitude: sortedItems[0].longitude,
-        departureLatitude: sortedItems[0].latitude,
-      })
-    }
-  }, [sortedItems])
-
   /** 선택한 검색어를 전달하며 이동 */
   const toDepartureMapScreen = (
     title: string,
@@ -96,22 +74,13 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
     }});
   }
 
-  const [, setArrival] = useRecoilState(arrivalState);
-  const toSpotMapScreen = (spots: Spot) => {
-    navigation.goBack();
-    setArrival({
-      name: spots.name,
-      spotId: spots.id,
-    });
-  }
-
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="mx-4 flex-1">
         
         {/** 검색창 */}
         <View className="mb-3 mt-2">
-          <SearchBoxComponent />
+          <DepartureSearchBoxComponent />
         </View>
 
         {/** 추천 검색어 */}
@@ -132,7 +101,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
                 distance={item.distance}
-                isFirst={index === 0}
+                isFirst={index===0}
               />
             </Pressable>
           ))}
@@ -142,4 +111,4 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
   );
 };
 
-export default SearchScreen;
+export default DepartureSearchScreen;

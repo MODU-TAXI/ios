@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import React from 'react';
+import { View, Text } from 'react-native';
 
 import { modifyDistStr } from '@utils/search';
 
@@ -9,6 +9,7 @@ interface RecommendedSearchProps {
   fullKeyword: string;
   address: string;
   distance: number;
+  isFirst: boolean;
 }
 
 /** 추천 검색어 컴포넌트 */
@@ -17,6 +18,7 @@ const RecommendedSearchComponent: React.FC<RecommendedSearchProps> = ({
   fullKeyword,
   address,
   distance,
+  isFirst
 }) => {
   // 키워드가 포함된 부분을 찾아서 하이라이트 처리
   const highlightKeyword = (text: string, keyword: string) => {
@@ -35,7 +37,7 @@ const RecommendedSearchComponent: React.FC<RecommendedSearchProps> = ({
   };
 
   return (
-    <View className="flex flex-row items-center border-t border-gray100 py-3">
+    <View className={`flex flex-row items-center ${!isFirst && "border-t border-gray100"} py-3`}>
         <View className='ml-2 flex flex-col'>
 
             <View className='mb-1 flex flex-row items-center'>

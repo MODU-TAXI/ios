@@ -19,3 +19,14 @@ export interface GetSpotListResponse {
     liked: boolean; 
   }[]
 }
+
+export interface GetSpotMapResponse {
+  distance: number;
+  spots: {
+    id: number;
+    name: string;
+    address: string;
+    longitude: number;
+    latitude: number;
+  }[]
+};

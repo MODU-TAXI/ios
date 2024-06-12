@@ -13,6 +13,7 @@ import { useReverseGeocoding } from "@hooks/api/search";
 
 import { getCurrentLocation } from "@utils/map";
 
+import { SearchResultParams } from "@type/entity/search";
 import { DepartureMapScreenProps } from "@type/param/loginStack";
 
 import MapPin from '@assets/images/Map/MapPin.svg';
@@ -27,7 +28,7 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
   const [searchBoxValue, setSearchBoxValue] = useState<string>("출발지를 입력하세요");
   const [isSearched, setIsSearched] = useState<boolean>(false);
   const [, setDeparture] = useRecoilState(departureState);
-  const [builingName, setBuildingName] = useState<string>('');
+  const [searchParams, setSearchParams] = useState<SearchResultParams | undefined>(route.params?.searchParams);
 
   const [currentCamera, setCurrentCamera] = useState<Camera>({
     latitude: 37.451062,
@@ -36,17 +37,22 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
   });
 
   useEffect(() => {
-    if (route.params) {
+    if (route.params?.searchParams) {
+      setSearchParams(route.params.searchParams);
+    }
+  }, [route.params?.searchParams]);
+
+  // 검색결과 설정 이후 값 저장
+  useEffect(() => {
+    if (searchParams) {
       const searchCamera: Camera = {
-        latitude: route.params?.searchParams.latitude,
-        longitude: route.params?.searchParams.longitude,
+        latitude: searchParams.latitude,
+        longitude: searchParams.longitude,
         zoom: 16,
       }
       mapRef.current?.animateCameraTo(searchCamera);
-      setBuildingName(route.params?.searchParams.title);
     }
-  }, [route.params])
-
+  }, [searchParams])
 
   const { results, refetch } = useReverseGeocoding(
     currentCamera.latitude, 
@@ -80,6 +86,10 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
       clearTimeout(timeoutRef.current);
     }
 
+    if (route.params?.searchParams) {
+      resetSearchParams();
+    }
+
     // 조정된 센터 저장
     setCurrentCamera({
       latitude: e.latitude,
@@ -103,13 +113,12 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
     });
 
     mapRef.current?.animateCameraTo(currentLocation);
-    refetch();
   }
 
   /** 빌딩 이름 유무에 따른 렌더링 */
   const formatBuildingName = () => {
-    if (route.params) {
-      return route.params?.searchParams.title;
+    if (searchParams) {
+      return searchParams.title;
     }
 
     const value = results?.[1]?.land.addition0.value;
@@ -164,8 +173,13 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
     navigation.goBack();
   }
 
+  /** searchParams 초기화 */
+  const resetSearchParams = () => {
+    setSearchParams(undefined);
+  };
+
   const toSearchScreen = () => {
-    navigation.navigate('SearchScreen');
+    navigation.navigate('DepartureSearchScreen');
   }
 
   const toBack = () => {
@@ -187,6 +201,7 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
           locale="ko"
           isShowLocationButton={false}
           isShowScaleBar={false}
+          isShowZoomControls={false}
           logoAlign="BottomLeft"
           onCameraChanged={handleCameraChange}
         />

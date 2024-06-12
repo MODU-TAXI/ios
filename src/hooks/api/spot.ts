@@ -1,11 +1,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Coord } from '@mj-studio/react-native-naver-map';
 
-import { checkSpot, getSpotList } from '@server/api/spot';
-import { CheckSpotRequest } from '@server/requestTypes/spot';
-import { GetSpotListResponse } from '@server/responseTypes/spot';
+import { checkSpot, getSpotMap, getSpotList } from '@server/api/spot';
+import { CheckSpotRequest, GetSpotMapRequest } from '@server/requestTypes/spot';
+import { GetSpotMapResponse, GetSpotListResponse } from '@server/responseTypes/spot';
 
-import { Spot } from '@type/entity/spot';
+import { Spot, SpotMap } from '@type/entity/spot';
 
 export const fetchSpot = async (
   id: number,
@@ -62,4 +62,19 @@ export const useGetSpotList = (
     },
   });
   return { spots, refetch };
+}
+
+export const useGetSpotMap = (
+  data: GetSpotMapRequest
+): { spotData: SpotMap; refetch: () => void } => {
+  const { data: spotData, refetch } = useSuspenseQuery({
+    queryKey: [`/api/spots/map`, data.count, data.searchLongitude, data.searchLatitude],
+    queryFn: () =>
+      getSpotMap(data),
+    select: (response: GetSpotMapResponse) => {
+      console.log(response);
+      return response;
+    },
+  });
+  return { spotData, refetch };
 }

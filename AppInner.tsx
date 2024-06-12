@@ -3,6 +3,10 @@ import { useRecoilState } from 'recoil';
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import ArrivalMapScreen from 'src/screens/map/ArrivalMap';
+import ArrivalSearchScreen from 'src/screens/search/ArrivalSearch';
+import DepartureSearchScreen from 'src/screens/search/DepartureSearch';
+
 import TestScreen from './src/screens/test';
 import MainScreen from './src/screens/main/Main';
 import HomeScreen from './src/screens/home/Home';
@@ -51,6 +55,7 @@ import { onMessageReceivedBackground } from '@utils/fcm';
 
 import { RootStackParamList } from '@type/param/rootStack';
 import { LoginStackParamList } from '@type/param/loginStack';
+
 // Background에서 FCM Message 수신
 messaging().setBackgroundMessageHandler(onMessageReceivedBackground);
 
@@ -77,13 +82,20 @@ function AppInner() {
         <LogInStack.Screen name="MyPageScreen" component={MyPageScreen} />
         <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
         <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
-        <LogInStack.Screen name="DepartureMapScreen" component={DepartureMapScreen} />
-        <LogInStack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
-        <LogInStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
-        <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
-        <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
         <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
         <LogInStack.Screen name="AlarmScreen" component={AlarmScreen} />
+
+        {/* 생성 Screen */}
+        <LogInStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
+        <LogInStack.Screen name="DepartureMapScreen" component={DepartureMapScreen} />
+        <LogInStack.Screen name="DepartureSearchScreen" component={DepartureSearchScreen} />
+        <LogInStack.Screen name="ArrivalMapScreen" component={ArrivalMapScreen} />
+        <LogInStack.Screen name="ArrivalSearchScreen" component={ArrivalSearchScreen} />
+        <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
+
+        {/* 조회, 수정 Screen */}
+        <LogInStack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
+        <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
 
         {/* 정산 Screen */}
         <LogInStack.Screen name="CheckDepartureScreen" component={CheckDepartureScreen} />
