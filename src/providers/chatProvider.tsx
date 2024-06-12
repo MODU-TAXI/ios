@@ -4,8 +4,6 @@ import StompJs, { Message } from '@stomp/stompjs';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import React, { useRef, useEffect, useContext, createContext } from 'react';
 
-import LoadingComponent from '@components/Common/Loading';
-
 import { roomState, chatInState, messagesState, memberIdState } from '@recoil/recoil';
 
 import { getMyChatInfo } from '@server/api/chat';

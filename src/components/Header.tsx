@@ -7,16 +7,12 @@ import CloseButton from '@assets/images/Header/CloseButton.svg';
 
 interface HeaderComponentProps {
   title: string;
-  clearMessages?: () => void;
 }
 
-const HeaderComponent: React.FC<HeaderComponentProps> = ({ title, clearMessages }) => {
+const HeaderComponent: React.FC<HeaderComponentProps> = ({ title }) => {
   const navigation = useNavigation();
 
   const goBack = () => {
-    if (clearMessages) {
-      clearMessages();
-    }
     navigation.goBack();
   };
 
