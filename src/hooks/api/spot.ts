@@ -66,14 +66,15 @@ export const useGetSpotList = (
 
 export const useGetSpotMap = (
   data: GetSpotMapRequest
-): { spots: SpotMap; refetch: () => void } => {
-  const { data: spots, refetch } = useSuspenseQuery({
+): { spotData: SpotMap; refetch: () => void } => {
+  const { data: spotData, refetch } = useSuspenseQuery({
     queryKey: [`/api/spots/map`, data.count, data.searchLongitude, data.searchLatitude],
     queryFn: () =>
       getSpotMap(data),
     select: (response: GetSpotMapResponse) => {
+      console.log(response);
       return response;
     },
   });
-  return { spots, refetch };
+  return { spotData, refetch };
 }

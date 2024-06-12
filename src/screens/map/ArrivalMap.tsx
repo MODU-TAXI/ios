@@ -15,12 +15,14 @@ import { useGetSpotMap } from "@hooks/api/spot";
 import { Spot } from "@type/entity/spot";
 import { ArrivalMapScreenProps } from "@type/param/loginStack";
 
+import SpotPinSvg from "@assets/images/Map/spotPin.svg";
+import SpotPinGraySvg from "@assets/images/Map/spotPinGray.svg";
 import ChevronBackwardCircle from '@assets/images/Map/chevronBackwardCircle.svg';
 
 const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
   const insets = useSafeAreaInsets();
   const mapRef = useRef<NaverMapViewRef>(null);
-  const [searchBoxValue, setSearchBoxValue] = useState<string>("출발지를 입력하세요");
+  const [searchBoxValue, setSearchBoxValue] = useState<string>("도착지를 입력하세요");
   const [isSearched, setIsSearched] = useState<boolean>(false);
   const [selectedSpot, setSelectedSpot] = useState<Spot | undefined>(route.params?.spot);
   const snapPoints = useMemo(() => ['27%'], []);
@@ -28,7 +30,7 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
   const [currentCamera, setCurrentCamera] = useState<Camera>({
     latitude: 37.451062,
     longitude: 126.656496,
-    zoom: 16,
+    zoom: 14,
   });
 
   useEffect(() => {
@@ -37,28 +39,37 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
       setCurrentCamera({
         latitude: route.params.spot?.latitude,
         longitude: route.params.spot?.longitude,
-        zoom: 16,
+        zoom: 14,
       });
     } else if (route.params?.type === "search" && route.params.searchParams) {
       setSelectedSpot(undefined);
       setCurrentCamera({
         latitude: route.params.searchParams?.latitude,
         longitude: route.params.searchParams?.longitude,
-        zoom: 16,
+        zoom: 14,
       });
     }
   }, []);
 
+  useEffect(() => {
+    route.params && mapRef.current?.animateCameraTo(currentCamera);
+  }, [currentCamera])
+
   // 거점 3개와 distance
-  const { spots, refetch } = useGetSpotMap({
+  const { spotData, refetch } = useGetSpotMap({
     "count": 3,
     "searchLongitude": currentCamera.longitude,
     "searchLatitude": currentCamera.latitude,
   });
 
-  const handleCameraChange = () => {
-    setSelectedSpot(undefined);
+  const handleSelectSpot = (spot: Spot) => {
+    setSelectedSpot(spot);
+    console.log(spot);
   }
+
+  useEffect(() => {
+    console.log(selectedSpot)
+  }, [selectedSpot])
 
   const toBack = () => {
     navigation.goBack();
@@ -70,7 +81,7 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
   
   // 도착 거점을 저장하며 이동
   const [, setArrival] = useRecoilState(arrivalState);
-  const handleSelectSpot = () => {
+  const handleSelectArrival = () => {
     navigation.navigate('CreateRoomScreen');
     if (selectedSpot) {
       setArrival({
@@ -92,15 +103,33 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
         isShowScaleBar={false}
         isShowZoomControls={false}
         logoAlign="BottomLeft"
-        onCameraChanged={handleCameraChange}
       >
-        <NaverMapMarkerOverlay
-          latitude={currentCamera.latitude}
-          longitude={currentCamera.longitude}
-          anchor={{ x: 0.5, y: 0.5 }}
-        >
-          <SpotMarker selected={false} spotName="주안역" />
-        </NaverMapMarkerOverlay>
+        {spotData.spots
+          .filter((spot) => spot.id === selectedSpot?.id)
+          .map((spot, index) => (
+            <NaverMapMarkerOverlay
+              key={`selected-${spot.id}`}
+              latitude={spot.latitude}
+              longitude={spot.longitude}
+              anchor={{ x: 0.5, y: 0.5 }}
+              onTap={() => handleSelectSpot(spot)}
+            >
+              <SpotMarker selected={true} spotName={spot.name} />
+            </NaverMapMarkerOverlay>
+          ))}
+        {spotData.spots
+          .filter((spot) => spot.id !== selectedSpot?.id)
+          .map((spot, index) => (
+            <NaverMapMarkerOverlay
+              key={`unselected-${spot.id}`}
+              latitude={spot.latitude}
+              longitude={spot.longitude}
+              anchor={{ x: 0.5, y: 0.5 }}
+              onTap={() => handleSelectSpot(spot)}
+            >
+              <SpotMarker selected={false} spotName={spot.name} />
+            </NaverMapMarkerOverlay>
+          ))}
       </NaverMapView>
 
       {/** 검색창 */}
@@ -151,13 +180,47 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
           className="flex-1 items-center"
         >
           <View className="flex-1 flex-col px-6 py-2">
+            {selectedSpot ? (
+              <View className="flex-1">
+                <Text className="mb-2 font-medium text-base text-boxFont">도착지</Text>
+                <View className="flex flex-row items-center">
+                  <SpotPinSvg width={15} height={20} />
+                  <Text className="ml-1 text-lg font-semibold text-main">
+                    {selectedSpot.name}
+                  </Text>
+                </View>
+                <Text className="text-gray600">
+                  {selectedSpot.address}
+                </Text>
+                <Pressable
+                  className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-main"
+                  onPress={() => handleSelectArrival()}
+                >
+                  <Text className="font-semibold text-white">도착지로 설정</Text>
+                </Pressable>
+              </View>
+            ) : (
+              <View className="flex-1">
+                <Text className="mb-2 font-medium text-base text-boxFont">근처 거점 포인트를 선택해주세요!</Text>
+                <View className="flex flex-row items-center">
+                  <SpotPinGraySvg width={15} height={20} />
+                  <Text className="ml-1 text-lg font-semibold text-gray500">
+                    거점지를 선택해주세요
+                  </Text>
+                </View>
+                <Text className="text-sm text-gray600">
+                  -
+                </Text>
+                <Pressable
+                  className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-gray500"
+                  disabled={true}
+                >
+                  <Text className="font-semibold text-white">도착지로 설정</Text>
+                </Pressable>
+              </View>
+            )}
+
             {/** 도착지 설정 버튼 */}
-            <Pressable
-              className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-main"
-              onPress={() => handleSelectSpot}
-            >
-              <Text className="font-semibold text-white">도착지로 설정</Text>
-            </Pressable>
           </View>
         </BottomSheetView>
       </BottomSheet>
