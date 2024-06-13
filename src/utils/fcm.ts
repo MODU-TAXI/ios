@@ -22,10 +22,10 @@ export const onMessageReceivedForeground = async (
   }
 
   if (messageType === 'CHAT' || messageType === 'IMAGE') {
-    if (!chatIn) {
-      if (roomId && typeof roomId === 'string') {
-        await handleFirebaseMessage(title, body, messageType, roomId);
-      }
+    if (chatIn) return;
+
+    if (roomId && typeof roomId === 'string') {
+      await handleFirebaseMessage(title, body, messageType, roomId);
     }
   } else if (messageType === 'JOIN') {
     if (roomId && typeof roomId === 'string') {

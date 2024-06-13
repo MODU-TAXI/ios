@@ -1,19 +1,18 @@
 import React, { useRef, useState } from 'react';
 import { View, TextInput, Pressable } from 'react-native';
 
-import { useChatContext } from 'src/providers/chatProvider';
-
 import Plus from '@assets/images/Chat/Plus.svg';
 import SendButton from '@assets/images/Chat/SendButton.svg';
 
 interface MessageInputBoxComponentProps {
+  sendMessage: (inputMessage: string, type: string) => void;
   openSelectImageModal: () => void;
 }
 
 const MessageInputBoxComponent: React.FC<MessageInputBoxComponentProps> = ({
+  sendMessage,
   openSelectImageModal,
 }) => {
-  const { sendMessage } = useChatContext();
   const textInputRef = useRef<TextInput>(null);
 
   const [inputMessage, setInputMessage] = useState<string>('');

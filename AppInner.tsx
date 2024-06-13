@@ -3,10 +3,6 @@ import { useRecoilState } from 'recoil';
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import ArrivalMapScreen from 'src/screens/map/ArrivalMap';
-import ArrivalSearchScreen from 'src/screens/search/ArrivalSearch';
-import DepartureSearchScreen from 'src/screens/search/DepartureSearch';
-
 import TestScreen from './src/screens/test';
 import MainScreen from './src/screens/main/Main';
 import HomeScreen from './src/screens/home/Home';
@@ -19,8 +15,8 @@ import SearchScreen from './src/screens/search/Search';
 import SignInScreen from './src/screens/signIn/SignIn';
 import ChatRoomScreen from './src/screens/chat/ChatRoom';
 import AmountScreen from './src/screens/calculate/Amount';
+import ArrivalMapScreen from './src/screens/map/ArrivalMap';
 import AccountScreen from './src/screens/calculate/Account';
-import { ChatProvider } from './src/providers/chatProvider';
 import CreateRoomScreen from './src/screens/room/CreateRoom';
 import RoomDetailScreen from './src/screens/room/RoomDetail';
 import PatchAccountScreen from './src/screens/my/PatchAccount';
@@ -29,11 +25,13 @@ import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import PatchNicknameScreen from './src/screens/my/PatchNickname';
 import PatchUserInfoScreen from './src/screens/my/PatchUserInfo';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
+import ArrivalSearchScreen from './src/screens/search/ArrivalSearch';
 import CheckAccountScreen from './src/screens/calculate/CheckAccount';
 import DeclarationScreen from './src/screens/declaration/Declaration';
 import AuthenticationScreen from './src/screens/signUp/Authentication';
 import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
 import PatchSchoolEmailScreen from './src/screens/my/PatchSchoolEmail';
+import DepartureSearchScreen from './src/screens/search/DepartureSearch';
 import CheckPermissionScreen from './src/screens/signUp/CheckPermission';
 import CheckCalculateScreen from './src/screens/calculate/CheckCalculate';
 import CheckDepartureScreen from './src/screens/calculate/CheckDeparture';
@@ -70,61 +68,59 @@ function AppInner() {
   useNotifee(); // notifeecation제어
 
   return loggedIn ? (
-    <ChatProvider>
-      <LogInStack.Navigator
-        initialRouteName="MainScreen"
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <LogInStack.Screen name="MainScreen" component={MainScreen} />
-        <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
-        <LogInStack.Screen name="MyPageScreen" component={MyPageScreen} />
-        <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
-        <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
-        <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
-        <LogInStack.Screen name="AlarmScreen" component={AlarmScreen} />
+    <LogInStack.Navigator
+      initialRouteName="MainScreen"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <LogInStack.Screen name="MainScreen" component={MainScreen} />
+      <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
+      <LogInStack.Screen name="MyPageScreen" component={MyPageScreen} />
+      <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
+      <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
+      <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
+      <LogInStack.Screen name="AlarmScreen" component={AlarmScreen} />
 
-        {/* 생성 Screen */}
-        <LogInStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
-        <LogInStack.Screen name="DepartureMapScreen" component={DepartureMapScreen} />
-        <LogInStack.Screen name="DepartureSearchScreen" component={DepartureSearchScreen} />
-        <LogInStack.Screen name="ArrivalMapScreen" component={ArrivalMapScreen} />
-        <LogInStack.Screen name="ArrivalSearchScreen" component={ArrivalSearchScreen} />
-        <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
+      {/* 생성 Screen */}
+      <LogInStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
+      <LogInStack.Screen name="DepartureMapScreen" component={DepartureMapScreen} />
+      <LogInStack.Screen name="DepartureSearchScreen" component={DepartureSearchScreen} />
+      <LogInStack.Screen name="ArrivalMapScreen" component={ArrivalMapScreen} />
+      <LogInStack.Screen name="ArrivalSearchScreen" component={ArrivalSearchScreen} />
+      <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
 
-        {/* 조회, 수정 Screen */}
-        <LogInStack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
-        <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
+      {/* 조회, 수정 Screen */}
+      <LogInStack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
+      <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
 
-        {/* 정산 Screen */}
-        <LogInStack.Screen name="CheckDepartureScreen" component={CheckDepartureScreen} />
-        <LogInStack.Screen name="AmountScreen" component={AmountScreen} />
-        <LogInStack.Screen name="AccountScreen" component={AccountScreen} />
-        <LogInStack.Screen name="CheckAccountScreen" component={CheckAccountScreen} />
-        <LogInStack.Screen name="CheckCalculateScreen" component={CheckCalculateScreen} />
-        <LogInStack.Screen name="CompleteCalculateScreen" component={CompleteCalculateScreen} />
+      {/* 정산 Screen */}
+      <LogInStack.Screen name="CheckDepartureScreen" component={CheckDepartureScreen} />
+      <LogInStack.Screen name="AmountScreen" component={AmountScreen} />
+      <LogInStack.Screen name="AccountScreen" component={AccountScreen} />
+      <LogInStack.Screen name="CheckAccountScreen" component={CheckAccountScreen} />
+      <LogInStack.Screen name="CheckCalculateScreen" component={CheckCalculateScreen} />
+      <LogInStack.Screen name="CompleteCalculateScreen" component={CompleteCalculateScreen} />
 
-        {/* 마이페이지 Screen */}
-        <LogInStack.Screen name="PatchNicknameScreen" component={PatchNicknameScreen} />
-        <LogInStack.Screen name="PatchUserInfoScreen" component={PatchUserInfoScreen} />
-        <LogInStack.Screen name="PatchSchoolEmailScreen" component={PatchSchoolEmailScreen} />
-        <LogInStack.Screen name="PatchAccountScreen" component={PatchAccountScreen} />
-        <LogInStack.Screen
-          name="PatchUserInfoAuthenticationScreen"
-          component={PatchUserInfoAuthenticationScreen}
-        />
-        <LogInStack.Screen
-          name="PatchSchoolEmailAuthenticationScreen"
-          component={PatchSchoolEmailAuthenticationScreen}
-        />
+      {/* 마이페이지 Screen */}
+      <LogInStack.Screen name="PatchNicknameScreen" component={PatchNicknameScreen} />
+      <LogInStack.Screen name="PatchUserInfoScreen" component={PatchUserInfoScreen} />
+      <LogInStack.Screen name="PatchSchoolEmailScreen" component={PatchSchoolEmailScreen} />
+      <LogInStack.Screen name="PatchAccountScreen" component={PatchAccountScreen} />
+      <LogInStack.Screen
+        name="PatchUserInfoAuthenticationScreen"
+        component={PatchUserInfoAuthenticationScreen}
+      />
+      <LogInStack.Screen
+        name="PatchSchoolEmailAuthenticationScreen"
+        component={PatchSchoolEmailAuthenticationScreen}
+      />
 
-        {/* 신고 Screen */}
-        <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />
+      {/* 신고 Screen */}
+      <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />
 
-        <LogInStack.Screen name="TestScreen" component={TestScreen} />
-      </LogInStack.Navigator>
-    </ChatProvider>
+      <LogInStack.Screen name="TestScreen" component={TestScreen} />
+    </LogInStack.Navigator>
   ) : (
     <RootStack.Navigator
       screenOptions={{

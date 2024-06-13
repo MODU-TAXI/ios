@@ -1,11 +1,11 @@
+import { useRecoilValue } from 'recoil';
+import Config from 'react-native-config';
 import TextEncodingPolyfill from 'text-encoding';
+import StompJs, { Message } from '@stomp/stompjs';
 import ImageView from 'react-native-image-viewing';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { useChatContext } from '@providers/chatProvider';
-import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, AppState, KeyboardAvoidingView } from 'react-native';
-import React, { Suspense, useState, useEffect, useCallback } from 'react';
+import React, { useRef, Suspense, useState, useEffect, useCallback } from 'react';
 
 import HeaderComponent from '@components/Header';
 import MessagesComponent from '@components/Chat/Messages';
@@ -16,12 +16,17 @@ import SelectImageModal from '@components/Common/SelectImageModal';
 import ChatErrorBoundary from '@components/Fallback/ChatErrorBoundary';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 
-import { memberIdState, messagesState } from '@recoil/recoil';
+import { MessageBody } from '@recoil/type';
+import { userInfoState } from '@recoil/recoil';
 
+import { refreshAccessToken } from '@server/api/member';
+
+import { useAccessToken } from '@hooks/token';
 import { useEnterChatRoom } from '@hooks/chat';
 import { useChatDetail } from '@hooks/api/chat';
 
 import { openAlbum, openCamera } from '@utils/image';
+import { setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
 
 import { UserPreview } from '@type/entity/user';
 import { ChatRoomScreenProps } from '@type/param/loginStack';
@@ -38,17 +43,174 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   const { roomPreview, messages, messagesRefetch } = useChatDetail(roomId);
 
-  const { sendMessage } = useChatContext();
-
-  const [newMessages, setNewMeesages] = useRecoilState(messagesState);
+  const [newMessages, setNewMeesages] = useState<MessageBody[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
   const [imageModalVisible, setImageModalVisible] = useState(false); // 이미지 뷰 모달
   const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
   const [viewImages, setViewImages] = useState([{ uri: '' }]);
   const [userInfo, setUserInfo] = useState<UserPreview>();
-  const memberId = useRecoilValue(memberIdState);
+  const myInfo = useRecoilValue(userInfoState);
+
+  const [accessToken, setNewAccessToken] = useAccessToken(); // socket을 위한 token hook
 
   useEnterChatRoom(); // 채팅스크린에 있을때는 알람안오게 해야하므로 recoil로 상태 저장
+
+  const stompClient = useRef<any>({});
+
+  // 메세지 보내기
+  const sendMessage = (inputMessage: string, type: string) => {
+    try {
+      if (stompClient.current.connected) {
+        stompClient.current.publish({
+          destination: '/pub/chat',
+          body: JSON.stringify({
+            roomId: roomId,
+            type: type,
+            content: inputMessage,
+          }),
+          headers: {
+            token: accessToken,
+          },
+        });
+      } else {
+        // 여기다 저장해놨다가 connect되면 한번에 send?
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 메세지 초기화
+  const clearMessages = useCallback(() => {
+    setNewMeesages([]);
+  }, [setNewMeesages]);
+
+  // 메세지 받기
+  const onMessageReceived = (message: Message) => {
+    const newMessage: MessageBody = JSON.parse(message.body);
+
+    setNewMeesages((prev: MessageBody[]) => [...prev, newMessage]);
+  };
+
+  // socket 연결 해제
+  const disConnect = () => {
+    if (stompClient.current.activate) {
+      stompClient.current.deactivate();
+      console.log('Socket 연결 해제!');
+    }
+  };
+
+  const connect = () => {
+    // 여기서 연결 체크~?
+
+    if (accessToken) {
+      // 이미 connect 되어 있을때는 안되게 함
+      if (stompClient.current && stompClient.current.connected) {
+        return;
+      }
+
+      stompClient.current = new StompJs.Client({
+        brokerURL: Config.SOCKET_URL,
+        connectHeaders: {
+          token: accessToken,
+        },
+        debug: function (str) {
+          console.log(str);
+        },
+        reconnectDelay: 50,
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
+      });
+
+      stompClient.current.activate();
+
+      stompClient.current.onConnect = () => {
+        stompClient.current.subscribe(`/sub/chat/${roomId}`, onMessageReceived, {
+          headers: {
+            token: accessToken,
+          },
+        });
+      };
+
+      stompClient.current.onStompError = async (error: any) => {
+        const stompError = new TextDecoder('utf-8').decode(new Uint8Array(error._binaryBody));
+        console.log('stompError:', stompError);
+
+        // 존재하지 않은 방인 경우
+        if (stompError == 'SOCK_ROOM_003') {
+          disConnect();
+          Alert.alert(
+            'ROOM ERROR',
+            '존재하지 않는 방입니다.',
+            [
+              {
+                text: 'OK',
+                onPress: () =>
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'MainScreen' }],
+                  }),
+              },
+            ],
+            { cancelable: false },
+          );
+        }
+
+        // token 문제
+        if (
+          stompError == 'SOCK_AUTH_007' ||
+          stompError == 'SOCK_AUTH_008' ||
+          stompError == 'SOCK_AUTH_009' ||
+          stompError == 'SOCK_AUTH_010'
+        ) {
+          disConnect();
+
+          const refreshToken = await getRefreshToken();
+
+          if (refreshToken) {
+            const { tokenResponse } = await refreshAccessToken(refreshToken);
+
+            const { accessToken: newAccessToken, refreshToken: newRefreshToken } = tokenResponse;
+
+            await Promise.all([setAccessToken(newAccessToken), setRefreshToken(newRefreshToken)]);
+
+            setNewAccessToken(newAccessToken);
+
+            connect();
+          }
+        }
+      };
+    }
+  };
+
+  // 화면을 다시켰을때 socket 연결
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (appState.match(/inactive|background/) && nextAppState === 'active') {
+        connect();
+        clearMessages();
+        messagesRefetch();
+      }
+      setAppState(nextAppState);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [accessToken, appState, clearMessages, messagesRefetch]);
+
+  // 들어왔을때 socket 연결
+  useEffect(() => {
+    connect();
+  }, [accessToken]);
+
+  // 나갔을때 메세지 clear
+  useEffect(() => {
+    return () => {
+      disConnect();
+      clearMessages();
+    };
+  }, []);
 
   // 이미지 채팅 보내기
   const sendImage = (imgUrl: string | null) => {
@@ -106,11 +268,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     setModalVisible(false);
   };
 
-  // 메세지 초기화
-  const clearMessages = useCallback(() => {
-    setNewMeesages([]);
-  }, [setNewMeesages]);
-
   // 정산페이지로 이동
   const toCalculateScreen = () => {
     if (roomPreview) {
@@ -126,29 +283,11 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     }
   };
 
-  // 화면 껏다 켰을때 그동안 메세지 가져오기
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', (nextAppState) => {
-      if (appState.match(/inactive|background/) && nextAppState === 'active') {
-        clearMessages();
-        messagesRefetch();
-      }
-      setAppState(nextAppState);
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, [appState, clearMessages, messagesRefetch]);
-
-  // 나갔을때 메세지 clear
-  useEffect(() => {
-    return () => clearMessages();
-  }, [clearMessages]);
+  // if (!userInfo) return <LoadingComponent />;
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <HeaderComponent title={'채팅 페이지'} clearMessages={clearMessages} />
+      <HeaderComponent title={'채팅 페이지'} />
 
       <ImageView
         images={viewImages}
@@ -164,7 +303,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         {/* 메세지 Component */}
         <MessagesComponent
           messages={messages.messages}
-          memberId={memberId}
+          memberId={myInfo.id}
           openUserInfoModal={openUserInfoModal}
           newMessages={newMessages}
           openImageModal={openImageModal}
@@ -172,7 +311,10 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         />
 
         {/* 입력창 Component */}
-        <MessageInputBoxComponent openSelectImageModal={openSelectImageModal} />
+        <MessageInputBoxComponent
+          sendMessage={sendMessage}
+          openSelectImageModal={openSelectImageModal}
+        />
       </KeyboardAvoidingView>
 
       {/* 유저 정보 modal */}

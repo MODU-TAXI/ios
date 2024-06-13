@@ -51,7 +51,7 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
 
   if (message.messageType === 'CHAT') {
     // 내가 보낸 메세지일 경우
-    if (message.memberId === memberId) {
+    if (message.memberId == memberId) {
       return (
         <View className="my-4 flex-row">
           <View className="mr-1 flex-1 flex-col items-end justify-end ">

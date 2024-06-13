@@ -29,8 +29,7 @@ export const useCheckLogin = (setLoggedIn: SetterOrUpdater<boolean>) => {
         setUserInfo(memberInfoResponse);
 
         // 토큰 저장
-        await setAccessToken(newAccessToken);
-        await setRefreshToken(newRefreshToken);
+        await Promise.all([setAccessToken(newAccessToken), setRefreshToken(newRefreshToken)]);
 
         setLoggedIn(true);
       } catch (error) {

@@ -25,12 +25,12 @@ export const useChatDetail = (roomId: number) => {
   return useSuspenseQueries({
     queries: [
       {
-        retry: 0,
+        retry: 1,
         queryKey: [`/api/rooms/preview/${roomId}`],
         queryFn: () => getRoomPreview(roomId),
       },
       {
-        retry: 0,
+        retry: 1,
         queryKey: [`/api/chat-messages/${roomId}`],
         queryFn: () => getChatMessages(roomId),
       },
