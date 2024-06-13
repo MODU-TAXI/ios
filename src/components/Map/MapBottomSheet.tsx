@@ -17,12 +17,14 @@ interface MapBottomSheetProps {
   roomList: RoomList[];
   navigation: MainMapScreenProps['navigation'];
   index: number;
+  handleModal: () => void;
 }
 
 const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
   roomList,
   navigation,
   index,
+  handleModal,
 }) => {
   /** 해당 마커의 room 으로 이동 */
   const toRoomDetailScreen = (roomId: number) => {
@@ -35,7 +37,9 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
       <View className="h-fit">
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View className="mb-4 flex flex-row overflow-scroll">
-            <SpotFilterButtonComponent selected label="도착지" />
+            <Pressable onPress={handleModal}>
+              <SpotFilterButtonComponent selected label="거점지" />
+            </Pressable>
             <FilterButtonComponent label="학생인증" />
             <FilterButtonComponent label="여자만" />
             <FilterButtonComponent label="매너탑승" />

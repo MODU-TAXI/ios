@@ -2,9 +2,6 @@ import { useSharedValue } from 'react-native-reanimated';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { View, Pressable, LayoutChangeEvent } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import BottomSheet, {
-  BottomSheetView,
-} from '@gorhom/bottom-sheet';
 import Animated, { runOnJS, useAnimatedStyle } from 'react-native-reanimated';
 import React, {
   useRef,
@@ -21,10 +18,18 @@ import {
   NaverMapViewRef,
   NaverMapMarkerOverlay,
 } from '@mj-studio/react-native-naver-map';
+import BottomSheet, {
+  BottomSheetView,
+  BottomSheetModal,
+  BottomSheetBackdrop,
+  BottomSheetModalProvider,
+  BottomSheetBackdropProps
+} from '@gorhom/bottom-sheet';
 
 import MapBottomSheetScreen from '../../components/Map/MapBottomSheet';
 
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
+import SpotFilterModalScreen from '@components/Map/SpotFilterModal';
 import CreateRoomButtonComponent from '@components/CreateRoomButton';
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDigest';
@@ -44,7 +49,6 @@ import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   const insets = useSafeAreaInsets();
   const userInfo = useRecoilValue(userInfoState);
-  const bottomSheetRef = useRef<BottomSheet>(null);
   const mapRef = useRef<NaverMapViewRef>(null);
   const [selectedRoom, setSelectedRoom] = useState<RoomCurrentCamera | null>(null);
   
@@ -52,11 +56,30 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   const snapPoints = useMemo(() => ['10%', '20%', '40%', '85%'], []);
   const [mapBottomSheetIndex, setMapBottomSheetIndex] = useState<number>(1);
   const bottomSheetPosition = useSharedValue<number>(0);
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
-  // bottomSheet 핸들러
+  // bottomSheet, bottomSheetModal 핸들러
   const handleBottomSheetIndex = (index: number) => {
     setMapBottomSheetIndex(index);
   }
+
+  const handleOpenSpotModal = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleCloseSpotModal = () => {
+    bottomSheetModalRef.current?.close();
+  }
+
+  // bottomSheetModal
+  const modalSnapPoints = useMemo(() => ['85%'], []);
+  const [spotModalIndex, setSpotModalIndex] = useState<number>(0);
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  const renderBackdrop = useCallback(
+    (props: BottomSheetBackdropProps) => <BottomSheetBackdrop {...props} />,
+    [],
+  );
 
   // 택시팟 생성 버튼 위치 설정 변수
   const buttonSizeRef = useRef<View>(null);
@@ -345,31 +368,56 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
       </Animated.View>
 
       {/** 바텀시트 */}
-      <BottomSheet
-        style={{
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 4,
-          },
-          shadowOpacity: 0.3,
-          shadowRadius: 4.65,
-          elevation: 8,
-          backgroundColor: '#FFFFFF',
-          borderRadius: 16,
-        }}
-        ref={bottomSheetRef}
-        index={mapBottomSheetIndex}
-        onChange={handleBottomSheetIndex}
-        snapPoints={snapPoints}
-        animatedPosition={bottomSheetPosition}
-      >
-        <BottomSheetView
-          className="flex-1 items-center"
+      <BottomSheetModalProvider>
+        <BottomSheet
+          style={{
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 4,
+            },
+            shadowOpacity: 0.3,
+            shadowRadius: 4.65,
+            elevation: 8,
+            backgroundColor: '#FFFFFF',
+            borderRadius: 16,
+          }}
+          ref={bottomSheetRef}
+          index={mapBottomSheetIndex}
+          onChange={handleBottomSheetIndex}
+          snapPoints={snapPoints}
+          animatedPosition={bottomSheetPosition}
         >
-          <MapBottomSheetScreen roomList={roomList} navigation={navigation} index={mapBottomSheetIndex} />
-        </BottomSheetView>
-      </BottomSheet>
+          <BottomSheetView
+            className="flex-1 items-center"
+          >
+            <MapBottomSheetScreen roomList={roomList} navigation={navigation} index={mapBottomSheetIndex} handleModal={handleOpenSpotModal}/>
+          </BottomSheetView>
+        </BottomSheet>
+
+        <BottomSheetModal
+          style={{
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 4,
+            },
+            shadowOpacity: 0.3,
+            shadowRadius: 4.65,
+            elevation: 8,
+            backgroundColor: '#FFFFFF',
+            borderRadius: 16,
+          }}
+          ref={bottomSheetModalRef}
+          snapPoints={modalSnapPoints}
+          index={spotModalIndex}
+          backdropComponent={renderBackdrop}
+        >
+          <BottomSheetView className="flex-1">
+            <SpotFilterModalScreen handleClose={handleCloseSpotModal} />
+          </BottomSheetView>
+        </BottomSheetModal>
+      </BottomSheetModalProvider>
     </GestureHandlerRootView>
   )
 }

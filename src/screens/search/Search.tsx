@@ -1,7 +1,6 @@
 import { useRecoilState } from 'recoil';
 import { View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,21 +9,19 @@ import { convertCoordinates, getCurrentLocation } from '../../utils/map';
 import SearchBoxComponent from '@components/Search/SearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 
-import { arrivalState, searchParamState, searchKeywordState } from '@recoil/recoil';
+import { searchParamState, searchKeywordState } from '@recoil/recoil';
 
-import { useGetSpotList } from '@hooks/api/spot';
 import { useNaverSearch } from '@hooks/api/search';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
 
-import { Spot } from '@type/entity/spot';
 import { SortedItemType } from '@type/entity/search';
 import { SearchScreenProps } from '@type/param/loginStack';
 
 /** 메인맵 도착지 검색 */
 const SearchScreen = ({ navigation }: SearchScreenProps) => {
   /** 검색어 저장 변수 */
-  const [keyword, ] = useRecoilState<string>(searchKeywordState);
+  const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({
@@ -79,6 +76,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
       latitude: latitude,
       longitude: longitude,
     })
+    setKeyword(''); // 검색어 삭제
     navigation.goBack();
   }
 
