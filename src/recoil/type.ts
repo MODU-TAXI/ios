@@ -43,3 +43,9 @@ export type Calculate = {
   amount: string;
   users: UserPreview[];
 };
+
+export type SearchParam = {
+  title: string,
+  latitude: number,
+  longitude: number,
+}

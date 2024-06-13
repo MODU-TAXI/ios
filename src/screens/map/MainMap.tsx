@@ -1,5 +1,5 @@
-import { useRecoilValue } from 'recoil';
 import { useSharedValue } from 'react-native-reanimated';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { View, Pressable, LayoutChangeEvent } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import BottomSheet, {
@@ -29,7 +29,7 @@ import CreateRoomButtonComponent from '@components/CreateRoomButton';
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDigest';
 
-import { userInfoState } from '@recoil/recoil';
+import { userInfoState, searchParamState } from '@recoil/recoil';
 
 import { useGetRoomList, useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
@@ -41,7 +41,7 @@ import { MainMapScreenProps } from '@type/param/loginStack';
 import RefreshButton from '@assets/images/Map/refreshButton.svg';
 import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 
-const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
+const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   const insets = useSafeAreaInsets();
   const userInfo = useRecoilValue(userInfoState);
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -83,6 +83,26 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
 
   // 현재 줌에서의 탐색 범위
   const [radius, setRadius] = useState<number>(600);
+
+  const searchParams = useRecoilValue(searchParamState);
+  const resetSearchParams = useResetRecoilState(searchParamState);
+
+  // 검색 후 좌표설정
+  useEffect(() => {
+    if (searchParams) {
+      const location = {
+        latitude: searchParams.latitude,
+        longitude: searchParams.longitude,
+        zoom: 16,
+      };
+      setCurrentCamera({
+        latitude: location.latitude,
+        longitude: location.longitude,
+        zoom: 16,
+      });
+      mapRef.current?.animateCameraTo(location);
+    }
+  }, [searchParams])
 
   // 매칭방 리스트 객체
   const { rooms: rooms, refetch: refetch } = useGetRoomCurrentCamera({
@@ -176,13 +196,12 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
 
   /** 매칭방 생성으로 이동 */
   const toCreateRoomScreen = () => {
-    // TODO : reverse geocoding 으로 출발지 recoil 저장하며 이동
     navigation.navigate('CreateRoomScreen');
   }
 
   /** 검색창 이동 */
   const toSearchScreen = () => {
-    // TODO : 메인맵 거점 필터링용 검색창 화면 분리
+    resetSearchParams();
     navigation.navigate('SearchScreen');
   }
   
@@ -203,6 +222,14 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
           isShowScaleBar={false}
           logoAlign="BottomLeft"
         >
+          {searchParams && 
+            <NaverMapMarkerOverlay
+              latitude={searchParams.latitude}
+              longitude={searchParams.longitude}
+              anchor={{ x: 0.5, y: 0.5 }}
+            >
+            </NaverMapMarkerOverlay>
+          }
           {selectedRoom ? (
             // Room 선택시 마커 변경하여 렌더링
             <>
@@ -261,10 +288,17 @@ const MainMapScreen = ({ navigation }: MainMapScreenProps) => {
         <Pressable
           onPress={toSearchScreen}
         >
-          <TransparentSearchBoxComponent 
-            value={`${userInfo.name}님 우리 어디로 떠날까요?`}
-            isSearched={false}
-          />
+          {searchParams.title !== '' ? (
+            <TransparentSearchBoxComponent 
+              value={searchParams.title}
+              isSearched={true}
+            />
+          ) : (
+            <TransparentSearchBoxComponent 
+              value={`${userInfo.name}님 우리 어디로 떠날까요?`}
+              isSearched={false}
+            />
+          )}
         </Pressable>
       </View>
 
