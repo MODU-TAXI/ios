@@ -68,25 +68,6 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
     }
   }, [items, currentLocation])
 
-  const [spotSearchParams, setSpotSearchParams] = useState({
-    currentLongitude: currentLocation.longitude,
-    currentLatitude: currentLocation.latitude,
-    departureLongitude: currentLocation.longitude,
-    departureLatitude: currentLocation.latitude,
-  });
-
-  // sortedItems 바뀔 때마다 거점탐색의 파라미터 변경
-  useEffect(() => {
-    if (sortedItems.length > 0) {
-      setSpotSearchParams({
-        currentLongitude: currentLocation.longitude,
-        currentLatitude: currentLocation.latitude,
-        departureLongitude: sortedItems[0].longitude,
-        departureLatitude: sortedItems[0].latitude,
-      })
-    }
-  }, [sortedItems])
-
   /** 선택한 검색어를 전달하며 이동 */
   const toMainMapScreen = (
     title: string,

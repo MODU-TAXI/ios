@@ -35,7 +35,7 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
       <View className="h-fit">
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View className="mb-4 flex flex-row overflow-scroll">
-            <SpotFilterButtonComponent label="도착지" />
+            <SpotFilterButtonComponent selected label="도착지" />
             <FilterButtonComponent label="학생인증" />
             <FilterButtonComponent label="여자만" />
             <FilterButtonComponent label="매너탑승" />

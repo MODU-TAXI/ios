@@ -89,7 +89,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
 
   // 검색 후 좌표설정
   useEffect(() => {
-    if (searchParams) {
+    if (searchParams && searchParams.title !== '') {
       const location = {
         latitude: searchParams.latitude,
         longitude: searchParams.longitude,
@@ -222,7 +222,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
           isShowScaleBar={false}
           logoAlign="BottomLeft"
         >
-          {searchParams && 
+          {searchParams.title !== '' && 
             <NaverMapMarkerOverlay
               latitude={searchParams.latitude}
               longitude={searchParams.longitude}

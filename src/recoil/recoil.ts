@@ -89,8 +89,8 @@ export const searchParamState = atom<SearchParam>({
   key: 'searchParam',
   default: {
     title: '',
-    longitude: 37.451062,
-    latitude: 126.656496,
+    longitude: 126.656496,
+    latitude: 37.451062,
   },
 })
 

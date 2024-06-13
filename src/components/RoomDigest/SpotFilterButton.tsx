@@ -5,6 +5,7 @@ import SpotPinGraySvg from '@assets/images/RoomDigest/SpotPinGray.svg';
 
 interface SpotFilterButtonProps {
   label: string;
+  selected: boolean;
 }
 
 /** 카풀팟 태그 필터 버튼 */
