@@ -13,6 +13,7 @@ export type MessageBody = {
   memberId: number;
   roomId: number;
   sender: string;
+  imageUrl: string;
   messageType: 'JOIN' | 'CHAT' | 'LEAVE';
 };
 

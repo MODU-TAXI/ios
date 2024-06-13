@@ -67,6 +67,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
             roomId: roomId,
             type: type,
             content: inputMessage,
+            imageUrl: myInfo.imageUrl,
           }),
           headers: {
             token: accessToken,
@@ -282,8 +283,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
       navigation.navigate('DeclarationScreen', { userInfo: userInfo, roomId: roomId });
     }
   };
-
-  // if (!userInfo) return <LoadingComponent />;
 
   return (
     <SafeAreaView className="flex-1 bg-white">
