@@ -5,12 +5,23 @@ import SpotSelectionSearchComponent from "@components/Search/SpotSelectionSearch
 
 interface SpotFilterModalProps {
   handleClose: () => void;
+  handleFilter: (category: string, value: any) => void;
 }
 
 const SpotFilterModalScreen: React.FC<SpotFilterModalProps> = ({
-  handleClose
+  handleClose,
+  handleFilter
 }) => {
   const [selectedSpot, setSelectedSpot] = useState<number>(1);
+  
+  const handleSpotSelection = (spotId: number) => {
+    setSelectedSpot(spotId);
+  }
+
+  const applySpotFilter = () => {
+    handleFilter("spotId", selectedSpot);
+    handleClose();
+  }
 
   return (
     <View className="-mb-20 flex h-full w-full flex-col items-center pt-4">
@@ -44,7 +55,7 @@ const SpotFilterModalScreen: React.FC<SpotFilterModalProps> = ({
       {selectedSpot ? (
         <Pressable
           className="flex h-[56px] items-center justify-center rounded-full bg-main"
-          onPress={handleClose}
+          onPress={applySpotFilter}
         >
           <Text className="font-semibold text-white">거점지로 가는 택시팟 보기</Text>
         </Pressable>

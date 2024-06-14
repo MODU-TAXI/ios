@@ -109,7 +109,7 @@ export const getRoomIntegration = async (
     params: params,
   });
 
-  return response.data.result;
+  return response.data.rooms;
 }
 
 // [방 미리보기 조회] /api/rooms/preview/{id}

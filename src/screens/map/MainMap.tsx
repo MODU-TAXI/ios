@@ -36,12 +36,14 @@ import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDige
 
 import { userInfoState, searchParamState } from '@recoil/recoil';
 
-import { useGetRoomList, useGetRoomCurrentCamera } from '@hooks/api/rooms';
+import { GetRoomIntegrationRequest } from '@server/requestTypes/room';
+
+import { useGetRoomList, useGetRoomIntegration, useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
 import { calculateRadius, getCurrentLocation } from '@utils/map';
 
-import { RoomCurrentCamera } from '@type/entity/room';
 import { MainMapScreenProps } from '@type/param/loginStack';
+import { RoomIntegration, RoomCurrentCamera } from '@type/entity/room';
 
 import RefreshButton from '@assets/images/Map/refreshButton.svg';
 import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
@@ -50,7 +52,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   const insets = useSafeAreaInsets();
   const userInfo = useRecoilValue(userInfoState);
   const mapRef = useRef<NaverMapViewRef>(null);
-  const [selectedRoom, setSelectedRoom] = useState<RoomCurrentCamera | null>(null);
+  const [selectedRoom, setSelectedRoom] = useState<RoomIntegration | null>(null);
   
   // bottomSheet 인덱스 정의, 최초 렌더링 시 40% 설정
   const snapPoints = useMemo(() => ['10%', '20%', '40%', '85%'], []);
@@ -105,7 +107,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   });
 
   // 현재 줌에서의 탐색 범위
-  const [radius, setRadius] = useState<number>(600);
+  const [radius, setRadius] = useState<number>(5000);
 
   const searchParams = useRecoilValue(searchParamState);
   const resetSearchParams = useResetRecoilState(searchParamState);
@@ -127,21 +129,32 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
     }
   }, [searchParams])
 
-  // 매칭방 리스트 객체
-  const { rooms: rooms, refetch: refetch } = useGetRoomCurrentCamera({
+  // 필터링 상태값
+  const [filterParam, setFilterParam] = useState({
+    "sortType": "NEW",
+    "spotId": undefined,
+    "roomTags": [],
+    "isImminent": false,
+  });
+  
+  // 매칭방 탐색
+  const { rooms: rooms, refetch: refetch } = useGetRoomIntegration({
     "searchLongitude": currentCamera.longitude,
     "searchLatitude": currentCamera.latitude,
     "radius": radius,
+    "sortType": filterParam.sortType,
+    "spotId": filterParam.spotId,
+    "roomTags": filterParam.roomTags,
+    "isImminent": filterParam.isImminent,
   });
 
-  const { rooms: roomList, refetch: refetchRoomList } = useGetRoomList({
-    "page": 0,
-    "size": 10,
-    "searchLongitude": currentCamera.longitude,
-    "searchLatitude": currentCamera.latitude,
-    "sortType": "NEW",
-    "radius": radius,
-  })
+  /** 필터링 부여 함수 */
+  const handleFiltering = useCallback((category: string, value: any) => {
+    setFilterParam({
+      ...filterParam,
+      [category]: value
+    })
+  }, []);
 
   // 처음 렌더링 시 현재위치로
   useEffect(() => {
@@ -198,7 +211,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   }
 
   /** 방 선택 및 bottomSheet 10%로 내림 */
-  const handleSelectRoom = (room: RoomCurrentCamera) => {
+  const handleSelectRoom = (room: RoomIntegration) => {
     setSelectedRoom(room);
     setMapBottomSheetIndex(0);
   }
@@ -257,29 +270,29 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
             // Room 선택시 마커 변경하여 렌더링
             <>
               {rooms
-                .filter((room) => room.id === selectedRoom.id)
+                .filter((room) => room.roomId === selectedRoom.roomId)
                 .map((room) => (
                   <NaverMapMarkerOverlay
-                    key={`selected-${room.id}`}
+                    key={`selected-${room.roomId}`}
                     latitude={room.departureLatitude}
                     longitude={room.departureLongitude}
                     onTap={() => handleSelectRoom(room)}
                     anchor={{ x: 0.5, y: 0.5 }}
                   >
-                    <RoomMarkerComponent roomId={selectedRoom.id} spotName={selectedRoom.spotName} selected />
+                    <RoomMarkerComponent roomId={selectedRoom.roomId} spotName={selectedRoom.arrivalName} selected />
                   </NaverMapMarkerOverlay>
                 ))}
               {rooms
-                .filter((room) => room.id !== selectedRoom.id)
+                .filter((room) => room.roomId !== selectedRoom.roomId)
                 .map((room) => (
                   <NaverMapMarkerOverlay
-                    key={`unselected-${room.id}`}
+                    key={`unselected-${room.roomId}`}
                     latitude={room.departureLatitude}
                     longitude={room.departureLongitude}
                     onTap={() => handleSelectRoom(room)}
                     anchor={{ x: 0.5, y: 0.5 }}
                   >
-                    <RoomMarkerComponent roomId={room.id} spotName={room.spotName} selected={false} />
+                    <RoomMarkerComponent roomId={room.roomId} spotName={room.arrivalName} selected={false} />
                   </NaverMapMarkerOverlay>
                 ))}
             </>
@@ -287,13 +300,13 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
             // Room 선택하지 않을 시 일반 렌더링
             rooms.map((room) => (
               <NaverMapMarkerOverlay
-                key={`initial-${room.id}`}
+                key={`initial-${room.roomId}`}
                 latitude={room.departureLatitude}
                 longitude={room.departureLongitude}
                 onTap={() => handleSelectRoom(room)}
                 anchor={{ x: 0.5, y: 0.5 }}
               >
-                <RoomMarkerComponent roomId={room.id} spotName={room.spotName} selected={false} />
+                <RoomMarkerComponent roomId={room.roomId} spotName={room.arrivalName} selected={false} />
               </NaverMapMarkerOverlay>
             ))
           )}
@@ -328,8 +341,8 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
       {/** 방 미리보기 */}
       {selectedRoom &&
         <View className='absolute top-[68%] w-full'>
-          <Pressable onPress={() => toRoomDetailScreen(selectedRoom.id)}>
-            <SelectedRoomDigestComponent roomId={selectedRoom.id} roomList={roomList} />
+          <Pressable onPress={() => toRoomDetailScreen(selectedRoom.roomId)}>
+            <SelectedRoomDigestComponent roomId={selectedRoom.roomId} roomList={rooms} />
           </Pressable>
         </View>
       }
@@ -367,8 +380,8 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
         </Pressable>
       </Animated.View>
 
-      {/** 바텀시트 */}
       <BottomSheetModalProvider>
+        {/** 바텀시트 */}
         <BottomSheet
           style={{
             shadowColor: '#000',
@@ -391,10 +404,16 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
           <BottomSheetView
             className="flex-1 items-center"
           >
-            <MapBottomSheetScreen roomList={roomList} navigation={navigation} index={mapBottomSheetIndex} handleModal={handleOpenSpotModal}/>
+            <MapBottomSheetScreen 
+              roomList={rooms} 
+              navigation={navigation} 
+              index={mapBottomSheetIndex} 
+              handleModal={handleOpenSpotModal}
+            />
           </BottomSheetView>
         </BottomSheet>
 
+        {/* 거점선택 모달 */}
         <BottomSheetModal
           style={{
             shadowColor: '#000',
@@ -414,7 +433,10 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
           backdropComponent={renderBackdrop}
         >
           <BottomSheetView className="flex-1">
-            <SpotFilterModalScreen handleClose={handleCloseSpotModal} />
+            <SpotFilterModalScreen 
+              handleClose={handleCloseSpotModal} 
+              handleFilter={handleFiltering}
+            />
           </BottomSheetView>
         </BottomSheetModal>
       </BottomSheetModalProvider>
