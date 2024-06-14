@@ -8,6 +8,7 @@ export interface GetRoomCurrentCameraResponse {
   }[];
 }
 
+// [경로를 제외한 방 리스트 조회] /api/rooms/list
 export interface GetRoomListResponse {
   roomId: number;
   spotId: number;
@@ -16,6 +17,24 @@ export interface GetRoomListResponse {
   roomTagBitMaskList: string[];
   departureTime: string;
   departureName: string;
+  currentHeadcount: number;
+  wishHeadcount: number;
+  durationMinutes: number;
+  expectedChargePerPerson: number;
+  expectedCharge: number;
+}
+
+// [지도, 리스트 통합 조회] /api/rooms/integration
+export interface GetRoomIntegrationResponse {
+  roomId: number;
+  spotId: number;
+  arrivalTime: string;
+  arrivalName: string;
+  roomTagBitMaskList: string[];
+  departureTime: string;
+  departureName: string;
+  departureLongitude: number;
+  departureLatitude: number;
   currentHeadcount: number;
   wishHeadcount: number;
   durationMinutes: number;

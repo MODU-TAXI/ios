@@ -78,6 +78,24 @@ export interface RoomList {
   expectedCharge: number;
 }
 
+// 방 통합 정보
+export interface RoomIntegration {
+  roomId: number;
+  spotId: number;
+  arrivalTime: string;
+  arrivalName: string;
+  roomTagBitMaskList: string[];
+  departureTime: string;
+  departureName: string;
+  departureLongitude: number;
+  departureLatitude: number;
+  currentHeadcount: number;
+  wishHeadcount: number;
+  durationMinutes: number;
+  expectedChargePerPerson: number;
+  expectedCharge: number;
+}
+
 // 방 참여자 정보
 export interface RoomMember {
   memberId: number;

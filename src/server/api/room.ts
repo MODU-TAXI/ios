@@ -5,7 +5,7 @@ import {
   DeleteAxiosInstance,
 } from '@axios/axios.method';
 
-import { PatchRoomRequest, CreateRoomRequest, GetRoomListRequest, GetRoomCurrentCameraRequest } from '@server/requestTypes/room';
+import { PatchRoomRequest, CreateRoomRequest, GetRoomListRequest, GetRoomIntegrationRequest, GetRoomCurrentCameraRequest } from '@server/requestTypes/room';
 import {
   JoinRoomResponse,
   PatchRoomResponse,
@@ -16,6 +16,7 @@ import {
   GetRoomMembersResponse,
   GetRoomPreviewResponse,
   ApproveJoinRoomResponse,
+  GetRoomIntegrationResponse,
   GetRoomCurrentCameraResponse,
   GetRoomWaitingMembersResponse,
 } from '@server/responseTypes/room';
@@ -88,6 +89,28 @@ export const getRoomList = async (
 
   return response.data.result;
 };
+
+// [지도, 리스트 통합 조회] /api/rooms/integration
+export const getRoomIntegration = async (
+  data: GetRoomIntegrationRequest
+): Promise<GetRoomIntegrationResponse[]> => {
+  const params: any = {
+    searchLongitude: data.searchLongitude,
+    searchLatitude: data.searchLatitude,
+    sortType: data.sortType,
+  };
+
+  data.radius && (params.radius = data.radius);
+  data.spotId && (params.spotId = data.spotId);
+  data.roomTags && (params.roomTags = data.roomTags);
+  data.isImminent && (params.isImminent = data.isImminent);
+
+  const response = await GetAxiosInstance<GetRoomIntegrationResponse[]>(`/api/rooms/integration`, {
+    params: params,
+  });
+
+  return response.data.result;
+}
 
 // [방 미리보기 조회] /api/rooms/preview/{id}
 export const getRoomPreview = async (id: number): Promise<GetRoomPreviewResponse | null> => {

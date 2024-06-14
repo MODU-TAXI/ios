@@ -20,6 +20,7 @@ export interface PatchRoomRequest {
   wishHeadcount: number;
 }
 
+// [원형 영역 내 방 조회] /api/rooms/map
 export interface GetRoomCurrentCameraRequest {
   searchLongitude: number,
   searchLatitude: number,
@@ -29,9 +30,21 @@ export interface GetRoomCurrentCameraRequest {
   isImminent?: boolean,
 }
 
+// [경로를 제외한 방 리스트 조회] /api/rooms/list
 export interface GetRoomListRequest {
   page: number,
   size: number,
+  searchLongitude: number,
+  searchLatitude: number,
+  sortType: string,
+  spotId?: number,
+  radius?: number,
+  roomTags?: string[],
+  isImminent?: boolean,
+}
+
+// [지도, 리스트 통합 조회] /api/rooms/integration
+export interface GetRoomIntegrationRequest {
   searchLongitude: number,
   searchLatitude: number,
   sortType: string,
