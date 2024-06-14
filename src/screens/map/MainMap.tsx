@@ -38,12 +38,13 @@ import { userInfoState, searchParamState } from '@recoil/recoil';
 
 import { GetRoomIntegrationRequest } from '@server/requestTypes/room';
 
+import { useGetSpotMap } from '@hooks/api/spot';
 import { useGetRoomList, useGetRoomIntegration, useGetRoomCurrentCamera } from '@hooks/api/rooms';
 
 import { calculateRadius, getCurrentLocation } from '@utils/map';
 
 import { MainMapScreenProps } from '@type/param/loginStack';
-import { RoomIntegration, RoomCurrentCamera } from '@type/entity/room';
+import { RoomIntegration, RoomFilterParam, RoomCurrentCamera } from '@type/entity/room';
 
 import RefreshButton from '@assets/images/Map/refreshButton.svg';
 import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
@@ -130,12 +131,16 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   }, [searchParams])
 
   // 필터링 상태값
-  const [filterParam, setFilterParam] = useState({
+  const [filterParam, setFilterParam] = useState<RoomFilterParam>({
     "sortType": "NEW",
     "spotId": undefined,
     "roomTags": [],
     "isImminent": false,
   });
+
+  useEffect(() => {
+    console.log(filterParam)
+  }, [filterParam])
   
   // 매칭방 탐색
   const { rooms: rooms, refetch: refetch } = useGetRoomIntegration({
@@ -146,6 +151,14 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
     "spotId": filterParam.spotId,
     "roomTags": filterParam.roomTags,
     "isImminent": filterParam.isImminent,
+  });
+
+
+  // 거점 3개와 고정카메라 좌표 리턴
+  const { spotData, refetch: refetchSpot } = useGetSpotMap({
+    "count": 3,
+    "searchLongitude": currentCamera.longitude,
+    "searchLatitude": currentCamera.latitude,
   });
 
   /** 필터링 부여 함수 */
@@ -409,6 +422,9 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
               navigation={navigation} 
               index={mapBottomSheetIndex} 
               handleModal={handleOpenSpotModal}
+              handleFilter={handleFiltering}
+              filterParam={filterParam}
+              spotData={spotData}
             />
           </BottomSheetView>
         </BottomSheet>
@@ -434,6 +450,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
         >
           <BottomSheetView className="flex-1">
             <SpotFilterModalScreen 
+              spotData={spotData}
               handleClose={handleCloseSpotModal} 
               handleFilter={handleFiltering}
             />

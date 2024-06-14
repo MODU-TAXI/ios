@@ -3,23 +3,31 @@ import { View, Text, Pressable } from "react-native";
 
 import SpotSelectionSearchComponent from "@components/Search/SpotSelectionSearch";
 
+import { SpotMap } from "@type/entity/spot";
+
 interface SpotFilterModalProps {
+  spotData: SpotMap;
   handleClose: () => void;
   handleFilter: (category: string, value: any) => void;
 }
 
 const SpotFilterModalScreen: React.FC<SpotFilterModalProps> = ({
+  spotData,
   handleClose,
   handleFilter
 }) => {
-  const [selectedSpot, setSelectedSpot] = useState<number>(1);
+  const [selectedSpotId, setSelectedSpotId] = useState<number>(0);
   
   const handleSpotSelection = (spotId: number) => {
-    setSelectedSpot(spotId);
+    if (selectedSpotId === spotId) {
+      setSelectedSpotId(0);
+    } else {
+      setSelectedSpotId(spotId);
+    }
   }
 
   const applySpotFilter = () => {
-    handleFilter("spotId", selectedSpot);
+    handleFilter("spotId", selectedSpotId);
     handleClose();
   }
 
@@ -28,31 +36,25 @@ const SpotFilterModalScreen: React.FC<SpotFilterModalProps> = ({
       <Text className="mb-8 text-lg font-semibold">거점지 리스트</Text>
 
       <View className="h-full w-full flex-1">
-        <SpotSelectionSearchComponent 
-          spotName="주안역"
-          address="서울특별시 중구 주안동"
-          distance={0.5}
-          isFirst={true}
-          selected={false}
-        />
-        <SpotSelectionSearchComponent 
-          spotName="주안역"
-          address="서울특별시 중구 주안동"
-          distance={0.5}
-          isFirst={false}
-          selected={true}
-        />
-        <SpotSelectionSearchComponent 
-          spotName="주안역"
-          address="서울특별시 중구 주안동"
-          distance={0.5}
-          isFirst={false}
-          selected={false}
-        />
+        {spotData.spots.map((spot, index) => (
+          <Pressable
+            key={index}  
+            onPress={() => handleSpotSelection(spot.id)}
+          >
+            <SpotSelectionSearchComponent
+              spotName={spot.name}
+              address={spot.address}
+              distance={0.5}
+              isFirst={index === 0}
+              selected={spot.id === selectedSpotId}
+            />
+          </Pressable>
+        ))}
+
       </View>
 
       <View className="w-full p-4">
-      {selectedSpot ? (
+      {selectedSpotId ? (
         <Pressable
           className="flex h-[56px] items-center justify-center rounded-full bg-main"
           onPress={applySpotFilter}

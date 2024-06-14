@@ -72,7 +72,6 @@ export const useGetSpotMap = (
     queryFn: () =>
       getSpotMap(data),
     select: (response: GetSpotMapResponse) => {
-      console.log(response);
       return response;
     },
   });

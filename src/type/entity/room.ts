@@ -96,6 +96,13 @@ export interface RoomIntegration {
   expectedCharge: number;
 }
 
+export interface RoomFilterParam {
+  sortType: string;
+  spotId: number | undefined;
+  roomTags: string[];
+  isImminent: boolean;
+}
+
 // 방 참여자 정보
 export interface RoomMember {
   memberId: number;
