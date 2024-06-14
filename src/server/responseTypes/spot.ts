@@ -21,7 +21,10 @@ export interface GetSpotListResponse {
 }
 
 export interface GetSpotMapResponse {
-  distance: number;
+  minLongitude: number;
+  minLatitude: number;
+  maxLongitude: number;
+  maxLatitude: number;
   spots: {
     id: number;
     name: string;

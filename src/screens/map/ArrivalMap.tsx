@@ -41,6 +41,16 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
         longitude: route.params.spot?.longitude,
         zoom: 14,
       });
+      mapRef.current?.animateCameraWithTwoCoords({
+        coord1: {
+          latitude: spotData.maxLatitude,
+          longitude: spotData.maxLongitude,
+        },
+        coord2: {
+          latitude: spotData.minLatitude,
+          longitude: spotData.minLongitude,
+        }
+      })
     } else if (route.params?.type === "search" && route.params.searchParams) {
       setSelectedSpot(undefined);
       setCurrentCamera({
@@ -48,14 +58,24 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
         longitude: route.params.searchParams?.longitude,
         zoom: 14,
       });
+      mapRef.current?.animateCameraWithTwoCoords({
+        coord1: {
+          latitude: spotData.maxLatitude,
+          longitude: spotData.maxLongitude,
+        },
+        coord2: {
+          latitude: spotData.minLatitude,
+          longitude: spotData.minLongitude,
+        }
+      })
     }
   }, []);
 
   useEffect(() => {
-    route.params && mapRef.current?.animateCameraTo(currentCamera);
+    // route.params && mapRef.current?.animateCameraTo(currentCamera);
   }, [currentCamera])
 
-  // 거점 3개와 distance
+  // 거점 3개와 고정카메라 좌표 리턴
   const { spotData, refetch } = useGetSpotMap({
     "count": 3,
     "searchLongitude": currentCamera.longitude,
