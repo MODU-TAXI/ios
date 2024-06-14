@@ -33,6 +33,7 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
   filterParam,
   spotData,
 }) => {
+  // 선택된 거점 이름 저장
   const [selectedSpotName, setSelectedSpotName] = useState<string>('');
   useEffect(() => {
     if (filterParam.spotId) {
@@ -40,6 +41,7 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
     }
   }, [filterParam.spotId])
 
+  /** 거점 선택 취소 */
   const deleteSpotFilter = () => {
     handleFilter("spotId", 0);
   }
@@ -55,6 +57,8 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
       <View className="h-fit">
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View className="mb-4 flex flex-row overflow-scroll">
+
+            {/** 거점 필터 */}
             {filterParam.spotId && spotData.spots.find((spot) => spot.id === filterParam.spotId)?.name ? (
               <Pressable onPress={handleModal}>
                 <SpotFilterButtonComponent 
@@ -68,10 +72,10 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
                 <SpotFilterButtonComponent selected={false} label="거점지" />
               </Pressable>
             )}
+
             <FilterButtonComponent label="학생인증" />
             <FilterButtonComponent label="여자만" />
             <FilterButtonComponent label="매너탑승" />
-            <FilterButtonComponent label="학생인증" />
           </View>
         </ScrollView>
       </View>

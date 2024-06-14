@@ -1,7 +1,7 @@
 import React from "react"
 import { View, Text } from "react-native"
 
-import { modifyDistStr } from '@utils/search';
+import { modifyDistStr } from "@utils/search";
 
 import SpotCircleMintReverse from "@assets/images/Search/SpotCircleMintReverse.svg"
 
@@ -22,19 +22,19 @@ const SpotSelectionSearchComponent: React.FC<SpotSearchProps> = ({
 }) => {
   return (
     <View 
-      className={`flex flex-row items-center ${!isFirst && "border-t border-gray100"} px-4 py-3`}
+      className="flex flex-row items-center px-4"
       style={{
         backgroundColor: selected ? 'rgba(64, 206, 172, 0.2)' : 'transparent'
       }}
     >
-      <View className='ml-2 flex flex-col'>
+      <View className={`ml-2 py-3 ${!isFirst && "border-t border-gray100"} flex flex-col`}>
 
-        <View className='mb-1 flex flex-row items-center'>
+        <View className="mb-1 flex flex-row items-center">
           <SpotCircleMintReverse />
           <Text className="ml-1 font-medium text-base text-main">{spotName}</Text>
         </View>
 
-        <View className='flex w-full flex-row'>
+        <View className="flex w-full flex-row">
           <Text 
             className="w-4/5 text-left text-sm text-gray600"
             numberOfLines={1}
