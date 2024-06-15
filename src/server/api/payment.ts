@@ -40,7 +40,9 @@ export const getPaymentMembers = async (roomId: number): Promise<GetPaymentMembe
 
 // [정산 완료] /api/payment-members
 export const completePayment = async (roomId: number): Promise<CompletePaymentResponse> => {
-  const response = await PatchAxiosInstance<CompletePaymentResponse>(`/api/payment-members`);
+  const response = await PatchAxiosInstance<CompletePaymentResponse>(
+    `/api/payment-members?roomId=${roomId}`,
+  );
 
   return response.data;
 };

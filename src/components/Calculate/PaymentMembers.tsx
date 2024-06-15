@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import PaymentMemberComponent from './PaymentMember';
 
-import { PaymentUser, UserPreview } from '@type/entity/user';
+import { PaymentUser } from '@type/entity/user';
 
 interface PaymentMembersComponentProps {
   paymentMembers: PaymentUser[];
@@ -15,7 +15,7 @@ const PaymentMembersComponent: React.FC<PaymentMembersComponentProps> = ({
   price,
 }) => {
   return (
-    <View className="flex-1">
+    <View className="grow">
       {paymentMembers.map((paymentMember, index) => (
         <PaymentMemberComponent key={index} paymentMember={paymentMember} price={price} />
       ))}

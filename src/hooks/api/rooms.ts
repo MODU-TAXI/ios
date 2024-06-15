@@ -38,8 +38,8 @@ import {
   GetRoomMembersResponse,
   GetRoomPreviewResponse,
   ApproveJoinRoomResponse,
-  GetRoomIntegrationResponse,
   CompleteMatchingResponse,
+  GetRoomIntegrationResponse,
   GetRoomCurrentCameraResponse,
   GetRoomWaitingMembersResponse,
 } from '@server/responseTypes/room';

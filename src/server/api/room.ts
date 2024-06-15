@@ -12,7 +12,6 @@ import {
   GetRoomIntegrationRequest,
   GetRoomCurrentCameraRequest,
 } from '@server/requestTypes/room';
-
 import {
   JoinRoomResponse,
   PatchRoomResponse,
@@ -23,8 +22,8 @@ import {
   GetRoomMembersResponse,
   GetRoomPreviewResponse,
   ApproveJoinRoomResponse,
-  GetRoomIntegrationResponse,
   CompleteMatchingResponse,
+  GetRoomIntegrationResponse,
   GetRoomCurrentCameraResponse,
   GetRoomWaitingMembersResponse,
 } from '@server/responseTypes/room';

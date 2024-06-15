@@ -1,4 +1,4 @@
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useSuspenseQuery, useSuspenseQueries } from '@tanstack/react-query';
 
 import { PaymentRequest } from '@server/requestTypes/payment';
 import { payment, getPayment, completePayment, getPaymentMembers } from '@server/api/payment';
@@ -15,6 +15,39 @@ export const useGetPayment = (roomId: number) => {
   return { payment, getPaymentRefetch };
 };
 
+// 정산 멤버 현황 조회
+export const useGetPaymentMembers = (roomId: number) => {
+  const { data: paymentMembers, refetch: getPaymentMembersRefetch } = useSuspenseQuery({
+    queryKey: [`/api/payment-members`, roomId],
+    queryFn: async () => getPaymentMembers(roomId),
+  });
+
+  return { paymentMembers, getPaymentMembersRefetch };
+};
+
+// 정산 정보 Detail 조회
+export const useGetPaymentDetail = (roomId: number) => {
+  return useSuspenseQueries({
+    queries: [
+      {
+        queryKey: [`/api/payment-rooms`, roomId],
+        queryFn: async () => getPayment(roomId),
+      },
+      {
+        queryKey: [`/api/payment-members`, roomId],
+        queryFn: async () => getPaymentMembers(roomId),
+      },
+    ],
+    combine: (results) => {
+      return {
+        payment: results[0].data,
+        paymentMembers: results[1].data,
+        getPaymentMembersRefetch: results[1].refetch,
+      };
+    },
+  });
+};
+
 // 정산 요청
 export const usePayment = () => {
   return useMutation({
@@ -26,16 +59,6 @@ export const usePayment = () => {
       }
     },
   });
-};
-
-// 정산 멤버 현황 조회
-export const useGetPaymentMembers = (roomId: number) => {
-  const { data: paymentMembers, refetch: getPaymentMembersRefetch } = useSuspenseQuery({
-    queryKey: [`/api/payment-members`, roomId],
-    queryFn: async () => getPaymentMembers(roomId),
-  });
-
-  return { paymentMembers, getPaymentMembersRefetch };
 };
 
 // 정산 완료

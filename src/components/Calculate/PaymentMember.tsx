@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
-import { PaymentUser, UserPreview } from '@type/entity/user';
+import { PaymentUser } from '@type/entity/user';
 
 interface PaymentMemberComponentProps {
   paymentMember: PaymentUser;
