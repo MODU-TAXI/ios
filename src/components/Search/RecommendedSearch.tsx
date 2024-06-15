@@ -38,23 +38,23 @@ const RecommendedSearchComponent: React.FC<RecommendedSearchProps> = ({
 
   return (
     <View className={`flex flex-row items-center ${!isFirst && "border-t border-gray100"} py-3`}>
-        <View className='ml-2 flex flex-col'>
+      <View className='ml-2 flex flex-col'>
 
-            <View className='mb-1 flex flex-row items-center'>
-              {highlightKeyword(fullKeyword, keyword) }
-            </View>
-
-            <View className='flex w-full flex-row'>
-                <Text 
-                  className="w-4/5 text-left text-sm text-gray600"
-                  numberOfLines={1}
-                  ellipsizeMode='tail'
-                >
-                  {address}
-                </Text>
-                <Text className="w-1/5 text-right text-sm text-gray600">{modifyDistStr(distance)}</Text>
-            </View>
+        <View className='mb-1 flex flex-row items-center'>
+          {highlightKeyword(fullKeyword, keyword) }
         </View>
+
+        <View className='flex w-full flex-row'>
+          <Text 
+            className="w-4/5 text-left text-sm text-gray600"
+            numberOfLines={1}
+            ellipsizeMode='tail'
+          >
+            {address}
+          </Text>
+          <Text className="w-1/5 text-right text-sm text-gray600">{modifyDistStr(distance)}</Text>
+        </View>
+      </View>
     </View>
   );
 };

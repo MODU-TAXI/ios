@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -6,24 +6,46 @@ import FilterButtonComponent from '@components/RoomDigest/FilterButton';
 import RoomDigestBoxComponent from '@components/RoomDigest/RoomDigestBox';
 import SpotFilterButtonComponent from '@components/RoomDigest/SpotFilterButton';
 
-import { RoomList } from '@type/entity/room';
+import { SpotMap } from '@type/entity/spot';
 import { MainMapScreenProps } from '@type/param/loginStack';
+import { RoomList, RoomIntegration, RoomFilterParam } from '@type/entity/room';
 
 import RadioButtonBoxSvg from '@assets/images/RadioBox/RadioButtonBox.svg';
 import ChevronDownBoxSvg from '@assets/images/RoomDigest/ChevronDownBox.svg';
 import SelectedRadioButtonSvg from '@assets/images/RadioBox/SelectedRadioButton.svg';
 
 interface MapBottomSheetProps {
-  roomList: RoomList[];
+  roomList: RoomIntegration[];
   navigation: MainMapScreenProps['navigation'];
   index: number;
+  handleModal: () => void;
+  handleFilter: (category: string, value: any) => void;
+  filterParam: RoomFilterParam;
+  spotData: SpotMap;
 }
 
 const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
   roomList,
   navigation,
   index,
+  handleModal,
+  handleFilter,
+  filterParam,
+  spotData,
 }) => {
+  // 선택된 거점 이름 저장
+  const [selectedSpotName, setSelectedSpotName] = useState<string>('');
+  useEffect(() => {
+    if (filterParam.spotId) {
+      setSelectedSpotName(spotData.spots.find((spot) => spot.id === filterParam.spotId)?.name || '');
+    }
+  }, [filterParam.spotId])
+
+  /** 거점 선택 취소 */
+  const deleteSpotFilter = () => {
+    handleFilter("spotId", 0);
+  }
+
   /** 해당 마커의 room 으로 이동 */
   const toRoomDetailScreen = (roomId: number) => {
     navigation.navigate('RoomDetailScreen', {roomId: roomId});
@@ -35,11 +57,25 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
       <View className="h-fit">
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View className="mb-4 flex flex-row overflow-scroll">
-            <SpotFilterButtonComponent label="도착지" />
+
+            {/** 거점 필터 */}
+            {filterParam.spotId && spotData.spots.find((spot) => spot.id === filterParam.spotId)?.name ? (
+              <Pressable onPress={handleModal}>
+                <SpotFilterButtonComponent 
+                  selected={true}
+                  label={selectedSpotName} 
+                  handleDelete={deleteSpotFilter}
+                />
+              </Pressable>
+            ) : (
+              <Pressable onPress={handleModal}>
+                <SpotFilterButtonComponent selected={false} label="거점지" />
+              </Pressable>
+            )}
+
             <FilterButtonComponent label="학생인증" />
             <FilterButtonComponent label="여자만" />
             <FilterButtonComponent label="매너탑승" />
-            <FilterButtonComponent label="학생인증" />
           </View>
         </ScrollView>
       </View>

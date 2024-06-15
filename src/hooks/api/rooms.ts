@@ -11,6 +11,7 @@ import {
   PatchRoomRequest,
   CreateRoomRequest,
   GetRoomListRequest,
+  GetRoomIntegrationRequest,
   GetRoomCurrentCameraRequest,
 } from '@server/requestTypes/room';
 import {
@@ -23,6 +24,7 @@ import {
   getRoomMembers,
   getRoomPreview,
   approveJoinRoom,
+  getRoomIntegration,
   getRoomCurrentCamera,
   getRoomWaitingMembers,
 } from '@server/api/room';
@@ -35,6 +37,7 @@ import {
   GetRoomMembersResponse,
   GetRoomPreviewResponse,
   ApproveJoinRoomResponse,
+  GetRoomIntegrationResponse,
   GetRoomCurrentCameraResponse,
   GetRoomWaitingMembersResponse,
 } from '@server/responseTypes/room';
@@ -42,7 +45,7 @@ import {
 import { translateCategory } from '@utils/room';
 import { InfoToastMessage, ErrorToastMessage } from '@utils/toastMessage';
 
-import { RoomList, RoomDetail, RoomCurrentCamera } from '@type/entity/room';
+import { RoomList, RoomDetail, RoomIntegration, RoomCurrentCamera } from '@type/entity/room';
 
 // 방 생성
 export const useCreateRoom = (): UseMutationResult<
@@ -278,6 +281,30 @@ export const useGetRoomList = (
     ],
     queryFn: () => getRoomList(data),
     select: (response: GetRoomListResponse[]) => {
+      return response;
+    },
+  });
+
+  return { rooms, refetch };
+};
+
+// 지도, 리스트 통합 조회
+export const useGetRoomIntegration = (
+  data: GetRoomIntegrationRequest,
+): { rooms: RoomIntegration[]; refetch: () => void } => {
+  const { data: rooms, refetch } = useSuspenseQuery({
+    queryKey: [
+      `/api/rooms/integration`,
+      data.searchLongitude,
+      data.searchLatitude,
+      data.sortType,
+      data.spotId,
+      data.radius,
+      data.roomTags,
+      data.isImminent,
+    ],
+    queryFn: () => getRoomIntegration(data),
+    select: (response: GetRoomIntegrationResponse[]) => {
       return response;
     },
   });

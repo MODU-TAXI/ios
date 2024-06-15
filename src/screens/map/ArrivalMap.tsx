@@ -52,10 +52,19 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
   }, []);
 
   useEffect(() => {
-    route.params && mapRef.current?.animateCameraTo(currentCamera);
-  }, [currentCamera])
+    mapRef.current?.animateCameraWithTwoCoords({
+      coord1: {
+        latitude: spotData.maxLatitude * 1.00005,
+        longitude: spotData.maxLongitude * 1.00005,
+      },
+      coord2: {
+        latitude: spotData.minLatitude * 0.99995,
+        longitude: spotData.minLongitude * 0.99995,
+      }
+    })
+  }, [route.params?.searchParams?.title])
 
-  // 거점 3개와 distance
+  // 거점 3개와 고정카메라 좌표 리턴
   const { spotData, refetch } = useGetSpotMap({
     "count": 3,
     "searchLongitude": currentCamera.longitude,
@@ -95,7 +104,7 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
     <View className="flex-1 items-center bg-white" style={{ marginTop: 0 }}>
       <NaverMapView 
         ref={mapRef}
-        style={{ flex: 1, width: "100%" }}
+        style={{ flex: 1, width: "100%", padding: -40 }}
         mapType="Basic"
         initialCamera={currentCamera}
         locale="ko"

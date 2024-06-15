@@ -7,7 +7,10 @@ export interface Spot {
 }
 
 export interface SpotMap {
-  distance: number;
+  minLongitude: number;
+  minLatitude: number;
+  maxLongitude: number;
+  maxLatitude: number;
   spots: {
     id: number;
     name: string;

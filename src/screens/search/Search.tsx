@@ -1,7 +1,6 @@
 import { useRecoilState } from 'recoil';
 import { View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,17 +9,16 @@ import { convertCoordinates, getCurrentLocation } from '../../utils/map';
 import SearchBoxComponent from '@components/Search/SearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 
-import { arrivalState, searchKeywordState } from '@recoil/recoil';
+import { searchParamState, searchKeywordState } from '@recoil/recoil';
 
-import { useGetSpotList } from '@hooks/api/spot';
 import { useNaverSearch } from '@hooks/api/search';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
 
-import { Spot } from '@type/entity/spot';
+import { SortedItemType } from '@type/entity/search';
 import { SearchScreenProps } from '@type/param/loginStack';
-import { NaverSearch, SortedItemType } from '@type/entity/search';
 
+/** 메인맵 도착지 검색 */
 const SearchScreen = ({ navigation }: SearchScreenProps) => {
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
@@ -30,6 +28,9 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
     latitude: 37.5665,
     longitude: 126.978,
   });
+  
+  // 검색어 선택시 넘겨줄 값
+  const [, setSearchParam] = useRecoilState(searchParamState);
 
   useEffect(() => {
     const fetchCurrentLocation = async () => {
@@ -64,45 +65,19 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
     }
   }, [items, currentLocation])
 
-  const [spotSearchParams, setSpotSearchParams] = useState({
-    currentLongitude: currentLocation.longitude,
-    currentLatitude: currentLocation.latitude,
-    departureLongitude: currentLocation.longitude,
-    departureLatitude: currentLocation.latitude,
-  });
-
-  // sortedItems 바뀔 때마다 거점탐색의 파라미터 변경
-  useEffect(() => {
-    if (sortedItems.length > 0) {
-      setSpotSearchParams({
-        currentLongitude: currentLocation.longitude,
-        currentLatitude: currentLocation.latitude,
-        departureLongitude: sortedItems[0].longitude,
-        departureLatitude: sortedItems[0].latitude,
-      })
-    }
-  }, [sortedItems])
-
   /** 선택한 검색어를 전달하며 이동 */
-  const toDepartureMapScreen = (
+  const toMainMapScreen = (
     title: string,
     latitude: number,
     longitude: number,
   ) => {
-    navigation.navigate('DepartureMapScreen', {searchParams: {
+    setSearchParam({
       title: title,
       latitude: latitude,
       longitude: longitude,
-    }});
-  }
-
-  const [, setArrival] = useRecoilState(arrivalState);
-  const toSpotMapScreen = (spots: Spot) => {
+    })
+    setKeyword(''); // 검색어 삭제
     navigation.goBack();
-    setArrival({
-      name: spots.name,
-      spotId: spots.id,
-    });
   }
 
   return (
@@ -120,7 +95,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
           sortedItems.map((item, index) => (
             <Pressable
               key={index}
-              onPress={() => toDepartureMapScreen(
+              onPress={() => toMainMapScreen(
                 deleteTagTitle(item.title),
                 item.latitude,
                 item.longitude,
