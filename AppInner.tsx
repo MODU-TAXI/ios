@@ -3,6 +3,8 @@ import { useRecoilState } from 'recoil';
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import CheckPaymentScreen from 'src/screens/calculate/CheckPayment';
+
 import TestScreen from './src/screens/test';
 import MainScreen from './src/screens/main/Main';
 import HomeScreen from './src/screens/home/Home';
@@ -101,6 +103,7 @@ function AppInner() {
       <LogInStack.Screen name="CheckAccountScreen" component={CheckAccountScreen} />
       <LogInStack.Screen name="CheckCalculateScreen" component={CheckCalculateScreen} />
       <LogInStack.Screen name="CompleteCalculateScreen" component={CompleteCalculateScreen} />
+      <LogInStack.Screen name="CheckPaymentScreen" component={CheckPaymentScreen} />
 
       {/* 마이페이지 Screen */}
       <LogInStack.Screen name="PatchNicknameScreen" component={PatchNicknameScreen} />

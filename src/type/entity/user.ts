@@ -14,3 +14,12 @@ export type UserPreview = {
   imageUrl: string;
   thisIsMe: boolean;
 };
+
+export type PaymentUser = {
+  id: number;
+  nickName: string;
+  name: string;
+  imageUrl: string;
+  status: 'COMPLETE' | 'INCOMPLETE';
+  me: boolean;
+};

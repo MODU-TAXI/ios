@@ -21,7 +21,7 @@ const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) 
 
   const [unParticipateMembers, setUnParticipateMembers] = useState<UserPreview[]>([]);
 
-  const [, setCalculate] = useRecoilState(calculateState);
+  const [, setCalculateData] = useRecoilState(calculateState);
 
   const toAmountScreen = async () => {
     const filteredMembers = roomMembers.inList.filter(
@@ -31,12 +31,12 @@ const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) 
         ),
     );
 
-    setCalculate((prev) => ({
+    setCalculateData((prev) => ({
       ...prev,
       users: filteredMembers,
     }));
 
-    navigation.navigate('AmountScreen');
+    navigation.navigate('AmountScreen', { roomPreview: roomPreview });
   };
 
   return (

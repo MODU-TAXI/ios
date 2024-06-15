@@ -11,20 +11,22 @@ import { calculateState } from '@recoil/recoil';
 
 import { AmountScreenProps } from '@type/param/loginStack';
 
-const AmountScreen = ({ navigation }: AmountScreenProps) => {
-  const [, setCalculate] = useRecoilState(calculateState);
-  const [amount, setAmount] = useState<string>('');
-  const [expectedAmount] = useState<string>('12000');
+const AmountScreen = ({ navigation, route }: AmountScreenProps) => {
+  const { roomPreview } = route.params;
 
-  const amountError = parseInt(amount) > parseInt(expectedAmount);
+  const [, setCalculateData] = useRecoilState(calculateState);
+  const [amount, setAmount] = useState<string>('');
+  const [expectedAmount] = useState<number>(roomPreview.expectedCharge);
+
+  const amountError = parseInt(amount) > expectedAmount;
 
   const toAccountPage = async () => {
-    setCalculate((prev) => ({
+    setCalculateData((prev) => ({
       ...prev,
       amount: amount,
     }));
 
-    navigation.navigate('AccountScreen');
+    navigation.navigate('AccountScreen', { roomPreview: roomPreview });
   };
 
   return (

@@ -100,7 +100,11 @@ export const calculateState = atom<Calculate>({
   default: {
     amount: '',
     account: '',
-    bank: '',
+    accountId: 0,
+    bank: {
+      identifier: '',
+      name: '',
+    },
     users: [],
   },
 });

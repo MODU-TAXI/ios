@@ -14,6 +14,8 @@ interface MessageBoxComponentProps {
   openUserInfoModal: (user: UserPreview) => void;
   openImageModal: (imageUrl: string) => void;
   toCalculateScreen: () => void;
+  matchComplete: () => void;
+  toPaymentScreen: () => void;
 }
 
 export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
@@ -22,7 +24,11 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
   openUserInfoModal,
   openImageModal,
   toCalculateScreen,
+  matchComplete,
+  toPaymentScreen,
 }) => {
+  console.log(message);
+
   // Join message인 경우
   if (message.messageType === 'JOIN') {
     return (
@@ -181,7 +187,7 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
     }
   }
 
-  // 택시 부러러 가기
+  // 택시 부르러 가기
   if (message.messageType === 'CALL_TAXI') {
     return (
       <View className="my-4 flex-col">
@@ -222,6 +228,7 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
     );
   }
 
+  // 매칭 완료
   if (message.messageType === 'MATCHING_COMPLETE') {
     return (
       <View className="my-4 flex-col">
@@ -248,13 +255,138 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
               </Text>
             </View>
 
-            <Pressable className="mt-2">
+            <Pressable className="mt-2" onPress={matchComplete}>
               <View className="rounded-lg border-[1px] border-main bg-white px-6 py-3">
                 <Text className="text-center text-[12px] font-medium tracking-tight text-main">
                   매칭완료
                 </Text>
               </View>
             </Pressable>
+          </View>
+
+          <View className="ml-1 flex-1 flex-col items-start justify-end">
+            <Text className="text-[10px] tracking-tight">2</Text>
+            <Text className="text-[10px] tracking-tight  text-gray-300">
+              {dayjs(message.dateTime).format('HH:MM')}
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  // 정산하기
+  if (message.messageType === 'PAYMENT_REQUEST') {
+    return (
+      <View className="my-4 flex-col">
+        <View className="flex-row items-center">
+          <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
+            <ProfileImage className="" />
+          </View>
+
+          <View>
+            <Text className="font-medium tracking-tight text-[#5D5D5D]">모두의 택시 봇</Text>
+          </View>
+        </View>
+
+        <View className="ml-4 mt-2 flex-row">
+          {/* 메세지 */}
+          <View className="max-w-[260px] rounded-r-2xl rounded-bl-2xl bg-[#F3F4F6] px-4 py-3">
+            <View>
+              <Text className="font-medium tracking-tight  text-[#3E3E3E]">
+                목적지에 도착했어요,
+              </Text>
+
+              <Text className="mt-1 font-medium tracking-tight  text-[#3E3E3E]">
+                '정산하기'를 눌러주세요!
+              </Text>
+            </View>
+
+            <Pressable className="mt-2" onPress={toCalculateScreen}>
+              <View className="rounded-lg border-[1px] border-main bg-white px-6 py-3">
+                <Text className="text-center text-[12px] font-medium tracking-tight text-main">
+                  정산하기
+                </Text>
+              </View>
+            </Pressable>
+          </View>
+
+          <View className="ml-1 flex-1 flex-col items-start justify-end">
+            <Text className="text-[10px] tracking-tight">2</Text>
+            <Text className="text-[10px] tracking-tight  text-gray-300">
+              {dayjs(message.dateTime).format('HH:MM')}
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  // 멤버가 보는 정산페이지
+  if (message.messageType === 'PAYMENT_REQUEST_COMPLETE') {
+    const [arriveTime, payment] = message.content.split('\n');
+
+    return (
+      <View className="my-4 flex-col">
+        <View className="flex-row items-center">
+          <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
+            <ProfileImage className="" />
+          </View>
+
+          <View>
+            <Text className="font-medium tracking-tight text-[#5D5D5D]">모두의 택시 봇</Text>
+          </View>
+        </View>
+
+        <View className="ml-4 mt-2 flex-row">
+          {/* 메세지 */}
+          <View className="max-w-[260px] rounded-r-2xl rounded-bl-2xl bg-[#F3F4F6] px-4 py-3">
+            <Text className="font-medium tracking-tight  text-[#3E3E3E]">{arriveTime}</Text>
+
+            <Text className="mt-1 font-medium tracking-tight  text-[#3E3E3E] ">{payment}</Text>
+
+            <Pressable className="mt-2" onPress={toPaymentScreen}>
+              <View className="rounded-lg border-[1px] border-main bg-white px-6 py-3">
+                <Text className="text-center text-[12px] font-medium tracking-tight text-main">
+                  돈 보내주기
+                </Text>
+              </View>
+            </Pressable>
+          </View>
+
+          <View className="ml-1 flex-1 flex-col items-start justify-end">
+            <Text className="text-[10px] tracking-tight">2</Text>
+            <Text className="text-[10px] tracking-tight  text-gray-300">
+              {dayjs(message.dateTime).format('HH:MM')}
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  // 금액 알림
+  if (message.messageType === 'CHAT_BOT') {
+    const [arriveTime, payment] = message.content.split('\n');
+
+    return (
+      <View className="my-4 flex-col">
+        <View className="flex-row items-center">
+          <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
+            <ProfileImage className="" />
+          </View>
+
+          <View>
+            <Text className="font-medium tracking-tight text-[#5D5D5D]">모두의 택시 봇</Text>
+          </View>
+        </View>
+
+        <View className="ml-4 mt-2 flex-row">
+          {/* 메세지 */}
+          <View className="max-w-[260px] rounded-r-2xl rounded-bl-2xl bg-[#F3F4F6] px-4 py-3">
+            <Text className="font-medium tracking-tight  text-[#3E3E3E]">{arriveTime}</Text>
+
+            <Text className="mt-1 font-medium tracking-tight  text-[#3E3E3E] ">{payment}</Text>
           </View>
 
           <View className="ml-1 flex-1 flex-col items-start justify-end">

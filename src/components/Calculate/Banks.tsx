@@ -3,38 +3,40 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 
 import { GetBankComponent } from './GetBank';
 
+import { Bank } from '@type/entity/account';
+
 const banks = [
-  { name: 'NH농협' },
-  { name: '카카오뱅크' },
-  { name: 'KB국민' },
-  { name: '토스뱅크' },
-  { name: '신한' },
-  { name: '우리' },
-  { name: 'IBK기업' },
-  { name: '하나' },
-  { name: '새마을' },
-  { name: '부산' },
-  { name: '대구' },
-  { name: '케이뱅크' },
-  { name: '신협' },
-  { name: '우체국' },
-  { name: 'SC제일' },
-  { name: '광주' },
-  { name: '수협' },
-  { name: '전북' },
-  { name: '경남' },
-  { name: '저축은행' },
-  { name: '제주' },
+  { identifier: 'NH', name: 'NH농협' },
+  { identifier: 'KAKAO', name: '카카오뱅크' },
+  { identifier: 'KB', name: 'KB국민' },
+  { identifier: 'TOSS', name: '토스뱅크' },
+  { identifier: 'SINHAN', name: '신한' },
+  { identifier: 'WOORI', name: '우리' },
+  { identifier: 'IBK', name: 'IBK기업' },
+  { identifier: 'HANA', name: '하나' },
+  { identifier: 'MG', name: '새마을' },
+  { identifier: 'BUSAN', name: '부산' },
+  { identifier: 'DAEGU', name: '대구' },
+  { identifier: 'K', name: '케이뱅크' },
+  { identifier: 'SHINHYUP', name: '신협' },
+  { identifier: 'POST', name: '우체국' },
+  { identifier: 'SC', name: 'SC제일' },
+  { identifier: 'GWANGJU', name: '광주' },
+  { identifier: 'SUHYUP', name: '수협' },
+  { identifier: 'JEONBUK', name: '전북' },
+  { identifier: 'BNK', name: '경남' },
+  { identifier: 'SB', name: '저축은행' },
+  { identifier: 'JEJU', name: '제주' },
 ];
 
 interface BanksComponentProps {
   closeBankModal: (index: number) => void;
-  setBank: React.Dispatch<React.SetStateAction<string>>;
+  setBank: React.Dispatch<React.SetStateAction<Bank>>;
 }
 
 const BanksComponent: React.FC<BanksComponentProps> = ({ closeBankModal, setBank }) => {
-  const selectBank = (bank: string) => {
-    setBank(bank);
+  const selectBank = (bank: Bank) => {
+    setBank({ identifier: bank.identifier, name: bank.name });
     closeBankModal(0);
   };
 
@@ -42,8 +44,8 @@ const BanksComponent: React.FC<BanksComponentProps> = ({ closeBankModal, setBank
     <View style={styles.gridContainer}>
       {banks.map((bank, index) => {
         return (
-          <Pressable key={index} style={styles.bankItem} onPress={() => selectBank(bank.name)}>
-            <GetBankComponent bank={bank.name} />
+          <Pressable key={index} style={styles.bankItem} onPress={() => selectBank(bank)}>
+            <GetBankComponent bank={bank.identifier} />
             <Text style={styles.bankText}>{bank.name}</Text>
           </Pressable>
         );

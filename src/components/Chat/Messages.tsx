@@ -13,6 +13,8 @@ interface MessagesComponentProps {
   openUserInfoModal: (user: UserPreview) => void;
   openImageModal: (imageUrl: string) => void;
   toCalculateScreen: () => void;
+  matchComplete: () => void;
+  toPaymentScreen: () => void;
 }
 
 const MessagesComponent: React.FC<MessagesComponentProps> = ({
@@ -22,6 +24,8 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
   openUserInfoModal,
   openImageModal,
   toCalculateScreen,
+  matchComplete,
+  toPaymentScreen,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -64,6 +68,8 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
             memberId={memberId}
             openImageModal={openImageModal}
             toCalculateScreen={toCalculateScreen}
+            matchComplete={matchComplete}
+            toPaymentScreen={toPaymentScreen}
           />
         </View>
       ))}
@@ -77,6 +83,8 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
             memberId={memberId}
             openImageModal={openImageModal}
             toCalculateScreen={toCalculateScreen}
+            matchComplete={matchComplete}
+            toPaymentScreen={toPaymentScreen}
           />
         </View>
       ))}

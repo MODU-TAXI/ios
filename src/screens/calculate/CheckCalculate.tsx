@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Text, View, Pressable } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -7,24 +7,70 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
 import { GetBankComponent } from '@components/Calculate/GetBank';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ParticipateMembersComponent from '@components/Calculate/ParicipateMembers';
+import UnParticipateMembersComponent from '@components/Calculate/UnParticipateMembers';
 
 import { calculateState } from '@recoil/recoil';
 
+import { usePayment } from '@hooks/api/payment';
+
 import { InfoToastMessage } from '@utils/toastMessage';
 
+import { UserPreview } from '@type/entity/user';
 import { CheckCalculateScreenProps } from '@type/param/loginStack';
 
 import CopyButton from '@assets/images/Calculate/CopyButton.svg';
 
-const CheckCalculateScreen = ({ navigation }: CheckCalculateScreenProps) => {
+const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) => {
+  const { roomPreview } = route.params;
+
   const calculateData = useRecoilValue(calculateState);
 
-  const amount = parseInt(calculateData.amount);
-  const amountPerPerson = parseInt(calculateData.amount) / calculateData.users.length;
+  const [participateMembers, setParticipateMembers] = useState<UserPreview[]>(calculateData.users);
+  const [unParticipateMembers, setUnParticipateMembers] = useState<UserPreview[]>([]);
 
-  const toCompleteCalculateScreen = () => {
-    navigation.navigate('CompleteCalculateScreen');
+  const amount = parseInt(calculateData.amount);
+  const amountPerPerson = parseInt(calculateData.amount) / participateMembers.length;
+
+  const { mutateAsync: payment, isPending: paymentPending } = usePayment();
+
+  // 정산 멤버에 추가
+  const addUser = (member: UserPreview) => {
+    const remainUsers = unParticipateMembers.filter(
+      (unParticipateMember) => unParticipateMember.memberId !== member.memberId,
+    );
+
+    setUnParticipateMembers(remainUsers);
+
+    setParticipateMembers((prev) => [...prev, member]);
+  };
+
+  // 정산 멤버에서 빼기
+  const exceptUser = (member: UserPreview) => {
+    const remainUsers = participateMembers.filter(
+      (participateMember) => participateMember.memberId !== member.memberId,
+    );
+
+    setParticipateMembers(remainUsers);
+
+    setUnParticipateMembers((prev) => [...prev, member]);
+  };
+
+  // 정산하기
+  const toCompleteCalculateScreen = async () => {
+    await payment({
+      roomId: roomPreview.roomId,
+      accountId: calculateData.accountId,
+      totalCharge: parseInt(calculateData.amount),
+      participantList: participateMembers.map((participateMember) => {
+        return { id: participateMember.memberId };
+      }),
+      nonParticipantList: unParticipateMembers.map((unParticipateMember) => {
+        return { id: unParticipateMember.memberId };
+      }),
+    });
+    navigation.navigate('CompleteCalculateScreen', { roomPreview: roomPreview });
   };
 
   const copyAccount = () => {
@@ -35,6 +81,8 @@ const CheckCalculateScreen = ({ navigation }: CheckCalculateScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {paymentPending && <TransparentLoadingComponent />}
+
       <HeaderComponent title="도착완료 정산하기" />
       <View className="flex-1 px-4 pt-8">
         <View className="flex-1 px-3 ">
@@ -53,9 +101,9 @@ const CheckCalculateScreen = ({ navigation }: CheckCalculateScreenProps) => {
             <Text className="font-medium tracking-tight text-[#5D5D5D]">계좌번호</Text>
 
             <View className="flex-row items-center">
-              <GetBankComponent bank={calculateData.bank} />
+              <GetBankComponent bank={calculateData.bank.identifier} />
               <Text className="ml-2 mr-1 text-[16px] font-medium tracking-tight">
-                {calculateData.bank}
+                {calculateData.bank.name}
               </Text>
               <Text className="text-[16px] font-medium tracking-tight">
                 {calculateData.account}
@@ -88,14 +136,29 @@ const CheckCalculateScreen = ({ navigation }: CheckCalculateScreenProps) => {
           <View className="my-6 border-[0.5px] border-[#D7D7D7]" />
 
           {/* 정산 멤버 */}
-          <ParticipateMembersComponent participateMembers={calculateData.users} price={amount} />
+          <ParticipateMembersComponent
+            participateMembers={participateMembers}
+            price={amount}
+            exceptUser={exceptUser}
+          />
+
+          {unParticipateMembers.length === 0 && <View className="flex-1" />}
+
+          {/* 정산 멤버 미포함 */}
+          {unParticipateMembers.length > 0 && (
+            <UnParticipateMembersComponent
+              unParticipateMembers={unParticipateMembers}
+              price={amount}
+              addUser={addUser}
+            />
+          )}
 
           <View className="mb-4 px-3">
             <ButtonComponent
               color={'bg-main'}
               borderColor={'border-main'}
               textColor={'white'}
-              text={'확인'}
+              text={'정산 요청하기'}
               disabled={false}
               onPress={toCompleteCalculateScreen}
             />
