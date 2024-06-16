@@ -53,9 +53,8 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
   const [viewImages, setViewImages] = useState([{ uri: '' }]);
   const [userInfo, setUserInfo] = useState<UserPreview>();
-  const myInfo = useRecoilValue(userInfoState);
-
   const [accessToken, setNewAccessToken] = useAccessToken(); // socket을 위한 token hook
+  const myInfo = useRecoilValue(userInfoState);
 
   useEnterChatRoom(); // 채팅스크린에 있을때는 알람안오게 해야하므로 recoil로 상태 저장
 

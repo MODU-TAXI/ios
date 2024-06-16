@@ -4,8 +4,6 @@ import FastImage from 'react-native-fast-image';
 
 import { RoomMember } from '@type/entity/room';
 
-import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
-
 interface ParticipateUserComponentProps {
   roomMember: RoomMember;
 }
