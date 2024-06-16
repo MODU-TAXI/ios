@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { View, Text, Pressable } from 'react-native';
 
 import { UserPreview } from '@type/entity/user';
 
@@ -32,13 +32,16 @@ const UnParticipateMemberComponent: React.FC<UnParticipateMemberComponentProps> 
         )}
       </View>
 
-      <View className="flex-row items-center justify-center">
+      <Pressable
+        className="flex-row items-center justify-center"
+        onPress={() => addUser(unParticipateMember)}
+      >
         <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C]">
           {price.toLocaleString('ko-KR')}원
         </Text>
 
-        <PlusButton onPress={() => addUser(unParticipateMember)} />
-      </View>
+        <PlusButton />
+      </Pressable>
     </View>
   );
 };
