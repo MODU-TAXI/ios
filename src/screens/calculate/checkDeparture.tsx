@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
-import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ButtonComponent from '@components/Button';
