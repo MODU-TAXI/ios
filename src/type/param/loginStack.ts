@@ -17,7 +17,7 @@ export type LoginStackParamList = {
   MainMapScreen: undefined;
   NaverMapScreen: undefined;
   SearchScreen: undefined;
-  ChatRoomScreen: { roomId: number };
+  ChatRoomScreen: { roomId: number; managerId: number };
   AlarmScreen: undefined;
 
   // 생성

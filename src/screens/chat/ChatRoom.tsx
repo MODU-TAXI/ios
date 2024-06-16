@@ -41,7 +41,7 @@ Object.assign('global', {
 const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [appState, setAppState] = useState(AppState.currentState);
 
-  const { roomId } = route.params;
+  const { roomId, managerId } = route.params;
 
   const { roomPreview, messages, messagesRefetch } = useChatDetail(roomId);
 
@@ -120,7 +120,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         debug: function (str) {
           console.log(str);
         },
-        reconnectDelay: 50,
+        reconnectDelay: 500,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
       });
@@ -274,7 +274,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   // 정산페이지로 이동
   const toCalculateScreen = () => {
     if (roomPreview) {
-      navigation.navigate('CheckDepartureScreen', { roomPreview: roomPreview });
+      navigation.navigate('AmountScreen', { roomPreview: roomPreview });
     }
   };
 
@@ -312,10 +312,11 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
       <KeyboardAvoidingView className="flex-1 bg-white" behavior="padding">
         {/* 메세지 Component */}
         <MessagesComponent
-          messages={messages.messages}
           memberId={myInfo.id}
-          openUserInfoModal={openUserInfoModal}
+          managerId={managerId}
           newMessages={newMessages}
+          messages={messages.messages}
+          openUserInfoModal={openUserInfoModal}
           openImageModal={openImageModal}
           toCalculateScreen={toCalculateScreen}
           matchComplete={matchComplete}

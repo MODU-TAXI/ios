@@ -1,4 +1,5 @@
 import React from 'react';
+import FastImage from 'react-native-fast-image';
 import { View, Text, Pressable } from 'react-native';
 
 import { RoomWaitingMember } from '@type/entity/room';
@@ -18,7 +19,11 @@ const WaitingUserComponent: React.FC<WaitingUserComponentProps> = ({
   return (
     <View className="mt-4 flex-row items-center justify-between">
       <View className="flex-row items-center">
-        <UserBasicImage className="mr-1" />
+        <FastImage
+          source={{ uri: roomWaitingMember.imageUrl }}
+          className="mr-2 h-[24px] w-[24px] rounded-full"
+        />
+
         <Text className="mr-1 font-normal text-base">{roomWaitingMember.nickname}</Text>
       </View>
 

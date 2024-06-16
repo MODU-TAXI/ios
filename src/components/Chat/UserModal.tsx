@@ -1,4 +1,5 @@
 import React from 'react';
+import FastImage from 'react-native-fast-image';
 import { Text, View, Modal, Pressable } from 'react-native';
 
 import { UserPreview } from '@type/entity/user';
@@ -21,6 +22,7 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
   closeUserInfoModal,
   toDeclarationScreen,
 }) => {
+  console.log('imageUrl:', userInfo.imageUrl);
   return (
     <Modal animationType="fade" transparent={true} visible={modalVisible}>
       <View
@@ -32,7 +34,10 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
         <View className="flex-col items-center justify-center rounded-t-[20px] bg-white pt-[50px]">
           {/* 사진 */}
           <View className="mt-10">
-            <UserImage />
+            <FastImage
+              source={{ uri: userInfo.imageUrl }}
+              className="h-[160px] w-[160px] rounded-full"
+            />
           </View>
 
           {/* 이름 */}

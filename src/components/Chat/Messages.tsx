@@ -8,6 +8,7 @@ import { UserPreview } from '@type/entity/user';
 
 interface MessagesComponentProps {
   memberId: number;
+  managerId: number;
   messages: ChatMessage[];
   newMessages: ChatMessage[];
   openUserInfoModal: (user: UserPreview) => void;
@@ -19,6 +20,7 @@ interface MessagesComponentProps {
 
 const MessagesComponent: React.FC<MessagesComponentProps> = ({
   memberId,
+  managerId,
   messages,
   newMessages,
   openUserInfoModal,
@@ -64,6 +66,7 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
           {/* 말풍선 */}
           <MessageBoxComponent
             message={chat}
+            managerId={managerId}
             openUserInfoModal={openUserInfoModal}
             memberId={memberId}
             openImageModal={openImageModal}
@@ -79,6 +82,7 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
           {/* 말풍선 */}
           <MessageBoxComponent
             message={chat}
+            managerId={managerId}
             openUserInfoModal={openUserInfoModal}
             memberId={memberId}
             openImageModal={openImageModal}
