@@ -8,20 +8,26 @@ import { UserPreview } from '@type/entity/user';
 
 interface MessagesComponentProps {
   memberId: number;
+  managerId: number;
   messages: ChatMessage[];
   newMessages: ChatMessage[];
   openUserInfoModal: (user: UserPreview) => void;
   openImageModal: (imageUrl: string) => void;
   toCalculateScreen: () => void;
+  matchComplete: () => void;
+  toPaymentScreen: () => void;
 }
 
 const MessagesComponent: React.FC<MessagesComponentProps> = ({
   memberId,
+  managerId,
   messages,
   newMessages,
   openUserInfoModal,
   openImageModal,
   toCalculateScreen,
+  matchComplete,
+  toPaymentScreen,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -60,10 +66,13 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
           {/* 말풍선 */}
           <MessageBoxComponent
             message={chat}
+            managerId={managerId}
             openUserInfoModal={openUserInfoModal}
             memberId={memberId}
             openImageModal={openImageModal}
             toCalculateScreen={toCalculateScreen}
+            matchComplete={matchComplete}
+            toPaymentScreen={toPaymentScreen}
           />
         </View>
       ))}
@@ -73,10 +82,13 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
           {/* 말풍선 */}
           <MessageBoxComponent
             message={chat}
+            managerId={managerId}
             openUserInfoModal={openUserInfoModal}
             memberId={memberId}
             openImageModal={openImageModal}
             toCalculateScreen={toCalculateScreen}
+            matchComplete={matchComplete}
+            toPaymentScreen={toPaymentScreen}
           />
         </View>
       ))}

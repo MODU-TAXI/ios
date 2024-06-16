@@ -21,6 +21,7 @@ import {
   deleteRoom,
   getRoomList,
   getRoomDetail,
+  completeMatch,
   getRoomMembers,
   getRoomPreview,
   approveJoinRoom,
@@ -37,6 +38,7 @@ import {
   GetRoomMembersResponse,
   GetRoomPreviewResponse,
   ApproveJoinRoomResponse,
+  CompleteMatchingResponse,
   GetRoomIntegrationResponse,
   GetRoomCurrentCameraResponse,
   GetRoomWaitingMembersResponse,
@@ -371,6 +373,21 @@ export const useApproveJoinRoom = (
     mutationFn: (memberId: number) => approveJoinRoom(roomId, memberId),
     onSuccess: async () => {
       InfoToastMessage('파티 입장 성공!');
+    },
+    onError: (error: any) => {
+      if (error?.response?.data?.message) {
+        return ErrorToastMessage(error.response.data.message);
+      }
+    },
+  });
+};
+
+// 방 입장 수락
+export const useMatchComplete = (roomId: number) => {
+  return useMutation({
+    mutationFn: () => completeMatch(roomId),
+    onSuccess: async () => {
+      InfoToastMessage('매칭완료 성공!');
     },
     onError: (error: any) => {
       if (error?.response?.data?.message) {

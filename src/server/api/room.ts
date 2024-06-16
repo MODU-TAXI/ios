@@ -5,7 +5,13 @@ import {
   DeleteAxiosInstance,
 } from '@axios/axios.method';
 
-import { PatchRoomRequest, CreateRoomRequest, GetRoomListRequest, GetRoomIntegrationRequest, GetRoomCurrentCameraRequest } from '@server/requestTypes/room';
+import {
+  PatchRoomRequest,
+  CreateRoomRequest,
+  GetRoomListRequest,
+  GetRoomIntegrationRequest,
+  GetRoomCurrentCameraRequest,
+} from '@server/requestTypes/room';
 import {
   JoinRoomResponse,
   PatchRoomResponse,
@@ -16,6 +22,7 @@ import {
   GetRoomMembersResponse,
   GetRoomPreviewResponse,
   ApproveJoinRoomResponse,
+  CompleteMatchingResponse,
   GetRoomIntegrationResponse,
   GetRoomCurrentCameraResponse,
   GetRoomWaitingMembersResponse,
@@ -47,7 +54,7 @@ export const deleteRoom = async (roomId: number): Promise<DeleteRoomResponse> =>
 
 // [원형 영역 내 방 조회] /api/rooms/map
 export const getRoomCurrentCamera = async (
-  data: GetRoomCurrentCameraRequest
+  data: GetRoomCurrentCameraRequest,
 ): Promise<GetRoomCurrentCameraResponse> => {
   const params: any = {
     searchLongitude: data.searchLongitude,
@@ -67,9 +74,7 @@ export const getRoomCurrentCamera = async (
 };
 
 // [경로를 제외한 방 리스트 조회] /api/rooms/list
-export const getRoomList = async (
-  data: GetRoomListRequest
-): Promise<GetRoomListResponse[]> => {
+export const getRoomList = async (data: GetRoomListRequest): Promise<GetRoomListResponse[]> => {
   const params: any = {
     page: data.page,
     size: data.size,
@@ -92,7 +97,7 @@ export const getRoomList = async (
 
 // [지도, 리스트 통합 조회] /api/rooms/integration
 export const getRoomIntegration = async (
-  data: GetRoomIntegrationRequest
+  data: GetRoomIntegrationRequest,
 ): Promise<GetRoomIntegrationResponse[]> => {
   const params: any = {
     searchLongitude: data.searchLongitude,
@@ -110,7 +115,7 @@ export const getRoomIntegration = async (
   });
 
   return response.data.rooms;
-}
+};
 
 // [방 미리보기 조회] /api/rooms/preview/{id}
 export const getRoomPreview = async (id: number): Promise<GetRoomPreviewResponse | null> => {
@@ -164,6 +169,15 @@ export const approveJoinRoom = async (
 ): Promise<ApproveJoinRoomResponse> => {
   const response = await DeleteAxiosInstance<ApproveJoinRoomResponse>(
     `/api/rooms/${roomId}/members/${memberId}/approve`,
+  );
+
+  return response.data;
+};
+
+// [매칭 완료] /api/rooms/finish/matching/{id}
+export const completeMatch = async (roomId: number): Promise<CompleteMatchingResponse> => {
+  const response = await PatchAxiosInstance<CompleteMatchingResponse>(
+    `/api/rooms/finish/matching/${roomId}`,
   );
 
   return response.data;

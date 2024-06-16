@@ -12,6 +12,7 @@ import RoomMapComponent from '@components/RoomDigest/RoomMap';
 import RoomHeaderComponent from '@components/Home/RoomHeader';
 import UpdateModalComponent from '@components/RoomDigest/UpdateModal';
 import RoomErrorBoundary from '@components/Fallback/RoomErrorBoundary';
+import ManagerComponent from '@components/RoomDigest/ManagerComponent';
 import WaitingUsersComponent from '@components/RoomDigest/WaitingUsers';
 import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
 import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
@@ -50,6 +51,14 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     useApproveJoinRoom(roomId); // 방 입장 수락 mutate
   const { mutateAsync: deleteRoomMutate, isPending: deleteRoomPending } = useDeleteRoom(roomId); // 방 삭제 mutate
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
+
+  const manager = participateMembers.inList.filter(
+    (participateMember) => participateMember.memberId == roomDetail.managerId,
+  );
+
+  const members = participateMembers.inList.filter(
+    (participateMember) => participateMember.memberId != roomDetail.managerId,
+  );
 
   // 방정보 새로고침
   const onRefresh = React.useCallback(async () => {
@@ -112,7 +121,10 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
 
   // 채팅방으로 이동
   const toChatRoomScreen = async () => {
-    navigation.navigate('ChatRoomScreen', { roomId: roomDetail.roomId });
+    navigation.navigate('ChatRoomScreen', {
+      roomId: roomDetail.roomId,
+      managerId: roomDetail.managerId,
+    });
   };
 
   if (pending) return <LoadingComponent />;
@@ -178,8 +190,11 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
         {/* 점선 */}
         <DottedLine width="100%" />
 
+        {/* 방장 */}
+        <ManagerComponent manager={manager[0]} />
+
         {/* 참여멤버 */}
-        <ParticipateUsersComponent roomMembers={participateMembers.inList} />
+        <ParticipateUsersComponent roomMembers={members} />
 
         {/* 대기 멤버 */}
         <WaitingUsersComponent

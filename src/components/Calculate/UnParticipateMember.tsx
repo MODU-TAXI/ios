@@ -4,46 +4,46 @@ import { View, Text, Pressable } from 'react-native';
 
 import { UserPreview } from '@type/entity/user';
 
-import MinusButton from '@assets/images/Calculate/MinusButton.svg';
+import PlusButton from '@assets/images/Calculate/PlusButton.svg';
 import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
 
-interface ParticipateMemberComponentProps {
-  participateMember: UserPreview;
+interface UnParticipateMemberComponentProps {
+  unParticipateMember: UserPreview;
   price: number;
-  exceptUser: (member: UserPreview) => void;
+  addUser: (member: UserPreview) => void;
 }
 
-const ParticipateMemberComponent: React.FC<ParticipateMemberComponentProps> = ({
-  participateMember,
+const UnParticipateMemberComponent: React.FC<UnParticipateMemberComponentProps> = ({
+  unParticipateMember,
   price,
-  exceptUser,
+  addUser,
 }) => {
   return (
-    <View key={participateMember.memberId} className="mt-4 flex-row items-center justify-between">
+    <View key={unParticipateMember.memberId} className="mt-4 flex-row items-center justify-between">
       <View className="flex-row items-center">
         <FastImage
-          source={{ uri: participateMember.imageUrl }}
+          source={{ uri: unParticipateMember.imageUrl }}
           className="mr-2 h-[24px] w-[24px] rounded-full"
         />
 
-        <Text className="font-normal text-base">{participateMember.nickname}</Text>
-        {participateMember.thisIsMe && (
+        <Text className="font-normal text-base">{unParticipateMember.nickname}</Text>
+        {unParticipateMember.thisIsMe && (
           <Text className="ml-1 text-lg font-medium tracking-tight  text-disabled2">(나)</Text>
         )}
       </View>
 
       <Pressable
         className="flex-row items-center justify-center"
-        onPress={() => exceptUser(participateMember)}
+        onPress={() => addUser(unParticipateMember)}
       >
         <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C]">
           {price.toLocaleString('ko-KR')}원
         </Text>
 
-        <MinusButton />
+        <PlusButton />
       </Pressable>
     </View>
   );
 };
 
-export default ParticipateMemberComponent;
+export default UnParticipateMemberComponent;

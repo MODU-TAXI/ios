@@ -1,3 +1,4 @@
+import { Bank } from '@type/entity/account';
 import { UserPreview } from '@type/entity/user';
 
 export type SignUpUser = {
@@ -13,6 +14,7 @@ export type MessageBody = {
   memberId: number;
   roomId: number;
   sender: string;
+  imageUrl: string;
   messageType: 'JOIN' | 'CHAT' | 'LEAVE';
 };
 
@@ -39,7 +41,8 @@ export type Arrival = {
 
 export type Calculate = {
   account: string;
-  bank: string;
+  accountId: number;
+  bank: Bank;
   amount: string;
   users: UserPreview[];
 };

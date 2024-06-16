@@ -5,4 +5,5 @@ export type ChatMessage = {
   sender: string;
   memberId: number;
   dateTime: Date;
+  imageUrl: string;
 };

@@ -4,10 +4,12 @@ import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from '@gor
 
 import BanksComponent from '@components/Calculate/Banks';
 
+import { Bank } from '@type/entity/account';
+
 interface BankModalComponentProps {
   bankModalIndex: number;
   closeBankModal: (index: number) => void;
-  setBank: React.Dispatch<React.SetStateAction<string>>;
+  setBank: React.Dispatch<React.SetStateAction<Bank>>;
 }
 
 const BankModalComponent: React.FC<BankModalComponentProps> = ({

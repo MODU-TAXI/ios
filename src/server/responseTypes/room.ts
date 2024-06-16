@@ -197,3 +197,8 @@ export interface GetRoomWaitingMembersResponse {
     thisIsMe: boolean;
   }[];
 }
+
+// [매칭 완료] /api/rooms/finish/matching/{id}
+export interface CompleteMatchingResponse {
+  isUpdated: boolean;
+}

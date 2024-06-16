@@ -8,18 +8,28 @@ import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/Calculate/InputBox';
 import BankModalComponent from '@components/Calculate/BankModal';
 import { GetBankComponent } from '@components/Calculate/GetBank';
+import MyAccountsComponent from '@components/Calculate/MyAccounts';
 
 import { calculateState } from '@recoil/recoil';
 
+import { useGetAccounts } from '@hooks/api/account';
+
+import { Bank } from '@type/entity/account';
 import { AccountScreenProps } from '@type/param/loginStack';
 
 import SelectBank from '@assets/images/Calculate/SelectBank.svg';
 
-const AccountScreen = ({ navigation }: AccountScreenProps) => {
-  const [, setCalculate] = useRecoilState(calculateState);
+const AccountScreen = ({ navigation, route }: AccountScreenProps) => {
+  const { roomPreview } = route.params;
+
+  const { accounts } = useGetAccounts(); // 계좌 정보들 가져오기
+
+  const [, setCalculateData] = useRecoilState(calculateState);
   const [account, setAccount] = useState<string>(''); // 계좌번호
-  const [bank, setBank] = useState<string>(''); // 은행
-  const [bankModalIndex, setBankModalIndex] = useState<number>(1); // modal index
+  const [bank, setBank] = useState<Bank>({ identifier: '', name: '' }); // 은행
+  const [bankModalIndex, setBankModalIndex] = useState<number>(
+    accounts.accounts.length === 0 ? 1 : 0,
+  ); // modal index
 
   // bank modal 열기
   const openBankModal = () => {
@@ -32,13 +42,13 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
   };
 
   const toNext = () => {
-    setCalculate((prev) => ({
+    setCalculateData((prev) => ({
       ...prev,
       account: account,
       bank: bank,
     }));
 
-    navigation.navigate('CheckAccountScreen');
+    navigation.navigate('CheckAccountScreen', { roomPreview: roomPreview });
   };
 
   return (
@@ -65,14 +75,20 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
 
             <View className="mt-2 flex-row justify-between px-2">
               <View className="flex-row items-center">
-                <GetBankComponent bank={bank} />
-                <Text className="ml-1 font-medium tracking-tight">{bank}</Text>
+                <GetBankComponent bank={bank.identifier} />
+                <Text className="ml-1 font-medium tracking-tight">{bank.name}</Text>
               </View>
 
               <Pressable onPress={openBankModal}>
                 <SelectBank />
               </Pressable>
             </View>
+
+            <MyAccountsComponent
+              accounts={accounts.accounts}
+              setAccount={setAccount}
+              setBank={setBank}
+            />
           </View>
 
           <View className="mb-4 px-3">

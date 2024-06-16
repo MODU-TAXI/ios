@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
-import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ButtonComponent from '@components/Button';
@@ -21,7 +21,7 @@ const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) 
 
   const [unParticipateMembers, setUnParticipateMembers] = useState<UserPreview[]>([]);
 
-  const [, setCalculate] = useRecoilState(calculateState);
+  const [, setCalculateData] = useRecoilState(calculateState);
 
   const toAmountScreen = async () => {
     const filteredMembers = roomMembers.inList.filter(
@@ -31,12 +31,12 @@ const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) 
         ),
     );
 
-    setCalculate((prev) => ({
+    setCalculateData((prev) => ({
       ...prev,
       users: filteredMembers,
     }));
 
-    navigation.navigate('AmountScreen');
+    navigation.navigate('AmountScreen', { roomPreview: roomPreview });
   };
 
   return (

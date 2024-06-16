@@ -17,14 +17,14 @@ export type LoginStackParamList = {
   MainMapScreen: undefined;
   NaverMapScreen: undefined;
   SearchScreen: undefined;
-  ChatRoomScreen: { roomId: number };
+  ChatRoomScreen: { roomId: number; managerId: number };
   AlarmScreen: undefined;
 
   // 생성
   CreateRoomScreen: undefined;
   DepartureMapScreen: undefined | { searchParams: SearchResultParams };
   DepartureSearchScreen: undefined;
-  ArrivalMapScreen: undefined | { type: string, searchParams?: SearchResultParams, spot?: Spot };
+  ArrivalMapScreen: undefined | { type: string; searchParams?: SearchResultParams; spot?: Spot };
   ArrivalSearchScreen: undefined;
 
   // 조회, 수정
@@ -34,11 +34,12 @@ export type LoginStackParamList = {
 
   // 정산
   CheckDepartureScreen: { roomPreview: RoomPreview };
-  AmountScreen: undefined;
-  AccountScreen: undefined;
-  CheckAccountScreen: undefined;
-  CheckCalculateScreen: undefined;
-  CompleteCalculateScreen: undefined;
+  AmountScreen: { roomPreview: RoomPreview };
+  AccountScreen: { roomPreview: RoomPreview };
+  CheckAccountScreen: { roomPreview: RoomPreview };
+  CheckCalculateScreen: { roomPreview: RoomPreview };
+  CompleteCalculateScreen: { roomPreview: RoomPreview };
+  CheckPaymentScreen: { roomPreview: RoomPreview };
 
   // 마이 페이지
   PatchNicknameScreen: undefined;
@@ -69,9 +70,15 @@ export type DepartureMapScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'DepartureMapScreen'
 >;
-export type DepartureSearchScreenProps = NativeStackScreenProps<LoginStackParamList,'DepartureSearchScreen'>;
+export type DepartureSearchScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'DepartureSearchScreen'
+>;
 export type ArrivalMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'ArrivalMapScreen'>;
-export type ArrivalSearchScreenProps = NativeStackScreenProps<LoginStackParamList, 'ArrivalSearchScreen'>;
+export type ArrivalSearchScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'ArrivalSearchScreen'
+>;
 
 // 조회, 수정
 export type RoomDetailScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomDetailScreen'>;
@@ -95,6 +102,10 @@ export type CheckCalculateScreenProps = NativeStackScreenProps<
 export type CompleteCalculateScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'CompleteCalculateScreen'
+>;
+export type CheckPaymentScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'CheckPaymentScreen'
 >;
 
 // 마이 페이지

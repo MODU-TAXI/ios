@@ -15,6 +15,7 @@ import UserModalComponent from '@components/Chat/UserModal';
 import SelectImageModal from '@components/Common/SelectImageModal';
 import ChatErrorBoundary from '@components/Fallback/ChatErrorBoundary';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { MessageBody } from '@recoil/type';
 import { userInfoState } from '@recoil/recoil';
@@ -24,6 +25,7 @@ import { refreshAccessToken } from '@server/api/member';
 import { useAccessToken } from '@hooks/token';
 import { useEnterChatRoom } from '@hooks/chat';
 import { useChatDetail } from '@hooks/api/chat';
+import { useMatchComplete } from '@hooks/api/rooms';
 
 import { openAlbum, openCamera } from '@utils/image';
 import { setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
@@ -39,9 +41,11 @@ Object.assign('global', {
 const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [appState, setAppState] = useState(AppState.currentState);
 
-  const { roomId } = route.params;
+  const { roomId, managerId } = route.params;
 
   const { roomPreview, messages, messagesRefetch } = useChatDetail(roomId);
+
+  const { mutateAsync: matchComplete, isPending: matchCompletePending } = useMatchComplete(roomId);
 
   const [newMessages, setNewMeesages] = useState<MessageBody[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
@@ -49,9 +53,8 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
   const [viewImages, setViewImages] = useState([{ uri: '' }]);
   const [userInfo, setUserInfo] = useState<UserPreview>();
-  const myInfo = useRecoilValue(userInfoState);
-
   const [accessToken, setNewAccessToken] = useAccessToken(); // socket을 위한 token hook
+  const myInfo = useRecoilValue(userInfoState);
 
   useEnterChatRoom(); // 채팅스크린에 있을때는 알람안오게 해야하므로 recoil로 상태 저장
 
@@ -65,12 +68,11 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
           destination: '/pub/chat',
           body: JSON.stringify({
             roomId: roomId,
+            memberId: myInfo.id,
             type: type,
             content: inputMessage,
+            imageUrl: myInfo.imageUrl,
           }),
-          headers: {
-            token: accessToken,
-          },
         });
       } else {
         // 여기다 저장해놨다가 connect되면 한번에 send?
@@ -117,7 +119,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         debug: function (str) {
           console.log(str);
         },
-        reconnectDelay: 50,
+        reconnectDelay: 500,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
       });
@@ -271,7 +273,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   // 정산페이지로 이동
   const toCalculateScreen = () => {
     if (roomPreview) {
-      navigation.navigate('CheckDepartureScreen', { roomPreview: roomPreview });
+      navigation.navigate('AmountScreen', { roomPreview: roomPreview });
     }
   };
 
@@ -283,10 +285,17 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     }
   };
 
-  // if (!userInfo) return <LoadingComponent />;
+  // 유저기준 - 정산하기 페이지로 이동
+  const toPaymentScreen = () => {
+    if (roomPreview) {
+      navigation.navigate('CheckPaymentScreen', { roomPreview: roomPreview });
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {matchCompletePending && <TransparentLoadingComponent />}
+
       <HeaderComponent title={'채팅 페이지'} />
 
       <ImageView
@@ -302,12 +311,15 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
       <KeyboardAvoidingView className="flex-1 bg-white" behavior="padding">
         {/* 메세지 Component */}
         <MessagesComponent
-          messages={messages.messages}
           memberId={myInfo.id}
-          openUserInfoModal={openUserInfoModal}
+          managerId={managerId}
           newMessages={newMessages}
+          messages={messages.messages}
+          openUserInfoModal={openUserInfoModal}
           openImageModal={openImageModal}
           toCalculateScreen={toCalculateScreen}
+          matchComplete={matchComplete}
+          toPaymentScreen={toPaymentScreen}
         />
 
         {/* 입력창 Component */}
