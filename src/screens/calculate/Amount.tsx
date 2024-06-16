@@ -9,11 +9,14 @@ import InputBoxComponent from '@components/Calculate/InputBox';
 
 import { calculateState } from '@recoil/recoil';
 
+import { useGetRoomMembers } from '@hooks/api/rooms';
+
 import { AmountScreenProps } from '@type/param/loginStack';
 
 const AmountScreen = ({ navigation, route }: AmountScreenProps) => {
   const { roomPreview } = route.params;
 
+  const { roomMembers } = useGetRoomMembers(roomPreview.roomId); // 참여자 목록
   const [, setCalculateData] = useRecoilState(calculateState);
   const [amount, setAmount] = useState<string>('');
   const [expectedAmount] = useState<number>(roomPreview.expectedCharge);
@@ -24,6 +27,7 @@ const AmountScreen = ({ navigation, route }: AmountScreenProps) => {
     setCalculateData((prev) => ({
       ...prev,
       amount: amount,
+      users: roomMembers.inList,
     }));
 
     navigation.navigate('AccountScreen', { roomPreview: roomPreview });

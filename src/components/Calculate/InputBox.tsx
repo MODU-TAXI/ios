@@ -41,10 +41,10 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
       onPress={handleFocus}
       className={
         !isFocused
-          ? 'flex-col rounded-xl border-[1px] border-[#E2E2E2] bg-white px-6 py-4'
+          ? 'flex-col justify-center rounded-xl border-[1px] border-[#E2E2E2] bg-white px-6 py-4'
           : error
-            ? 'flex-col rounded-xl border-[1px] border-warning bg-white px-6 py-4'
-            : 'flex-col rounded-xl border-[1px] border-main bg-white px-6 py-4'
+            ? 'flex-col justify-center rounded-xl border-[1px] border-warning bg-white px-6 py-4'
+            : 'flex-col justify-center rounded-xl border-[1px] border-main bg-white px-6 py-4'
       }
     >
       <View className="flex-row">

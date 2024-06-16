@@ -31,7 +31,10 @@ const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) 
   const [unParticipateMembers, setUnParticipateMembers] = useState<UserPreview[]>([]);
 
   const amount = parseInt(calculateData.amount);
-  const amountPerPerson = parseInt(calculateData.amount) / participateMembers.length;
+  const amountPerPerson =
+    participateMembers.length === 0
+      ? 0
+      : parseInt(calculateData.amount) / participateMembers.length;
 
   const { mutateAsync: payment, isPending: paymentPending } = usePayment();
 
