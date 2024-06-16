@@ -1,5 +1,5 @@
 // [이미지 업로드] /api/s3
 export interface s3Response {
-  imgUrl: string;
+  imageUrl: string;
   fileName: string;
 }

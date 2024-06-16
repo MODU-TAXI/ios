@@ -50,6 +50,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
     Vibration.vibrate(0.1); // 새로고침시 진동
 
     const response = await getMyChatInfo();
+
     const { roomId } = response;
 
     setSocketRoomId(roomId);

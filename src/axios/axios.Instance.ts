@@ -60,13 +60,15 @@ axiosInstance.interceptors.response.use(
         await setAccessToken(newAccessToken);
         await setRefreshToken(newRefreshToken);
 
+        console.log('Refresh!');
+
         // 만료때문에 반려된 api 재요청 보내기
         return axiosInstance(error.config);
       } catch (refreshTokenError) {
         // 여기선 무슨 에러가 발생하더라도 로그아웃 처리
         console.log('로그아웃 처리하세요');
-        await deleteToken();
-        // return Promise.reject(error.response.data);
+        // await deleteToken();
+        return Promise.reject(error.response.data);
       }
     }
 
@@ -83,9 +85,9 @@ axiosInstance.interceptors.response.use(
 
     if (Config.ENV === 'DEVELOP') {
       console.log('==================================');
-      console.log('URI:', error.response.config.url);
-      console.log('CODE:', error.response.data.code);
-      console.log('MESSAGE:', error.response.data.message);
+      console.log('URI:', error?.response?.config?.url);
+      console.log('CODE:', error?.response?.data?.code);
+      console.log('MESSAGE:', error?.response?.data?.message);
       console.log('==================================');
     }
 

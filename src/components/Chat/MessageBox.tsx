@@ -76,17 +76,17 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
   }
 
   // 택시 부르러 가기
-  if (message.messageType === 'CALL_TAXI' && message.memberId == managerId) {
+  if (message.messageType === 'CALL_TAXI' && memberId == managerId) {
     return <CallTaxiMessageBoxComponent message={message} />;
   }
 
   // 매칭 완료
-  if (message.messageType === 'MATCHING_COMPLETE' && message.memberId == managerId) {
+  if (message.messageType === 'MATCHING_COMPLETE' && memberId == managerId) {
     return <MatchCompleteMessageBoxComponent message={message} matchComplete={matchComplete} />;
   }
 
   // 정산 요청하기
-  if (message.messageType === 'PAYMENT_REQUEST' && message.memberId == managerId) {
+  if (message.messageType === 'PAYMENT_REQUEST' && memberId == managerId) {
     return (
       <PaymentRequestMessageBoxComponent message={message} toCalculateScreen={toCalculateScreen} />
     );

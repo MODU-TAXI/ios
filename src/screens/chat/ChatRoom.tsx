@@ -103,8 +103,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   };
 
   const connect = () => {
-    // 여기서 연결 체크~?
-
     if (accessToken) {
       // 이미 connect 되어 있을때는 안되게 함
       if (stompClient.current && stompClient.current.connected) {
@@ -215,9 +213,9 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   }, []);
 
   // 이미지 채팅 보내기
-  const sendImage = (imgUrl: string | null) => {
-    if (imgUrl) {
-      sendMessage(imgUrl, 'IMAGE');
+  const sendImage = (imageUrl: string | null) => {
+    if (imageUrl) {
+      sendMessage(imageUrl, 'IMAGE');
     }
   };
 
@@ -298,13 +296,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
       <HeaderComponent title={'채팅 페이지'} />
 
-      <ImageView
-        images={viewImages}
-        imageIndex={0}
-        visible={imageModalVisible}
-        onRequestClose={() => setImageModalVisible(false)}
-      />
-
       {/* 방 정보 Component */}
       {roomPreview && <RoomInfoComponent roomPreview={roomPreview} />}
 
@@ -344,6 +335,13 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         closeSelectImageModal={closeSelectImageModal}
         selectImageFromCamera={selectImageFromCamera}
         selectImageFromAlbum={selectImageFromAlbum}
+      />
+
+      <ImageView
+        images={viewImages}
+        imageIndex={0}
+        visible={imageModalVisible}
+        onRequestClose={() => setImageModalVisible(false)}
       />
     </SafeAreaView>
   );
