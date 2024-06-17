@@ -271,14 +271,6 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
           isShowScaleBar={false}
           logoAlign="BottomLeft"
         >
-          {searchParams.title !== '' && 
-            <NaverMapMarkerOverlay
-              latitude={searchParams.latitude}
-              longitude={searchParams.longitude}
-              anchor={{ x: 0.5, y: 0.5 }}
-            >
-            </NaverMapMarkerOverlay>
-          }
           {selectedRoom ? (
             // Room 선택시 마커 변경하여 렌더링
             <>

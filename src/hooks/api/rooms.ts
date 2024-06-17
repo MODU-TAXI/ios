@@ -121,6 +121,11 @@ export const useGetRoomDetail = (roomId: number) => {
             myRoom: response.myRoom,
             participate: response.participate,
 
+            minLongitude: response.minLongitude,
+            minLatitude: response.minLatitude,
+            maxLongitude: response.maxLongitude,
+            maxLatitude: response.maxLatitude,
+
             path: {
               coordinateReferenceSystem: response.path.coordinateReferenceSystem,
               coordinates: convertedCoords,
@@ -196,6 +201,11 @@ export const useGetRoom = (
         roomCategories: convertedRoomTagBitMaskList,
         myRoom: response.myRoom,
         participate: response.participate,
+
+        minLongitude: response.minLongitude,
+        minLatitude: response.minLatitude,
+        maxLongitude: response.maxLongitude,
+        maxLatitude: response.maxLatitude,
 
         path: {
           coordinateReferenceSystem: response.path.coordinateReferenceSystem,

@@ -31,8 +31,8 @@ export const useNaverSearch = (
 export const useReverseGeocoding = (
   latitude: number,
   longitude: number,
-): { results: NaverReverseGeocoding['results'] | undefined; refetch: () => void } => {
-  const { data: results, refetch } = useQuery({
+): { results: NaverReverseGeocoding['results'] | undefined; refetch: () => void; isFetching: boolean; isLoading: boolean } => {
+  const { data: results, refetch, isFetching, isLoading } = useQuery({
     queryKey: ['reverseGeocoding'],
     queryFn: async () => {
       const coords = `${longitude},${latitude}`;
@@ -52,7 +52,8 @@ export const useReverseGeocoding = (
         }
       );
       return response.data.results;
-    }
+    },
+    staleTime: 1000,
   });
-  return { results, refetch };
+  return { results, refetch, isFetching, isLoading };
 }

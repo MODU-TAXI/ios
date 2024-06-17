@@ -22,7 +22,7 @@ export type LoginStackParamList = {
 
   // 생성
   CreateRoomScreen: undefined;
-  DepartureMapScreen: undefined | { searchParams: SearchResultParams };
+  DepartureMapScreen: undefined;
   DepartureSearchScreen: undefined;
   ArrivalMapScreen: undefined | { type: string; searchParams?: SearchResultParams; spot?: Spot };
   ArrivalSearchScreen: undefined;

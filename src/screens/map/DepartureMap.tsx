@@ -1,5 +1,5 @@
-import { useRecoilState } from "recoil";
 import { Text, View, Pressable } from "react-native";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import React, { useRef, useMemo, useState, useEffect, useCallback } from "react";
@@ -7,13 +7,12 @@ import { Camera, NaverMapView, NaverMapViewRef } from "@mj-studio/react-native-n
 
 import TransparentSearchBoxComponent from "@components/Search/TransparentSearchBox";
 
-import { departureState } from "@recoil/recoil";
+import { departureState, searchParamState } from "@recoil/recoil";
 
 import { useReverseGeocoding } from "@hooks/api/search";
 
 import { getCurrentLocation } from "@utils/map";
 
-import { SearchResultParams } from "@type/entity/search";
 import { DepartureMapScreenProps } from "@type/param/loginStack";
 
 import MapPin from '@assets/images/Map/MapPin.svg';
@@ -21,14 +20,16 @@ import MapPinGray from '@assets/images/Map/MapPinGray.svg';
 import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 import ChevronBackwardCircle from '@assets/images/Map/chevronBackwardCircle.svg';
 
-const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
+const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
   const insets = useSafeAreaInsets();
-  const [isTouching, setIsTouching] = useState<boolean>(false);
   const mapRef = useRef<NaverMapViewRef>(null);
+  const [isTouching, setIsTouching] = useState<boolean>(false);
   const [searchBoxValue, setSearchBoxValue] = useState<string>("출발지를 입력하세요");
   const [isSearched, setIsSearched] = useState<boolean>(false);
+
   const [, setDeparture] = useRecoilState(departureState);
-  const [searchParams, setSearchParams] = useState<SearchResultParams | undefined>(route.params?.searchParams);
+  const [searchParams, setSearchParams] = useRecoilState(searchParamState);
+  const [isBlocked, setIsBlocked] = useState<boolean>(false);
 
   const [currentCamera, setCurrentCamera] = useState<Camera>({
     latitude: 37.451062,
@@ -36,15 +37,9 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
     zoom: 16,
   });
 
+  // 검색결과 넘어올 경우 카메라 이동
   useEffect(() => {
-    if (route.params?.searchParams) {
-      setSearchParams(route.params.searchParams);
-    }
-  }, [route.params?.searchParams]);
-
-  // 검색결과 설정 이후 값 저장
-  useEffect(() => {
-    if (searchParams) {
+    if (searchParams.title !== "") {
       const searchCamera: Camera = {
         latitude: searchParams.latitude,
         longitude: searchParams.longitude,
@@ -54,7 +49,8 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
     }
   }, [searchParams])
 
-  const { results, refetch } = useReverseGeocoding(
+  // reverse geocoding
+  const { results, refetch, isFetching } = useReverseGeocoding(
     currentCamera.latitude, 
     currentCamera.longitude
   );
@@ -71,7 +67,7 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
         longitude: location.longitude,
         zoom: 16,
       });
-      !route.params && mapRef.current?.animateCameraTo(location);
+      mapRef.current?.animateCameraTo(location);
     };
     fetchCurrentLocation();
   }, []);
@@ -84,10 +80,6 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
     // timeout 시
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
-    }
-
-    if (route.params?.searchParams) {
-      resetSearchParams();
     }
 
     // 조정된 센터 저장
@@ -103,6 +95,27 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
     }, 100);
   }, []);
 
+  useEffect(() => {
+    if (!isBlocked && searchParams.title !== "") {
+      setSearchParams({
+        ...searchParams,
+        title: "",
+      })
+    }
+  }, [currentCamera, refetch])
+
+  // 카메라 옮기면 500ms간 버튼 비활성화
+  useEffect(() => {
+    if (isTouching) {
+      setIsBlocked(true);
+    } else {
+      const timeout = setTimeout(() => {
+        setIsBlocked(false);
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [isTouching])
+
   /** 현재 위치로 */
   const moveToCurrentLocation = async() => {
     const currentLocation = await getCurrentLocation();
@@ -117,10 +130,6 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
 
   /** 빌딩 이름 유무에 따른 렌더링 */
   const formatBuildingName = () => {
-    if (searchParams) {
-      return searchParams.title;
-    }
-
     const value = results?.[1]?.land.addition0.value;
 
     if (value === undefined) {
@@ -172,11 +181,6 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
     }
     navigation.goBack();
   }
-
-  /** searchParams 초기화 */
-  const resetSearchParams = () => {
-    setSearchParams(undefined);
-  };
 
   const toSearchScreen = () => {
     navigation.navigate('DepartureSearchScreen');
@@ -280,14 +284,14 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
 
             <Text className="mb-2 font-medium text-base text-boxFont">출발지</Text>
             <Text className="text-lg font-semibold text-main">
-              {formatBuildingName()}
+              {searchParams.title !== "" ? searchParams.title : formatBuildingName()}
             </Text>
             <Text className="text-gray600">
               {formatAddress()}
             </Text>
 
             {/** 출발지 설정 버튼 */}
-            {formatBuildingName() === "주소 정보 없음" || isTouching ? (
+            {formatBuildingName() === "주소 정보 없음" || isTouching || isFetching || isBlocked ? (
               <Pressable
                 className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-disabled2"
                 disabled={true}
@@ -302,7 +306,6 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
                 <Text className="font-semibold text-white">출발지로 설정</Text>
               </Pressable>
             )}
-
 
           </View>
         </BottomSheetView>

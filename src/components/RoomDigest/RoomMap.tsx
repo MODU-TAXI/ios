@@ -28,12 +28,12 @@ const RoomMapComponent: React.FC<RoomMapComponentProps> = ({ roomDetail }) => {
     if (roomDetail) {
       mapRef.current?.animateCameraWithTwoCoords({
         coord1: {
-          latitude: roomDetail.departureLatitude,
-          longitude: roomDetail.departureLongitude,
+          latitude: roomDetail.maxLatitude,
+          longitude: roomDetail.maxLongitude,
         },
         coord2: {
-          latitude: roomDetail.arrivalLatitude,
-          longitude: roomDetail.arrivalLongitude,
+          latitude: roomDetail.minLatitude,
+          longitude: roomDetail.minLongitude,
         },
         duration: 500,
       });
