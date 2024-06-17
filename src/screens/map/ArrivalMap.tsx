@@ -73,12 +73,7 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
 
   const handleSelectSpot = (spot: Spot) => {
     setSelectedSpot(spot);
-    console.log(spot);
   }
-
-  useEffect(() => {
-    console.log(selectedSpot)
-  }, [selectedSpot])
 
   const toBack = () => {
     navigation.goBack();

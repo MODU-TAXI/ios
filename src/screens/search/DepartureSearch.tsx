@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 import DepartureSearchBoxComponent from '@components/Search/DepartureSearchBox';
 
-import { searchKeywordState } from '@recoil/recoil';
+import { searchParamState, searchKeywordState } from '@recoil/recoil';
 
 import { useNaverSearch } from '@hooks/api/search';
 
@@ -21,6 +21,8 @@ import { DepartureSearchScreenProps } from '@type/param/loginStack';
 const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
   /** 검색어 저장 변수 */
   const [keyword, ] = useRecoilState<string>(searchKeywordState);
+  const [, setSearchParams] = useRecoilState(searchParamState);
+
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({
@@ -67,11 +69,12 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
     latitude: number,
     longitude: number,
   ) => {
-    navigation.navigate('DepartureMapScreen', {searchParams: {
+    setSearchParams({
       title: title,
       latitude: latitude,
       longitude: longitude,
-    }});
+    });
+    navigation.goBack();
   }
 
   return (
