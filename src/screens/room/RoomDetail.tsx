@@ -22,6 +22,8 @@ import { roomState } from '@recoil/recoil';
 
 import { useJoinRoom, useDeleteRoom, useGetRoomDetail, useApproveJoinRoom } from '@hooks/api/rooms';
 
+import { vibration } from '@utils/effect';
+
 import { RoomDetailScreenProps } from '@type/param/loginStack';
 
 import EndCircle from '@assets/images/Match/EndCircle.svg';
@@ -64,7 +66,8 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
 
-    Vibration.vibrate(0.1); // 새로고침시 진동
+    vibration();
+
     await Promise.all([refetchRoomDetail(), refetcParticipateMembers(), refetchWaitingMembers()]);
 
     setRefreshing(false);
