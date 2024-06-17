@@ -39,14 +39,14 @@ const PartyComponent: React.FC<PartyComponentProps> = ({ roomDetail }) => {
         <View className="mr-2 flex-row items-center justify-center">
           <People className="mr-1" />
           <Text className="text-[12px] text-[#7c7c7c]">
-            {roomDetail.currentHeadcount + 1} / {roomDetail.wishHeadcount + 1}
+            {roomDetail.currentHeadcount} / {roomDetail.wishHeadcount}
           </Text>
         </View>
 
         <View className="flex-row items-center justify-center">
           <Money className="mr-1" />
           <Text className="text-[12px] text-[#7c7c7c]">
-            인당 {roomDetail.expectedChargePerPerson}원
+            인당 {roomDetail.expectedChargePerPerson.toLocaleString('ko-KR')}원
           </Text>
         </View>
       </View>
