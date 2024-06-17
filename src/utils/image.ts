@@ -58,9 +58,9 @@ export const handleUpload = async (image: Asset): Promise<string> => {
     name: imageName,
   });
 
-  const { imgUrl } = await uploadImage(formData);
+  const { imageUrl } = await uploadImage(formData);
 
-  return imgUrl;
+  return imageUrl;
 };
 
 // 카메라로 사진 선택

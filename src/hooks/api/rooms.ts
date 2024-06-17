@@ -84,7 +84,6 @@ export const useGetRoomDetail = (roomId: number) => {
   return useSuspenseQueries({
     queries: [
       {
-        retry: 0,
         queryKey: [`/api/rooms/${roomId}`, roomId],
         queryFn: async () => getRoomDetail(roomId),
         select: (response: GetRoomDetailResponse) => {
@@ -131,12 +130,10 @@ export const useGetRoomDetail = (roomId: number) => {
         },
       },
       {
-        retry: 0,
         queryKey: [`/api/rooms/${roomId}/members/in`, roomId],
         queryFn: async () => getRoomMembers(roomId),
       },
       {
-        retry: 0,
         queryKey: [`/api/rooms/${roomId}/members/waiting`, roomId],
         queryFn: async () => getRoomWaitingMembers(roomId),
       },

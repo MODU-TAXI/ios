@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Pressable } from 'react-native';
+import { Text, View, Pressable, StyleSheet } from 'react-native';
 
 import { RoomPreview } from '@type/entity/room';
 
@@ -12,6 +12,16 @@ interface MyPartyComponentProps {
   roomPreview: RoomPreview;
   toChatRoomScreen: () => void;
 }
+
+const styles = StyleSheet.create({
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+});
 
 const MyPartyComponent: React.FC<MyPartyComponentProps> = ({ roomPreview, toChatRoomScreen }) => {
   return (
@@ -28,7 +38,7 @@ const MyPartyComponent: React.FC<MyPartyComponentProps> = ({ roomPreview, toChat
         </View>
 
         {/* 출발지, 도착지 */}
-        <View className="mt-2 flex-row items-center">
+        <View className="mt-2 flex-row items-center truncate">
           <View>
             <Text className="text-[16px] font-semibold text-[#272727]">
               {roomPreview.departureName}

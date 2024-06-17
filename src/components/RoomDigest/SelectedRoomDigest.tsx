@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 import { View, Text } from 'react-native';
 
-import { useGetRoom } from "@hooks/api/rooms";
+import { useGetRoom } from '@hooks/api/rooms';
 
-import { RoomList } from "@type/entity/room";
+import { RoomList } from '@type/entity/room';
 
 import Arrow from '@assets/images/Chat/Arrow.svg';
 import Money from '@assets/images/Chat/Money.svg';
@@ -15,12 +15,9 @@ interface SelectedRoomDigestProps {
   roomList: RoomList[];
 }
 
-const SelectedRoomDigestComponent: React.FC<SelectedRoomDigestProps> = ({
-  roomId,
-  roomList,
-}) => {
-  const roomDetail = roomList.find(room => room.roomId === roomId);
-  
+const SelectedRoomDigestComponent: React.FC<SelectedRoomDigestProps> = ({ roomId, roomList }) => {
+  const roomDetail = roomList.find((room) => room.roomId === roomId);
+
   if (!roomDetail) return null;
 
   return (
@@ -32,9 +29,11 @@ const SelectedRoomDigestComponent: React.FC<SelectedRoomDigestProps> = ({
       </View>
 
       {/* 출발지, 도착지 */}
-      <View className="mt-2 flex-row items-center">
+      <View className="mt-2 flex-row items-center truncate">
         <View>
-          <Text className="text-[16px] font-semibold text-[#272727]">{roomDetail.departureName}</Text>
+          <Text className="text-[16px] font-semibold text-[#272727]">
+            {roomDetail.departureName}
+          </Text>
         </View>
 
         <Arrow className="mx-2" />
@@ -48,16 +47,20 @@ const SelectedRoomDigestComponent: React.FC<SelectedRoomDigestProps> = ({
       <View className="mt-2 flex-row">
         <View className="mr-2 flex-row items-center justify-center">
           <People className="mr-1" />
-          <Text className="text-[12px] text-[#7c7c7c]">{roomDetail.currentHeadcount}/{roomDetail.wishHeadcount}</Text>
+          <Text className="text-[12px] text-[#7c7c7c]">
+            {roomDetail.currentHeadcount}/{roomDetail.wishHeadcount}
+          </Text>
         </View>
 
         <View className="flex-row items-center justify-center">
           <Money className="mr-1" />
-          <Text className="text-[12px] text-[#7c7c7c]">인당 {roomDetail.expectedChargePerPerson}원</Text>
+          <Text className="text-[12px] text-[#7c7c7c]">
+            인당 {roomDetail.expectedChargePerPerson}원
+          </Text>
         </View>
       </View>
     </View>
   );
-}
+};
 
 export default SelectedRoomDigestComponent;

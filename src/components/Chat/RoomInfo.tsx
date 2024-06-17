@@ -28,21 +28,17 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomPreview }) =>
   return (
     <View className="z-10 bg-white">
       <View style={styles.shadow} className="flex-col rounded-b-3xl bg-white px-4 py-6">
-        <View className="flex-row items-center justify-between">
-          <View className="flex-row items-center justify-center">
-            <View>
-              <Text className="text-[16px] font-semibold text-[#272727]">
-                {truncateText(roomPreview.departureName, 7)}
-              </Text>
-            </View>
+        <View className="flex-row items-center justify-between ">
+          <View className="w-[260px] flex-row items-center truncate">
+            <Text className="text-[16px] font-semibold text-[#272727]">
+              {roomPreview.departureName}
+            </Text>
 
             <Arrow className="mx-2" />
 
-            <View>
-              <Text className="text-[16px] font-semibold text-[#272727]">
-                {truncateText(roomPreview.arrivalName, 7)}
-              </Text>
-            </View>
+            <Text className="text-[16px] font-semibold text-[#272727]">
+              {roomPreview.arrivalName}
+            </Text>
           </View>
 
           <View className="flex-row items-center justify-center rounded-lg bg-gray-200 px-3 py-[6px]">

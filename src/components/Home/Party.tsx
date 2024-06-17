@@ -12,9 +12,7 @@ interface PartyComponentProps {
   roomDetail: RoomList;
 }
 
-const PartyComponent: React.FC<PartyComponentProps> = ({
-  roomDetail
-}) => {
+const PartyComponent: React.FC<PartyComponentProps> = ({ roomDetail }) => {
   return (
     <View className="mr-4 rounded-xl border-[1px] border-gray200 px-4 py-3">
       {/* 출발 시각 */}
@@ -24,7 +22,7 @@ const PartyComponent: React.FC<PartyComponentProps> = ({
       </View>
 
       {/* 출발지, 도착지 */}
-      <View className="mt-2 flex-row items-center">
+      <View className="mt-2 flex-row items-center truncate">
         <View>
           <Text className="text-[14px] font-semibold text-gray800">{roomDetail.departureName}</Text>
         </View>
@@ -40,12 +38,16 @@ const PartyComponent: React.FC<PartyComponentProps> = ({
       <View className="mt-2 flex-row">
         <View className="mr-2 flex-row items-center justify-center">
           <People className="mr-1" />
-          <Text className="text-[12px] text-[#7c7c7c]">{roomDetail.currentHeadcount + 1} / {roomDetail.wishHeadcount + 1}</Text>
+          <Text className="text-[12px] text-[#7c7c7c]">
+            {roomDetail.currentHeadcount + 1} / {roomDetail.wishHeadcount + 1}
+          </Text>
         </View>
 
         <View className="flex-row items-center justify-center">
           <Money className="mr-1" />
-          <Text className="text-[12px] text-[#7c7c7c]">인당 {roomDetail.expectedChargePerPerson}원</Text>
+          <Text className="text-[12px] text-[#7c7c7c]">
+            인당 {roomDetail.expectedChargePerPerson}원
+          </Text>
         </View>
       </View>
     </View>

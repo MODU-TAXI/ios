@@ -19,6 +19,8 @@ import { getMyChatInfo } from '@server/api/chat';
 
 import { useGetRoomPreview } from '@hooks/api/rooms';
 
+import { vibration } from '@utils/effect';
+
 import { HomeScreenProps } from '@type/param/loginStack';
 
 const HomeComponent = ({ navigation }: HomeScreenProps) => {
@@ -47,9 +49,10 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
 
-    Vibration.vibrate(0.1); // 새로고침시 진동
+    vibration();
 
     const response = await getMyChatInfo();
+
     const { roomId } = response;
 
     setSocketRoomId(roomId);
