@@ -69,7 +69,8 @@ export interface CreateRoomResponse {
   participate: boolean; // 참여여부
 
   roomTagBitMaskList: string[]; // 카테고리
-  path: {
+
+  path: { // 경로
     coordinateReferenceSystem: {
       type: string;
     };
@@ -118,6 +119,12 @@ export interface GetRoomDetailResponse {
   participate: boolean; // 참여여부
 
   roomTagBitMaskList: string[]; // 카테고리
+
+  minLongitude: number; // 카메라 조정 꼭짓점 좌표
+  minLatitude: number;
+  maxLongitude: number;
+  maxLatitude: number;
+  
   path: {
     coordinateReferenceSystem: {
       type: string;
@@ -154,6 +161,7 @@ export interface PatchRoomResponse {
   participate: boolean; // 참여여부
 
   roomTagBitMaskList: string[]; // 카테고리
+  
   path: {
     coordinateReferenceSystem: {
       type: string;

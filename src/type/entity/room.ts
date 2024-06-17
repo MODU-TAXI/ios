@@ -38,6 +38,11 @@ export interface RoomDetail {
   myRoom: boolean; // 내가 방장인지 여부
   participate: boolean; // 참여여부
 
+  minLongitude: number; // 카메라 조정 꼭짓점 좌표
+  minLatitude: number;
+  maxLongitude: number;
+  maxLatitude: number;
+
   path: {
     coordinateReferenceSystem: {
       type: string;
