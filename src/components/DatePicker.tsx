@@ -23,6 +23,10 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
   setDatePickerOpen,
   openDatePicker,
 }) => {
+  const today = new Date;
+  const tomorrow = new Date;
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
   return (
     <View>
       {datePicked ? (
@@ -32,7 +36,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
         >
           <View>
             <Text className="font-medium text-base text-emphasized">
-              {dayjs().format('YYYY년 MM월 DD일')}
+              {dayjs(date).format('YYYY년 MM월 DD일')}
             </Text>
             <Text className="mt-1 font-semibold text-base text-main">
               {dayjs(date)
@@ -67,7 +71,10 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
         modal
         open={datePickerOpen}
         date={date}
-        mode="time"
+        locale='ko-kr'
+        minimumDate={today}
+        maximumDate={tomorrow}
+        mode="datetime"
         onConfirm={(date) => {
           setDatePickerOpen(false);
           setDate(date);
