@@ -111,6 +111,11 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('ManageAlarmScreen');
   };
 
+  // 문의하기 페이지 이동
+  const toInquiryScreen = () => {
+    navigation.navigate('InquiryScreen');
+  };
+
   if (!userInfo) return <LoadingComponent />;
 
   return (
@@ -197,8 +202,11 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             <NextButton />
           </Pressable>
 
-          <Pressable className="flex-row items-center justify-between py-4">
-            <Text className="font-semibold tracking-tight text-[#3E3E3E]">문의사항</Text>
+          <Pressable
+            className="flex-row items-center justify-between py-4"
+            onPress={toInquiryScreen}
+          >
+            <Text className="font-semibold tracking-tight text-[#3E3E3E]">문의하기</Text>
             <NextButton />
           </Pressable>
         </View>

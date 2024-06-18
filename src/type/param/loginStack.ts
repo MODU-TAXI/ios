@@ -51,6 +51,7 @@ export type LoginStackParamList = {
   HistoryDetailScreen: { historyId: number };
   ManageAccountScreen: undefined;
   ManageAlarmScreen: undefined;
+  InquiryScreen: undefined;
 
   // 신고
   DeclarationScreen: { userInfo: UserPreview; roomId: number };
@@ -145,6 +146,7 @@ export type ManageAlarmScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'ManageAlarmScreen'
 >;
+export type InquiryScreenProps = NativeStackScreenProps<LoginStackParamList, 'InquiryScreen'>;
 
 // 신고 페이지
 export type DeclarationScreenProps = NativeStackScreenProps<
