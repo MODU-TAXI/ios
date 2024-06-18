@@ -1,3 +1,4 @@
+import { useRecoilValue } from 'recoil';
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -6,6 +7,8 @@ import FilterButtonComponent from '@components/RoomDigest/FilterButton';
 import RoomDigestBoxComponent from '@components/RoomDigest/RoomDigestBox';
 import SpotFilterButtonComponent from '@components/RoomDigest/SpotFilterButton';
 
+import { userInfoState } from '@recoil/recoil';
+
 import { SpotMap } from '@type/entity/spot';
 import { MainMapScreenProps } from '@type/param/loginStack';
 import { RoomList, RoomIntegration, RoomFilterParam } from '@type/entity/room';
@@ -13,6 +16,7 @@ import { RoomList, RoomIntegration, RoomFilterParam } from '@type/entity/room';
 import RadioButtonBoxSvg from '@assets/images/RadioBox/RadioButtonBox.svg';
 import ChevronDownBoxSvg from '@assets/images/RoomDigest/ChevronDownBox.svg';
 import SelectedRadioButtonSvg from '@assets/images/RadioBox/SelectedRadioButton.svg';
+
 
 interface MapBottomSheetProps {
   roomList: RoomIntegration[];
@@ -33,6 +37,8 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
   filterParam,
   spotData,
 }) => {
+  const userInfo = useRecoilValue(userInfoState);
+
   // 선택된 거점 이름 저장
   const [selectedSpotName, setSelectedSpotName] = useState<string>('');
   useEffect(() => {
@@ -73,9 +79,16 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
               </Pressable>
             )}
 
+            
             <FilterButtonComponent label="학생인증" />
-            <FilterButtonComponent label="여자만" />
-            <FilterButtonComponent label="매너탑승" />
+
+            {userInfo.gender === "MALE" ? (
+              <FilterButtonComponent label="남자만" />
+            ) : (
+              <FilterButtonComponent label="여자만" />
+            )}
+
+            <FilterButtonComponent label="조용히" />
           </View>
         </ScrollView>
       </View>
