@@ -30,7 +30,7 @@ const MessageInputBoxComponent: React.FC<MessageInputBoxComponentProps> = ({
   };
 
   return (
-    <View className="flex-row items-center justify-center bg-white px-8 py-2">
+    <View className="flex-row items-center justify-center bg-white px-8 py-2 ">
       <Pressable className="p-3" onPress={openSelectImageModal}>
         <Plus />
       </Pressable>

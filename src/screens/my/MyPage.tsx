@@ -101,6 +101,11 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('PatchAccountScreen');
   };
 
+  // 이용 내용 페이지 이동
+  const toHistoryScreen = () => {
+    navigation.navigate('HistoryScreen');
+  };
+
   if (!userInfo) return <LoadingComponent />;
 
   return (
@@ -171,7 +176,10 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             <NextButton />
           </Pressable>
 
-          <Pressable className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4">
+          <Pressable
+            className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
+            onPress={toHistoryScreen}
+          >
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">이용내역</Text>
             <NextButton />
           </Pressable>

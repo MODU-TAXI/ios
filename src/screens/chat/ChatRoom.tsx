@@ -11,7 +11,7 @@ import HeaderComponent from '@components/Header';
 import MessagesComponent from '@components/Chat/Messages';
 import RoomInfoComponent from '@components/Chat/RoomInfo';
 import LoadingComponent from '@components/Common/Loading';
-import UserModalComponent from '@components/Chat/UserModal';
+import UserModalComponent from '@components/Common/UserModal';
 import SelectImageModal from '@components/Common/SelectImageModal';
 import ChatErrorBoundary from '@components/Fallback/ChatErrorBoundary';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
@@ -41,7 +41,7 @@ Object.assign('global', {
 const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [appState, setAppState] = useState(AppState.currentState);
 
-  const { roomId, managerId } = route.params;
+  const { roomId, managerId, readonly } = route.params;
 
   const { roomPreview, messages, messagesRefetch } = useChatDetail(roomId);
 
@@ -103,6 +103,9 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   };
 
   const connect = () => {
+    // 읽기 모드에선 socket x
+    if (readonly) return;
+
     if (accessToken) {
       // 이미 connect 되어 있을때는 안되게 함
       if (stompClient.current && stompClient.current.connected) {
@@ -270,7 +273,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   // 정산페이지로 이동
   const toCalculateScreen = () => {
-    if (roomPreview) {
+    if (roomPreview && !readonly) {
       navigation.navigate('AmountScreen', { roomPreview: roomPreview });
     }
   };
@@ -285,13 +288,23 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   // 유저기준 - 정산하기 페이지로 이동
   const toPaymentScreen = () => {
-    if (roomPreview) {
+    if (roomPreview && !readonly) {
       navigation.navigate('CheckPaymentScreen', { roomPreview: roomPreview });
     }
   };
 
+  // 매칭 완료하기
+  const completeMatch = async () => {
+    if (!readonly) {
+      await matchComplete();
+    }
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView
+      className="flex-1 bg-white"
+      edges={readonly ? ['top', 'left', 'right'] : undefined}
+    >
       {matchCompletePending && <TransparentLoadingComponent />}
 
       <HeaderComponent title={'채팅 페이지'} />
@@ -309,15 +322,17 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
           openUserInfoModal={openUserInfoModal}
           openImageModal={openImageModal}
           toCalculateScreen={toCalculateScreen}
-          matchComplete={matchComplete}
+          matchComplete={completeMatch}
           toPaymentScreen={toPaymentScreen}
         />
 
         {/* 입력창 Component */}
-        <MessageInputBoxComponent
-          sendMessage={sendMessage}
-          openSelectImageModal={openSelectImageModal}
-        />
+        {!readonly && (
+          <MessageInputBoxComponent
+            sendMessage={sendMessage}
+            openSelectImageModal={openSelectImageModal}
+          />
+        )}
       </KeyboardAvoidingView>
 
       {/* 유저 정보 modal */}

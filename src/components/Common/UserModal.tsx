@@ -22,7 +22,6 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
   closeUserInfoModal,
   toDeclarationScreen,
 }) => {
-  console.log('imageUrl:', userInfo.imageUrl);
   return (
     <Modal animationType="fade" transparent={true} visible={modalVisible}>
       <View

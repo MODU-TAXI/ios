@@ -3,8 +3,6 @@ import { useRecoilState } from 'recoil';
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import CheckPaymentScreen from 'src/screens/calculate/CheckPayment';
-
 import TestScreen from './src/screens/test';
 import MainScreen from './src/screens/main/Main';
 import HomeScreen from './src/screens/home/Home';
@@ -16,6 +14,7 @@ import MainMapScreen from './src/screens/map/MainMap';
 import SearchScreen from './src/screens/search/Search';
 import SignInScreen from './src/screens/signIn/SignIn';
 import ChatRoomScreen from './src/screens/chat/ChatRoom';
+import HistoryScreen from './src/screens/history/History';
 import AmountScreen from './src/screens/calculate/Amount';
 import ArrivalMapScreen from './src/screens/map/ArrivalMap';
 import AccountScreen from './src/screens/calculate/Account';
@@ -28,6 +27,8 @@ import PatchNicknameScreen from './src/screens/my/PatchNickname';
 import PatchUserInfoScreen from './src/screens/my/PatchUserInfo';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
 import ArrivalSearchScreen from './src/screens/search/ArrivalSearch';
+import CheckPaymentScreen from './src/screens/calculate/CheckPayment';
+import HistoryDetailScreen from './src/screens/history/HistoryDetail';
 import CheckAccountScreen from './src/screens/calculate/CheckAccount';
 import DeclarationScreen from './src/screens/declaration/Declaration';
 import AuthenticationScreen from './src/screens/signUp/Authentication';
@@ -118,6 +119,8 @@ function AppInner() {
         name="PatchSchoolEmailAuthenticationScreen"
         component={PatchSchoolEmailAuthenticationScreen}
       />
+      <LogInStack.Screen name="HistoryScreen" component={HistoryScreen} />
+      <LogInStack.Screen name="HistoryDetailScreen" component={HistoryDetailScreen} />
 
       {/* 신고 Screen */}
       <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />

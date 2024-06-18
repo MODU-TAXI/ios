@@ -25,6 +25,7 @@
   },
 
   "rules": {
+    "no-empty-interface": 0,
     "no-console": 1,
     "camelcase": 0,
     "no-use-before-define": 1,

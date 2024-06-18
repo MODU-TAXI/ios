@@ -127,6 +127,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     navigation.navigate('ChatRoomScreen', {
       roomId: roomDetail.roomId,
       managerId: roomDetail.managerId,
+      readonly: false,
     });
   };
 
