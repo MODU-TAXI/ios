@@ -10,7 +10,7 @@ import HistoryMembersComponent from '@components/History/HistoryMembers';
 import { useGetHistoryDetail } from '@hooks/api/history';
 
 import { UserPreview } from '@type/entity/user';
-import { HistoryScreenProps, HistoryDetailScreenProps } from '@type/param/loginStack';
+import { HistoryDetailScreenProps } from '@type/param/loginStack';
 
 import Arrow from '@assets/images/History/Arrow.svg';
 
