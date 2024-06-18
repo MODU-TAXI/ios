@@ -56,6 +56,15 @@ const HistoryDetailScreen = ({ navigation, route }: HistoryDetailScreenProps) =>
     }
   };
 
+  // 채팅방 입장
+  const toHistoryChatScreen = () => {
+    navigation.navigate('ChatRoomScreen', {
+      roomId: history.roomId,
+      managerId: history.managerId,
+      readonly: true,
+    });
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <HeaderComponent title="이용내역" />
@@ -144,9 +153,7 @@ const HistoryDetailScreen = ({ navigation, route }: HistoryDetailScreenProps) =>
             textColor={'main'}
             text={'채팅방 입장하기'}
             disabled={false}
-            onPress={() => {
-              console.log('?');
-            }}
+            onPress={toHistoryChatScreen}
           />
         </View>
       </View>

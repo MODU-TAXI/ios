@@ -3,6 +3,7 @@ import { Text, View, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import HeaderComponent from '@components/Header';
 import HistoryInfoComponent from '@components/History/HistoryInfo';
 
 import { useGetHistories } from '@hooks/api/history';
@@ -23,7 +24,9 @@ const HistoryScreen = ({ navigation }: HistoryScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="mt-10 px-5">
+      <HeaderComponent title="이용내역" />
+
+      <View className="mt-6 px-5">
         <View className="flex-row items-center">
           <Text className="mr-1 text-[20px] font-semibold tracking-tight text-[#9C9C9C]">
             2024년 5월
@@ -74,7 +77,11 @@ const HistoryScreen = ({ navigation }: HistoryScreenProps) => {
         </View>
 
         {histories.historySimpleListResponse.map((history: HistoryPreview) => (
-          <HistoryInfoComponent history={history} toHistoryDetailScreen={toHistoryDetailScreen} />
+          <HistoryInfoComponent
+            key={history.historyId}
+            history={history}
+            toHistoryDetailScreen={toHistoryDetailScreen}
+          />
         ))}
       </ScrollView>
     </SafeAreaView>
