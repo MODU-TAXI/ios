@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
 import FastImage from 'react-native-fast-image';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Text, View, Alert, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,10 +9,11 @@ import LoadingComponent from '@components/Common/Loading';
 import SelectImageModal from '@components/Common/SelectImageModal';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { userInfoState } from '@recoil/recoil';
+import { loggedInState, userInfoState } from '@recoil/recoil';
 
 import { usePatchMember } from '@hooks/api/member';
 
+import { deleteToken } from '@utils/token';
 import { openAlbum, openCamera } from '@utils/image';
 
 import { MyPageScreenProps } from '@type/param/loginStack';
@@ -30,10 +31,23 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const { mutateAsync: patchMemberMutate, isPending: patchMemberPending } = usePatchMember();
   const [profileImage, setProfileImage] = useState<string>(userInfo.imageUrl);
   const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
 
   // 로그아웃
   const logOut = () => {
-    console.log('logout!');
+    Alert.alert('정말 로그아웃 하시겠어요?', '모두의택시 이용 기록은 여전히 남아있어요', [
+      {
+        text: '취소',
+        style: 'cancel',
+      },
+      {
+        text: '로그아웃',
+        onPress: async () => {
+          await deleteToken();
+          setLoggedIn(false);
+        },
+      },
+    ]);
   };
 
   // 이미지 선택 모달 띄우기
