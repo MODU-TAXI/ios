@@ -96,14 +96,14 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('PatchSchoolEmailScreen');
   };
 
-  // 계좌 수정 페이지 이동
-  const toPatchAccountScreen = () => {
-    navigation.navigate('PatchAccountScreen');
-  };
-
   // 이용 내용 페이지 이동
   const toHistoryScreen = () => {
     navigation.navigate('HistoryScreen');
+  };
+
+  // 계좌 관리 페이지 이동
+  const toManageAccountScreen = () => {
+    navigation.navigate('ManageAccountScreen');
   };
 
   if (!userInfo) return <LoadingComponent />;
@@ -170,7 +170,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
         <View className="mt-4 rounded-xl border-[1px] border-[#EBEBEB] px-4">
           <Pressable
             className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
-            onPress={toPatchAccountScreen}
+            onPress={toManageAccountScreen}
           >
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">계좌관리</Text>
             <NextButton />
@@ -186,11 +186,6 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
           <Pressable className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4">
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">알림설정</Text>
-            <NextButton />
-          </Pressable>
-
-          <Pressable className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4">
-            <Text className="font-semibold tracking-tight text-[#3E3E3E]">공지사항/이벤트</Text>
             <NextButton />
           </Pressable>
 

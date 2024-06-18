@@ -45,11 +45,11 @@ export type LoginStackParamList = {
   PatchNicknameScreen: undefined;
   PatchUserInfoScreen: undefined;
   PatchSchoolEmailScreen: undefined;
-  PatchAccountScreen: undefined;
   PatchUserInfoAuthenticationScreen: undefined;
   PatchSchoolEmailAuthenticationScreen: undefined;
   HistoryScreen: undefined;
   HistoryDetailScreen: { historyId: number };
+  ManageAccountScreen: undefined;
 
   // 신고
   DeclarationScreen: { userInfo: UserPreview; roomId: number };
@@ -123,10 +123,6 @@ export type PatchSchoolEmailScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'PatchSchoolEmailScreen'
 >;
-export type PatchAccountScreenProps = NativeStackScreenProps<
-  LoginStackParamList,
-  'PatchAccountScreen'
->;
 export type PatchUserInfoAuthenticationScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'PatchUserInfoAuthenticationScreen'
@@ -139,6 +135,10 @@ export type HistoryScreenProps = NativeStackScreenProps<LoginStackParamList, 'Hi
 export type HistoryDetailScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'HistoryDetailScreen'
+>;
+export type ManageAccountScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'ManageAccountScreen'
 >;
 
 // 신고 페이지

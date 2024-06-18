@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Text, View, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import HeaderComponent from '@components/Header';
+import LoadingComponent from '@components/Common/Loading';
 import HistoryInfoComponent from '@components/History/HistoryInfo';
 
 import { useGetHistories } from '@hooks/api/history';
@@ -15,7 +16,7 @@ import AfterBar from '@assets/images/History/AfterBar.svg';
 import DropDown from '@assets/images/History/DropDown.svg';
 import BeforeBar from '@assets/images/History/BeforeBar.svg';
 
-const HistoryScreen = ({ navigation }: HistoryScreenProps) => {
+const HistoryComponent = ({ navigation }: HistoryScreenProps) => {
   const { data: histories } = useGetHistories();
 
   const toHistoryDetailScreen = (historyId: number) => {
@@ -85,6 +86,14 @@ const HistoryScreen = ({ navigation }: HistoryScreenProps) => {
         ))}
       </ScrollView>
     </SafeAreaView>
+  );
+};
+
+const HistoryScreen = ({ route, navigation }: HistoryScreenProps) => {
+  return (
+    <Suspense fallback={<LoadingComponent />}>
+      <HistoryComponent navigation={navigation} route={route} />
+    </Suspense>
   );
 };
 
