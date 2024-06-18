@@ -11,7 +11,7 @@ import HeaderComponent from '@components/Header';
 import MessagesComponent from '@components/Chat/Messages';
 import RoomInfoComponent from '@components/Chat/RoomInfo';
 import LoadingComponent from '@components/Common/Loading';
-import UserModalComponent from '@components/Chat/UserModal';
+import UserModalComponent from '@components/Common/UserModal';
 import SelectImageModal from '@components/Common/SelectImageModal';
 import ChatErrorBoundary from '@components/Fallback/ChatErrorBoundary';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';

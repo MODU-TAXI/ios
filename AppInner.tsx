@@ -3,7 +3,9 @@ import { useRecoilState } from 'recoil';
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import HistoryScreen from 'src/screens/history/History';
 import CheckPaymentScreen from 'src/screens/calculate/CheckPayment';
+import HistoryDetailScreen from 'src/screens/history/HistoryDetail';
 
 import TestScreen from './src/screens/test';
 import MainScreen from './src/screens/main/Main';
@@ -118,6 +120,8 @@ function AppInner() {
         name="PatchSchoolEmailAuthenticationScreen"
         component={PatchSchoolEmailAuthenticationScreen}
       />
+      <LogInStack.Screen name="HistoryScreen" component={HistoryScreen} />
+      <LogInStack.Screen name="HistoryDetailScreen" component={HistoryDetailScreen} />
 
       {/* 신고 Screen */}
       <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />
