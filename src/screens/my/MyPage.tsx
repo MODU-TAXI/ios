@@ -106,6 +106,11 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('ManageAccountScreen');
   };
 
+  // 알림 설정 페이지 이동
+  const toManageAlarmScreen = () => {
+    navigation.navigate('ManageAlarmScreen');
+  };
+
   if (!userInfo) return <LoadingComponent />;
 
   return (
@@ -184,7 +189,10 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             <NextButton />
           </Pressable>
 
-          <Pressable className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4">
+          <Pressable
+            className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
+            onPress={toManageAlarmScreen}
+          >
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">알림설정</Text>
             <NextButton />
           </Pressable>

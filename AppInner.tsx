@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import ManageAlarmScreen from 'src/screens/my/ManageAlarm';
 import ManageAccountScreen from 'src/screens/my/ManageAccount';
 
 import TestScreen from './src/screens/test';
@@ -122,6 +123,7 @@ function AppInner() {
       <LogInStack.Screen name="HistoryScreen" component={HistoryScreen} />
       <LogInStack.Screen name="HistoryDetailScreen" component={HistoryDetailScreen} />
       <LogInStack.Screen name="ManageAccountScreen" component={ManageAccountScreen} />
+      <LogInStack.Screen name="ManageAlarmScreen" component={ManageAlarmScreen} />
 
       {/* 신고 Screen */}
       <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />
