@@ -1,31 +1,32 @@
-import { useRecoilValue } from 'recoil';
 import Config from 'react-native-config';
 import TextEncodingPolyfill from 'text-encoding';
 import StompJs, { Message } from '@stomp/stompjs';
 import ImageView from 'react-native-image-viewing';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, AppState, KeyboardAvoidingView } from 'react-native';
 import React, { useRef, Suspense, useState, useEffect, useCallback } from 'react';
 
-import HeaderComponent from '@components/Header';
 import MessagesComponent from '@components/Chat/Messages';
 import RoomInfoComponent from '@components/Chat/RoomInfo';
 import LoadingComponent from '@components/Common/Loading';
+import ExitModalComponent from '@components/Chat/ExitModal';
 import UserModalComponent from '@components/Common/UserModal';
+import ChatHeaderComponent from '@components/Chat/ChatHeader';
 import SelectImageModal from '@components/Common/SelectImageModal';
 import ChatErrorBoundary from '@components/Fallback/ChatErrorBoundary';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { MessageBody } from '@recoil/type';
-import { userInfoState } from '@recoil/recoil';
+import { roomState, userInfoState } from '@recoil/recoil';
 
 import { refreshAccessToken } from '@server/api/member';
 
 import { useAccessToken } from '@hooks/token';
 import { useEnterChatRoom } from '@hooks/chat';
 import { useChatDetail } from '@hooks/api/chat';
-import { useMatchComplete } from '@hooks/api/rooms';
+import { useMatchComplete, useExitParticipateRoom } from '@hooks/api/rooms';
 
 import { openAlbum, openCamera } from '@utils/image';
 import { setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
@@ -46,15 +47,20 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const { roomPreview, messages, messagesRefetch } = useChatDetail(roomId);
 
   const { mutateAsync: matchComplete, isPending: matchCompletePending } = useMatchComplete(roomId);
+  const { mutateAsync: exitParticipateRoomMutate, isPending: exitParticipateRoomPending } =
+    useExitParticipateRoom(); // 현재 내가 참여하고 있는 방 퇴장 mutate
 
+  const [, setSocketRoomId] = useRecoilState(roomState);
   const [newMessages, setNewMeesages] = useState<MessageBody[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
   const [imageModalVisible, setImageModalVisible] = useState(false); // 이미지 뷰 모달
   const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
+  const [exitModalVisible, setExitModalVisible] = useState<boolean>(false); // 퇴장 모달 뷰
   const [viewImages, setViewImages] = useState([{ uri: '' }]);
   const [userInfo, setUserInfo] = useState<UserPreview>();
   const [accessToken, setNewAccessToken] = useAccessToken(); // socket을 위한 token hook
   const myInfo = useRecoilValue(userInfoState);
+  const myRoom = managerId == myInfo.id;
 
   useEnterChatRoom(); // 채팅스크린에 있을때는 알람안오게 해야하므로 recoil로 상태 저장
 
@@ -300,14 +306,38 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     }
   };
 
+  // 매칭 나가기 모달 열기
+  const openExitModal = async () => {
+    setExitModalVisible(true);
+  };
+
+  // 매칭 나가기 모달 닫기
+  const closeExitModal = async () => {
+    setExitModalVisible(false);
+  };
+
+  // 방 탈퇴하기
+  const exitRoom = async () => {
+    closeExitModal();
+
+    await exitParticipateRoomMutate();
+
+    setSocketRoomId(-1);
+
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'MainScreen' }],
+    });
+  };
+
   return (
     <SafeAreaView
       className="flex-1 bg-white"
       edges={readonly ? ['top', 'left', 'right'] : undefined}
     >
-      {matchCompletePending && <TransparentLoadingComponent />}
+      {(matchCompletePending || exitParticipateRoomPending) && <TransparentLoadingComponent />}
 
-      <HeaderComponent title={'채팅 페이지'} />
+      <ChatHeaderComponent myRoom={myRoom} openExitModal={openExitModal} />
 
       {/* 방 정보 Component */}
       {roomPreview && <RoomInfoComponent roomPreview={roomPreview} />}
@@ -357,6 +387,12 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         imageIndex={0}
         visible={imageModalVisible}
         onRequestClose={() => setImageModalVisible(false)}
+      />
+
+      <ExitModalComponent
+        exitModalVisible={exitModalVisible}
+        closeExitModal={closeExitModal}
+        exitRoom={exitRoom}
       />
     </SafeAreaView>
   );

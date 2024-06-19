@@ -15,17 +15,25 @@ const UpdateModalComponent: React.FC<UpdateModalComponentProps> = ({
   deleteRoom,
 }) => {
   return (
-    <Modal animationType="slide" transparent={true} visible={updateModalVisible}>
-      <View className="flex-1 flex-col justify-end">
+    <Modal animationType="fade" transparent={true} visible={updateModalVisible}>
+      <View
+        className="flex-1 flex-col justify-end"
+        style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
+      >
         <Pressable className="flex-1" onPress={closeUpdateModal} />
 
-        <View className="mx-2 mb-6 flex-col rounded-xl bg-gray-200 opacity-90">
-          <Pressable className="border-b-[1px] border-white py-8" onPress={patchRoom}>
-            <Text className="text-center font-semibold">수정하기</Text>
+        <View
+          className="mx-2 mb-8 rounded-[13px] "
+          style={{ backgroundColor: 'rgba(245, 245, 245, 0.90)' }}
+        >
+          <Pressable className="px-4 py-[18px]" onPress={patchRoom}>
+            <Text className="text-center text-[20px] text-[#007AFF]">방 수정하기</Text>
           </Pressable>
 
-          <Pressable className="py-8" onPress={deleteRoom}>
-            <Text className="text-center font-semibold text-red-500">삭제하기</Text>
+          <View className="border-b-[1px] border-[#3C3C43] opacity-30" />
+
+          <Pressable className="px-4 py-[18px]" onPress={deleteRoom}>
+            <Text className="text-center text-[20px] text-warning">방 삭제하기</Text>
           </Pressable>
         </View>
       </View>

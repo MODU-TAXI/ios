@@ -3,14 +3,14 @@ import { View, Text, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import BackButton from '@assets/images/Header/BackButton.svg';
-import CloseButton from '@assets/images/Header/CloseButton.svg';
+import HeaderDots from '@assets/images/Header/HeaderDots.svg';
 
-interface RoomHeaderComponentProps {
-  openUpdateModal: () => void;
+interface ChatHeaderComponentProps {
+  openExitModal: () => Promise<void>;
   myRoom: boolean;
 }
 
-const RoomHeaderComponent: React.FC<RoomHeaderComponentProps> = ({ openUpdateModal, myRoom }) => {
+const ChatHeaderComponent: React.FC<ChatHeaderComponentProps> = ({ openExitModal, myRoom }) => {
   const navigation = useNavigation();
 
   const goBack = () => {
@@ -22,18 +22,19 @@ const RoomHeaderComponent: React.FC<RoomHeaderComponentProps> = ({ openUpdateMod
       <Pressable onPress={goBack}>
         <BackButton />
       </Pressable>
-      <Text className="text-lg font-semibold text-black">매칭 페이지</Text>
+
+      <Text className="text-lg font-semibold text-black">채팅 페이지</Text>
       {/* 방장인 경우에만 수정/삭제 버튼 visible */}
 
       {myRoom ? (
-        <Pressable onPress={openUpdateModal}>
-          <CloseButton />
-        </Pressable>
+        <View className="h-10 w-10 bg-white" />
       ) : (
-        <View />
+        <Pressable onPress={openExitModal}>
+          <HeaderDots />
+        </Pressable>
       )}
     </View>
   );
 };
 
-export default RoomHeaderComponent;
+export default ChatHeaderComponent;

@@ -169,7 +169,7 @@ export const approveJoinRoom = async (
   roomId: number,
   memberId: number,
 ): Promise<ApproveJoinRoomResponse> => {
-  const response = await DeleteAxiosInstance<ApproveJoinRoomResponse>(
+  const response = await PostAxiosInstance<ApproveJoinRoomResponse>(
     `/api/rooms/${roomId}/members/${memberId}/approve`,
   );
 

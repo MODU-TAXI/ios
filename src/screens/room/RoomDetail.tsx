@@ -2,14 +2,14 @@ import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
+import { View, Text, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, Suspense, useCallback } from 'react';
-import { View, Text, Vibration, RefreshControl } from 'react-native';
 
 import ButtonComponent from '@components/Button';
 import LoadingComponent from '@components/Common/Loading';
 import RoomMapComponent from '@components/RoomDigest/RoomMap';
-import RoomHeaderComponent from '@components/Home/RoomHeader';
+import RoomHeaderComponent from '@components/RoomDigest/RoomHeader';
 import UpdateModalComponent from '@components/RoomDigest/UpdateModal';
 import RoomErrorBoundary from '@components/Fallback/RoomErrorBoundary';
 import ManagerComponent from '@components/RoomDigest/ManagerComponent';
@@ -26,7 +26,6 @@ import {
   useGetRoomDetail,
   useApproveJoinRoom,
   useExitWaitingRoom,
-  useExitParticipateRoom,
 } from '@hooks/api/rooms';
 
 import { vibration } from '@utils/effect';
@@ -60,8 +59,6 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const { mutateAsync: applyJoinRoomMutate, isPending: approveRoomPending } =
     useApproveJoinRoom(roomId); // 방 입장 수락 mutate
   const { mutateAsync: deleteRoomMutate, isPending: deleteRoomPending } = useDeleteRoom(roomId); // 방 삭제 mutate
-  const { mutateAsync: exitParticipateRoomMutate, isPending: exitParticipateRoomPending } =
-    useExitParticipateRoom(); // 현재 내가 참여하고 있는 방 퇴장 mutate
   const { mutateAsync: exitWaitingRoomMutate, isPending: exitWaitingRoomPending } =
     useExitWaitingRoom(roomId); // 대기열에서 퇴장 mutate
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
@@ -103,13 +100,6 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   // 방 입장 요청
   const joinRoom = async () => {
     await joinRoomMutate(roomId);
-
-    await Promise.all([refetchParticipateMembers(), refetchWaitingMembers()]);
-  };
-
-  // 현재 내가 참여하고 있는 방 퇴장
-  const exitParticipateRoom = async () => {
-    await exitParticipateRoomMutate();
 
     await Promise.all([refetchParticipateMembers(), refetchWaitingMembers()]);
   };
@@ -165,14 +155,13 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 삭제, 입장, 수락시 로딩 */}
-      {(deleteRoomPending ||
-        joinRoomPending ||
-        approveRoomPending ||
-        exitParticipateRoomPending ||
-        exitWaitingRoomPending) && <TransparentLoadingComponent />}
+      {(deleteRoomPending || joinRoomPending || approveRoomPending || exitWaitingRoomPending) && (
+        <TransparentLoadingComponent />
+      )}
 
       {/* 헤더 */}
       <RoomHeaderComponent openUpdateModal={openUpdateModal} myRoom={roomDetail.myRoom} />
+
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         className="mt-8 flex-1 px-4"
