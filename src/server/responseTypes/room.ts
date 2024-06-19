@@ -70,7 +70,8 @@ export interface CreateRoomResponse {
 
   roomTagBitMaskList: string[]; // 카테고리
 
-  path: { // 경로
+  path: {
+    // 경로
     coordinateReferenceSystem: {
       type: string;
     };
@@ -124,7 +125,7 @@ export interface GetRoomDetailResponse {
   minLatitude: number;
   maxLongitude: number;
   maxLatitude: number;
-  
+
   path: {
     coordinateReferenceSystem: {
       type: string;
@@ -161,7 +162,7 @@ export interface PatchRoomResponse {
   participate: boolean; // 참여여부
 
   roomTagBitMaskList: string[]; // 카테고리
-  
+
   path: {
     coordinateReferenceSystem: {
       type: string;
@@ -209,4 +210,14 @@ export interface GetRoomWaitingMembersResponse {
 // [매칭 완료] /api/rooms/finish/matching/{id}
 export interface CompleteMatchingResponse {
   isUpdated: boolean;
+}
+
+// [현재 내가 참여하고 있는 방 퇴장] /api/rooms
+export interface ExitParticipateRoomResponse {
+  isDeleted: boolean;
+}
+
+// [대기열에서 퇴장] /api/rooms/{roomId}/waiting
+export interface ExitWaitingRoomResponse {
+  isDeleted: boolean;
 }

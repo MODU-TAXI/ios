@@ -1,6 +1,6 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, Suspense, useCallback } from 'react';
@@ -18,9 +18,16 @@ import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
 import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { roomState } from '@recoil/recoil';
+import { roomState, userInfoState } from '@recoil/recoil';
 
-import { useJoinRoom, useDeleteRoom, useGetRoomDetail, useApproveJoinRoom } from '@hooks/api/rooms';
+import {
+  useJoinRoom,
+  useDeleteRoom,
+  useGetRoomDetail,
+  useApproveJoinRoom,
+  useExitWaitingRoom,
+  useExitParticipateRoom,
+} from '@hooks/api/rooms';
 
 import { vibration } from '@utils/effect';
 
@@ -43,24 +50,34 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     participateMembers,
     waitingMembers,
     refetchRoomDetail,
-    refetcParticipateMembers,
+    refetchParticipateMembers,
     refetchWaitingMembers,
     pending,
   } = useGetRoomDetail(roomId); // 방정보들 가져오기
 
+  const myInfo = useRecoilValue(userInfoState);
   const { mutateAsync: joinRoomMutate, isPending: joinRoomPending } = useJoinRoom(roomId); // 방 입장 mutate
   const { mutateAsync: applyJoinRoomMutate, isPending: approveRoomPending } =
     useApproveJoinRoom(roomId); // 방 입장 수락 mutate
   const { mutateAsync: deleteRoomMutate, isPending: deleteRoomPending } = useDeleteRoom(roomId); // 방 삭제 mutate
+  const { mutateAsync: exitParticipateRoomMutate, isPending: exitParticipateRoomPending } =
+    useExitParticipateRoom(); // 현재 내가 참여하고 있는 방 퇴장 mutate
+  const { mutateAsync: exitWaitingRoomMutate, isPending: exitWaitingRoomPending } =
+    useExitWaitingRoom(roomId); // 대기열에서 퇴장 mutate
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
 
+  // 방장
   const manager = participateMembers.inList.filter(
     (participateMember) => participateMember.memberId == roomDetail.managerId,
   );
 
+  // 대기열 참여자들
   const members = participateMembers.inList.filter(
     (participateMember) => participateMember.memberId != roomDetail.managerId,
   );
+
+  // 대기열 참여 여부
+  const isWaiting = waitingMembers.waitingList.some((member) => member.memberId === myInfo.id);
 
   // 방정보 새로고침
   const onRefresh = React.useCallback(async () => {
@@ -68,7 +85,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
 
     vibration();
 
-    await Promise.all([refetchRoomDetail(), refetcParticipateMembers(), refetchWaitingMembers()]);
+    await Promise.all([refetchRoomDetail(), refetchParticipateMembers(), refetchWaitingMembers()]);
 
     setRefreshing(false);
   }, [refetchRoomDetail]);
@@ -87,16 +104,28 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const joinRoom = async () => {
     await joinRoomMutate(roomId);
 
-    refetcParticipateMembers(); // 멤버 refetch
-    refetchWaitingMembers(); // 대기 멤버 refetch
+    await Promise.all([refetchParticipateMembers(), refetchWaitingMembers()]);
+  };
+
+  // 현재 내가 참여하고 있는 방 퇴장
+  const exitParticipateRoom = async () => {
+    await exitParticipateRoomMutate();
+
+    await Promise.all([refetchParticipateMembers(), refetchWaitingMembers()]);
+  };
+
+  // 대기열에서 퇴장
+  const exitWaitingRoom = async () => {
+    await exitWaitingRoomMutate();
+
+    await Promise.all([refetchParticipateMembers(), refetchWaitingMembers()]);
   };
 
   // 방 입장 수락
   const applyJoinRoom = async (memberId: number) => {
     await applyJoinRoomMutate(memberId);
 
-    refetcParticipateMembers(); // 멤버 refetch
-    refetchWaitingMembers(); // 대기 멤버 refetch
+    await Promise.all([refetchParticipateMembers(), refetchWaitingMembers()]);
   };
 
   // 방 삭제
@@ -136,9 +165,11 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 삭제, 입장, 수락시 로딩 */}
-      {(deleteRoomPending || joinRoomPending || approveRoomPending) && (
-        <TransparentLoadingComponent />
-      )}
+      {(deleteRoomPending ||
+        joinRoomPending ||
+        approveRoomPending ||
+        exitParticipateRoomPending ||
+        exitWaitingRoomPending) && <TransparentLoadingComponent />}
 
       {/* 헤더 */}
       <RoomHeaderComponent openUpdateModal={openUpdateModal} myRoom={roomDetail.myRoom} />
@@ -237,6 +268,17 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
               text={'채팅방으로 이동'}
               disabled={false}
               onPress={toChatRoomScreen}
+            />
+          </View>
+        ) : isWaiting ? (
+          <View className="mx-5 mb-10 mt-[78px]">
+            <ButtonComponent
+              color={'bg-main'}
+              borderColor={'border-main'}
+              textColor={'white'}
+              text={'대기 취소하기'}
+              disabled={false}
+              onPress={exitWaitingRoom}
             />
           </View>
         ) : (
