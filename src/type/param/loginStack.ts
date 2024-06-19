@@ -53,6 +53,12 @@ export type LoginStackParamList = {
   ManageAlarmScreen: undefined;
   InquiryScreen: undefined;
 
+  // 회원탈퇴
+  WithdrawCheckScreen: undefined;
+  WithdrawSurveyScreen: undefined;
+  WithdrawLastScreen: undefined;
+  WithdrawCompleteScreen: undefined;
+
   // 신고
   DeclarationScreen: { userInfo: UserPreview; roomId: number };
 
@@ -147,6 +153,24 @@ export type ManageAlarmScreenProps = NativeStackScreenProps<
   'ManageAlarmScreen'
 >;
 export type InquiryScreenProps = NativeStackScreenProps<LoginStackParamList, 'InquiryScreen'>;
+
+// 회원탈퇴 페이지
+export type WithdrawCheckScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'WithdrawCheckScreen'
+>;
+export type WithdrawSurveyScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'WithdrawSurveyScreen'
+>;
+export type WithdrawCompleteScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'WithdrawCompleteScreen'
+>;
+export type WithdrawLastScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'WithdrawLastScreen'
+>;
 
 // 신고 페이지
 export type DeclarationScreenProps = NativeStackScreenProps<

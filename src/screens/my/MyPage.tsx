@@ -31,7 +31,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const { mutateAsync: patchMemberMutate, isPending: patchMemberPending } = usePatchMember();
   const [profileImage, setProfileImage] = useState<string>(userInfo.imageUrl);
   const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
-  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setLoggedIn] = useRecoilState(loggedInState);
 
   // 로그아웃
   const logOut = () => {
@@ -128,6 +128,11 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   // 문의하기 페이지 이동
   const toInquiryScreen = () => {
     navigation.navigate('InquiryScreen');
+  };
+
+  // 회원탈퇴 페이지 이동
+  const toWithdarwScreen = () => {
+    navigation.navigate('WithdrawCheckScreen');
   };
 
   if (!userInfo) return <LoadingComponent />;
@@ -233,14 +238,8 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
           <SplitLine />
 
-          <Pressable className="p-4">
+          <Pressable onPress={toWithdarwScreen} className="p-4">
             <ResignButton />
-          </Pressable>
-
-          <SplitLine />
-
-          <Pressable className="p-4">
-            <ContactButton />
           </Pressable>
         </View>
       </ScrollView>

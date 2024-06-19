@@ -6,6 +6,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import InquiryScreen from 'src/screens/my/Inquiry';
 import ManageAlarmScreen from 'src/screens/my/ManageAlarm';
 import ManageAccountScreen from 'src/screens/my/ManageAccount';
+import WithdrawLastScreen from 'src/screens/withdraw/WithdrawLast';
+import WithdrawCheckScreen from 'src/screens/withdraw/WithdrawCheck';
+import WithdrawSurveyScreen from 'src/screens/withdraw/WithdrawSurvey';
+import WithdrawCompleteScreen from 'src/screens/withdraw/WithdrawComplete';
 
 import TestScreen from './src/screens/test';
 import MainScreen from './src/screens/main/Main';
@@ -126,6 +130,12 @@ function AppInner() {
       <LogInStack.Screen name="ManageAccountScreen" component={ManageAccountScreen} />
       <LogInStack.Screen name="ManageAlarmScreen" component={ManageAlarmScreen} />
       <LogInStack.Screen name="InquiryScreen" component={InquiryScreen} />
+
+      {/* 회원탈퇴 Screen */}
+      <LogInStack.Screen name="WithdrawCheckScreen" component={WithdrawCheckScreen} />
+      <LogInStack.Screen name="WithdrawSurveyScreen" component={WithdrawSurveyScreen} />
+      <LogInStack.Screen name="WithdrawCompleteScreen" component={WithdrawCompleteScreen} />
+      <LogInStack.Screen name="WithdrawLastScreen" component={WithdrawLastScreen} />
 
       {/* 신고 Screen */}
       <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />

@@ -6,20 +6,11 @@ import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import InputBoxComponent from '@components/InputBox';
-import ProgressBarComponent from '@components/ProgressBar';
-import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { userInfoState, signUpUserState } from '@recoil/recoil';
 
-import { signUp } from '@server/api/member';
-
-import { useFcmToken } from '@hooks/fcm';
-import { useSmsConfirm, useSmsAuthentication } from '@hooks/api/member.sms';
-
 import { InfoToastMessage } from '@utils/toastMessage';
-import { setAccessToken, setRefreshToken } from '@utils/token';
 
-import { PhoneAuthenticationCodeScreenProps } from '@type/param/rootStack';
 import { PatchUserInfoAuthenticationScreenProps } from '@type/param/loginStack';
 
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
@@ -64,7 +55,7 @@ const PatchUserInfoAuthenticationScreen = ({
 
           <View className="mx-6 flex-1">
             {/* 입력란 설명 */}
-            <View className="mt-14 flex">
+            <View className="mt-6 flex">
               <Text className="text-xl font-bold">적어주신 번호로</Text>
               <Text className="text-xl font-bold">인증번호가 전송됐어요!</Text>
             </View>
