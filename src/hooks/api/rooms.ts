@@ -316,6 +316,7 @@ export const useGetRoomIntegration = (
     ],
     queryFn: () => getRoomIntegration(data),
     select: (response: GetRoomIntegrationResponse[]) => {
+      console.log(data, response)
       return response;
     },
   });

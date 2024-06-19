@@ -45,11 +45,11 @@ export interface GetRoomListRequest {
 
 // [지도, 리스트 통합 조회] /api/rooms/integration
 export interface GetRoomIntegrationRequest {
-  searchLongitude: number;
-  searchLatitude: number;
-  sortType: string;
-  spotId?: number;
-  radius?: number;
-  roomTags?: string[];
-  isImminent?: boolean;
+  searchLongitude: number,
+  searchLatitude: number,
+  sortType: string,
+  spotId?: number,
+  radius?: number,
+  roomTags?: string,
+  isImminent?: boolean,
 }

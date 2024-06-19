@@ -26,6 +26,7 @@ interface MapBottomSheetProps {
   handleFilter: (category: string, value: any) => void;
   filterParam: RoomFilterParam;
   spotData: SpotMap;
+  refetch: () => void;
 }
 
 const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
@@ -36,6 +37,7 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
   handleFilter,
   filterParam,
   spotData,
+  refetch
 }) => {
   const userInfo = useRecoilValue(userInfoState);
 
@@ -50,6 +52,41 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
   /** 거점 선택 취소 */
   const deleteSpotFilter = () => {
     handleFilter("spotId", 0);
+  }
+
+  // 선택된 태그 저장
+  // const [selectedTags, setSelectedTags] = useState<string>();
+  // useEffect(() => {
+  //   if (filterParam.roomTags) {
+  //     handleFilter("roomTags", selectedTags);
+  //   }
+  //   refetch();
+  // }, [selectedTags])
+
+  // /** 태그 선택 핸들링 */
+  // const handleRoomTagFilter = (tag: string) => {
+  //   if (selectedTags.find((selectedTag) => selectedTag === tag)) {
+  //     const newRoomTags = [...selectedTags]
+  //     const temp = newRoomTags.findIndex((roomTag) => roomTag === tag)
+  //     newRoomTags.splice(temp, 1);
+  //     setSelectedTags(newRoomTags);
+  //   } else {
+  //     setSelectedTags([...selectedTags, tag]);
+  //   }
+  // }
+
+  const [selectedTag, setSelectedTag] = useState<string>();
+  useEffect(() => {
+    handleFilter("roomTags", selectedTag);
+    refetch();
+  }, [selectedTag])
+
+  const handleRoomTagFilter = (tag: string) => {
+    if (tag === filterParam.roomTags) {
+      setSelectedTag('');
+    } else {
+      setSelectedTag(tag);
+    }
   }
 
   /** 해당 마커의 room 으로 이동 */
@@ -79,16 +116,36 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
               </Pressable>
             )}
 
-            
-            <FilterButtonComponent label="학생인증" />
+            {/** 학생 인증 필터 */}
+            <Pressable onPress={() => handleRoomTagFilter("STUDENT_CERTIFICATION")}>
+              <FilterButtonComponent 
+                label="학생인증" 
+                selected={selectedTag === "STUDENT_CERTIFICATION"} 
+              />
+            </Pressable>
 
             {userInfo.gender === "MALE" ? (
-              <FilterButtonComponent label="남자만" />
+              <Pressable onPress={() => handleRoomTagFilter("ONLY_MAN")}>
+                <FilterButtonComponent 
+                  label="남자만" 
+                  selected={selectedTag === "ONLY_MAN"} 
+                />
+              </Pressable>
             ) : (
-              <FilterButtonComponent label="여자만" />
+              <Pressable onPress={() => handleRoomTagFilter("ONLY_WOMAN")}>
+                <FilterButtonComponent 
+                  label="여자만" 
+                  selected={selectedTag === "ONLY_WOMAN"} 
+                />
+              </Pressable>           
             )}
 
-            <FilterButtonComponent label="조용히" />
+            <Pressable onPress={() => handleRoomTagFilter("QUIET")}>
+              <FilterButtonComponent 
+                label="조용히" 
+                selected={selectedTag === "QUIET"} 
+              />
+            </Pressable>
           </View>
         </ScrollView>
       </View>

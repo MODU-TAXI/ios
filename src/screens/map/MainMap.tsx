@@ -134,16 +134,12 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   const [filterParam, setFilterParam] = useState<RoomFilterParam>({
     "sortType": "NEW",
     "spotId": undefined,
-    "roomTags": [],
+    "roomTags": undefined,
     "isImminent": false,
   });
-
-  useEffect(() => {
-    console.log(filterParam)
-  }, [filterParam])
   
   // 매칭방 탐색
-  const { rooms: rooms, refetch: refetch } = useGetRoomIntegration({
+  const { rooms: rooms, refetch } = useGetRoomIntegration({
     "searchLongitude": currentCamera.longitude,
     "searchLatitude": currentCamera.latitude,
     "radius": radius,
@@ -152,7 +148,6 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
     "roomTags": filterParam.roomTags,
     "isImminent": filterParam.isImminent,
   });
-
 
   // 거점 3개와 고정카메라 좌표 리턴
   const { spotData, refetch: refetchSpot } = useGetSpotMap({
@@ -417,6 +412,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
               handleFilter={handleFiltering}
               filterParam={filterParam}
               spotData={spotData}
+              refetch={refetch}
             />
           </BottomSheetView>
         </BottomSheet>
