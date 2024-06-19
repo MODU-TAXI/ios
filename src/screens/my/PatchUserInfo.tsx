@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
@@ -8,22 +8,38 @@ import HeaderComponent from '@components/Header';
 import InputBoxComponent from '@components/InputBox';
 import RadioBoxComponent from '@components/RadioBox';
 import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { userInfoState } from '@recoil/recoil';
+
+import { useSmsAuthentication } from '@hooks/api/member.sms';
 
 import { PatchUserInfoScreenProps } from '@type/param/loginStack';
 
 const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [userInfo] = useRecoilState(userInfoState);
 
   const [name, setName] = useState<string>(userInfo.name);
-  const [gender, setGender] = useState<string>('');
+  const [gender, setGender] = useState<string>(userInfo.gender === 'MALE' ? '남자' : '여자');
   const [phoneNumber, setPhoneNumber] = useState<string>(userInfo.phoneNumber);
   const [items, setItems] = useState([
     { index: 1, item: '남자', select: userInfo.gender === 'MALE' },
     { index: 2, item: '여자', select: userInfo.gender === 'FEMALE' },
   ]);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+
+  const { mutateAsync: smsAuthentication, isPending: smsAuthenticationPending } =
+    useSmsAuthentication(setErrorMessage);
+
+  useEffect(() => {
+    const hasNameChanged = name !== userInfo.name;
+    const hasGenderChanged =
+      (userInfo.gender === 'MALE' && gender !== '남자') ||
+      (userInfo.gender === 'FEMALE' && gender !== '여자');
+    const hasPhoneNumberChanged = phoneNumber !== userInfo.phoneNumber;
+    setIsButtonDisabled(!(hasNameChanged || hasGenderChanged || hasPhoneNumberChanged));
+  }, [name, gender, phoneNumber, userInfo]);
 
   // 다음으로
   const toNext = async (): Promise<void> => {
@@ -32,6 +48,8 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {smsAuthenticationPending && <TransparentLoadingComponent />}
+
       <HeaderComponent title="개인정보 수정" />
 
       {/* TouchableWithoutFeedback로 화면의 다른 부분 터치 시 키보드 내리기 */}
@@ -84,7 +102,7 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
                 borderColor={'border-main'}
                 textColor={'white'}
                 text={'확인'}
-                disabled={!name || !gender || !phoneNumber}
+                disabled={isButtonDisabled}
                 onPress={toNext}
               />
             </View>

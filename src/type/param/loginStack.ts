@@ -45,11 +45,19 @@ export type LoginStackParamList = {
   PatchNicknameScreen: undefined;
   PatchUserInfoScreen: undefined;
   PatchSchoolEmailScreen: undefined;
-  PatchAccountScreen: undefined;
   PatchUserInfoAuthenticationScreen: undefined;
   PatchSchoolEmailAuthenticationScreen: undefined;
   HistoryScreen: undefined;
   HistoryDetailScreen: { historyId: number };
+  ManageAccountScreen: undefined;
+  ManageAlarmScreen: undefined;
+  InquiryScreen: undefined;
+
+  // 회원탈퇴
+  WithdrawCheckScreen: undefined;
+  WithdrawSurveyScreen: undefined;
+  WithdrawLastScreen: undefined;
+  WithdrawCompleteScreen: undefined;
 
   // 신고
   DeclarationScreen: { userInfo: UserPreview; roomId: number };
@@ -123,10 +131,6 @@ export type PatchSchoolEmailScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'PatchSchoolEmailScreen'
 >;
-export type PatchAccountScreenProps = NativeStackScreenProps<
-  LoginStackParamList,
-  'PatchAccountScreen'
->;
 export type PatchUserInfoAuthenticationScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'PatchUserInfoAuthenticationScreen'
@@ -139,6 +143,33 @@ export type HistoryScreenProps = NativeStackScreenProps<LoginStackParamList, 'Hi
 export type HistoryDetailScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'HistoryDetailScreen'
+>;
+export type ManageAccountScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'ManageAccountScreen'
+>;
+export type ManageAlarmScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'ManageAlarmScreen'
+>;
+export type InquiryScreenProps = NativeStackScreenProps<LoginStackParamList, 'InquiryScreen'>;
+
+// 회원탈퇴 페이지
+export type WithdrawCheckScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'WithdrawCheckScreen'
+>;
+export type WithdrawSurveyScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'WithdrawSurveyScreen'
+>;
+export type WithdrawCompleteScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'WithdrawCompleteScreen'
+>;
+export type WithdrawLastScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'WithdrawLastScreen'
 >;
 
 // 신고 페이지

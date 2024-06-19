@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
 import FastImage from 'react-native-fast-image';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Text, View, Alert, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,10 +9,11 @@ import LoadingComponent from '@components/Common/Loading';
 import SelectImageModal from '@components/Common/SelectImageModal';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { userInfoState } from '@recoil/recoil';
+import { loggedInState, userInfoState } from '@recoil/recoil';
 
 import { usePatchMember } from '@hooks/api/member';
 
+import { deleteToken } from '@utils/token';
 import { openAlbum, openCamera } from '@utils/image';
 
 import { MyPageScreenProps } from '@type/param/loginStack';
@@ -30,10 +31,23 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const { mutateAsync: patchMemberMutate, isPending: patchMemberPending } = usePatchMember();
   const [profileImage, setProfileImage] = useState<string>(userInfo.imageUrl);
   const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
+  const [, setLoggedIn] = useRecoilState(loggedInState);
 
   // 로그아웃
   const logOut = () => {
-    console.log('logout!');
+    Alert.alert('정말 로그아웃 하시겠어요?', '모두의택시 이용 기록은 여전히 남아있어요', [
+      {
+        text: '취소',
+        style: 'cancel',
+      },
+      {
+        text: '로그아웃',
+        onPress: async () => {
+          await deleteToken();
+          setLoggedIn(false);
+        },
+      },
+    ]);
   };
 
   // 이미지 선택 모달 띄우기
@@ -96,14 +110,29 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('PatchSchoolEmailScreen');
   };
 
-  // 계좌 수정 페이지 이동
-  const toPatchAccountScreen = () => {
-    navigation.navigate('PatchAccountScreen');
-  };
-
   // 이용 내용 페이지 이동
   const toHistoryScreen = () => {
     navigation.navigate('HistoryScreen');
+  };
+
+  // 계좌 관리 페이지 이동
+  const toManageAccountScreen = () => {
+    navigation.navigate('ManageAccountScreen');
+  };
+
+  // 알림 설정 페이지 이동
+  const toManageAlarmScreen = () => {
+    navigation.navigate('ManageAlarmScreen');
+  };
+
+  // 문의하기 페이지 이동
+  const toInquiryScreen = () => {
+    navigation.navigate('InquiryScreen');
+  };
+
+  // 회원탈퇴 페이지 이동
+  const toWithdarwScreen = () => {
+    navigation.navigate('WithdrawCheckScreen');
   };
 
   if (!userInfo) return <LoadingComponent />;
@@ -170,7 +199,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
         <View className="mt-4 rounded-xl border-[1px] border-[#EBEBEB] px-4">
           <Pressable
             className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
-            onPress={toPatchAccountScreen}
+            onPress={toManageAccountScreen}
           >
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">계좌관리</Text>
             <NextButton />
@@ -184,18 +213,19 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             <NextButton />
           </Pressable>
 
-          <Pressable className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4">
+          <Pressable
+            className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
+            onPress={toManageAlarmScreen}
+          >
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">알림설정</Text>
             <NextButton />
           </Pressable>
 
-          <Pressable className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4">
-            <Text className="font-semibold tracking-tight text-[#3E3E3E]">공지사항/이벤트</Text>
-            <NextButton />
-          </Pressable>
-
-          <Pressable className="flex-row items-center justify-between py-4">
-            <Text className="font-semibold tracking-tight text-[#3E3E3E]">문의사항</Text>
+          <Pressable
+            className="flex-row items-center justify-between py-4"
+            onPress={toInquiryScreen}
+          >
+            <Text className="font-semibold tracking-tight text-[#3E3E3E]">문의하기</Text>
             <NextButton />
           </Pressable>
         </View>
@@ -208,14 +238,8 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
           <SplitLine />
 
-          <Pressable className="p-4">
+          <Pressable onPress={toWithdarwScreen} className="p-4">
             <ResignButton />
-          </Pressable>
-
-          <SplitLine />
-
-          <Pressable className="p-4">
-            <ContactButton />
           </Pressable>
         </View>
       </ScrollView>

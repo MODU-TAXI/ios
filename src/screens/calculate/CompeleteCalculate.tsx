@@ -18,7 +18,7 @@ const CompleteCalculateScreen = ({ navigation }: CompleteCalculateScreenProps) =
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex flex-1 items-center justify-center">
-        <Image source={require('../../assets/images/Calculate/Complete.gif')} />
+        <Image source={require('../../assets/images/Common/Complete.gif')} />
 
         <Text className="mt-4 text-[20px] font-bold tracking-tight text-[#1F1F1F]">
           정산 내용 설정이 완료되었어요!

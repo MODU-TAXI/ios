@@ -29,7 +29,7 @@ const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
     { index: 2, item: '여자', select: false },
   ]);
 
-  const { mutateAsync: smsAuthentication, isPaused: smsAuthenticationPending } =
+  const { mutateAsync: smsAuthentication, isPending: smsAuthenticationPending } =
     useSmsAuthentication(setErrorMessage);
 
   // 다음으로

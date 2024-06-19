@@ -96,7 +96,7 @@ const DeclarationScreen = ({ navigation, route }: DeclarationScreenProps) => {
             <View className="mt-3 flex-row items-center">
               <DeclarationAlert className="mr-1" />
 
-              <Text className="#AFAFAF  text-[12px] tracking-tight">
+              <Text className="text-[12px]  tracking-tight text-[#AFAFAF]">
                 신고 접수 후 패널티 조치까지 3-5일정도 소요될 수 있어요!
               </Text>
             </View>

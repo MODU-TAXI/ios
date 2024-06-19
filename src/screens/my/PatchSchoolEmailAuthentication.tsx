@@ -6,7 +6,6 @@ import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import InputBoxComponent from '@components/InputBox';
-import ProgressBarComponent from '@components/ProgressBar';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { emailState, userInfoState } from '@recoil/recoil';
