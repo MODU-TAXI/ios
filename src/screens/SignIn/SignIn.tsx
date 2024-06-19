@@ -12,7 +12,7 @@ import AppleLogo from '@assets/images/SignIn/AppleLogo.svg';
 import KakaoLogo from '@assets/images/SignIn/KakaoLogo.svg';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
-  const { mutateAsync: kakaoLogin, isPaused: kakaoLoginPending } = useKakaoLogin(navigation);
+  const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
 
   const appleLogin = async (): Promise<void> => {
     await Linking.openURL('modutaxi://main');

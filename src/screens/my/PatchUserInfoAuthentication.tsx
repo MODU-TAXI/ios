@@ -18,11 +18,10 @@ import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 const PatchUserInfoAuthenticationScreen = ({
   navigation,
 }: PatchUserInfoAuthenticationScreenProps) => {
-  const signUpUser = useRecoilValue(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
   const [, setUserInfo] = useRecoilState(userInfoState);
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
-  const [time, setTime] = useState(300); // 타이머 시간
+  const [time, setTime] = useState(10); // 타이머 시간
 
   // 인증번호 만료시 에러 메세지 생성
   useEffect(() => {
@@ -46,6 +45,8 @@ const PatchUserInfoAuthenticationScreen = ({
     InfoToastMessage('인증번호가 재전송 되었습니다');
     setTime(300); // 재전송시 timer 재설정
   };
+
+  console.log(time);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>

@@ -8,8 +8,11 @@ import HeaderComponent from '@components/Header';
 import InputBoxComponent from '@components/InputBox';
 import RadioBoxComponent from '@components/RadioBox';
 import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { userInfoState } from '@recoil/recoil';
+
+import { useSmsAuthentication } from '@hooks/api/member.sms';
 
 import { PatchUserInfoScreenProps } from '@type/param/loginStack';
 
@@ -23,8 +26,11 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
     { index: 1, item: '남자', select: userInfo.gender === 'MALE' },
     { index: 2, item: '여자', select: userInfo.gender === 'FEMALE' },
   ]);
-  const [errorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+
+  const { mutateAsync: smsAuthentication, isPending: smsAuthenticationPending } =
+    useSmsAuthentication(setErrorMessage);
 
   useEffect(() => {
     const hasNameChanged = name !== userInfo.name;
@@ -42,6 +48,8 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
+      {smsAuthenticationPending && <TransparentLoadingComponent />}
+
       <HeaderComponent title="개인정보 수정" />
 
       {/* TouchableWithoutFeedback로 화면의 다른 부분 터치 시 키보드 내리기 */}
