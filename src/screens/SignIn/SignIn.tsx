@@ -5,7 +5,7 @@ import appleAuth from '@invertase/react-native-apple-authentication';
 
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { useKakaoLogin } from '@hooks/api/member';
+import { appleLogin, useKakaoLogin } from '@hooks/api/member';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
@@ -15,19 +15,6 @@ import ModutaxiLogo from '@assets/images/SignIn/ModutaxiLogo.svg';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
-
-  const appleLogin = async (): Promise<void> => {
-    const appleAuthRequestResponse = await appleAuth.performRequest({
-      requestedOperation: appleAuth.Operation.LOGIN,
-      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-    });
-
-    console.log(appleAuthRequestResponse);
-    const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
-    if (credentialState === appleAuth.State.AUTHORIZED) {
-      console.log("애플 ㅇㅈㅇㅈ")
-    }
-  };
 
   useEffect(() => {
     return appleAuth.onCredentialRevoked(async () => {
