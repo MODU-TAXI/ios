@@ -1,7 +1,10 @@
 import { useRecoilValue } from 'recoil';
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import { ScrollView } from 'react-native-gesture-handler';
+import { View, Text, Modal, Pressable, Touchable, LayoutChangeEvent } from 'react-native';
+
+import DropDownModal from './DropDownModal';
 
 import FilterButtonComponent from '@components/RoomDigest/FilterButton';
 import RoomDigestBoxComponent from '@components/RoomDigest/RoomDigestBox';
@@ -54,7 +57,7 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
     handleFilter("spotId", 0);
   }
 
-  // 선택된 태그 저장
+  /** roomTags가 배열을 받을 상황이라면.. */
   // const [selectedTags, setSelectedTags] = useState<string>();
   // useEffect(() => {
   //   if (filterParam.roomTags) {
@@ -75,6 +78,7 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
   //   }
   // }
 
+  // 태그 선택
   const [selectedTag, setSelectedTag] = useState<string>();
   useEffect(() => {
     handleFilter("roomTags", selectedTag);
@@ -87,6 +91,21 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
     } else {
       setSelectedTag(tag);
     }
+  }
+
+  // 드롭다운 모달, sortType 핸들링 상태관리
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [selectedSortType, setSelectedSortType] = useState<string>("최신순");
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
+  /** 선택한 sortType 적용, 모달 핸들링 */
+  const handleSelectSortType = (param: string, label: string) => {
+    setSelectedSortType(label);
+    handleFilter("sortType", param);
+    toggleModal();
   }
 
   /** 해당 마커의 room 으로 이동 */
@@ -158,9 +177,20 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
           </View>
           <Text className="font-medium text-boxFont">마감임박</Text>
         </Pressable>
-        <Pressable className="flex flex-row items-center pr-1">
-          <Text className="mr-1 font-medium text-boxFont">최신순</Text>
+        
+        <Pressable className="flex flex-row items-center pr-1" onPress={toggleModal}>
+          <Text className="mr-1 font-medium text-boxFont">{selectedSortType}</Text>
           <ChevronDownBoxSvg />
+
+          {/** 드롭다운 */}
+          <Modal visible={modalVisible} animationType="fade" transparent>
+            <View
+              className="relative m-4 items-end justify-center"
+              style={index === 2 ? {top: "60%"} : {top: "25%"}}
+            >
+              <DropDownModal handleSelectSortType={handleSelectSortType} selectedSortType={selectedSortType} />
+            </View>
+          </Modal>
         </Pressable>
       </View>
 
