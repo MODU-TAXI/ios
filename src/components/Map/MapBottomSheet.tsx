@@ -18,7 +18,7 @@ import { RoomList, RoomIntegration, RoomFilterParam } from '@type/entity/room';
 
 import RadioButtonBoxSvg from '@assets/images/RadioBox/RadioButtonBox.svg';
 import ChevronDownBoxSvg from '@assets/images/RoomDigest/ChevronDownBox.svg';
-import SelectedRadioButtonSvg from '@assets/images/RadioBox/SelectedRadioButton.svg';
+import SelectedRadioButtonSvg from '@assets/images/RadioBox/SelectedRadioButtonGray.svg';
 
 
 interface MapBottomSheetProps {
@@ -108,6 +108,11 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
     toggleModal();
   }
 
+  const handleIsImminent = () => {
+    const isImminent = !filterParam.isImminent;
+    handleFilter("isImminent", isImminent);
+  }
+
   /** 해당 마커의 room 으로 이동 */
   const toRoomDetailScreen = (roomId: number) => {
     navigation.navigate('RoomDetailScreen', {roomId: roomId});
@@ -135,7 +140,7 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
               </Pressable>
             )}
 
-            {/** 학생 인증 필터 */}
+            {/** 카테고리 필터 */}
             <Pressable onPress={() => handleRoomTagFilter("STUDENT_CERTIFICATION")}>
               <FilterButtonComponent 
                 label="학생인증" 
@@ -165,23 +170,31 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
                 selected={selectedTag === "QUIET"} 
               />
             </Pressable>
+
+            <Pressable onPress={() => handleRoomTagFilter("MANNER")}>
+              <FilterButtonComponent 
+                label="매너탑승" 
+                selected={selectedTag === "MANNER"} 
+              />
+            </Pressable>
           </View>
         </ScrollView>
       </View>
 
-      {/** 마감임박 radio, 최신순 필터 */}
       <View className="mb-1 flex flex-row items-center justify-between">
-        <Pressable className="flex flex-row items-center">
+
+        {/** 마감임박 radio */}
+        <Pressable className="flex flex-row items-center" onPress={handleIsImminent}>
           <View className="p-2">
-            <RadioButtonBoxSvg />
+            {filterParam.isImminent ? <SelectedRadioButtonSvg width={16} height={16} /> : <RadioButtonBoxSvg width={16} height={16} />}
           </View>
           <Text className="font-medium text-boxFont">마감임박</Text>
         </Pressable>
         
+        {/** 최신순/거리순/마감순 필터 */}
         <Pressable className="flex flex-row items-center pr-1" onPress={toggleModal}>
           <Text className="mr-1 font-medium text-boxFont">{selectedSortType}</Text>
           <ChevronDownBoxSvg />
-
           {/** 드롭다운 */}
           <Modal visible={modalVisible} animationType="fade" transparent>
             <View

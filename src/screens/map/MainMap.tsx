@@ -162,7 +162,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
       ...filterParam,
       [category]: value
     })
-  }, []);
+  }, [filterParam]);
 
   // 처음 렌더링 시 현재위치로
   useEffect(() => {
