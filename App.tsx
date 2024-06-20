@@ -20,7 +20,13 @@ Sentry.init({
   dsn: Config.SENTRY_DSN,
 });
 
-const queryClient = new QueryClient(); // react-query client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 0,
+    },
+  },
+}); // react-query client
 
 import { linking } from './deepLinkConfig';
 
