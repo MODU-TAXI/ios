@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, Linking, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import appleAuth from '@invertase/react-native-apple-authentication';
 
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
@@ -16,10 +17,23 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
 
   const appleLogin = async (): Promise<void> => {
-    await Linking.openURL('modutaxi://main');
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    });
 
-    // navigation.navigate('CheckPermissionScreen');
+    console.log(appleAuthRequestResponse);
+    const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+    if (credentialState === appleAuth.State.AUTHORIZED) {
+      console.log("애플 ㅇㅈㅇㅈ")
+    }
   };
+
+  useEffect(() => {
+    return appleAuth.onCredentialRevoked(async () => {
+      console.warn('Credential Revoked');
+    });
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -54,7 +68,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
           <View className="mb-12">
             <Pressable
               className="flex-row items-center justify-center rounded-full bg-black py-4"
-              onPress={appleLogin}
+              onPress={() => appleLogin()}
             >
               <AppleLogo className="mr-2 h-[18px] w-[18px]" />
               <Text className="text-center font-semibold text-base text-white">
