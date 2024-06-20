@@ -6,7 +6,6 @@ import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
-import ProgressBarComponent from '@components/ProgressBar';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { userInfoState } from '@recoil/recoil';

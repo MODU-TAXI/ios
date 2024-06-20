@@ -318,16 +318,34 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   // 방 탈퇴하기
   const exitRoom = async () => {
-    closeExitModal();
+    Alert.alert(
+      '택시팟 탈퇴',
+      '택시팟을 탈퇴하시겠습니까?',
+      [
+        {
+          text: '취소',
+          onPress: () => {
+            closeExitModal();
+          },
+        },
+        {
+          text: '확인',
+          onPress: async () => {
+            closeExitModal();
 
-    await exitParticipateRoomMutate();
+            await exitParticipateRoomMutate();
 
-    setSocketRoomId(-1);
+            setSocketRoomId(-1);
 
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'MainScreen' }],
-    });
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'MainScreen' }],
+            });
+          },
+        },
+      ],
+      { cancelable: false },
+    );
   };
 
   return (
