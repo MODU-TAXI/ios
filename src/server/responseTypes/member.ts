@@ -1,3 +1,5 @@
+import { AppleRequestScope, AppleRequestResponseFullName } from "@invertase/react-native-apple-authentication";
+
 // [토큰 재발급] /api/members/refresh
 export interface RefreshTokenResponse {
   tokenResponse: {
@@ -23,6 +25,19 @@ export interface KakaoLoginResponse {
   accessTokenExpiresAt: Date;
   refreshTokenExpiresAt: Date;
   scopes: string[];
+}
+
+// [애플 sdk 로그인]
+export interface AppleLoginResponse {
+  user: string;
+  email: string | null;
+  authorizedScopes: AppleRequestScope[];
+  fullName: AppleRequestResponseFullName | null;
+  identityToken: string | null;
+  authorizationCode: string | null;
+  realUserStatus: number;
+  state: string | null;
+  nonce: string;
 }
 
 // [닉네임 설정] /api/members/nickname
