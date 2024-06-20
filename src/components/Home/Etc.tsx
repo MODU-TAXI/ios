@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
 
 import Check from '@assets/images/Home/Popper.svg';
 import Receipt from '@assets/images/Home/Receipt.svg';
@@ -24,11 +24,11 @@ const EtcComponent: React.FC = () => {
         </View>
       </View>
 
-      <View>
+      <Pressable>
         <Text className="px-1 text-[18px] font-semibold">나의 매칭률</Text>
 
         <View className="mt-4 flex-row rounded-2xl border-[1px] border-gray200 px-3 py-4">
-          <Check className="mr-1" width={38}/>
+          <Check className="mr-1" width={38} />
 
           <View className="flex-col">
             <Text className="text-[12px] font-medium text-[#5d5d5d]">현재 상위 1%에요!</Text>
@@ -38,7 +38,7 @@ const EtcComponent: React.FC = () => {
             </View>
           </View>
         </View>
-      </View>
+      </Pressable>
     </View>
   );
 };

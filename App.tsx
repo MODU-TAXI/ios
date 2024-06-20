@@ -12,6 +12,8 @@ import { NavigationContainer } from '@react-navigation/native'; // 줄여쓰면 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // react-query v5 라이브러리
 import { RecoilRoot } from 'recoil'; // recoil 라이브러리
 
+import { toastConfig } from 'src/config/toastConfig';
+
 import LoadingComponent from '@components/Common/Loading';
 
 Sentry.init({
@@ -38,7 +40,7 @@ function App(): React.JSX.Element {
           </SafeAreaProvider>
         </GestureHandlerRootView>
       </RecoilRoot>
-      <Toast />
+      <Toast config={toastConfig} />
     </>
   );
 }

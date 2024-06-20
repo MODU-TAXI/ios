@@ -40,7 +40,6 @@ import {
   GetRoomMembersResponse,
   GetRoomPreviewResponse,
   ApproveJoinRoomResponse,
-  CompleteMatchingResponse,
   GetRoomIntegrationResponse,
   GetRoomCurrentCameraResponse,
   GetRoomWaitingMembersResponse,
@@ -61,7 +60,7 @@ export const useCreateRoom = (): UseMutationResult<
   return useMutation({
     mutationFn: (createRoomRequest: CreateRoomRequest) => createRoom(createRoomRequest),
     onSuccess: async (data: CreateRoomResponse) => {
-      InfoToastMessage('파티 생성 성공!');
+      InfoToastMessage('택시팟 생성이 완료되었어요!');
     },
     onError: (error: any) => {
       if (error?.response?.data?.message) {
@@ -331,7 +330,7 @@ export const usePatchRoom = (
     mutationFn: (patchRoomRequest: PatchRoomRequest) => patchRoom(roomId, patchRoomRequest),
     onSuccess: async () => {
       // 수정시에는 invalidateQueries를 통해 기존 데이터 캐싱시키기?
-      InfoToastMessage('파티 수정 성공!');
+      InfoToastMessage('택시팟 수정이 성공하였습니다!');
     },
 
     onError: (error: any) => {
@@ -347,7 +346,7 @@ export const useDeleteRoom = (roomId: number) => {
   return useMutation({
     mutationFn: () => deleteRoom(roomId),
     onSuccess: async () => {
-      InfoToastMessage('파티 삭제 성공!');
+      InfoToastMessage('택시팟 삭제에 성공하였습니다!');
     },
     onError: (error: any) => {
       if (error?.response?.data?.message) {
@@ -357,14 +356,14 @@ export const useDeleteRoom = (roomId: number) => {
   });
 };
 
-// 방 입장
+// 방 입장 요청
 export const useJoinRoom = (
   roomId: number,
 ): UseMutationResult<JoinRoomResponse, void, number, unknown> => {
   return useMutation({
     mutationFn: () => joinRoom(roomId),
     onSuccess: async () => {
-      InfoToastMessage('파티 입장 성공!');
+      InfoToastMessage('택시팟 참여 신청이 완료되었어요!');
     },
     onError: (error: any) => {
       if (error?.response?.data?.message) {
@@ -380,9 +379,6 @@ export const useApproveJoinRoom = (
 ): UseMutationResult<ApproveJoinRoomResponse, void, number, unknown> => {
   return useMutation({
     mutationFn: (memberId: number) => approveJoinRoom(roomId, memberId),
-    onSuccess: async () => {
-      InfoToastMessage('파티 입장 성공!');
-    },
     onError: (error: any) => {
       if (error?.response?.data?.message) {
         return ErrorToastMessage(error.response.data.message);
@@ -391,13 +387,10 @@ export const useApproveJoinRoom = (
   });
 };
 
-// 방 입장 수락
+// 매칭완료
 export const useMatchComplete = (roomId: number) => {
   return useMutation({
     mutationFn: () => completeMatch(roomId),
-    onSuccess: async () => {
-      InfoToastMessage('매칭완료 성공!');
-    },
     onError: (error: any) => {
       if (error?.response?.data?.message) {
         return ErrorToastMessage(error.response.data.message);
@@ -411,7 +404,7 @@ export const useExitParticipateRoom = () => {
   return useMutation({
     mutationFn: () => exitParticipateRoom(),
     onSuccess: async () => {
-      InfoToastMessage('퇴장 성공!');
+      InfoToastMessage('택시팟 퇴장에 성공하였습니다!');
     },
     onError: (error: any) => {
       if (error?.response?.data?.message) {
@@ -426,7 +419,7 @@ export const useExitWaitingRoom = (roomId: number) => {
   return useMutation({
     mutationFn: () => exitWaitingRoom(roomId),
     onSuccess: async () => {
-      InfoToastMessage('대기열 퇴장 성공!');
+      InfoToastMessage('택시팟 참여 신청이 취소되었어요!');
     },
     onError: (error: any) => {
       if (error?.response?.data?.message) {
