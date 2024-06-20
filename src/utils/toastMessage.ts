@@ -1,12 +1,48 @@
 import Toast from 'react-native-toast-message';
 
 // 알림용 토스트 메세지
-export const InfoToastMessage = (description: string): void => {
+export const InfoToastMessage = (content: string): void => {
   return Toast.show({
-    type: 'info',
-    text1: '성공!',
-    text2: description,
+    type: 'infoToast',
+    props: { content: content },
     position: 'bottom',
+    bottomOffset: 30,
+  });
+};
+
+// 채팅 시작 토스트 메세지
+export const StartChatToastMessage = (): void => {
+  return Toast.show({
+    type: 'startChatToast',
+    position: 'bottom',
+    bottomOffset: 30,
+  });
+};
+
+// 계좌등록 토스트 메세지
+export const RegisterAccountToastMessage = (): void => {
+  return Toast.show({
+    type: 'registerAccountToast',
+    position: 'bottom',
+    bottomOffset: 30,
+  });
+};
+
+// 계좌등록완료 토스트 메세지
+export const CompleteRegisterAccountToastMessage = (): void => {
+  return Toast.show({
+    type: 'completeRegisterAccountToast',
+    position: 'bottom',
+    bottomOffset: 30,
+  });
+};
+
+// 매칭완료 토스트 메세지
+export const CompleteMatchToastMessage = (): void => {
+  return Toast.show({
+    type: 'completeMatchToast',
+    position: 'bottom',
+    bottomOffset: 30,
   });
 };
 

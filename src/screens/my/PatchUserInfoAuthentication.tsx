@@ -46,8 +46,6 @@ const PatchUserInfoAuthenticationScreen = ({
     setTime(300); // 재전송시 timer 재설정
   };
 
-  console.log(time);
-
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>

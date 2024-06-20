@@ -50,7 +50,7 @@ const ServeySecondScreen = ({ navigation }: SurveySecondScreenProps) => {
 
       {/* 진행사항 progressBar */}
       <View className="mt-[11px] h-1">
-        <ProgressBarComponent previousDealt={0} dealt={80} />
+        <ProgressBarComponent previousDealt={0} dealt={100} />
       </View>
 
       <View className="mx-6 flex-1">
@@ -68,8 +68,8 @@ const ServeySecondScreen = ({ navigation }: SurveySecondScreenProps) => {
         {/* 확인 버튼 */}
         <View className="mx-3 mb-11">
           <ButtonComponent
-            color={'bg-black'}
-            borderColor={'border-black'}
+            color={'bg-main'}
+            borderColor={'border-main'}
             textColor={'white'}
             text={'확인'}
             disabled={!checkSelectedNum()}

@@ -5,14 +5,14 @@ interface UpdateModalComponentProps {
   updateModalVisible: boolean;
   closeUpdateModal: () => void;
   patchRoom: () => Promise<void>;
-  deleteRoom: () => Promise<void>;
+  checkDeleteRoom: () => Promise<void>;
 }
 
 const UpdateModalComponent: React.FC<UpdateModalComponentProps> = ({
   updateModalVisible,
   closeUpdateModal,
   patchRoom,
-  deleteRoom,
+  checkDeleteRoom,
 }) => {
   return (
     <Modal animationType="fade" transparent={true} visible={updateModalVisible}>
@@ -32,7 +32,7 @@ const UpdateModalComponent: React.FC<UpdateModalComponentProps> = ({
 
           <View className="border-b-[1px] border-[#3C3C43] opacity-30" />
 
-          <Pressable className="px-4 py-[18px]" onPress={deleteRoom}>
+          <Pressable className="px-4 py-[18px]" onPress={checkDeleteRoom}>
             <Text className="text-center text-[20px] text-warning">방 삭제하기</Text>
           </Pressable>
         </View>

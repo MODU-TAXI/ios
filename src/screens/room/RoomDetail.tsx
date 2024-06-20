@@ -2,9 +2,9 @@ import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
-import { View, Text, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, Suspense, useCallback } from 'react';
+import { View, Text, Alert, RefreshControl } from 'react-native';
 
 import ButtonComponent from '@components/Button';
 import LoadingComponent from '@components/Common/Loading';
@@ -113,14 +113,29 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
 
   // 방 입장 수락
   const applyJoinRoom = async (memberId: number) => {
-    await applyJoinRoomMutate(memberId);
+    Alert.alert(
+      '참여 수락',
+      '대기 멤버의 참여를 수락하시겠어요?',
+      [
+        {
+          text: '취소',
+        },
+        {
+          text: '확인',
+          onPress: async () => {
+            await applyJoinRoomMutate(memberId);
 
-    await Promise.all([refetchParticipateMembers(), refetchWaitingMembers()]);
+            await Promise.all([refetchParticipateMembers(), refetchWaitingMembers()]);
+          },
+        },
+      ],
+      { cancelable: false },
+    );
   };
 
   // 방 삭제
   const deleteRoom = async () => {
-    setUpdateModalVisible(false);
+    closeUpdateModal();
 
     await deleteRoomMutate();
 
@@ -132,6 +147,27 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
       index: 0,
       routes: [{ name: 'MainScreen' }],
     });
+  };
+
+  // 방 삭제 확인 창
+  const checkDeleteRoom = async () => {
+    Alert.alert(
+      '택시팟 삭제',
+      '택시팟을 정말 삭제하시겠어요?',
+      [
+        {
+          text: '취소',
+          onPress: () => {
+            closeUpdateModal();
+          },
+        },
+        {
+          text: '확인',
+          onPress: deleteRoom,
+        },
+      ],
+      { cancelable: false },
+    );
   };
 
   // 방 수정페이지로 이동
@@ -288,7 +324,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
           updateModalVisible={updateModalVisible}
           closeUpdateModal={closeUpdateModal}
           patchRoom={toPatchRoomScreen}
-          deleteRoom={deleteRoom}
+          checkDeleteRoom={checkDeleteRoom}
         />
       </ScrollView>
     </SafeAreaView>

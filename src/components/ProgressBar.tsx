@@ -6,10 +6,7 @@ interface ProgressBarComponentProps {
   dealt: number;
 }
 
-const ProgressBarComponent: React.FC<ProgressBarComponentProps> = ({
-  previousDealt,
-  dealt,
-}) => {
+const ProgressBarComponent: React.FC<ProgressBarComponentProps> = ({ previousDealt, dealt }) => {
   const widthAnim = useRef(new Animated.Value(previousDealt)).current;
 
   useEffect(() => {
@@ -28,11 +25,11 @@ const ProgressBarComponent: React.FC<ProgressBarComponentProps> = ({
         style={{
           flex: 1,
           height: 1,
-          backgroundColor: 'black',
+          backgroundColor: '#40CEAC',
           borderRadius: 50,
           // 0~100 -> 0%~100% 로 매핑
           width: widthAnim.interpolate({
-            inputRange: [0, 100],
+            inputRange: [0, 120],
             outputRange: ['0%', '100%'],
           }),
         }}

@@ -110,8 +110,8 @@ const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
             {/* 확인 버튼 */}
             <View className="mx-3 mb-11">
               <ButtonComponent
-                color={'bg-black'}
-                borderColor={'border-black'}
+                color={'bg-main'}
+                borderColor={'border-main'}
                 textColor={'white'}
                 text={'확인'}
                 disabled={!name || !gender || !phoneNumber}
