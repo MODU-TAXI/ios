@@ -8,16 +8,11 @@ interface SelectBoxComponentProps {
 
 type Item = { index: number; content: string; select: boolean };
 
-const SelectBoxComponent: React.FC<SelectBoxComponentProps> = ({
-  items,
-  setItems,
-}) => {
+const SelectBoxComponent: React.FC<SelectBoxComponentProps> = ({ items, setItems }) => {
   // item 선택
   const select = (selectedItem: Item) => {
     const updatedItems = items.map((item) =>
-      item.index === selectedItem.index
-        ? { ...item, select: !item.select }
-        : item,
+      item.index === selectedItem.index ? { ...item, select: !item.select } : item,
     );
     setItems(updatedItems);
   };
@@ -31,7 +26,7 @@ const SelectBoxComponent: React.FC<SelectBoxComponentProps> = ({
               <Pressable
                 key={item.index}
                 onPress={() => select(item)}
-                className="mb-4 rounded-xl bg-black px-5 py-7"
+                className="mb-4 rounded-xl bg-main px-5 py-7"
               >
                 <Text className="font-semibold text-white">{item.content}</Text>
               </Pressable>
