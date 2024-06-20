@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import Toast from 'react-native-toast-message';
 import appleAuth from '@invertase/react-native-apple-authentication';
@@ -94,38 +93,42 @@ export const useAppleLogin = (
   const [, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
 
   return useMutation({
-    mutationFn: () => appleLogin(),
+    mutationFn: () => appleLoginAuth(),
     onSuccess: async (response: AppleLoginResponse) => {
       const { identityToken: appleIdentityToken } = response;
-      const { existent, key } = await checkMembership('APPLE', {
-        accessToken: appleIdentityToken,
-        fcmToken: fcmToken,
-      });
+      // const { existent, key } = await checkMembership('APPLE', {
+      //   accessToken: appleIdentityToken,
+      //   fcmToken: fcmToken,
+      // });
 
-      if (existent) {
-        const response = await socialLogin('APPLE', {
-          accessToken: appleIdentityToken,
-          fcmToken: fcmToken,
-        });
-        const { accessToken, refreshToken } = response.tokenResponse;
+      // 재발급
+      const newAppleLoginResponse = await appleLoginAuth();
+      const { identityToken: newAppleIdentityToken } = newAppleLoginResponse;
 
-        await setAccessToken(accessToken);
-        await setRefreshToken(refreshToken);
+      // if (existent) {
+      //   const response = await socialLogin('APPLE', {
+      //     accessToken: newAppleIdentityToken,
+      //     fcmToken: fcmToken,
+      //   });
+      //   const { accessToken, refreshToken } = response.tokenResponse;
 
-        setUserInfo(response.memberInfoResponse);
-        setLoggedIn(true);
-      } else {
-        if (key) {
-          setSignUpUser((prevState: SignUpUser) => ({
-            ...prevState,
-            key: key,
-          }));
+      //   await setAccessToken(accessToken);
+      //   await setRefreshToken(refreshToken);
 
-          navigation.navigate('CheckPermissionScreen');
-        } else {
-          throw new Error('애플 로그인에 실패하였습니다');
-        }
-      }
+      //   setUserInfo(response.memberInfoResponse);
+      //   setLoggedIn(true);
+      // } else {
+      //   if (key) {
+      //     setSignUpUser((prevState: SignUpUser) => ({
+      //       ...prevState,
+      //       key: key,
+      //     }));
+
+      //     navigation.navigate('CheckPermissionScreen');
+      //   } else {
+      //     throw new Error('애플 로그인에 실패하였습니다');
+      //   }
+      // }
     },
     onError: () => {
       Toast.show({
@@ -138,8 +141,8 @@ export const useAppleLogin = (
   });
 };
 
-// 애플 인가 요청
-export const appleLogin = async (): Promise<AppleLoginResponse> => {
+// 애플 인가 요청 (사용자 FaceID 인증절차)
+export const appleLoginAuth = async (): Promise<AppleLoginResponse> => {
   const appleAuthRequestResponse = await appleAuth.performRequest({
     requestedOperation: appleAuth.Operation.LOGIN,
     requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],

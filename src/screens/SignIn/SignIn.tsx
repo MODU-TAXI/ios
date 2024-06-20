@@ -5,7 +5,7 @@ import appleAuth from '@invertase/react-native-apple-authentication';
 
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { appleLogin, useKakaoLogin } from '@hooks/api/member';
+import { useAppleLogin, useKakaoLogin } from '@hooks/api/member';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
@@ -15,6 +15,7 @@ import ModutaxiLogo from '@assets/images/SignIn/ModutaxiLogo.svg';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
+  const { mutateAsync: appleLogin, isPending: appleLoginPending } = useAppleLogin(navigation);
 
   useEffect(() => {
     return appleAuth.onCredentialRevoked(async () => {
@@ -24,7 +25,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
-      {kakaoLoginPending && <TransparentLoadingComponent />}
+      {(kakaoLoginPending || appleLoginPending) && <TransparentLoadingComponent />}
 
       <View className="mx-8 flex flex-1 items-center justify-between">
         <View />
