@@ -95,40 +95,41 @@ export const useAppleLogin = (
   return useMutation({
     mutationFn: () => appleLoginAuth(),
     onSuccess: async (response: AppleLoginResponse) => {
-      const { identityToken: appleIdentityToken } = response;
-      // const { existent, key } = await checkMembership('APPLE', {
-      //   accessToken: appleIdentityToken,
-      //   fcmToken: fcmToken,
-      // });
+      const { authorizationCode: appleAuthCode } = response;
+
+      const { existent, key } = await checkMembership('APPLE', {
+        accessToken: appleAuthCode,
+        fcmToken: fcmToken,
+      });
 
       // 재발급
       const newAppleLoginResponse = await appleLoginAuth();
-      const { identityToken: newAppleIdentityToken } = newAppleLoginResponse;
+      const { authorizationCode: newAppleAuthCode } = newAppleLoginResponse;
 
-      // if (existent) {
-      //   const response = await socialLogin('APPLE', {
-      //     accessToken: newAppleIdentityToken,
-      //     fcmToken: fcmToken,
-      //   });
-      //   const { accessToken, refreshToken } = response.tokenResponse;
+      if (existent) {
+        const response = await socialLogin('APPLE', {
+          accessToken: newAppleAuthCode,
+          fcmToken: fcmToken,
+        });
+        const { accessToken, refreshToken } = response.tokenResponse;
 
-      //   await setAccessToken(accessToken);
-      //   await setRefreshToken(refreshToken);
+        await setAccessToken(accessToken);
+        await setRefreshToken(refreshToken);
 
-      //   setUserInfo(response.memberInfoResponse);
-      //   setLoggedIn(true);
-      // } else {
-      //   if (key) {
-      //     setSignUpUser((prevState: SignUpUser) => ({
-      //       ...prevState,
-      //       key: key,
-      //     }));
+        setUserInfo(response.memberInfoResponse);
+        setLoggedIn(true);
+      } else {
+        if (key) {
+          setSignUpUser((prevState: SignUpUser) => ({
+            ...prevState,
+            key: key,
+          }));
 
-      //     navigation.navigate('CheckPermissionScreen');
-      //   } else {
-      //     throw new Error('애플 로그인에 실패하였습니다');
-      //   }
-      // }
+          navigation.navigate('CheckPermissionScreen');
+        } else {
+          throw new Error('애플 로그인에 실패하였습니다');
+        }
+      }
     },
     onError: () => {
       Toast.show({

@@ -49,7 +49,6 @@ export const checkMembership = async (
     `/api/members/${type}/membership`,
     data,
   );
-
   return response.data;
 };
 
@@ -62,7 +61,6 @@ export const socialLogin = async (
     `/api/members/${type}/login`,
     data,
   );
-
   return response.data;
 };
 
