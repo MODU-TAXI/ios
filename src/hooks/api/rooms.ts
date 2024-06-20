@@ -25,7 +25,9 @@ import {
   getRoomMembers,
   getRoomPreview,
   approveJoinRoom,
+  exitWaitingRoom,
   getRoomIntegration,
+  exitParticipateRoom,
   getRoomCurrentCamera,
   getRoomWaitingMembers,
 } from '@server/api/room';
@@ -150,7 +152,7 @@ export const useGetRoomDetail = (roomId: number) => {
         participateMembers: results[1].data,
         waitingMembers: results[2].data,
         refetchRoomDetail: results[0].refetch,
-        refetcParticipateMembers: results[1].refetch,
+        refetchParticipateMembers: results[1].refetch,
         refetchWaitingMembers: results[2].refetch,
         pending: results.some((result) => result.isPending),
         error: results.some((result) => result.error),
@@ -395,6 +397,36 @@ export const useMatchComplete = (roomId: number) => {
     mutationFn: () => completeMatch(roomId),
     onSuccess: async () => {
       InfoToastMessage('매칭완료 성공!');
+    },
+    onError: (error: any) => {
+      if (error?.response?.data?.message) {
+        return ErrorToastMessage(error.response.data.message);
+      }
+    },
+  });
+};
+
+// 현재 내가 참여하고 있는 방 퇴장
+export const useExitParticipateRoom = () => {
+  return useMutation({
+    mutationFn: () => exitParticipateRoom(),
+    onSuccess: async () => {
+      InfoToastMessage('퇴장 성공!');
+    },
+    onError: (error: any) => {
+      if (error?.response?.data?.message) {
+        return ErrorToastMessage(error.response.data.message);
+      }
+    },
+  });
+};
+
+// 대기열에서 퇴장
+export const useExitWaitingRoom = (roomId: number) => {
+  return useMutation({
+    mutationFn: () => exitWaitingRoom(roomId),
+    onSuccess: async () => {
+      InfoToastMessage('대기열 퇴장 성공!');
     },
     onError: (error: any) => {
       if (error?.response?.data?.message) {

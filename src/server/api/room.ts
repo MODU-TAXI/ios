@@ -22,8 +22,10 @@ import {
   GetRoomMembersResponse,
   GetRoomPreviewResponse,
   ApproveJoinRoomResponse,
+  ExitWaitingRoomResponse,
   CompleteMatchingResponse,
   GetRoomIntegrationResponse,
+  ExitParticipateRoomResponse,
   GetRoomCurrentCameraResponse,
   GetRoomWaitingMembersResponse,
 } from '@server/responseTypes/room';
@@ -167,7 +169,7 @@ export const approveJoinRoom = async (
   roomId: number,
   memberId: number,
 ): Promise<ApproveJoinRoomResponse> => {
-  const response = await DeleteAxiosInstance<ApproveJoinRoomResponse>(
+  const response = await PostAxiosInstance<ApproveJoinRoomResponse>(
     `/api/rooms/${roomId}/members/${memberId}/approve`,
   );
 
@@ -178,6 +180,22 @@ export const approveJoinRoom = async (
 export const completeMatch = async (roomId: number): Promise<CompleteMatchingResponse> => {
   const response = await PatchAxiosInstance<CompleteMatchingResponse>(
     `/api/rooms/finish/matching/${roomId}`,
+  );
+
+  return response.data;
+};
+
+// [현재 내가 참여하고 있는 방 퇴장] /api/rooms
+export const exitParticipateRoom = async (): Promise<ExitParticipateRoomResponse> => {
+  const response = await DeleteAxiosInstance<ExitParticipateRoomResponse>(`/api/rooms`);
+
+  return response.data;
+};
+
+// [대기열에서 퇴장] /api/rooms/{roomId}/waiting
+export const exitWaitingRoom = async (roomId: number): Promise<ExitWaitingRoomResponse> => {
+  const response = await DeleteAxiosInstance<ExitWaitingRoomResponse>(
+    `/api/rooms/${roomId}/waiting`,
   );
 
   return response.data;
