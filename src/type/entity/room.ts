@@ -103,8 +103,8 @@ export interface RoomIntegration {
 
 export interface RoomFilterParam {
   sortType: string;
-  spotId: number | undefined;
-  roomTags: string[];
+  spotId?: number;
+  roomTags?: string;
   isImminent: boolean;
 }
 
