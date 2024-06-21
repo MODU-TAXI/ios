@@ -41,23 +41,30 @@ export const useKakaoLogin = (
         fcmToken: fcmToken,
       });
 
-      if (socialResponse.data.key === undefined) { // 계정 존재함
-        const response = socialResponse.data;
-        const { accessToken, refreshToken } = response.tokenResponse;
+      // 기존 유저인지의 여부
+      const existent: boolean = (socialResponse.key === undefined); 
+
+      // 기존 유저
+      if (existent) {
+        const { accessToken, refreshToken } = socialResponse.tokenResponse;
 
         await setAccessToken(accessToken);
         await setRefreshToken(refreshToken);
 
-        setUserInfo(response.memberInfoResponse);
+        setUserInfo(socialResponse.memberInfoResponse);
         setLoggedIn(true);
-      } else { // 계정 미존재
-        if (socialResponse.data.key) {
+
+      // 신규 유저
+      } else {
+        if (socialResponse.key) {
           setSignUpUser((prevState: SignUpUser) => ({
             ...prevState,
-            key: socialResponse.data.key,
+            key: socialResponse.key,
           }));
           navigation.navigate('CheckPermissionScreen');
-        } else { // 에러 처리
+        
+        // 에러 처리
+        } else {
           throw new Error('카카오 로그인에 실패하였습니다');
         }
       }
@@ -92,23 +99,30 @@ export const useAppleLogin = (
         fcmToken: fcmToken,
       });
 
-      if (socialResponse.data.key === undefined) { // 계정 존재함
-        const response = socialResponse.data;
-        const { accessToken, refreshToken } = response.tokenResponse;
+      // 기존 유저인지의 여부
+      const existent: boolean = (socialResponse.key === undefined); 
+
+      // 기존 유저
+      if (existent) {
+        const { accessToken, refreshToken } = socialResponse.tokenResponse;
 
         await setAccessToken(accessToken);
         await setRefreshToken(refreshToken);
 
-        setUserInfo(response.memberInfoResponse);
+        setUserInfo(socialResponse.memberInfoResponse);
         setLoggedIn(true);
-      } else { // 계정 미존재
-        if (socialResponse.data.key) {
+
+      // 신규 유저
+      } else {
+        if (socialResponse.key) {
           setSignUpUser((prevState: SignUpUser) => ({
             ...prevState,
-            key: socialResponse.data.key,
+            key: socialResponse.key,
           }));
           navigation.navigate('CheckPermissionScreen');
-        } else { // 에러 처리
+
+        // 에러 처리
+        } else {
           throw new Error('애플 로그인에 실패하였습니다');
         }
       }
