@@ -65,7 +65,10 @@ export interface SocialLoginResponse {
     phoneNumber: string;
     email: string;
     imageUrl: string;
+    matchingCount: number;
+    blocked: boolean;
   };
+  key: string;
 }
 
 // [소셜 회원가입] /api/members/sign-up

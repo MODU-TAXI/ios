@@ -36,38 +36,28 @@ export const useKakaoLogin = (
     onSuccess: async (response: KakaoLoginResponse) => {
       const { accessToken: kakaoAccessToken } = response;
 
-      const { existent, key } = await checkMembership('KAKAO', {
+      const socialResponse = await socialLogin('KAKAO', {
         accessToken: kakaoAccessToken,
         fcmToken: fcmToken,
       });
 
-      if (existent) {
-        const response = await socialLogin('KAKAO', {
-          accessToken: kakaoAccessToken,
-          fcmToken: fcmToken,
-        });
-
+      if (socialResponse.data.key === undefined) { // 계정 존재함
+        const response = socialResponse.data;
         const { accessToken, refreshToken } = response.tokenResponse;
 
-        // 토큰 저장
         await setAccessToken(accessToken);
-
         await setRefreshToken(refreshToken);
 
-        // 유저 정보 저장
         setUserInfo(response.memberInfoResponse);
-
-        // 로그인 여부 수정
         setLoggedIn(true);
-      } else {
-        if (key) {
+      } else { // 계정 미존재
+        if (socialResponse.data.key) {
           setSignUpUser((prevState: SignUpUser) => ({
             ...prevState,
-            key: key,
+            key: socialResponse.data.key,
           }));
-
           navigation.navigate('CheckPermissionScreen');
-        } else {
+        } else { // 에러 처리
           throw new Error('카카오 로그인에 실패하였습니다');
         }
       }
@@ -97,20 +87,13 @@ export const useAppleLogin = (
     onSuccess: async (response: AppleLoginResponse) => {
       const { authorizationCode: appleAuthCode } = response;
 
-      const { existent, key } = await checkMembership('APPLE', {
+      const socialResponse = await socialLogin('APPLE', {
         accessToken: appleAuthCode,
         fcmToken: fcmToken,
       });
 
-      // 재발급
-      const newAppleLoginResponse = await appleLoginAuth();
-      const { authorizationCode: newAppleAuthCode } = newAppleLoginResponse;
-
-      if (existent) {
-        const response = await socialLogin('APPLE', {
-          accessToken: newAppleAuthCode,
-          fcmToken: fcmToken,
-        });
+      if (socialResponse.data.key === undefined) { // 계정 존재함
+        const response = socialResponse.data;
         const { accessToken, refreshToken } = response.tokenResponse;
 
         await setAccessToken(accessToken);
@@ -118,15 +101,14 @@ export const useAppleLogin = (
 
         setUserInfo(response.memberInfoResponse);
         setLoggedIn(true);
-      } else {
-        if (key) {
+      } else { // 계정 미존재
+        if (socialResponse.data.key) {
           setSignUpUser((prevState: SignUpUser) => ({
             ...prevState,
-            key: key,
+            key: socialResponse.data.key,
           }));
-
           navigation.navigate('CheckPermissionScreen');
-        } else {
+        } else { // 에러 처리
           throw new Error('애플 로그인에 실패하였습니다');
         }
       }

@@ -29,6 +29,8 @@ export const userInfoState = atom<UserInfo>({
     phoneNumber: '',
     email: '',
     imageUrl: '',
+    matchingCount: 0,
+    blocked: false,
   },
 });
 

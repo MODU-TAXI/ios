@@ -56,12 +56,13 @@ export const checkMembership = async (
 export const socialLogin = async (
   type: 'KAKAO' | 'APPLE',
   data: SocialLoginRequest,
-): Promise<SocialLoginResponse> => {
+): Promise<{data: SocialLoginResponse, status: number}> => {
   const response = await GuestPostAxiosInstance<SocialLoginResponse>(
     `/api/members/${type}/login`,
     data,
   );
-  return response.data;
+  console.log(response.data, response.status)
+  return {data: response.data, status: response.status};
 };
 
 // [소셜 회원가입] /api/members/sign-up
