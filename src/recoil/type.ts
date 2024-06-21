@@ -26,6 +26,8 @@ export type UserInfo = {
   phoneNumber: string;
   email: string;
   imageUrl: string;
+  matchingCount: number;
+  blocked: boolean;
 };
 
 export type Departure = {

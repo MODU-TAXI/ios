@@ -36,37 +36,34 @@ export const useKakaoLogin = (
     onSuccess: async (response: KakaoLoginResponse) => {
       const { accessToken: kakaoAccessToken } = response;
 
-      const { existent, key } = await checkMembership('KAKAO', {
+      const socialResponse = await socialLogin('KAKAO', {
         accessToken: kakaoAccessToken,
         fcmToken: fcmToken,
       });
 
+      // 기존 유저인지의 여부
+      const existent: boolean = (socialResponse.key === undefined); 
+
+      // 기존 유저
       if (existent) {
-        const response = await socialLogin('KAKAO', {
-          accessToken: kakaoAccessToken,
-          fcmToken: fcmToken,
-        });
+        const { accessToken, refreshToken } = socialResponse.tokenResponse;
 
-        const { accessToken, refreshToken } = response.tokenResponse;
-
-        // 토큰 저장
         await setAccessToken(accessToken);
-
         await setRefreshToken(refreshToken);
 
-        // 유저 정보 저장
-        setUserInfo(response.memberInfoResponse);
-
-        // 로그인 여부 수정
+        setUserInfo(socialResponse.memberInfoResponse);
         setLoggedIn(true);
+
+      // 신규 유저
       } else {
-        if (key) {
+        if (socialResponse.key) {
           setSignUpUser((prevState: SignUpUser) => ({
             ...prevState,
-            key: key,
+            key: socialResponse.key,
           }));
-
           navigation.navigate('CheckPermissionScreen');
+        
+        // 에러 처리
         } else {
           throw new Error('카카오 로그인에 실패하였습니다');
         }
@@ -97,35 +94,34 @@ export const useAppleLogin = (
     onSuccess: async (response: AppleLoginResponse) => {
       const { authorizationCode: appleAuthCode } = response;
 
-      const { existent, key } = await checkMembership('APPLE', {
+      const socialResponse = await socialLogin('APPLE', {
         accessToken: appleAuthCode,
         fcmToken: fcmToken,
       });
 
-      // 재발급
-      const newAppleLoginResponse = await appleLoginAuth();
-      const { authorizationCode: newAppleAuthCode } = newAppleLoginResponse;
+      // 기존 유저인지의 여부
+      const existent: boolean = (socialResponse.key === undefined); 
 
+      // 기존 유저
       if (existent) {
-        const response = await socialLogin('APPLE', {
-          accessToken: newAppleAuthCode,
-          fcmToken: fcmToken,
-        });
-        const { accessToken, refreshToken } = response.tokenResponse;
+        const { accessToken, refreshToken } = socialResponse.tokenResponse;
 
         await setAccessToken(accessToken);
         await setRefreshToken(refreshToken);
 
-        setUserInfo(response.memberInfoResponse);
+        setUserInfo(socialResponse.memberInfoResponse);
         setLoggedIn(true);
+
+      // 신규 유저
       } else {
-        if (key) {
+        if (socialResponse.key) {
           setSignUpUser((prevState: SignUpUser) => ({
             ...prevState,
-            key: key,
+            key: socialResponse.key,
           }));
-
           navigation.navigate('CheckPermissionScreen');
+
+        // 에러 처리
         } else {
           throw new Error('애플 로그인에 실패하였습니다');
         }

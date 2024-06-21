@@ -61,6 +61,7 @@ export const socialLogin = async (
     `/api/members/${type}/login`,
     data,
   );
+
   return response.data;
 };
 
