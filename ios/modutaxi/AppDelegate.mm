@@ -1,5 +1,6 @@
 #import "RNFBMessagingModule.h"
 #import "AppDelegate.h"
+#import "RNSplashScreen.h"
 #import <Firebase.h>
 #import <RNKakaoLogins.h>
 #import <React/RCTBundleURLProvider.h>
@@ -15,7 +16,14 @@
   self.initialProps = @{};
 
   [FIRApp configure];
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+
+  BOOL didFinishLaunchingWithOptions = [super application:application didFinishLaunchingWithOptions:launchOptions];
+
+  /* Second */
+  [RNSplashScreen show];
+
+  /* Third */
+  return didFinishLaunchingWithOptions;
 }
 
 - (BOOL)application:(UIApplication *)app

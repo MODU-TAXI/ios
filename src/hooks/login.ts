@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import SplashScreen from 'react-native-splash-screen';
 import { useRecoilState, SetterOrUpdater } from 'recoil';
 
 import { userInfoState } from '@recoil/recoil';
@@ -10,6 +11,8 @@ import { deleteToken, setAccessToken, getRefreshToken, setRefreshToken } from '@
 export const useCheckLogin = (setLoggedIn: SetterOrUpdater<boolean>) => {
   const [, setUserInfo] = useRecoilState(userInfoState);
 
+  const start = Date.now();
+
   useEffect(() => {
     (async () => {
       try {
@@ -18,6 +21,13 @@ export const useCheckLogin = (setLoggedIn: SetterOrUpdater<boolean>) => {
         if (!refreshToken) {
           setLoggedIn(false);
           await deleteToken();
+          const elapsed = Date.now() - start;
+          const remainingTime = 1500 - elapsed;
+          if (remainingTime > 0) {
+            setTimeout(() => SplashScreen.hide(), remainingTime);
+          } else {
+            SplashScreen.hide();
+          }
           return;
         }
 
@@ -32,9 +42,24 @@ export const useCheckLogin = (setLoggedIn: SetterOrUpdater<boolean>) => {
         await Promise.all([setAccessToken(newAccessToken), setRefreshToken(newRefreshToken)]);
 
         setLoggedIn(true);
+
+        const elapsed = Date.now() - start;
+        const remainingTime = 1500 - elapsed;
+        if (remainingTime > 0) {
+          setTimeout(() => SplashScreen.hide(), remainingTime);
+        } else {
+          SplashScreen.hide();
+        }
       } catch (error) {
         setLoggedIn(false);
         await deleteToken();
+        const elapsed = Date.now() - start;
+        const remainingTime = 1500 - elapsed;
+        if (remainingTime > 0) {
+          setTimeout(() => SplashScreen.hide(), remainingTime);
+        } else {
+          SplashScreen.hide();
+        }
       }
     })();
   }, [setLoggedIn, setUserInfo]);
