@@ -5,6 +5,7 @@ import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
+import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 import DepartureSearchBoxComponent from '@components/Search/DepartureSearchBox';
 
 import { searchParamState, searchKeywordState } from '@recoil/recoil';
@@ -87,8 +88,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
         </View>
 
         {/** 추천 검색어 */}
-        <View className="flex-1">
-          {sortedItems && 
+        {sortedItems && 
           sortedItems.map((item, index) => (
             <Pressable
               key={index}
@@ -107,9 +107,12 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
                 isFirst={index===0}
               />
             </Pressable>
-          ))}
+        ))}
+
+        {sortedItems.length === 0 && !keyword && 
+          <EmptySearchRenderComponent />
+        }
         </View>
-      </View>
     </SafeAreaView>
   );
 };
