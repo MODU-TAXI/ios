@@ -28,6 +28,7 @@ import ArrivalMapScreen from './src/screens/map/ArrivalMap';
 import AccountScreen from './src/screens/calculate/Account';
 import CreateRoomScreen from './src/screens/room/CreateRoom';
 import RoomDetailScreen from './src/screens/room/RoomDetail';
+import HomeSearchScreen from './src/screens/search/HomeSearch';
 import DepartureMapScreen from './src/screens/map/DepartureMap';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import PatchNicknameScreen from './src/screens/my/PatchNickname';
@@ -91,6 +92,7 @@ function AppInner() {
       <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
       <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
       <LogInStack.Screen name="AlarmScreen" component={AlarmScreen} />
+      <LogInStack.Screen name="HomeSearchScreen" component={HomeSearchScreen} />
 
       {/* 생성 Screen */}
       <LogInStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />

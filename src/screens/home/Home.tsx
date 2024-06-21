@@ -73,7 +73,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
   };
 
   const toSearchScreen = () => {
-    navigation.navigate('SearchScreen');
+    navigation.navigate('HomeSearchScreen');
   };
 
   const toChatRoomScreen = () => {
