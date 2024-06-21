@@ -78,7 +78,7 @@ const HomeSearchScreen = ({ navigation }: HomeSearchScreenProps) => {
       longitude: longitude,
     })
     setKeyword(''); // 검색어 삭제
-    navigation.navigate('MainMapScreen');
+    navigation.goBack();
   }
 
   return (
