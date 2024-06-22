@@ -58,40 +58,40 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
   }
 
   /** roomTags가 배열을 받을 상황이라면.. */
-  // const [selectedTags, setSelectedTags] = useState<string>();
-  // useEffect(() => {
-  //   if (filterParam.roomTags) {
-  //     handleFilter("roomTags", selectedTags);
-  //   }
-  //   refetch();
-  // }, [selectedTags])
-
-  // /** 태그 선택 핸들링 */
-  // const handleRoomTagFilter = (tag: string) => {
-  //   if (selectedTags.find((selectedTag) => selectedTag === tag)) {
-  //     const newRoomTags = [...selectedTags]
-  //     const temp = newRoomTags.findIndex((roomTag) => roomTag === tag)
-  //     newRoomTags.splice(temp, 1);
-  //     setSelectedTags(newRoomTags);
-  //   } else {
-  //     setSelectedTags([...selectedTags, tag]);
-  //   }
-  // }
-
-  // 태그 선택
-  const [selectedTag, setSelectedTag] = useState<string>();
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   useEffect(() => {
-    handleFilter("roomTags", selectedTag);
+    if (filterParam.roomTags) {
+      handleFilter("roomTags", selectedTags);
+    }
     refetch();
-  }, [selectedTag])
+  }, [selectedTags])
 
+  /** 태그 선택 핸들링 */
   const handleRoomTagFilter = (tag: string) => {
-    if (tag === filterParam.roomTags) {
-      setSelectedTag('');
+    if (selectedTags.find((selectedTag) => selectedTag === tag)) {
+      const newRoomTags = [...selectedTags]
+      const temp = newRoomTags.findIndex((roomTag) => roomTag === tag)
+      newRoomTags.splice(temp, 1);
+      setSelectedTags(newRoomTags);
     } else {
-      setSelectedTag(tag);
+      setSelectedTags([...selectedTags, tag]);
     }
   }
+
+  // 태그 선택
+  // const [selectedTag, setSelectedTag] = useState<string>();
+  // useEffect(() => {
+  //   handleFilter("roomTags", selectedTag);
+  //   refetch();
+  // }, [selectedTag])
+
+  // const handleRoomTagFilter = (tag: string) => {
+  //   if (tag === filterParam.roomTags) {
+  //     setSelectedTag('');
+  //   } else {
+  //     setSelectedTag(tag);
+  //   }
+  // }
 
   // 드롭다운 모달, sortType 핸들링 상태관리
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -144,7 +144,7 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
             <Pressable onPress={() => handleRoomTagFilter("STUDENT_CERTIFICATION")}>
               <FilterButtonComponent 
                 label="학생인증" 
-                selected={selectedTag === "STUDENT_CERTIFICATION"} 
+                selected={selectedTags.find((tag) => tag === "STUDENT_CERTIFICATION") !== undefined} 
               />
             </Pressable>
 
@@ -152,14 +152,14 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
               <Pressable onPress={() => handleRoomTagFilter("ONLY_MAN")}>
                 <FilterButtonComponent 
                   label="남자만" 
-                  selected={selectedTag === "ONLY_MAN"} 
+                  selected={selectedTags.find((tag) => tag === "ONLY_MAN") !== undefined} 
                 />
               </Pressable>
             ) : (
               <Pressable onPress={() => handleRoomTagFilter("ONLY_WOMAN")}>
                 <FilterButtonComponent 
                   label="여자만" 
-                  selected={selectedTag === "ONLY_WOMAN"} 
+                  selected={selectedTags.find((tag) => tag === "ONLY_WOMAN") !== undefined} 
                 />
               </Pressable>           
             )}
@@ -167,14 +167,14 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
             <Pressable onPress={() => handleRoomTagFilter("QUIET")}>
               <FilterButtonComponent 
                 label="조용히" 
-                selected={selectedTag === "QUIET"} 
+                selected={selectedTags.find((tag) => tag === "QUIET") !== undefined} 
               />
             </Pressable>
 
             <Pressable onPress={() => handleRoomTagFilter("MANNER")}>
               <FilterButtonComponent 
                 label="매너탑승" 
-                selected={selectedTag === "MANNER"} 
+                selected={selectedTags.find((tag) => tag === "MANNER") !== undefined} 
               />
             </Pressable>
           </View>

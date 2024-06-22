@@ -131,7 +131,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   const [filterParam, setFilterParam] = useState<RoomFilterParam>({
     "sortType": "NEW",
     "spotId": undefined,
-    "roomTags": undefined,
+    "roomTags": [],
     "isImminent": false,
   });
   
