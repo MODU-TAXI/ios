@@ -64,7 +64,6 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
 
     // 개발환경시 기기가 미국이라 9시간 더해주기
     const departureTimeForServer = new Date(departureTime.getTime() + 9 * 60 * 60 * 1000);
-    console.log("서버로 보내기", departureTimeForServer);
 
     const room = await createRoomMutate({
       spotId: arrival.spotId,
