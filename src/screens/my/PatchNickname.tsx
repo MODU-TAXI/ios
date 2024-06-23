@@ -44,6 +44,8 @@ const PatchNicknameScreen = ({ navigation }: PatchNicknameScreenProps) => {
       phoneNumber: userInfo.phoneNumber,
       email: userInfo.email,
       imageUrl: userInfo.imageUrl,
+      matchingCount: userInfo.matchingCount,
+      blocked: userInfo.blocked,
     });
 
     navigation.goBack();

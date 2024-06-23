@@ -51,6 +51,8 @@ const PatchSchoolEmailAuthenticationScreen = ({
       phoneNumber: userInfo.phoneNumber,
       email: email,
       imageUrl: userInfo.imageUrl,
+      matchingCount: userInfo.matchingCount,
+      blocked: userInfo.blocked,
     });
 
     navigation.reset({
