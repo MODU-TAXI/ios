@@ -4,7 +4,7 @@ import { Text, View, Pressable } from 'react-native';
 import Check from '@assets/images/Home/Popper.svg';
 import Receipt from '@assets/images/Home/Receipt.svg';
 
-const EtcComponent: React.FC = () => {
+const UserSummaryComponent: React.FC = () => {
   return (
     <View className="mb-[120px] flex-row items-center px-4">
       <View className="mr-4">
@@ -43,4 +43,4 @@ const EtcComponent: React.FC = () => {
   );
 };
 
-export default EtcComponent;
+export default UserSummaryComponent;

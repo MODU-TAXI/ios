@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, Image, Pressable } from 'react-native';
 
-interface MiddleComponentProps {
+interface HomeMainPanelComponentProps {
   toMapScreen: () => void;
   toCreateRoomScreen: () => void;
 }
 
-const MiddleComponent: React.FC<MiddleComponentProps> = ({ toMapScreen, toCreateRoomScreen }) => {
+const HomeMainPanelComponent: React.FC<HomeMainPanelComponentProps> = ({ toMapScreen, toCreateRoomScreen }) => {
   return (
     <View className="mt-4 h-64 flex-row justify-evenly px-3">
       <Pressable onPress={toCreateRoomScreen} className="flex-1 items-center pr-2">
@@ -36,4 +36,4 @@ const MiddleComponent: React.FC<MiddleComponentProps> = ({ toMapScreen, toCreate
   );
 };
 
-export default MiddleComponent;
+export default HomeMainPanelComponent;

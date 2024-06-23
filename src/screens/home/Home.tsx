@@ -5,13 +5,13 @@ import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Vibration, RefreshControl } from 'react-native';
 
-import EtcComponent from '@components/Home/Etc';
-import MiddleComponent from '@components/Home/Middle';
 import PartiesComponent from '@components/Home/Parties';
 import MyPartyComponent from '@components/Home/MyParty';
 import NoPartyComponent from '@components/Home/NoParty';
 import LoadingComponent from '@components/Common/Loading';
 import HomeHeaderComponent from '@components/Home/HomeHeader';
+import UserSummaryComponent from '@components/Home/UserSummary';
+import HomeMainPanelComponent from '@components/Home/HomeMainPanel';
 
 import { roomState, userInfoState } from '@recoil/recoil';
 
@@ -98,7 +98,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {/* 지도, 택시팟 */}
-        <MiddleComponent toMapScreen={toMapScreen} toCreateRoomScreen={toCreateRoomScreen} />
+        <HomeMainPanelComponent toMapScreen={toMapScreen} toCreateRoomScreen={toCreateRoomScreen} />
 
         <View className="my-6 h-2 bg-[#F2F2F2]" />
 
@@ -117,7 +117,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         <View className="my-6 h-2 bg-[#F2F2F2]" />
 
         {/* 기타 */}
-        <EtcComponent />
+        <UserSummaryComponent />
       </ScrollView>
     </SafeAreaView>
   );
