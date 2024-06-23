@@ -32,6 +32,7 @@ import {
 
 // [모집방 생성] /api/rooms
 export const createRoom = async (data: CreateRoomRequest): Promise<CreateRoomResponse> => {
+  console.log(data);
   const response = await PostAxiosInstance<CreateRoomResponse>(`/api/rooms`, data);
 
   return response.data;

@@ -71,7 +71,6 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
         modal
         open={datePickerOpen}
         date={date}
-        locale='ko-kr'
         minimumDate={today}
         maximumDate={tomorrow}
         mode="datetime"

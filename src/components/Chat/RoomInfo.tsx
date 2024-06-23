@@ -63,7 +63,7 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomPreview }) =>
           <View className="flex-row">
             <View className="mr-2 flex-row items-center justify-center">
               <People className="mr-1" />
-              <Text className="text-[12px] text-[#7c7c7c]">{roomPreview.wishHeadcount} / 3</Text>
+              <Text className="text-[12px] text-[#7c7c7c]">{roomPreview.currentHeadcount} / {roomPreview.wishHeadcount}</Text>
             </View>
 
             <View className="flex-row items-center justify-center">

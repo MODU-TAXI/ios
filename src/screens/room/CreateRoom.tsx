@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -109,6 +109,10 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
       spotId: 0,
     });
   };
+
+  useEffect(() => {
+    console.log(departureTime);
+  }, [departureTime]);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
