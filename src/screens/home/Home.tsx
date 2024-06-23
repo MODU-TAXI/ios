@@ -117,7 +117,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         <View className="my-6 h-2 bg-[#F2F2F2]" />
 
         {/* 기타 */}
-        <UserSummaryComponent />
+        <UserSummaryComponent navigation={navigation} />
       </ScrollView>
     </SafeAreaView>
   );
