@@ -18,7 +18,7 @@ const PartyComponent: React.FC<PartyComponentProps> = ({ roomDetail }) => {
       {/* 출발 시각 */}
       <View className="w-[100px] flex-row items-center justify-center rounded-lg bg-[#EBFBF7] px-3 py-1">
         <Check className="mr-1" width={12} />
-        <Text className="text-[12px] font-medium text-main">출발 {roomDetail.arrivalTime}</Text>
+        <Text className="text-[12px] font-medium text-main">출발 {roomDetail.departureTime}</Text>
       </View>
 
       {/* 출발지, 도착지 */}
