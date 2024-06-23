@@ -17,9 +17,13 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
   const { mutateAsync: appleLogin, isPending: appleLoginPending } = useAppleLogin(navigation);
 
+  // 애플 로그인 토큰발급 revoke 상황
   useEffect(() => {
     return appleAuth.onCredentialRevoked(async () => {
-      console.warn('Credential Revoked');
+      console.warn('애플 로그인 토큰이 revoke 되었습니다.');
+      await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.REFRESH,
+      });
     });
   }, []);
 

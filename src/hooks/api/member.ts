@@ -9,7 +9,7 @@ import { loggedInState, userInfoState, signUpUserState } from '@recoil/recoil';
 
 import { memberErrorHandler } from '@server/errorHandler/member';
 import { PatchMemberRequest, RegisterNicknameRequest } from '@server/requestTypes/member';
-import { socialLogin, patchMember, checkMembership, registerNickname } from '@server/api/member';
+import { socialLogin, patchMember, deleteMember, checkMembership, registerNickname } from '@server/api/member';
 import {
   AppleLoginResponse,
   KakaoLoginResponse,
@@ -72,7 +72,7 @@ export const useKakaoLogin = (
     onError: () => {
       Toast.show({
         type: 'error',
-        text1: '로그인 실패',
+        text1: '카카오 로그인 실패',
         text2: '로그인 재시도 하세요',
         position: 'bottom',
       });
@@ -130,7 +130,7 @@ export const useAppleLogin = (
     onError: () => {
       Toast.show({
         type: 'error',
-        text1: '로그인 실패',
+        text1: '애플 로그인 실패',
         text2: '로그인 재시도 하세요',
         position: 'bottom',
       });
@@ -149,7 +149,7 @@ export const appleLoginAuth = async (): Promise<AppleLoginResponse> => {
   if (credentialState === appleAuth.State.AUTHORIZED) {
     return appleAuthRequestResponse;
   } else {
-    throw new Error('Apple Login Failed');
+    throw new Error('Apple 인증에 실패하였습니다');
   }
 };
 
@@ -180,3 +180,21 @@ export const usePatchMember = (): UseMutationResult<
     },
   });
 };
+
+// 회원 탈퇴
+export const useDeleteMember = (): UseMutationResult<void, void, void> => {
+  return useMutation({
+    mutationFn: () => deleteMember(),
+    onError: () => {
+      ErrorToastMessage('회원 탈퇴에 실패하였습니다.');
+    },
+    onSuccess: () => {
+      // TODO: 카카오 연결 끊기
+
+      // TODO: 애플 토큰 revoke 처리; 회원탈퇴용 Apple client secret을 얻기 위한 별도 JWT 생성의 보안상 이유로 서버에서 처리 예정
+      // appleAuth.performRequest({
+      //   requestedOperation: appleAuth.Operation.LOGOUT,
+      // });
+    }
+  });
+}
