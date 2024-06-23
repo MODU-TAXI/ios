@@ -6,12 +6,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Vibration, RefreshControl } from 'react-native';
 
 import EtcComponent from '@components/Home/Etc';
-import TopComponent from '@components/Home/Top';
 import MiddleComponent from '@components/Home/Middle';
 import PartiesComponent from '@components/Home/Parties';
 import MyPartyComponent from '@components/Home/MyParty';
 import NoPartyComponent from '@components/Home/NoParty';
 import LoadingComponent from '@components/Common/Loading';
+import HomeHeaderComponent from '@components/Home/HomeHeader';
 
 import { roomState, userInfoState } from '@recoil/recoil';
 
@@ -89,7 +89,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['left', 'right']}>
       {/* 로고, 알림 */}
-      <TopComponent
+      <HomeHeaderComponent
         userInfo={userInfo}
         toSearchScreen={toSearchScreen}
         toAlarmScreen={toAlarmScreen}
