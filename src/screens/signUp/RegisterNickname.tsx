@@ -40,6 +40,8 @@ const RegisterNicknameScreen = ({ navigation }: RegisterNicknameScreenProps) => 
       phoneNumber: userInfo.phoneNumber,
       email: userInfo.email,
       imageUrl: userInfo.imageUrl,
+      matchingCount: userInfo.matchingCount,
+      blocked: userInfo.blocked,
     });
 
     navigation.navigate('SchoolAuthenticationScreen');

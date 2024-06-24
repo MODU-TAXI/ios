@@ -7,6 +7,8 @@ import {
   NaverMapPathOverlay,
 } from '@mj-studio/react-native-naver-map';
 
+import { calculateDist } from '@utils/search';
+
 import { RoomDetail } from '@type/entity/room';
 
 interface RoomMapComponentProps {
@@ -26,14 +28,21 @@ const RoomMapComponent: React.FC<RoomMapComponentProps> = ({ roomDetail }) => {
   // roomDetail 저장 시 카메라를 출발-도착지 사이로 이동
   useEffect(() => {
     if (roomDetail) {
+      const baseDist = 1000;
+      const dist = calculateDist(roomDetail.maxLatitude, roomDetail.maxLongitude, roomDetail.minLatitude, roomDetail.minLongitude);
+      const scaleFactor = Math.log10(dist / baseDist + 1) * 0.05;
+
+      const deltaMax = 1 + scaleFactor;
+      const deltaMin = 1 - scaleFactor;
+
       mapRef.current?.animateCameraWithTwoCoords({
         coord1: {
-          latitude: roomDetail.maxLatitude,
-          longitude: roomDetail.maxLongitude,
+          latitude: roomDetail.maxLatitude * deltaMax,
+          longitude: roomDetail.maxLongitude * deltaMax,
         },
         coord2: {
-          latitude: roomDetail.minLatitude,
-          longitude: roomDetail.minLongitude,
+          latitude: roomDetail.minLatitude * deltaMin,
+          longitude: roomDetail.minLongitude * deltaMin,
         },
         duration: 500,
       });

@@ -19,6 +19,7 @@ export type LoginStackParamList = {
   SearchScreen: undefined;
   ChatRoomScreen: { roomId: number; managerId: number; readonly: boolean };
   AlarmScreen: undefined;
+  HomeSearchScreen: undefined;
 
   // 생성
   CreateRoomScreen: undefined;
@@ -73,6 +74,7 @@ export type SearchScreenProps = NativeStackScreenProps<LoginStackParamList, 'Sea
 export type ChatRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'ChatRoomScreen'>;
 export type AlarmScreenProps = NativeStackScreenProps<LoginStackParamList, 'AlarmScreen'>;
 export type MyPageScreenProps = NativeStackScreenProps<LoginStackParamList, 'MyPageScreen'>;
+export type HomeSearchScreenProps = NativeStackScreenProps<LoginStackParamList, 'HomeSearchScreen'>;
 
 // 생성 페이지들
 export type CreateRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateRoomScreen'>;

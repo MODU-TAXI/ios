@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import dayjs from 'dayjs';
 import { useRecoilState } from 'recoil';
+import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,7 +13,7 @@ import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { roomState, arrivalState, departureState } from '@recoil/recoil';
+import { roomState, arrivalState, userInfoState, departureState } from '@recoil/recoil';
 
 import { useCreateRoom } from '@hooks/api/rooms';
 
@@ -20,6 +21,7 @@ import { ErrorToastMessage } from '@utils/toastMessage';
 
 import { CreateRoomScreenProps } from '@type/param/loginStack';
 
+import CheckBox from '@assets/images/Match/CheckBox.svg';
 import EndCircle from '@assets/images/Match/EndCircle.svg';
 import DottedLine from '@assets/images/Match/DottedLine.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
@@ -32,6 +34,8 @@ import UnSelectedPerson1 from '@assets/images/Match/UnSelectedPerson1.svg';
 import UnSelectedPerson2 from '@assets/images/Match/UnSelectedPerson2.svg';
 import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
 
+dayjs.locale('ko');
+
 const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   const { mutateAsync: createRoomMutate, isPending: createRoomPending } = useCreateRoom();
 
@@ -43,6 +47,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
   const [passangersNumber, setPassengersNumber] = useState<number | null>(null); // 탑승 인원
   const [checkedCategorys, setCheckedCategorys] = useState<boolean[]>([false, false, false]); // 카테고리
+  const [userInfo, ] = useRecoilState(userInfoState);
 
   // 파티 생성
   const createMatch = async () => {
@@ -50,19 +55,22 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
       return ErrorToastMessage('힝목을 모두 체크해주세요');
     }
 
-    const categories = ['STUDENT_CERTIFICATION', 'ONLY_WOMAN', 'MANNER'];
+    const categories = ['STUDENT_CERTIFICATION', 'ONLY_WOMAN', 'QUIET'];
+    if (userInfo && userInfo.gender === "MALE") {
+      categories[1] = 'ONLY_MAN';
+    }
 
     const filteredCategories = categories.filter((_, index) => checkedCategorys[index]);
 
     // 개발환경시 기기가 미국이라 9시간 더해주기
-    departureTime.setHours(departureTime.getHours() + 9);
+    const departureTimeForServer = new Date(departureTime.getTime() + 9 * 60 * 60 * 1000);
 
     const room = await createRoomMutate({
       spotId: arrival.spotId,
       departureLongitude: departure.longitude,
       departureLatitude: departure.latitude,
       roomTagBitMask: filteredCategories,
-      departureTime: departureTime,
+      departureTime: departureTimeForServer,
       departureName: departure.name,
       wishHeadcount: passangersNumber,
     });
@@ -242,21 +250,42 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
           <DescriptionComponent description="카테고리를 선택해주세요" />
 
           <View className="mt-4 flex-row justify-between">
-            <CategoryComponent
-              index={0}
-              category={'학생인증'}
-              checkedCategorys={checkedCategorys}
-              setCheckedCategorys={setCheckedCategorys}
-            />
-            <CategoryComponent
-              index={1}
-              category={'여자만'}
-              checkedCategorys={checkedCategorys}
-              setCheckedCategorys={setCheckedCategorys}
-            />
+            {userInfo.email ? (
+              <CategoryComponent
+                index={0}
+                category={'학생인증'}
+                checkedCategorys={checkedCategorys}
+                setCheckedCategorys={setCheckedCategorys}
+              />
+            ) : (
+              <Pressable
+                disabled
+                className="flex-row items-center justify-center rounded-xl border-2 border-gray200 px-3 py-2"
+              >
+                <CheckBox className="mr-2" />
+                <Text className="text-sm font-normal text-gray700">학생인증</Text>
+              </Pressable>
+            )}
+
+            {userInfo.gender === "MALE" ? (
+              <CategoryComponent
+                index={1}
+                category={'남자만'}
+                checkedCategorys={checkedCategorys}
+                setCheckedCategorys={setCheckedCategorys}
+              />
+            ) : (
+              <CategoryComponent
+                index={1}
+                category={'여자만'}
+                checkedCategorys={checkedCategorys}
+                setCheckedCategorys={setCheckedCategorys}
+              />
+            )}
+
             <CategoryComponent
               index={2}
-              category={'매너탑승'}
+              category={'조용히'}
               checkedCategorys={checkedCategorys}
               setCheckedCategorys={setCheckedCategorys}
             />

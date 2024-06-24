@@ -14,6 +14,8 @@ export interface RefreshTokenResponse {
     phoneNumber: string;
     email: string;
     imageUrl: string;
+    matchingCount: number;
+    blocked: boolean;
   };
 }
 
@@ -85,6 +87,8 @@ export interface SignUpResponse {
     phoneNumber: string;
     email: string;
     imageUrl: string;
+    matchingCount: number;
+    blocked: boolean;
   };
 }
 

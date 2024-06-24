@@ -4,32 +4,34 @@ import React, { useState, useEffect } from 'react';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { convertCoordinates, getCurrentLocation } from '../../utils/map';
+
+import SearchBoxComponent from '@components/Search/SearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
-import DepartureSearchBoxComponent from '@components/Search/DepartureSearchBox';
 
 import { searchParamState, searchKeywordState } from '@recoil/recoil';
 
 import { useNaverSearch } from '@hooks/api/search';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
-import { convertCoordinates, getCurrentLocation } from '@utils/map';
 
 import { SortedItemType } from '@type/entity/search';
-import { DepartureSearchScreenProps } from '@type/param/loginStack';
+import { HomeSearchScreenProps } from '@type/param/loginStack';
 
-/** 출발지 검색: 거점검색 기능 제외 */
-const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
+/** 메인맵 도착지 검색 */
+const HomeSearchScreen = ({ navigation }: HomeSearchScreenProps) => {
   /** 검색어 저장 변수 */
-  const [keyword, ] = useRecoilState<string>(searchKeywordState);
-  const [, setSearchParams] = useRecoilState(searchParamState);
-
+  const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({
     latitude: 37.5665,
     longitude: 126.978,
   });
+  
+  // 검색어 선택시 넘겨줄 값
+  const [, setSearchParam] = useRecoilState(searchParamState);
 
   useEffect(() => {
     const fetchCurrentLocation = async () => {
@@ -65,16 +67,17 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
   }, [items, currentLocation])
 
   /** 선택한 검색어를 전달하며 이동 */
-  const toDepartureMapScreen = (
+  const toMainMapScreen = (
     title: string,
     latitude: number,
     longitude: number,
   ) => {
-    setSearchParams({
+    setSearchParam({
       title: title,
       latitude: latitude,
       longitude: longitude,
-    });
+    })
+    setKeyword(''); // 검색어 삭제
     navigation.goBack();
   }
 
@@ -84,7 +87,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
         
         {/** 검색창 */}
         <View className="mb-3 mt-2">
-          <DepartureSearchBoxComponent />
+          <SearchBoxComponent />
         </View>
 
         {/** 추천 검색어 */}
@@ -92,7 +95,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
           sortedItems.map((item, index) => (
             <Pressable
               key={index}
-              onPress={() => toDepartureMapScreen(
+              onPress={() => toMainMapScreen(
                 deleteTagTitle(item.title),
                 item.latitude,
                 item.longitude,
@@ -104,7 +107,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
                 distance={item.distance}
-                isFirst={index===0}
+                isFirst={index === 0}
               />
             </Pressable>
         ))}
@@ -112,9 +115,9 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
         {sortedItems.length === 0 && !keyword && 
           <EmptySearchRenderComponent />
         }
-        </View>
+      </View>
     </SafeAreaView>
   );
 };
 
-export default DepartureSearchScreen;
+export default HomeSearchScreen;

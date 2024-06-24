@@ -8,14 +8,14 @@ import { User } from '@type/entity/user';
 import Logo from '@assets/images/Home/Logo.svg';
 import Bell from '@assets/images/Home/Bell.svg';
 
-interface TopComponentProps {
+interface HomeHeaderComponentProps {
   userInfo: User;
   roomId: number;
   toSearchScreen: () => void;
   toAlarmScreen: () => void;
 }
 
-const TopComponent: React.FC<TopComponentProps> = ({
+const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
   userInfo,
   roomId,
   toSearchScreen,
@@ -61,4 +61,4 @@ const TopComponent: React.FC<TopComponentProps> = ({
   );
 };
 
-export default TopComponent;
+export default HomeHeaderComponent;

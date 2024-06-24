@@ -1,8 +1,8 @@
+import { View, Pressable } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
+import Animated, { runOnJS } from 'react-native-reanimated';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { View, Pressable, LayoutChangeEvent } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, { runOnJS, useAnimatedStyle } from 'react-native-reanimated';
 import React, {
   useRef,
   useMemo,
@@ -12,7 +12,6 @@ import React, {
 } from 'react';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
-  Coord,
   Camera,
   NaverMapView,
   NaverMapViewRef,
@@ -26,25 +25,23 @@ import BottomSheet, {
   BottomSheetBackdropProps
 } from '@gorhom/bottom-sheet';
 
-import MapBottomSheetScreen from '../../components/Map/MapBottomSheet';
+import MapBottomSheetScreen from '../../components/Modal/MapBottomSheet';
 
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
-import SpotFilterModalScreen from '@components/Map/SpotFilterModal';
 import CreateRoomButtonComponent from '@components/CreateRoomButton';
+import SpotFilterModalScreen from '@components/Modal/SpotFilterModal';
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDigest';
 
 import { userInfoState, searchParamState } from '@recoil/recoil';
 
-import { GetRoomIntegrationRequest } from '@server/requestTypes/room';
-
 import { useGetSpotMap } from '@hooks/api/spot';
-import { useGetRoomList, useGetRoomIntegration, useGetRoomCurrentCamera } from '@hooks/api/rooms';
+import { useGetRoomIntegration } from '@hooks/api/rooms';
 
 import { calculateRadius, getCurrentLocation } from '@utils/map';
 
 import { MainMapScreenProps } from '@type/param/loginStack';
-import { RoomIntegration, RoomFilterParam, RoomCurrentCamera } from '@type/entity/room';
+import { RoomIntegration, RoomFilterParam } from '@type/entity/room';
 
 import RefreshButton from '@assets/images/Map/refreshButton.svg';
 import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
@@ -134,7 +131,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   const [filterParam, setFilterParam] = useState<RoomFilterParam>({
     "sortType": "NEW",
     "spotId": undefined,
-    "roomTags": undefined,
+    "roomTags": [],
     "isImminent": false,
   });
   

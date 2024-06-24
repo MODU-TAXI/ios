@@ -8,6 +8,7 @@ import { convertCoordinates, getCurrentLocation } from '../../utils/map';
 
 import SearchBoxComponent from '@components/Search/SearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
+import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 
 import { searchParamState, searchKeywordState } from '@recoil/recoil';
 
@@ -90,8 +91,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
         </View>
 
         {/** 추천 검색어 */}
-        <View className="flex-1">
-          {sortedItems && 
+        {sortedItems && 
           sortedItems.map((item, index) => (
             <Pressable
               key={index}
@@ -110,8 +110,11 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
                 isFirst={index === 0}
               />
             </Pressable>
-          ))}
-        </View>
+        ))}
+
+        {sortedItems.length === 0 && !keyword && 
+          <EmptySearchRenderComponent />
+        }
       </View>
     </SafeAreaView>
   );

@@ -2,7 +2,7 @@ import axios from 'axios';
 import Config from 'react-native-config';
 
 import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
-import { PostAxiosInstance, PatchAxiosInstance } from '@axios/axios.method';
+import { PostAxiosInstance, PatchAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
 
 import {
   SignUpRequest,
@@ -19,6 +19,8 @@ import {
   CheckMembershipResponse,
   RegisterNicknameResponse,
 } from '@server/responseTypes/member';
+
+import { getAccessToken } from '@utils/token';
 
 // [토큰 재발급] /api/members/refresh
 export const refreshAccessToken = async (refreshToken: string): Promise<RefreshTokenResponse> => {
@@ -78,3 +80,10 @@ export const patchMember = async (data: PatchMemberRequest): Promise<PatchMember
 
   return response.data;
 };
+
+// [회원 탈퇴] /api/members
+export const deleteMember = async () => {
+  const response = await DeleteAxiosInstance('/api/members');
+
+  return response.data;
+}

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { useRecoilState } from 'recoil';
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -12,12 +13,15 @@ import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
+import { userInfoState } from '@recoil/recoil';
+
 import { usePatchRoom } from '@hooks/api/rooms';
 
 import { ErrorToastMessage } from '@utils/toastMessage';
 
 import { PatchRoomScreenProps } from '@type/param/loginStack';
 
+import CheckBox from '@assets/images/Match/CheckBox.svg';
 import EndCircle from '@assets/images/Match/EndCircle.svg';
 import DottedLine from '@assets/images/Match/DottedLine.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
@@ -45,19 +49,28 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
   const [passangersNumber, setPassengersNumber] = useState<number | null>(roomDetail.wishHeadcount); // 탑승 인원
   const [checkedCategorys, setCheckedCategorys] = useState<boolean[]>([false, false, false]); // 카테고리
+  const [userInfo, ] = useRecoilState(userInfoState);
 
   // 날짜 다시 활성화
   useEffect(() => {
+    const splitDate = roomDetail.departureDairyDate.split('.');
     const splitTime = roomDetail.departureTime.split(':');
     const dateObj = new Date();
+    const realDate = splitDate[2].split(' ')[0];
+
+    dateObj.setFullYear(parseInt(splitDate[0]), parseInt(splitDate[1]) - 1, parseInt(realDate));
     dateObj.setHours(parseInt(splitTime[0]));
     dateObj.setMinutes(parseInt(splitTime[1]));
+
     setDepartureTime(dateObj);
   }, []);
 
   // 카테고리 선택했던 것들 활성화
   useEffect(() => {
-    const origin_categories = ['학생인증', '여자만', '매너탑승'];
+    const origin_categories = ['학생인증', '여자만', '조용히'];
+    if (userInfo && userInfo.gender === "MALE") {
+      origin_categories[1] = '남자만';
+    }
 
     const selected_indexs = roomDetail.roomCategories.map((roomCategory) => {
       return origin_categories.indexOf(roomCategory.trim());
@@ -76,19 +89,22 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
       return ErrorToastMessage('힝목을 모두 체크해주세요');
     }
 
-    const categories = ['STUDENT_CERTIFICATION', 'ONLY_WOMAN', 'MANNER'];
+    const categories = ['STUDENT_CERTIFICATION', 'ONLY_WOMAN', 'QUIET'];
+    if (userInfo && userInfo.gender === "MALE") {
+      categories[1] = 'ONLY_MAN';
+    }
 
     const filteredCategories = categories.filter((_, index) => checkedCategorys[index]);
 
     // 개발환경시 기기가 미국이라 9시간 더해주기
-    departureTime.setHours(departureTime.getHours() + 9);
+    const departureTimeForServer = new Date(departureTime.getTime() + 9 * 60 * 60 * 1000);
 
     await patchRoomMutate({
       spotId: 1,
       departureLongitude: 126.69487873676,
       departureLatitude: 37.463182225352,
       roomTagBitMask: filteredCategories,
-      departureTime: departureTime,
+      departureTime: departureTimeForServer,
       departureName: '주안역',
       wishHeadcount: passangersNumber,
     });
@@ -247,21 +263,42 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
           <DescriptionComponent description="카테고리를 선택해주세요" />
 
           <View className="mt-4 flex-row justify-between">
-            <CategoryComponent
-              index={0}
-              category={'학생인증'}
-              checkedCategorys={checkedCategorys}
-              setCheckedCategorys={setCheckedCategorys}
-            />
-            <CategoryComponent
-              index={1}
-              category={'여자만'}
-              checkedCategorys={checkedCategorys}
-              setCheckedCategorys={setCheckedCategorys}
-            />
+          {userInfo.email ? (
+              <CategoryComponent
+                index={0}
+                category={'학생인증'}
+                checkedCategorys={checkedCategorys}
+                setCheckedCategorys={setCheckedCategorys}
+              />
+            ) : (
+              <Pressable
+                disabled
+                className="flex-row items-center justify-center rounded-xl border-2 border-gray200 px-3 py-2"
+              >
+                <CheckBox className="mr-2" />
+                <Text className="text-sm font-normal text-gray700">학생인증</Text>
+              </Pressable>
+            )}
+
+            {userInfo.gender === "MALE" ? (
+              <CategoryComponent
+                index={1}
+                category={'남자만'}
+                checkedCategorys={checkedCategorys}
+                setCheckedCategorys={setCheckedCategorys}
+              />
+            ) : (
+              <CategoryComponent
+                index={1}
+                category={'여자만'}
+                checkedCategorys={checkedCategorys}
+                setCheckedCategorys={setCheckedCategorys}
+              />
+            )}
+
             <CategoryComponent
               index={2}
-              category={'매너탑승'}
+              category={'조용히'}
               checkedCategorys={checkedCategorys}
               setCheckedCategorys={setCheckedCategorys}
             />

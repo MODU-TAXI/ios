@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
 import DatePicker from 'react-native-date-picker';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 
 
@@ -71,7 +71,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
         modal
         open={datePickerOpen}
         date={date}
-        locale='ko-kr'
+        locale='ko-KR'
         minimumDate={today}
         maximumDate={tomorrow}
         mode="datetime"

@@ -101,20 +101,23 @@ export const getRoomList = async (data: GetRoomListRequest): Promise<GetRoomList
 export const getRoomIntegration = async (
   data: GetRoomIntegrationRequest,
 ): Promise<GetRoomIntegrationResponse[]> => {
-  const params: any = {
-    searchLongitude: data.searchLongitude,
-    searchLatitude: data.searchLatitude,
+  const params = new URLSearchParams({
+    searchLongitude: data.searchLongitude.toString(),
+    searchLatitude: data.searchLatitude.toString(),
     sortType: data.sortType,
-  };
-
-  data.radius && (params.radius = data.radius);
-  data.spotId && (params.spotId = data.spotId);
-  data.roomTags && (params.roomTags = data.roomTags);
-  data.isImminent && (params.isImminent = data.isImminent);
-
-  const response = await GetAxiosInstance<GetRoomIntegrationResponse[]>(`/api/rooms/integration`, {
-    params: params,
   });
+
+  data.radius && (params.append('radius', data.radius.toString()));
+  data.spotId && (params.append('spotId', data.spotId.toString()));
+  data.isImminent && (params.append('isImminent', data.isImminent.toString()));
+
+  if (data.roomTags && data.roomTags.length > 0) {
+    data.roomTags.forEach((tag) => {
+      params.append('roomTags', tag);
+    });
+  }
+
+  const response = await GetAxiosInstance<GetRoomIntegrationResponse[]>(`/api/rooms/integration?${params.toString()}`);
 
   return response.data.rooms;
 };

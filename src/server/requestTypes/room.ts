@@ -50,6 +50,6 @@ export interface GetRoomIntegrationRequest {
   sortType: string,
   spotId?: number,
   radius?: number,
-  roomTags?: string,
+  roomTags?: string[],
   isImminent?: boolean,
 }

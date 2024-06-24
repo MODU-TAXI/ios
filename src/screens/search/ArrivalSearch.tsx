@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
-import { View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { View, Text, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import SpotSearchComponent from '@components/Search/SpotSearch';
 import ArrivalSearchBoxComponent from '@components/Search/ArrivalSearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
+import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 
 import { arrivalState, searchKeywordState } from '@recoil/recoil';
 
@@ -20,6 +21,7 @@ import { convertCoordinates, getCurrentLocation } from '@utils/map';
 import { Spot } from '@type/entity/spot';
 import { SortedItemType } from '@type/entity/search';
 import { ArrivalSearchScreenProps } from '@type/param/loginStack';
+
 
 /** 도착 거점 검색 */
 const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
@@ -132,8 +134,7 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
         )}
 
         {/** 추천 검색어 */}
-        <View className="flex-1">
-          {sortedItems && 
+        {sortedItems && 
           sortedItems.map((item, index) => (
             <Pressable
               key={index}
@@ -152,8 +153,12 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
                 isFirst={false}
               />
             </Pressable>
-          ))}
-        </View>
+        ))}
+
+        {/** 빈 화면 렌더링 */}
+        {sortedItems.length === 0 && !keyword &&
+          <EmptySearchRenderComponent />
+        }
       </View>
     </SafeAreaView>
   );

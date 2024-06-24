@@ -1,5 +1,5 @@
-import React from 'react';
 import { useRecoilState } from 'recoil';
+import React, { useEffect } from 'react';
 import { Text, View, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -7,15 +7,19 @@ import ButtonComponent from '@components/Button';
 
 import { loggedInState } from '@recoil/recoil';
 
-import { deleteToken } from '@utils/token';
+import { useDeleteMember } from '@hooks/api/member';
+
+import { deleteToken, getAccessToken } from '@utils/token';
 
 import { WithdrawCompleteScreenProps } from '@type/param/loginStack';
 
 const WithdrawCompleteScreen = ({ navigation }: WithdrawCompleteScreenProps) => {
   const [, setLoggedIn] = useRecoilState(loggedInState);
+  const { mutateAsync: deleteMemberMutate } = useDeleteMember();
 
   // 회원탈퇴
   const withdraw = async () => {
+    await deleteMemberMutate();
     await deleteToken();
     setLoggedIn(false);
   };
