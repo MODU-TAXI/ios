@@ -1,79 +1,57 @@
-import React, { useState } from 'react';
-import {
-  Text,
-  View,
-  Keyboard,
-  SafeAreaView,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import React from 'react';
+import { Text, View, Alert, Linking, SafeAreaView } from 'react-native';
 
-import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
-import InquiryInputBoxComponent from '@components/My/InquiryInputBox';
-import InquirySelectBoxComponent from '@components/My/InquirySelectBox';
 
 import { InquiryScreenProps } from '@type/param/loginStack';
 
-import DeclarationAlert from '@assets/images/Declaration/DeclarationAlert.svg';
+import InquiryKakao from '@assets/images/My/InquiryKakao.svg';
 
 const InquiryScreen = ({ navigation }: InquiryScreenProps) => {
-  const [inquiryType, setInquiryType] = useState<string>(''); // 신구 유형
-  const [inquiryContent, setInquiryContent] = useState<string>(''); // 신고 내용
+  const inquiryKakao = async () => {
+    // URL을 열 수 있는지 확인
+    const canOpen = await Linking.canOpenURL('https://pf.kakao.com/sIHBVkzg/chat');
+
+    if (canOpen) {
+      // URL 열기
+      Linking.openURL('https://open.kakao.com/o/sIHBVkzg');
+    } else {
+      Alert.alert('에러', '카카오톡을 오픈하는데 실패하였습니다.');
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <HeaderComponent title={'문의하기'} />
 
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView className="flex-1">
-          <View className="px-7">
-            {/* 문의 유형 */}
-            <View className="mt-10">
-              <Text className="text-[14px] font-semibold tracking-tight text-[#5D5D5D]">
-                문의 유형
-              </Text>
+      <View className="ml-7 mt-10">
+        <Text className="text-[24px] font-semibold tracking-tight text-[#1F1F1F]">
+          문의는 카카오 채널로
+        </Text>
+        <Text className="text-[24px] font-semibold tracking-tight text-[#1F1F1F]">남겨주세요.</Text>
+      </View>
 
-              <InquirySelectBoxComponent setInquiryType={setInquiryType} />
-            </View>
+      <View className="flex-1 items-center justify-center">
+        <InquiryKakao onPress={inquiryKakao} />
 
-            {/* 문의 내용 */}
-            <View className="mt-10">
-              <Text className="text-[14px] font-semibold tracking-tight text-[#5D5D5D]">
-                문의 내용
-              </Text>
-              <InquiryInputBoxComponent
-                inquiryContent={inquiryContent}
-                setInquiryContent={setInquiryContent}
-              />
-            </View>
+        <View className="mt-11">
+          <Text className="text-[12px] tracking-tight text-[#5D5D5D]">
+            누르면 해당 문의 채널로 연결됩니다
+          </Text>
+        </View>
+      </View>
 
-            {/* 안내 문구 */}
-            <View className="mt-3 flex-row items-center">
-              <DeclarationAlert className="mr-1" />
-
-              <Text className="text-[12px]  tracking-tight text-[#AFAFAF]">
-                문의 접수 후 패널티 조치까지 3-5일정도 소요될 수 있어요!
-              </Text>
-            </View>
-          </View>
-
-          <View className="flex-1" />
-
-          <View className="mx-7">
-            <ButtonComponent
-              color={'bg-main'}
-              borderColor={'border-main'}
-              textColor={'white'}
-              text={'문의하기'}
-              disabled={!inquiryType || !inquiryContent}
-              onPress={() => {
-                console.log('?');
-              }}
-            />
-          </View>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+      <View className="mb-8 items-center">
+        <Text className="text-[12px] font-medium tracking-tight text-[#9C9C9C]">
+          모두의 택시는 택시팟 중계 서비스입니다.
+        </Text>
+        <Text className="text-[12px] font-medium tracking-tight text-[#9C9C9C]">
+          앞으로 택시 업계와 협업하여
+        </Text>
+        <Text className="text-[12px] font-medium tracking-tight text-[#9C9C9C]">
+          합리적인 가격으로 서비스를 이용하실 수 있도록 노력하겠습니다.
+        </Text>
+      </View>
     </SafeAreaView>
   );
 };

@@ -19,6 +19,7 @@ const AlaramsComponent: React.FC<AlaramsComponentProps> = ({ alarms, loadMoreAla
       renderItem={({ item }) => <AlaramComponent alarm={item} />}
       onEndReached={loadMoreAlarms}
       onEndReachedThreshold={0.7}
+      showsVerticalScrollIndicator={false}
     />
   );
 };
