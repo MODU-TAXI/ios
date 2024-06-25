@@ -5,20 +5,31 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { userInfoState } from '@recoil/recoil';
+
+import { useDeleteMember } from '@hooks/api/member';
+
+import { deleteToken } from '@utils/token';
 
 import { WithdrawLastScreenProps } from '@type/param/loginStack';
 
 const WithdrawLastScreen = ({ navigation }: WithdrawLastScreenProps) => {
   const myInfo = useRecoilValue(userInfoState);
 
-  const toWithdrawCompleteScreen = () => {
+  const { mutateAsync: deleteMemberMutate, isPending: deleteMemberPending } = useDeleteMember();
+
+  const toWithdrawCompleteScreen = async () => {
+    await deleteToken();
+    await deleteMemberMutate();
     navigation.navigate('WithdrawCompleteScreen');
   };
 
   return (
     <SafeAreaView className="flex-1 bg-white ">
+      {deleteMemberPending && <TransparentLoadingComponent />}
+
       <HeaderComponent title="회원탈퇴" />
 
       <View className="mt-8 flex-1 px-6">
@@ -62,7 +73,7 @@ const WithdrawLastScreen = ({ navigation }: WithdrawLastScreenProps) => {
           color={'bg-main'}
           borderColor={'border-main'}
           textColor={'white'}
-          text={'확인'}
+          text={'회원 탈퇴하기'}
           disabled={false}
           onPress={toWithdrawCompleteScreen}
         />

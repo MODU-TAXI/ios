@@ -41,9 +41,9 @@ const WithdrawCheckScreen = ({ navigation }: WithdrawCheckScreenProps) => {
             • [{myInfo.nickname}]님의 데이터는 비활성화 후 30일 동안 보관돼요
           </Text>
 
-          <View className="flex-row items-center">
+          <View className="mt-4 flex-row">
             <Text className="text-[12px] font-medium tracking-tight text-[#5D5D5D]">• </Text>
-            <Text className="mt-4 text-[12px] font-medium tracking-tight text-[#5D5D5D]">
+            <Text className="text-[12px] font-medium tracking-tight text-[#5D5D5D]">
               30일이 지나기 전까지는 언제든지 로그인해서 계정을 활성화할 수 있어요
             </Text>
           </View>
