@@ -9,7 +9,13 @@ import { loggedInState, userInfoState, signUpUserState } from '@recoil/recoil';
 
 import { memberErrorHandler } from '@server/errorHandler/member';
 import { PatchMemberRequest, RegisterNicknameRequest } from '@server/requestTypes/member';
-import { socialLogin, patchMember, deleteMember, checkMembership, registerNickname } from '@server/api/member';
+import {
+  socialLogin,
+  patchMember,
+  deleteMember,
+  checkMembership,
+  registerNickname,
+} from '@server/api/member';
 import {
   AppleLoginResponse,
   KakaoLoginResponse,
@@ -42,7 +48,7 @@ export const useKakaoLogin = (
       });
 
       // 기존 유저인지의 여부
-      const existent: boolean = (socialResponse.key === undefined); 
+      const existent: boolean = socialResponse.key === undefined;
 
       // 기존 유저
       if (existent) {
@@ -54,7 +60,7 @@ export const useKakaoLogin = (
         setUserInfo(socialResponse.memberInfoResponse);
         setLoggedIn(true);
 
-      // 신규 유저
+        // 신규 유저
       } else {
         if (socialResponse.key) {
           setSignUpUser((prevState: SignUpUser) => ({
@@ -62,8 +68,8 @@ export const useKakaoLogin = (
             key: socialResponse.key,
           }));
           navigation.navigate('CheckPermissionScreen');
-        
-        // 에러 처리
+
+          // 에러 처리
         } else {
           throw new Error('카카오 로그인에 실패하였습니다');
         }
@@ -100,7 +106,7 @@ export const useAppleLogin = (
       });
 
       // 기존 유저인지의 여부
-      const existent: boolean = (socialResponse.key === undefined); 
+      const existent: boolean = socialResponse.key === undefined;
 
       // 기존 유저
       if (existent) {
@@ -112,7 +118,7 @@ export const useAppleLogin = (
         setUserInfo(socialResponse.memberInfoResponse);
         setLoggedIn(true);
 
-      // 신규 유저
+        // 신규 유저
       } else {
         if (socialResponse.key) {
           setSignUpUser((prevState: SignUpUser) => ({
@@ -121,7 +127,7 @@ export const useAppleLogin = (
           }));
           navigation.navigate('CheckPermissionScreen');
 
-        // 에러 처리
+          // 에러 처리
         } else {
           throw new Error('애플 로그인에 실패하였습니다');
         }
@@ -134,7 +140,7 @@ export const useAppleLogin = (
         text2: '로그인 재시도 하세요',
         position: 'bottom',
       });
-    }
+    },
   });
 };
 
@@ -184,17 +190,16 @@ export const usePatchMember = (): UseMutationResult<
 // 회원 탈퇴
 export const useDeleteMember = (): UseMutationResult<void, void, void> => {
   return useMutation({
-    mutationFn: () => deleteMember(),
+    mutationFn: deleteMember,
     onError: () => {
       ErrorToastMessage('회원 탈퇴에 실패하였습니다.');
     },
     onSuccess: () => {
       // TODO: 카카오 연결 끊기
-
       // TODO: 애플 토큰 revoke 처리; 회원탈퇴용 Apple client secret을 얻기 위한 별도 JWT 생성의 보안상 이유로 서버에서 처리 예정
       // appleAuth.performRequest({
       //   requestedOperation: appleAuth.Operation.LOGOUT,
       // });
-    }
+    },
   });
-}
+};

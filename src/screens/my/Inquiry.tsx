@@ -10,7 +10,7 @@ import InquiryKakao from '@assets/images/My/InquiryKakao.svg';
 const InquiryScreen = ({ navigation }: InquiryScreenProps) => {
   const inquiryKakao = async () => {
     // URL을 열 수 있는지 확인
-    const canOpen = await Linking.canOpenURL('https://pf.kakao.com/sIHBVkzg/chat');
+    const canOpen = await Linking.canOpenURL('https://open.kakao.com/o/sIHBVkzg');
 
     if (canOpen) {
       // URL 열기

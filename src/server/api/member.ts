@@ -20,8 +20,6 @@ import {
   RegisterNicknameResponse,
 } from '@server/responseTypes/member';
 
-import { getAccessToken } from '@utils/token';
-
 // [토큰 재발급] /api/members/refresh
 export const refreshAccessToken = async (refreshToken: string): Promise<RefreshTokenResponse> => {
   const response = await axios.patch(
@@ -86,4 +84,4 @@ export const deleteMember = async () => {
   const response = await DeleteAxiosInstance('/api/members');
 
   return response.data;
-}
+};

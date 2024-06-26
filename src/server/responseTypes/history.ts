@@ -15,4 +15,10 @@ export interface HistoriesMonthlyResponse {
 }
 
 // [이용 내역 상세 조회] /api/histories/{id}
-export type HistoryDetailResponse = History
+export type HistoryDetailResponse = History;
+
+// [내가 생성했던 기록의 시작과 끝 날짜] /api/histories/duration
+export interface HistoryDurationResponse {
+  startDate: Date;
+  endDate: Date;
+}
