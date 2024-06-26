@@ -1,5 +1,13 @@
 export type Alarm = {
-  alarmType: string;
-  content: string;
-  date: Date;
+  type:
+    | 'PARTICIPATE_REQUEST'
+    | 'MATCHING_SUCCESS'
+    | 'MATCHING_COMPLETE'
+    | 'REPORT_SUCCESS'
+    | 'PAYMENT_REQUEST'
+    | 'PAYMENT_REQUEST_COMPLETE'
+    | 'PAYMENT_ALL_COMPLETE';
+  message: string;
+  resourceId: number;
+  dateTime: Date;
 };

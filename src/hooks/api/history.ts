@@ -1,12 +1,12 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
-import { getHistories, getHistoryDetail } from '@server/api/history';
+import { getHistoryDetail, getHistoryDuration, getHistoriesByMonth } from '@server/api/history';
 
 // 이용 내역 전체 조회
-export const useGetHistories = () => {
-  return useSuspenseQuery({
-    queryKey: [`/api/histories`],
-    queryFn: getHistories,
+export const useGetHistoriesByMonth = (year: number, month: number) => {
+  return useQuery({
+    queryKey: [`/api/histories/monthly`, [year, month]],
+    queryFn: async () => getHistoriesByMonth(year, month),
   });
 };
 
@@ -15,5 +15,13 @@ export const useGetHistoryDetail = (historyId: number) => {
   return useSuspenseQuery({
     queryKey: [`/api/histories`, historyId],
     queryFn: async () => getHistoryDetail(historyId),
+  });
+};
+
+// 내가 생성했던 기록의 시작과 끝 날짜
+export const useGetHistoryDuration = () => {
+  return useQuery({
+    queryKey: [`/api/histories/duration`],
+    queryFn: getHistoryDuration,
   });
 };

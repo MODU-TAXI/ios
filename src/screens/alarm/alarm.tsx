@@ -1,74 +1,39 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import HeaderComponent from '@components/Header';
 import AlaramsComponent from '@components/Alarm/alarms';
+import LoadingComponent from '@components/Common/Loading';
 
-const alarms = [
-  {
-    alarmType: 'calculate_complete',
-    content: '정산이 완료되었어요!',
-    date: new Date(),
-  },
-  {
-    alarmType: 'declaration_complete',
-    content: '신고가 접수되었어요, 빨리 해결해 드릴게요!',
-    date: new Date(),
-  },
-  {
-    alarmType: 'declaration_complete',
-    content: '신고가 접수되었어요, 빨리 해결해 드릴게요!',
-    date: new Date(),
-  },
-  {
-    alarmType: 'calculate',
-    content: '정산해주세요!',
-    date: new Date(),
-  },
-  {
-    alarmType: 'event',
-    content: '새로운 이벤트가 나왔어요!',
-    date: new Date(),
-  },
-  {
-    alarmType: 'match_complete',
-    content: '매칭에 성공했어요!',
-    date: new Date(),
-  },
-  {
-    alarmType: 'declaration_complete',
-    content: '매칭에 성공했어요!',
-    date: new Date(),
-  },
-  {
-    alarmType: 'calculate',
-    content: '정산해주세요!',
-    date: new Date(),
-  },
-  {
-    alarmType: 'event',
-    content: '새로운 이벤트가 나왔어요!',
-    date: new Date(),
-  },
-  {
-    alarmType: 'match_complete',
-    content: '매칭에 성공했어요!',
-    date: new Date(),
-  },
-  {
-    alarmType: 'declaration_complete',
-    content: '매칭에 성공했어요!',
-    date: new Date(),
-  },
-];
+import { useGetAlarms } from '@hooks/api/alarms';
+
+import { Alarm } from '@type/entity/alarm';
 
 const AlarmScreen = () => {
+  const [page, setPage] = useState<number>(0);
+  const [alarmsList, setAlarmsList] = useState<Alarm[]>([]);
+
+  const { data: alarms, isFetching } = useGetAlarms(page);
+
+  useEffect(() => {
+    if (alarms) {
+      setAlarmsList((prevAlarms) => [...prevAlarms, ...alarms.result]);
+    }
+  }, [alarms]);
+
+  const loadMoreAlarms = () => {
+    if (!isFetching) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  if (!alarms) return <LoadingComponent />;
+
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       <HeaderComponent title={'알림'} />
 
-      <AlaramsComponent alarms={alarms} />
+      <AlaramsComponent alarms={alarmsList} loadMoreAlarms={loadMoreAlarms} />
     </SafeAreaView>
   );
 };
