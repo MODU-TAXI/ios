@@ -1,3 +1,4 @@
+import { useRecoilState } from 'recoil';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import {
   useMutation,
@@ -7,6 +8,9 @@ import {
   UseSuspenseQueryResult,
 } from '@tanstack/react-query';
 
+import { loggedInState } from '@recoil/recoil';
+
+import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 import {
   PatchRoomRequest,
   CreateRoomRequest,
@@ -46,7 +50,7 @@ import {
 } from '@server/responseTypes/room';
 
 import { translateCategory } from '@utils/room';
-import { InfoToastMessage, ErrorToastMessage } from '@utils/toastMessage';
+import { InfoToastMessage } from '@utils/toastMessage';
 
 import { RoomList, RoomDetail, RoomIntegration, RoomCurrentCamera } from '@type/entity/room';
 
@@ -57,15 +61,15 @@ export const useCreateRoom = (): UseMutationResult<
   CreateRoomRequest,
   unknown
 > => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: (createRoomRequest: CreateRoomRequest) => createRoom(createRoomRequest),
-    onSuccess: async (data: CreateRoomResponse) => {
+    onSuccess: () => {
       InfoToastMessage('택시팟 생성이 완료되었어요!');
     },
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
@@ -86,7 +90,7 @@ export const useGetRoomDetail = (roomId: number) => {
     queries: [
       {
         queryKey: [`/api/rooms/${roomId}`, roomId],
-        queryFn: async () => getRoomDetail(roomId),
+        queryFn: () => getRoomDetail(roomId),
         select: (response: GetRoomDetailResponse) => {
           const coords = response.path.coordinates;
           const convertedCoords: Coord[] = coords.map(({ values: [longitude, latitude] }) => ({
@@ -97,6 +101,7 @@ export const useGetRoomDetail = (roomId: number) => {
           const convertedRoomTagBitMaskList = response.roomTagBitMaskList.map((roomTagBitMask) =>
             translateCategory(roomTagBitMask),
           );
+
           return {
             managerId: response.managerId,
             roomId: response.roomId,
@@ -137,11 +142,11 @@ export const useGetRoomDetail = (roomId: number) => {
       },
       {
         queryKey: [`/api/rooms/${roomId}/members/in`, roomId],
-        queryFn: async () => getRoomMembers(roomId),
+        queryFn: () => getRoomMembers(roomId),
       },
       {
         queryKey: [`/api/rooms/${roomId}/members/waiting`, roomId],
-        queryFn: async () => getRoomWaitingMembers(roomId),
+        queryFn: () => getRoomWaitingMembers(roomId),
       },
     ],
 
@@ -166,7 +171,7 @@ export const useGetRoom = (
 ): { roomDetail: RoomDetail; getRoomRefetch: () => void } => {
   const { data: roomDetail, refetch: getRoomRefetch } = useSuspenseQuery({
     queryKey: [`/api/rooms/${roomId}`, roomId],
-    queryFn: async () => getRoomDetail(roomId),
+    queryFn: () => getRoomDetail(roomId),
 
     select: (response: GetRoomDetailResponse) => {
       const coords = response.path.coordinates;
@@ -229,7 +234,7 @@ export const useGetRoomMembers = (
 } => {
   const { data: roomMembers, refetch: getRoomMembersRefetch } = useSuspenseQuery({
     queryKey: [`/api/rooms/${roomId}/members/in`, roomId],
-    queryFn: async () => getRoomMembers(roomId),
+    queryFn: () => getRoomMembers(roomId),
   });
 
   return { roomMembers, getRoomMembersRefetch };
@@ -244,7 +249,7 @@ export const useGetRoomWaitingMembers = (
 } => {
   const { data: roomWaitingMembers, refetch: getRoomWaitingMembersRefetch } = useSuspenseQuery({
     queryKey: [`/api/rooms/${roomId}/members/waiting`, roomId],
-    queryFn: async () => getRoomWaitingMembers(roomId),
+    queryFn: () => getRoomWaitingMembers(roomId),
   });
 
   return { roomWaitingMembers, getRoomWaitingMembersRefetch };
@@ -326,32 +331,30 @@ export const useGetRoomIntegration = (
 export const usePatchRoom = (
   roomId: number,
 ): UseMutationResult<PatchRoomResponse, void, PatchRoomRequest, unknown> => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: (patchRoomRequest: PatchRoomRequest) => patchRoom(roomId, patchRoomRequest),
-    onSuccess: async () => {
-      // 수정시에는 invalidateQueries를 통해 기존 데이터 캐싱시키기?
+    onSuccess: () => {
       InfoToastMessage('택시팟 수정이 성공하였습니다!');
     },
-
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
 
 // 방 삭제
 export const useDeleteRoom = (roomId: number) => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: () => deleteRoom(roomId),
-    onSuccess: async () => {
+    onSuccess: () => {
       InfoToastMessage('택시팟 삭제에 성공하였습니다!');
     },
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
@@ -360,15 +363,15 @@ export const useDeleteRoom = (roomId: number) => {
 export const useJoinRoom = (
   roomId: number,
 ): UseMutationResult<JoinRoomResponse, void, number, unknown> => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: () => joinRoom(roomId),
-    onSuccess: async () => {
+    onSuccess: () => {
       InfoToastMessage('택시팟 참여 신청이 완료되었어요!');
     },
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
@@ -377,54 +380,54 @@ export const useJoinRoom = (
 export const useApproveJoinRoom = (
   roomId: number,
 ): UseMutationResult<ApproveJoinRoomResponse, void, number, unknown> => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: (memberId: number) => approveJoinRoom(roomId, memberId),
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
 
 // 매칭완료
 export const useMatchComplete = (roomId: number) => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: () => completeMatch(roomId),
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
 
 // 현재 내가 참여하고 있는 방 퇴장
 export const useExitParticipateRoom = () => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: () => exitParticipateRoom(),
-    onSuccess: async () => {
+    onSuccess: () => {
       InfoToastMessage('택시팟 퇴장에 성공하였습니다!');
     },
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
 
 // 대기열에서 퇴장
 export const useExitWaitingRoom = (roomId: number) => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: () => exitWaitingRoom(roomId),
-    onSuccess: async () => {
+    onSuccess: () => {
       InfoToastMessage('택시팟 참여 신청이 취소되었어요!');
     },
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };

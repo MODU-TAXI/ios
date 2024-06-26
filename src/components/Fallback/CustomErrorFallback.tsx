@@ -28,8 +28,6 @@ const ErrorFallback = ({
     }
   }, [error?.response?.status, error?.response?.data?.message, resetErrorBoundary]);
 
-  console.log('error comes to here~');
-
   // 500 에러시에는 재시도 화면 보여주기
   return (
     <SafeAreaView className="flex-1">

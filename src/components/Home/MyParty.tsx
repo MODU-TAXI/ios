@@ -13,16 +13,6 @@ interface MyPartyComponentProps {
   toChatRoomScreen: () => void;
 }
 
-const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: '#000',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    elevation: 5,
-  },
-});
-
 const MyPartyComponent: React.FC<MyPartyComponentProps> = ({ roomPreview, toChatRoomScreen }) => {
   return (
     <View className="px-4">

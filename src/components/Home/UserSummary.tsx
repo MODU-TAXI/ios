@@ -1,6 +1,8 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 
+import { ErrorToastMessage } from '@utils/toastMessage';
+
 import { HomeScreenProps } from '@type/param/loginStack';
 
 import Check from '@assets/images/Home/Popper.svg';
@@ -10,23 +12,20 @@ interface UserSummaryComponentProps {
   navigation: HomeScreenProps['navigation'];
 }
 
-const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({
-  navigation
-}) => {
+const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({ navigation }) => {
   const date = new Date();
   const month = date.getMonth();
 
   const toSummaryScreen = () => {
     navigation.navigate('HistoryScreen');
-  }
+  };
 
   return (
     <View className="mb-[120px] flex-row items-center px-4">
-
       {/** 이용내역 */}
       <View className="flex w-1/2 flex-col pr-2">
         <Text className="mb-3 font-semibold text-base text-gray900">이용내역</Text>
-        <Pressable 
+        <Pressable
           onPress={toSummaryScreen}
           className="flex h-20 flex-row items-center justify-start truncate rounded-xl border border-gray200 px-3"
         >
@@ -40,7 +39,7 @@ const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({
           </View>
         </Pressable>
       </View>
-        
+
       {/** 나의 매칭률 */}
       <View className="w-1/2 pl-2">
         <Text className="mb-3 font-semibold text-base text-gray900">나의 매칭률</Text>
@@ -52,7 +51,6 @@ const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({
           </View>
         </View>
       </View>
-
     </View>
   );
 };

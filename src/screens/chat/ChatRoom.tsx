@@ -14,7 +14,6 @@ import ExitModalComponent from '@components/Chat/ExitModal';
 import UserModalComponent from '@components/Common/UserModal';
 import ChatHeaderComponent from '@components/Chat/ChatHeader';
 import SelectImageModal from '@components/Common/SelectImageModal';
-import ChatErrorBoundary from '@components/Fallback/ChatErrorBoundary';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
@@ -22,6 +21,7 @@ import { MessageBody } from '@recoil/type';
 import { roomState, userInfoState } from '@recoil/recoil';
 
 import { refreshAccessToken } from '@server/api/member';
+import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useAccessToken } from '@hooks/token';
 import { useEnterChatRoom } from '@hooks/chat';
@@ -418,11 +418,11 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
 const ChatRoomScreen = ({ route, navigation }: ChatRoomScreenProps) => {
   return (
-    <ChatErrorBoundary navigation={navigation}>
+    <SuspenseErrorHandler navigation={navigation}>
       <Suspense fallback={<LoadingComponent />}>
         <ChatRoomComponent navigation={navigation} route={route} />
       </Suspense>
-    </ChatErrorBoundary>
+    </SuspenseErrorHandler>
   );
 };
 

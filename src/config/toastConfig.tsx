@@ -1,15 +1,11 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import Toast, {
-  BaseToast,
-  ErrorToast,
-  ToastConfig,
-  ToastConfigParams,
-} from 'react-native-toast-message';
+import { ToastConfig, ToastConfigParams } from 'react-native-toast-message';
 
 import Card from '@assets/images/Toast/Card.svg';
 import Chat from '@assets/images/Toast/Chat.svg';
 import Check from '@assets/images/Toast/Check.svg';
+import Error from '@assets/images/Toast/Error.svg';
 import CompleteMatchText from '@assets/images/Toast/CompleteMatchText.svg';
 import RegisterAdvanceText from '@assets/images/Toast/RegisterAdvanceText.svg';
 
@@ -17,6 +13,12 @@ import RegisterAdvanceText from '@assets/images/Toast/RegisterAdvanceText.svg';
 interface InfoToastProps extends ToastConfigParams<any> {
   props: {
     content: string;
+  };
+}
+
+interface ErrorToastProps extends ToastConfigParams<any> {
+  props: {
+    message: string;
   };
 }
 
@@ -28,6 +30,16 @@ export const toastConfig: ToastConfig = {
     >
       <Check className="mr-2" />
       <Text className="text-center font-medium tracking-tight text-white">{props.content}</Text>
+    </View>
+  ),
+
+  errorToast: ({ props }: ErrorToastProps) => (
+    <View
+      className="w-[326px] flex-row items-center justify-center rounded-2xl px-2 py-4"
+      style={{ backgroundColor: 'rgba(75,75,75,0.55)' }}
+    >
+      <Error className="mr-2" />
+      <Text className="text-center font-medium tracking-tight text-white">{props.message}</Text>
     </View>
   ),
 

@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 import { useRecoilState } from 'recoil';
-import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
@@ -47,7 +47,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
   const [passangersNumber, setPassengersNumber] = useState<number | null>(null); // 탑승 인원
   const [checkedCategorys, setCheckedCategorys] = useState<boolean[]>([false, false, false]); // 카테고리
-  const [userInfo, ] = useRecoilState(userInfoState);
+  const [userInfo] = useRecoilState(userInfoState);
 
   // 파티 생성
   const createMatch = async () => {
@@ -56,7 +56,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
     }
 
     const categories = ['STUDENT_CERTIFICATION', 'ONLY_WOMAN', 'QUIET'];
-    if (userInfo && userInfo.gender === "MALE") {
+    if (userInfo && userInfo.gender === 'MALE') {
       categories[1] = 'ONLY_MAN';
     }
 
@@ -106,7 +106,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   };
 
   /** 출발, 도착지 초기화 */
-  const resetRecoilValue = () => {
+  const resetRecoilValue = useCallback(() => {
     setDeparture({
       name: '',
       latitude: 0,
@@ -116,7 +116,11 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
       name: '',
       spotId: 0,
     });
-  };
+  }, [setDeparture, setArrival]);
+
+  useEffect(() => {
+    return resetRecoilValue;
+  }, [resetRecoilValue]);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -267,7 +271,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
               </Pressable>
             )}
 
-            {userInfo.gender === "MALE" ? (
+            {userInfo.gender === 'MALE' ? (
               <CategoryComponent
                 index={1}
                 category={'남자만'}

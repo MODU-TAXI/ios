@@ -1,9 +1,11 @@
+import { useRecoilState } from 'recoil';
 import { useMutation, useSuspenseQuery, useSuspenseQueries } from '@tanstack/react-query';
 
-import { PaymentRequest } from '@server/requestTypes/payment';
-import { payment, getPayment, completePayment, getPaymentMembers } from '@server/api/payment';
+import { loggedInState } from '@recoil/recoil';
 
-import { ErrorToastMessage } from '@utils/toastMessage';
+import { PaymentRequest } from '@server/requestTypes/payment';
+import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
+import { payment, getPayment, completePayment, getPaymentMembers } from '@server/api/payment';
 
 // 정산 정보 조회
 export const useGetPayment = (roomId: number) => {
@@ -50,26 +52,26 @@ export const useGetPaymentDetail = (roomId: number) => {
 
 // 정산 요청
 export const usePayment = () => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: (paymentRequest: PaymentRequest) => payment(paymentRequest),
 
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
 
 // 정산 완료
 export const useCompletePayment = (roomId: number) => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: () => completePayment(roomId),
 
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
