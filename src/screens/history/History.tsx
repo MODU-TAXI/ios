@@ -1,8 +1,8 @@
 import { Text, View, Pressable } from 'react-native';
+import React, { useState, useCallback } from 'react';
 import MonthPicker from 'react-native-month-year-picker';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useState, Suspense, useCallback } from 'react';
 
 import HeaderComponent from '@components/Header';
 import LoadingComponent from '@components/Common/Loading';

@@ -11,7 +11,6 @@ import LoadingComponent from '@components/Common/Loading';
 import RoomMapComponent from '@components/RoomDigest/RoomMap';
 import RoomHeaderComponent from '@components/RoomDigest/RoomHeader';
 import UpdateModalComponent from '@components/RoomDigest/UpdateModal';
-import RoomErrorBoundary from '@components/Fallback/RoomErrorBoundary';
 import ManagerComponent from '@components/RoomDigest/ManagerComponent';
 import WaitingUsersComponent from '@components/RoomDigest/WaitingUsers';
 import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
@@ -19,6 +18,8 @@ import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { roomState, userInfoState } from '@recoil/recoil';
+
+import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import {
   useJoinRoom,
@@ -333,11 +334,11 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
 
 const RoomDetailScreen = ({ route, navigation }: RoomDetailScreenProps) => {
   return (
-    <RoomErrorBoundary navigation={navigation}>
+    <SuspenseErrorHandler navigation={navigation}>
       <Suspense fallback={<LoadingComponent />}>
         <RoomDetailComponent navigation={navigation} route={route} />
       </Suspense>
-    </RoomErrorBoundary>
+    </SuspenseErrorHandler>
   );
 };
 

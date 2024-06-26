@@ -1,11 +1,7 @@
 import { Alert } from 'react-native';
 import { SetterOrUpdater } from 'recoil';
-import { NavigationProp } from '@react-navigation/native';
 
-import { deleteToken } from '@utils/token';
 import { ErrorToastMessage } from '@utils/toastMessage';
-
-import { LoginStackParamList } from '@type/param/loginStack';
 
 export const mutateErrorHandler = async (
   error: any,

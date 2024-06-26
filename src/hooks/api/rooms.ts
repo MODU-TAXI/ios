@@ -101,6 +101,7 @@ export const useGetRoomDetail = (roomId: number) => {
           const convertedRoomTagBitMaskList = response.roomTagBitMaskList.map((roomTagBitMask) =>
             translateCategory(roomTagBitMask),
           );
+
           return {
             managerId: response.managerId,
             roomId: response.roomId,
