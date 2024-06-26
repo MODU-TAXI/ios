@@ -2,8 +2,7 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 
 import { getAccounts, registerAccount } from '@server/api/account';
 import { RegisterAccountRequest } from '@server/requestTypes/account';
-
-import { ErrorToastMessage } from '@utils/toastMessage';
+import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 
 // 계좌 목록 조회
 export const useGetAccounts = () => {
@@ -22,9 +21,7 @@ export const useRegisterAccount = () => {
       registerAccount(registerAccountRequest),
 
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error);
     },
   });
 };

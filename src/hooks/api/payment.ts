@@ -1,9 +1,8 @@
 import { useMutation, useSuspenseQuery, useSuspenseQueries } from '@tanstack/react-query';
 
 import { PaymentRequest } from '@server/requestTypes/payment';
+import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 import { payment, getPayment, completePayment, getPaymentMembers } from '@server/api/payment';
-
-import { ErrorToastMessage } from '@utils/toastMessage';
 
 // 정산 정보 조회
 export const useGetPayment = (roomId: number) => {
@@ -54,9 +53,7 @@ export const usePayment = () => {
     mutationFn: (paymentRequest: PaymentRequest) => payment(paymentRequest),
 
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error);
     },
   });
 };
@@ -67,9 +64,7 @@ export const useCompletePayment = (roomId: number) => {
     mutationFn: () => completePayment(roomId),
 
     onError: (error: any) => {
-      if (error?.response?.data?.message) {
-        return ErrorToastMessage(error.response.data.message);
-      }
+      mutateErrorHandler(error);
     },
   });
 };

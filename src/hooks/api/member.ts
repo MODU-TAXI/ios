@@ -1,5 +1,4 @@
 import { useRecoilState } from 'recoil';
-import Toast from 'react-native-toast-message';
 import appleAuth from '@invertase/react-native-apple-authentication';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
@@ -7,15 +6,9 @@ import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 import { SignUpUser } from '@recoil/type';
 import { loggedInState, userInfoState, signUpUserState } from '@recoil/recoil';
 
-import { memberErrorHandler } from '@server/errorHandler/member';
+import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 import { PatchMemberRequest, RegisterNicknameRequest } from '@server/requestTypes/member';
-import {
-  socialLogin,
-  patchMember,
-  deleteMember,
-  checkMembership,
-  registerNickname,
-} from '@server/api/member';
+import { socialLogin, patchMember, deleteMember, registerNickname } from '@server/api/member';
 import {
   AppleLoginResponse,
   KakaoLoginResponse,
@@ -25,7 +18,6 @@ import {
 
 import { useFcmToken } from '@hooks/fcm';
 
-import { ErrorToastMessage } from '@utils/toastMessage';
 import { setAccessToken, setRefreshToken } from '@utils/token';
 
 // 카카오 로그인
@@ -75,13 +67,8 @@ export const useKakaoLogin = (
         }
       }
     },
-    onError: () => {
-      Toast.show({
-        type: 'error',
-        text1: '카카오 로그인 실패',
-        text2: '로그인 재시도 하세요',
-        position: 'bottom',
-      });
+    onError: (error) => {
+      mutateErrorHandler(error);
     },
   });
 };
@@ -133,13 +120,8 @@ export const useAppleLogin = (
         }
       }
     },
-    onError: () => {
-      Toast.show({
-        type: 'error',
-        text1: '애플 로그인 실패',
-        text2: '로그인 재시도 하세요',
-        position: 'bottom',
-      });
+    onError: (error) => {
+      mutateErrorHandler(error);
     },
   });
 };
@@ -168,7 +150,7 @@ export const useRegisterNickname = (
       registerNickname(registerNicknameRequest),
 
     onError: (error: any) => {
-      memberErrorHandler(error, setErrorMessage);
+      mutateErrorHandler(error, setErrorMessage);
     },
   });
 };
@@ -181,8 +163,8 @@ export const usePatchMember = (): UseMutationResult<
 > => {
   return useMutation({
     mutationFn: (patchMemberRequest: PatchMemberRequest) => patchMember(patchMemberRequest),
-    onError: () => {
-      ErrorToastMessage('프로필 변경에 실패하였습니다.');
+    onError: (error) => {
+      mutateErrorHandler(error);
     },
   });
 };
@@ -191,8 +173,8 @@ export const usePatchMember = (): UseMutationResult<
 export const useDeleteMember = (): UseMutationResult<void, void, void> => {
   return useMutation({
     mutationFn: deleteMember,
-    onError: () => {
-      ErrorToastMessage('회원 탈퇴에 실패하였습니다.');
+    onError: (error) => {
+      mutateErrorHandler(error);
     },
     onSuccess: () => {
       // TODO: 카카오 연결 끊기

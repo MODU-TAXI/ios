@@ -10,6 +10,16 @@ export const InfoToastMessage = (content: string): void => {
   });
 };
 
+// 에러 토스트 메세지
+export const ErrorToastMessage = (message: string): void => {
+  return Toast.show({
+    type: 'errorToast',
+    props: { message: message },
+    position: 'bottom',
+    bottomOffset: 30,
+  });
+};
+
 // 채팅 시작 토스트 메세지
 export const StartChatToastMessage = (): void => {
   return Toast.show({
@@ -43,15 +53,5 @@ export const CompleteMatchToastMessage = (): void => {
     type: 'completeMatchToast',
     position: 'bottom',
     bottomOffset: 30,
-  });
-};
-
-// 에러용 토스트 메세지
-export const ErrorToastMessage = (description: string): void => {
-  return Toast.show({
-    type: 'error',
-    text1: '에러발생',
-    text2: description,
-    position: 'bottom',
   });
 };

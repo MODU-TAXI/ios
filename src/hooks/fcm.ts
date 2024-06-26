@@ -12,6 +12,7 @@ export const useFcmToken = (): [string, React.Dispatch<React.SetStateAction<stri
 
   useEffect(() => {
     (async () => {
+      // await messaging().registerDeviceForRemoteMessages();
       const tempFcmToken = await messaging().getToken();
 
       if (tempFcmToken) {
