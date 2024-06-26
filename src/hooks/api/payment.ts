@@ -1,4 +1,7 @@
+import { useRecoilState } from 'recoil';
 import { useMutation, useSuspenseQuery, useSuspenseQueries } from '@tanstack/react-query';
+
+import { loggedInState } from '@recoil/recoil';
 
 import { PaymentRequest } from '@server/requestTypes/payment';
 import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
@@ -49,22 +52,26 @@ export const useGetPaymentDetail = (roomId: number) => {
 
 // 정산 요청
 export const usePayment = () => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: (paymentRequest: PaymentRequest) => payment(paymentRequest),
 
     onError: (error: any) => {
-      mutateErrorHandler(error);
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
 
 // 정산 완료
 export const useCompletePayment = (roomId: number) => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: () => completePayment(roomId),
 
     onError: (error: any) => {
-      mutateErrorHandler(error);
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };

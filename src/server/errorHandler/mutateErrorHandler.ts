@@ -1,9 +1,23 @@
+import { Alert } from 'react-native';
+import { SetterOrUpdater } from 'recoil';
+import { NavigationProp } from '@react-navigation/native';
+
+import { deleteToken } from '@utils/token';
 import { ErrorToastMessage } from '@utils/toastMessage';
 
-export const mutateErrorHandler = (
+import { LoginStackParamList } from '@type/param/loginStack';
+
+export const mutateErrorHandler = async (
   error: any,
+  setLoggedIn: SetterOrUpdater<boolean>,
   setErrorMessage?: React.Dispatch<React.SetStateAction<string>>,
-): void => {
+): Promise<void> => {
+  // 토큰 관련 에러 -> 모두 로그아웃 처리
+  if (error.code === 'TOKEN_ERROR') {
+    setLoggedIn(false);
+    Alert.alert('로그아웃 되었습니다.');
+  }
+
   // 서버에러가 아닌 경우
   if (error?.response?.status >= 400 && error?.response?.status < 500) {
     // message 객체가 전달된 경우

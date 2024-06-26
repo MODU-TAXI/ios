@@ -68,7 +68,7 @@ export const useKakaoLogin = (
       }
     },
     onError: (error) => {
-      mutateErrorHandler(error);
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
@@ -121,7 +121,7 @@ export const useAppleLogin = (
       }
     },
     onError: (error) => {
-      mutateErrorHandler(error);
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
@@ -145,12 +145,14 @@ export const appleLoginAuth = async (): Promise<AppleLoginResponse> => {
 export const useRegisterNickname = (
   setErrorMessage?: React.Dispatch<React.SetStateAction<string>>,
 ): UseMutationResult<RegisterNicknameResponse, void, RegisterNicknameRequest> => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: (registerNicknameRequest: RegisterNicknameRequest) =>
       registerNickname(registerNicknameRequest),
 
     onError: (error: any) => {
-      mutateErrorHandler(error, setErrorMessage);
+      mutateErrorHandler(error, setLoggedIn, setErrorMessage);
     },
   });
 };
@@ -161,20 +163,24 @@ export const usePatchMember = (): UseMutationResult<
   void,
   PatchMemberRequest
 > => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: (patchMemberRequest: PatchMemberRequest) => patchMember(patchMemberRequest),
     onError: (error) => {
-      mutateErrorHandler(error);
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };
 
 // 회원 탈퇴
 export const useDeleteMember = (): UseMutationResult<void, void, void> => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   return useMutation({
     mutationFn: deleteMember,
     onError: (error) => {
-      mutateErrorHandler(error);
+      mutateErrorHandler(error, setLoggedIn);
     },
     onSuccess: () => {
       // TODO: 카카오 연결 끊기

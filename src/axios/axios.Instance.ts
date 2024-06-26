@@ -3,13 +3,18 @@ import axios, { AxiosInstance } from 'axios';
 
 import { refreshAccessToken } from '@server/api/member';
 
-import {
-  deleteToken,
-  getAccessToken,
-  setAccessToken,
-  getRefreshToken,
-  setRefreshToken,
-} from '@utils/token';
+import { getAccessToken, setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
+
+class CustomAxiosError extends Error {
+  code: string;
+
+  constructor(message: string, code: string) {
+    super(message);
+    this.code = code;
+    this.name = this.constructor.name;
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
 
 // 로그인 한 유저가 사용하는 axiosInstance
 const axiosInstance: AxiosInstance = axios.create({
@@ -22,8 +27,7 @@ axiosInstance.interceptors.request.use(
     const accessToken = await getAccessToken();
 
     if (!accessToken) {
-      // 여기서도 로그아웃 처리
-      throw new Error('토큰 없음');
+      throw new CustomAxiosError('토큰 에러', 'TOKEN_ERROR');
     }
 
     config.headers['Authorization'] = accessToken;
@@ -48,8 +52,7 @@ axiosInstance.interceptors.response.use(
         const refreshToken = await getRefreshToken();
 
         if (!refreshToken) {
-          // 여기서도 로그아웃 처리
-          throw new Error('토큰 없음');
+          throw new CustomAxiosError('토큰 에러', 'TOKEN_ERROR');
         }
 
         // refresh 요청
@@ -60,15 +63,10 @@ axiosInstance.interceptors.response.use(
         await setAccessToken(newAccessToken);
         await setRefreshToken(newRefreshToken);
 
-        console.log('Refresh!');
-
         // 만료때문에 반려된 api 재요청 보내기
         return axiosInstance(error.config);
       } catch (refreshTokenError) {
-        // 여기선 무슨 에러가 발생하더라도 로그아웃 처리
-        console.log('로그아웃 처리하세요');
-        // await deleteToken();
-        return Promise.reject(error.response.data);
+        throw new CustomAxiosError('토큰 에러', 'TOKEN_ERROR');
       }
     }
 
@@ -78,9 +76,7 @@ axiosInstance.interceptors.response.use(
       error.response?.data?.code === 'AUTH_002' ||
       error.response?.data?.code === 'AUTH_004'
     ) {
-      // 로그아웃 시키기
-      console.log('잘못된 토큰');
-      await deleteToken();
+      throw new CustomAxiosError('토큰 에러', 'TOKEN_ERROR');
     }
 
     if (Config.ENV === 'DEVELOP') {
