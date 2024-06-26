@@ -13,6 +13,7 @@ interface HomeHeaderComponentProps {
   roomId: number;
   toSearchScreen: () => void;
   toAlarmScreen: () => void;
+  alarmsCount: number | undefined;
 }
 
 const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
@@ -20,6 +21,7 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
   roomId,
   toSearchScreen,
   toAlarmScreen,
+  alarmsCount,
 }) => {
   const roomIn = roomId > 0;
 
@@ -34,7 +36,15 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
           <Logo />
         </View>
 
-        <Pressable onPress={toAlarmScreen}>
+        <Pressable onPress={toAlarmScreen} className={alarmsCount ? `mr-[6px]` : `mr-1`}>
+          {alarmsCount && alarmsCount > 0 ? (
+            <View className="absolute bottom-3 left-3 z-10 h-[18px] w-[18px] items-center justify-center rounded-full bg-[#FF4949]">
+              <Text className="text-[12px] font-medium tracking-tight text-white">
+                {alarmsCount}
+              </Text>
+            </View>
+          ) : null}
+
           <Bell />
         </Pressable>
       </View>

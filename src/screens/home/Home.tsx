@@ -18,6 +18,7 @@ import { roomState, userInfoState } from '@recoil/recoil';
 import { getMyChatInfo } from '@server/api/chat';
 
 import { useGetRoomPreview } from '@hooks/api/rooms';
+import { useGetAlarmsCount } from '@hooks/api/alarms';
 
 import { vibration } from '@utils/effect';
 
@@ -28,6 +29,8 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
   const [socketRoomId, setSocketRoomId] = useRecoilState(roomState);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
   const checkMyRoom = async () => {
     const response = await getMyChatInfo();
     const { roomId } = response;
@@ -35,16 +38,16 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
     setSocketRoomId(roomId);
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      checkMyRoom();
-    }, []),
-  );
+  const { data: alarmsCount, refetch: alarmsCountRefetch } = useGetAlarmsCount();
 
   const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(socketRoomId);
 
-  // 새로고침시 필요한 변수
-  const [refreshing, setRefreshing] = React.useState(false);
+  useFocusEffect(
+    React.useCallback(() => {
+      checkMyRoom();
+      alarmsCountRefetch();
+    }, []),
+  );
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -93,6 +96,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         userInfo={userInfo}
         toSearchScreen={toSearchScreen}
         toAlarmScreen={toAlarmScreen}
+        alarmsCount={alarmsCount?.counts}
         roomId={socketRoomId}
       />
 
