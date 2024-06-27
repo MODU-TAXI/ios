@@ -21,7 +21,7 @@ const PatchUserInfoAuthenticationScreen = ({
   const [, setUserInfo] = useRecoilState(userInfoState);
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
-  const [time, setTime] = useState(10); // 타이머 시간
+  const [time, setTime] = useState(300); // 타이머 시간
 
   // 인증번호 만료시 에러 메세지 생성
   useEffect(() => {

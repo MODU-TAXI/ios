@@ -3,7 +3,6 @@ import { Text, View, TextInput, Pressable } from 'react-native';
 
 import TimerComponent from './Timer';
 
-
 interface InputBoxComponentProps {
   title: string;
   value: string;
@@ -68,9 +67,7 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
         />
 
         {/* timer 있을때만 TimerComponent 적용 */}
-        {timer && time && setTime && (
-          <TimerComponent time={time} setTime={setTime} />
-        )}
+        {timer && setTime && <TimerComponent time={time!} setTime={setTime} />}
       </View>
     </Pressable>
   );
