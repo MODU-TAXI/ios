@@ -4,7 +4,7 @@ export interface RoomPreview {
   departureTime: string;
   departureName: string;
   arrivalName: string;
-  roomStatus: string;
+  roomStatus: 'PROCEEDING' | 'COMPLETE' | 'DELETE';
   currentHeadcount: number;
   wishHeadcount: number;
   expectedChargePerPerson: number;
