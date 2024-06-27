@@ -10,13 +10,14 @@ import RadioBoxComponent from '@components/RadioBox';
 import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { userInfoState } from '@recoil/recoil';
+import { userInfoState, signUpUserState } from '@recoil/recoil';
 
-import { useSmsAuthentication } from '@hooks/api/member.sms';
+import { useSmsChangeAuthentication } from '@hooks/api/member.sms';
 
 import { PatchUserInfoScreenProps } from '@type/param/loginStack';
 
 const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
+  const [, setSignUpUser] = useRecoilState(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
   const [userInfo] = useRecoilState(userInfoState);
 
   const [name, setName] = useState<string>(userInfo.name);
@@ -29,8 +30,8 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
-  const { mutateAsync: smsAuthentication, isPending: smsAuthenticationPending } =
-    useSmsAuthentication(setErrorMessage);
+  const { mutateAsync: smsChangeAuthentication, isPending: smsChangeAuthenticationPending } =
+    useSmsChangeAuthentication(setErrorMessage);
 
   useEffect(() => {
     const hasNameChanged = name !== userInfo.name;
@@ -43,12 +44,22 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
 
   // 다음으로
   const toNext = async (): Promise<void> => {
+    await smsChangeAuthentication({
+      phoneNumber: phoneNumber,
+    });
+
+    setSignUpUser({
+      key: '',
+      name: name,
+      gender: gender === '남자' ? 'MALE' : 'FEMALE',
+      phoneNumber: phoneNumber,
+    });
     navigation.navigate('PatchUserInfoAuthenticationScreen');
   };
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
-      {smsAuthenticationPending && <TransparentLoadingComponent />}
+      {smsChangeAuthenticationPending && <TransparentLoadingComponent />}
 
       <HeaderComponent title="개인정보 수정" />
 
