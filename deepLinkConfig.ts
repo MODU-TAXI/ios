@@ -10,7 +10,6 @@ export const linking: LinkingOptions<LoginStackParamList> = {
   config: {
     screens: {
       MainScreen: 'main',
-      CreateRoomScreen: 'createRoom',
       RoomDetailScreen: 'room/:roomId',
       ChatRoomScreen: 'chatRoom/:roomId',
     },

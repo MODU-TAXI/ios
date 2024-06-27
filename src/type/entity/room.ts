@@ -1,6 +1,7 @@
 // 방 간단 정보
 export interface RoomPreview {
   roomId: number;
+  managerId: number;
   departureTime: string;
   departureName: string;
   arrivalName: string;
