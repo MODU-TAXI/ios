@@ -60,7 +60,6 @@ const HistoryDetailScreen = ({ navigation, route }: HistoryDetailScreenProps) =>
   const toHistoryChatScreen = () => {
     navigation.navigate('ChatRoomScreen', {
       roomId: history.roomId,
-      managerId: history.managerId,
       readonly: true,
     });
   };
