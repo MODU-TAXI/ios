@@ -350,7 +350,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   return (
     <SafeAreaView
-      className="flex-1 bg-white"
+      className="flex-1 bg-white "
       edges={readonly ? ['top', 'left', 'right'] : undefined}
     >
       {(matchCompletePending || exitParticipateRoomPending) && <TransparentLoadingComponent />}
