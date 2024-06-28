@@ -33,21 +33,26 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
     zoom: 14,
   });
 
+  // 첫 렌더링 시 [거점 or 검색어] 선택에 따른 처리
   useEffect(() => {
     if (route.params?.type === "spot" && route.params.spot) {
       setSelectedSpot(route.params.spot);
       setCurrentCamera({
-        latitude: route.params.spot?.latitude,
-        longitude: route.params.spot?.longitude,
+        latitude: route.params.spot.latitude,
+        longitude: route.params.spot.longitude,
         zoom: 14,
       });
+      setSearchBoxValue(route.params.spot.name);
+      setIsSearched(true);
     } else if (route.params?.type === "search" && route.params.searchParams) {
       setSelectedSpot(undefined);
       setCurrentCamera({
-        latitude: route.params.searchParams?.latitude,
-        longitude: route.params.searchParams?.longitude,
+        latitude: route.params.searchParams.latitude,
+        longitude: route.params.searchParams.longitude,
         zoom: 14,
       });
+      setSearchBoxValue(route.params.searchParams.title);
+      setIsSearched(true);
     }
   }, []);
 

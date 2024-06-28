@@ -26,7 +26,7 @@ import { ArrivalSearchScreenProps } from '@type/param/loginStack';
 /** 도착 거점 검색 */
 const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
   /** 검색어 저장 변수 */
-  const [keyword, ] = useRecoilState<string>(searchKeywordState);
+  const [keyword, setKeyword] = useState<string>("");
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({
@@ -52,6 +52,10 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
     }
     refetchNaverSearch();
   }, [keyword, refetchNaverSearch])
+
+  const handleKeyword = (input: string) => {
+    setKeyword(input);
+  }
 
   // 좌표계 변환, 두 지점 사이 거리 계산하여 새 배열에 저장
   useEffect(() => {
@@ -124,7 +128,7 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
         
         {/** 검색창 */}
         <View className="mb-3 mt-2">
-          <ArrivalSearchBoxComponent />
+          <ArrivalSearchBoxComponent keyword={keyword} handleKeyword={handleKeyword} />
         </View>
 
         {keyword && (

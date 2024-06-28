@@ -78,8 +78,10 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
       fetchCurrentLocation();
     } else if (searchParams.title !== "") {
       fetchSearchLocation();
+      setSearchBoxValue(searchParams.title);
+      setIsSearched(true);
     }
-  }, [searchParams.latitude, searchParams.longitude]);
+  }, [locationPermission, searchParams.latitude, searchParams.longitude]);
 
   // timeout 정보 저장 Ref
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -124,8 +126,9 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
     }
   }, [isTouching])
 
-  /** 현재 위치로 */
+  /** 현재 위치로, 1000ms간 버튼 비활성화 */
   const moveToCurrentLocation = async() => {
+    setIsBlocked(true);
     const currentLocation = await getCurrentLocation();
     setCurrentCamera({
       latitude: currentLocation.latitude,
@@ -134,6 +137,10 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
     });
 
     mapRef.current?.animateCameraTo(currentLocation);
+    const timeout = setTimeout(() => {
+      setIsBlocked(false);
+    }, 1000);
+    return () => clearTimeout(timeout);
   }
 
   /** 빌딩 이름 유무에 따른 렌더링 */
