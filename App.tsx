@@ -1,6 +1,6 @@
-import React, { Suspense } from 'react';
 import Config from 'react-native-config';
 import Toast from 'react-native-toast-message';
+import React, { Suspense, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -29,23 +29,27 @@ const queryClient = new QueryClient({
   },
 }); // react-query client
 
+import SplashScreen from 'react-native-splash-screen';
+
 import { linking } from './deepLinkConfig';
 
 function App(): React.JSX.Element {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <>
       <RecoilRoot>
-        <GestureHandlerRootView>
-          <SafeAreaProvider>
-            <NavigationContainer linking={linking} fallback={<LoadingComponent />}>
-              <QueryClientProvider client={queryClient}>
-                <CustomErrorHandler>
-                  <AppInner />
-                </CustomErrorHandler>
-              </QueryClientProvider>
-            </NavigationContainer>
-          </SafeAreaProvider>
-        </GestureHandlerRootView>
+        <SafeAreaProvider>
+          <NavigationContainer linking={linking} fallback={<LoadingComponent />}>
+            <QueryClientProvider client={queryClient}>
+              <CustomErrorHandler>
+                <AppInner />
+              </CustomErrorHandler>
+            </QueryClientProvider>
+          </NavigationContainer>
+        </SafeAreaProvider>
       </RecoilRoot>
       <Toast config={toastConfig} />
     </>

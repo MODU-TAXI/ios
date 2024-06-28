@@ -100,6 +100,12 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
+  - lottie-ios (4.4.1)
+  - lottie-react-native (6.7.2):
+    - glog
+    - lottie-ios (= 4.4.1)
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - mj-studio-react-native-naver-map (1.2.0):
     - glog
     - NMapsMap (= 3.18.0)
@@ -1244,6 +1250,7 @@ DEPENDENCIES:
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - "kakao-login (from `../node_modules/@react-native-seoul/kakao-login`)"
   - libevent (~> 2.1.12)
+  - lottie-react-native (from `../node_modules/lottie-react-native`)
   - "mj-studio-react-native-naver-map (from `../node_modules/@mj-studio/react-native-naver-map`)"
   - NMapsMap (= 3.18.0)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
@@ -1331,6 +1338,7 @@ SPEC REPOS:
     - KakaoSDKUser
     - libevent
     - libwebp
+    - lottie-ios
     - nanopb
     - NMapsGeometry
     - NMapsMap
@@ -1356,6 +1364,8 @@ EXTERNAL SOURCES:
     :tag: hermes-2024-02-20-RNv0.73.5-18f99ace4213052c5e7cdbcd39ee9766cd5df7e4
   kakao-login:
     :path: "../node_modules/@react-native-seoul/kakao-login"
+  lottie-react-native:
+    :path: "../node_modules/lottie-react-native"
   mj-studio-react-native-naver-map:
     :path: "../node_modules/@mj-studio/react-native-naver-map"
   RCT-Folly:
@@ -1512,6 +1522,8 @@ SPEC CHECKSUMS:
   KakaoSDKUser: 08c0a4f40bebdebdf948a9e3d0e44ed5c2754f99
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
+  lottie-ios: e047b1d2e6239b787cc5e9755b988869cf190494
+  lottie-react-native: a2ca7702b9754a5a53b20b0b0ae29f7bad6800be
   mj-studio-react-native-naver-map: 1267e0c81ff46e996fe8f41240e74cbb98dd1a1d
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   NMapsGeometry: 53c573ead66466681cf123f99f698dc8071a4b83

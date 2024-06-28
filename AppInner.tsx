@@ -1,6 +1,9 @@
-import React from 'react';
 import { useRecoilState } from 'recoil';
+import LottieView from 'lottie-react-native';
 import messaging from '@react-native-firebase/messaging';
+import React, { useRef, useState, useEffect } from 'react';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import InquiryScreen from 'src/screens/my/Inquiry';
@@ -73,100 +76,130 @@ const LogInStack = createNativeStackNavigator<LoginStackParamList>();
 
 function AppInner() {
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+  const [appLoaded, setAppLoaded] = useState<boolean>(false);
 
-  useCheckLogin(setLoggedIn); // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
+  useCheckLogin(setLoggedIn, setAppLoaded); // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
   useFcmMessage(); // Foreground에서 FCM Message 수신
   useNotifee(); // notifeecation제어
 
-  return loggedIn ? (
-    <LogInStack.Navigator
-      initialRouteName="MainScreen"
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <LogInStack.Screen name="MainScreen" component={MainScreen} />
-      <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
-      <LogInStack.Screen name="MyPageScreen" component={MyPageScreen} />
-      <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
-      <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
-      <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
-      <LogInStack.Screen name="AlarmScreen" component={AlarmScreen} />
-      <LogInStack.Screen name="HomeSearchScreen" component={HomeSearchScreen} />
+  if (!appLoaded)
+    return (
+      <Animated.View
+        entering={FadeIn.duration(800)}
+        exiting={FadeOut.duration(300)}
+        style={{
+          flex: 1,
+        }}
+      >
+        <LottieView
+          source={require('./src/assets/SplashScreen.json')}
+          style={{ flex: 1, backgroundColor: 'white' }}
+          autoPlay={true}
+          loop={false}
+        />
+      </Animated.View>
+    );
 
-      {/* 생성 Screen */}
-      <LogInStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
-      <LogInStack.Screen name="DepartureMapScreen" component={DepartureMapScreen} />
-      <LogInStack.Screen name="DepartureSearchScreen" component={DepartureSearchScreen} />
-      <LogInStack.Screen name="ArrivalMapScreen" component={ArrivalMapScreen} />
-      <LogInStack.Screen name="ArrivalSearchScreen" component={ArrivalSearchScreen} />
-      <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
+  return (
+    <GestureHandlerRootView>
+      {loggedIn ? (
+        <Animated.View style={{ flex: 1, backgroundColor: 'white' }} entering={FadeIn}>
+          <LogInStack.Navigator
+            initialRouteName="MainScreen"
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <LogInStack.Screen name="MainScreen" component={MainScreen} />
+            <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
+            <LogInStack.Screen name="MyPageScreen" component={MyPageScreen} />
+            <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
+            <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
+            <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
+            <LogInStack.Screen name="AlarmScreen" component={AlarmScreen} />
+            <LogInStack.Screen name="HomeSearchScreen" component={HomeSearchScreen} />
 
-      {/* 조회, 수정 Screen */}
-      <LogInStack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
-      <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
+            {/* 생성 Screen */}
+            <LogInStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
+            <LogInStack.Screen name="DepartureMapScreen" component={DepartureMapScreen} />
+            <LogInStack.Screen name="DepartureSearchScreen" component={DepartureSearchScreen} />
+            <LogInStack.Screen name="ArrivalMapScreen" component={ArrivalMapScreen} />
+            <LogInStack.Screen name="ArrivalSearchScreen" component={ArrivalSearchScreen} />
+            <LogInStack.Screen name="SearchScreen" component={SearchScreen} />
 
-      {/* 정산 Screen */}
-      <LogInStack.Screen name="CheckDepartureScreen" component={CheckDepartureScreen} />
-      <LogInStack.Screen name="AmountScreen" component={AmountScreen} />
-      <LogInStack.Screen name="AccountScreen" component={AccountScreen} />
-      <LogInStack.Screen name="CheckAccountScreen" component={CheckAccountScreen} />
-      <LogInStack.Screen name="CheckCalculateScreen" component={CheckCalculateScreen} />
-      <LogInStack.Screen name="CompleteCalculateScreen" component={CompleteCalculateScreen} />
-      <LogInStack.Screen name="CheckPaymentScreen" component={CheckPaymentScreen} />
+            {/* 조회, 수정 Screen */}
+            <LogInStack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
+            <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
 
-      {/* 마이페이지 Screen */}
-      <LogInStack.Screen name="PatchNicknameScreen" component={PatchNicknameScreen} />
-      <LogInStack.Screen name="PatchUserInfoScreen" component={PatchUserInfoScreen} />
-      <LogInStack.Screen name="PatchSchoolEmailScreen" component={PatchSchoolEmailScreen} />
-      <LogInStack.Screen
-        name="PatchUserInfoAuthenticationScreen"
-        component={PatchUserInfoAuthenticationScreen}
-      />
-      <LogInStack.Screen
-        name="PatchSchoolEmailAuthenticationScreen"
-        component={PatchSchoolEmailAuthenticationScreen}
-      />
-      <LogInStack.Screen name="HistoryScreen" component={HistoryScreen} />
-      <LogInStack.Screen name="HistoryDetailScreen" component={HistoryDetailScreen} />
-      <LogInStack.Screen name="ManageAccountScreen" component={ManageAccountScreen} />
-      <LogInStack.Screen name="ManageAlarmScreen" component={ManageAlarmScreen} />
-      <LogInStack.Screen name="InquiryScreen" component={InquiryScreen} />
+            {/* 정산 Screen */}
+            <LogInStack.Screen name="CheckDepartureScreen" component={CheckDepartureScreen} />
+            <LogInStack.Screen name="AmountScreen" component={AmountScreen} />
+            <LogInStack.Screen name="AccountScreen" component={AccountScreen} />
+            <LogInStack.Screen name="CheckAccountScreen" component={CheckAccountScreen} />
+            <LogInStack.Screen name="CheckCalculateScreen" component={CheckCalculateScreen} />
+            <LogInStack.Screen name="CompleteCalculateScreen" component={CompleteCalculateScreen} />
+            <LogInStack.Screen name="CheckPaymentScreen" component={CheckPaymentScreen} />
 
-      {/* 회원탈퇴 Screen */}
-      <LogInStack.Screen name="WithdrawCheckScreen" component={WithdrawCheckScreen} />
-      <LogInStack.Screen name="WithdrawSurveyScreen" component={WithdrawSurveyScreen} />
-      <LogInStack.Screen name="WithdrawCompleteScreen" component={WithdrawCompleteScreen} />
-      <LogInStack.Screen name="WithdrawLastScreen" component={WithdrawLastScreen} />
+            {/* 마이페이지 Screen */}
+            <LogInStack.Screen name="PatchNicknameScreen" component={PatchNicknameScreen} />
+            <LogInStack.Screen name="PatchUserInfoScreen" component={PatchUserInfoScreen} />
+            <LogInStack.Screen name="PatchSchoolEmailScreen" component={PatchSchoolEmailScreen} />
+            <LogInStack.Screen
+              name="PatchUserInfoAuthenticationScreen"
+              component={PatchUserInfoAuthenticationScreen}
+            />
+            <LogInStack.Screen
+              name="PatchSchoolEmailAuthenticationScreen"
+              component={PatchSchoolEmailAuthenticationScreen}
+            />
+            <LogInStack.Screen name="HistoryScreen" component={HistoryScreen} />
+            <LogInStack.Screen name="HistoryDetailScreen" component={HistoryDetailScreen} />
+            <LogInStack.Screen name="ManageAccountScreen" component={ManageAccountScreen} />
+            <LogInStack.Screen name="ManageAlarmScreen" component={ManageAlarmScreen} />
+            <LogInStack.Screen name="InquiryScreen" component={InquiryScreen} />
 
-      {/* 신고 Screen */}
-      <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />
+            {/* 회원탈퇴 Screen */}
+            <LogInStack.Screen name="WithdrawCheckScreen" component={WithdrawCheckScreen} />
+            <LogInStack.Screen name="WithdrawSurveyScreen" component={WithdrawSurveyScreen} />
+            <LogInStack.Screen name="WithdrawCompleteScreen" component={WithdrawCompleteScreen} />
+            <LogInStack.Screen name="WithdrawLastScreen" component={WithdrawLastScreen} />
 
-      <LogInStack.Screen name="TestScreen" component={TestScreen} />
-    </LogInStack.Navigator>
-  ) : (
-    <RootStack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <RootStack.Screen name="SignInScreen" component={SignInScreen} />
-      <RootStack.Screen name="CheckPermissionScreen" component={CheckPermissionScreen} />
-      <RootStack.Screen name="AuthenticationScreen" component={AuthenticationScreen} />
-      <RootStack.Screen
-        name="PhoneAuthenticationCodeScreen"
-        component={PhoneAuthenticationCodeScreen}
-      />
-      <RootStack.Screen name="RegisterNicknameScreen" component={RegisterNicknameScreen} />
-      <RootStack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthenticationScreen} />
-      <RootStack.Screen
-        name="EmailAuthenticationCodeScreen"
-        component={EmailAuthenticationCodeScreen}
-      />
-      <RootStack.Screen name="CompleteSignUpScreen" component={CompleteSignUpScreen} />
-      <RootStack.Screen name="SurveyFirstScreen" component={SurveyFirstScreen} />
-      <RootStack.Screen name="SurveySecondScreen" component={SurveySecondScreen} />
-    </RootStack.Navigator>
+            {/* 신고 Screen */}
+            <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />
+
+            <LogInStack.Screen name="TestScreen" component={TestScreen} />
+          </LogInStack.Navigator>
+        </Animated.View>
+      ) : (
+        <Animated.View style={{ flex: 1, backgroundColor: 'white' }} entering={FadeIn}>
+          <RootStack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <RootStack.Screen name="SignInScreen" component={SignInScreen} />
+            <RootStack.Screen name="CheckPermissionScreen" component={CheckPermissionScreen} />
+            <RootStack.Screen name="AuthenticationScreen" component={AuthenticationScreen} />
+            <RootStack.Screen
+              name="PhoneAuthenticationCodeScreen"
+              component={PhoneAuthenticationCodeScreen}
+            />
+            <RootStack.Screen name="RegisterNicknameScreen" component={RegisterNicknameScreen} />
+            <RootStack.Screen
+              name="SchoolAuthenticationScreen"
+              component={SchoolAuthenticationScreen}
+            />
+            <RootStack.Screen
+              name="EmailAuthenticationCodeScreen"
+              component={EmailAuthenticationCodeScreen}
+            />
+            <RootStack.Screen name="CompleteSignUpScreen" component={CompleteSignUpScreen} />
+            <RootStack.Screen name="SurveyFirstScreen" component={SurveyFirstScreen} />
+            <RootStack.Screen name="SurveySecondScreen" component={SurveySecondScreen} />
+          </RootStack.Navigator>
+        </Animated.View>
+      )}
+    </GestureHandlerRootView>
   );
 }
 export default AppInner;
