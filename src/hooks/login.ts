@@ -8,7 +8,10 @@ import { refreshAccessToken } from '@server/api/member';
 
 import { deleteToken, setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
 
-export const useCheckLogin = (setLoggedIn: SetterOrUpdater<boolean>) => {
+export const useCheckLogin = (
+  setLoggedIn: SetterOrUpdater<boolean>,
+  setAppLoaded: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
   const [, setUserInfo] = useRecoilState(userInfoState);
 
   const start = Date.now();
@@ -22,11 +25,11 @@ export const useCheckLogin = (setLoggedIn: SetterOrUpdater<boolean>) => {
           setLoggedIn(false);
           await deleteToken();
           const elapsed = Date.now() - start;
-          const remainingTime = 1500 - elapsed;
+          const remainingTime = 3500 - elapsed;
           if (remainingTime > 0) {
-            setTimeout(() => SplashScreen.hide(), remainingTime);
+            setTimeout(() => setAppLoaded(true), remainingTime);
           } else {
-            SplashScreen.hide();
+            setAppLoaded(true);
           }
           return;
         }
@@ -44,23 +47,23 @@ export const useCheckLogin = (setLoggedIn: SetterOrUpdater<boolean>) => {
         setLoggedIn(true);
 
         const elapsed = Date.now() - start;
-        const remainingTime = 1500 - elapsed;
+        const remainingTime = 3500 - elapsed;
         if (remainingTime > 0) {
-          setTimeout(() => SplashScreen.hide(), remainingTime);
+          setTimeout(() => setAppLoaded(true), remainingTime);
         } else {
-          SplashScreen.hide();
+          setAppLoaded(true);
         }
       } catch (error) {
         setLoggedIn(false);
         await deleteToken();
         const elapsed = Date.now() - start;
-        const remainingTime = 1500 - elapsed;
+        const remainingTime = 3500 - elapsed;
         if (remainingTime > 0) {
-          setTimeout(() => SplashScreen.hide(), remainingTime);
+          setTimeout(() => setAppLoaded(true), remainingTime);
         } else {
-          SplashScreen.hide();
+          setAppLoaded(true);
         }
       }
     })();
-  }, [setLoggedIn, setUserInfo]);
+  }, [setLoggedIn, setUserInfo, setAppLoaded]);
 };
