@@ -12,6 +12,8 @@ import { arrivalState } from "@recoil/recoil";
 
 import { useGetSpotMap } from "@hooks/api/spot";
 
+import { calculateDist } from "@utils/search";
+
 import { Spot } from "@type/entity/spot";
 import { ArrivalMapScreenProps } from "@type/param/loginStack";
 
@@ -56,18 +58,31 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
     }
   }, []);
 
+  /** 거점 3개 디스플레이되는 카메라 조정 */
+  // useEffect(() => {
+  //   const baseDist = 1000;
+  //   const dist = calculateDist(spotData.maxLatitude, spotData.maxLongitude, spotData.minLatitude, spotData.minLongitude);
+  //   const scaleFactor = Math.log10(dist / baseDist + 1) * 0.05;
+
+  //   const deltaMax = 1 + scaleFactor;
+  //   const deltaMin = 1 - scaleFactor;
+
+  //   mapRef.current?.animateCameraWithTwoCoords({
+  //     coord1: {
+  //       latitude: spotData.maxLatitude * deltaMax,
+  //       longitude: spotData.maxLongitude * deltaMax,
+  //     },
+  //     coord2: {
+  //       latitude: spotData.minLatitude * deltaMin,
+  //       longitude: spotData.minLongitude * deltaMin,
+  //     }
+  //   })
+  // }, [route.params?.searchParams?.title])
+
+  /** 검색 결과 좌표로 카메라 조정 */
   useEffect(() => {
-    mapRef.current?.animateCameraWithTwoCoords({
-      coord1: {
-        latitude: spotData.maxLatitude * 1.00005,
-        longitude: spotData.maxLongitude * 1.00005,
-      },
-      coord2: {
-        latitude: spotData.minLatitude * 0.99995,
-        longitude: spotData.minLongitude * 0.99995,
-      }
-    })
-  }, [route.params?.searchParams?.title])
+    mapRef.current?.animateCameraTo(currentCamera);
+  }, [currentCamera])
 
   // 거점 3개와 고정카메라 좌표 리턴
   const { spotData, refetch } = useGetSpotMap({
