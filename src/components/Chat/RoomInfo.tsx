@@ -2,15 +2,14 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { Text, View, StyleSheet } from 'react-native';
 
-import { truncateText } from '@utils/text';
-
 import { RoomPreview } from '@type/entity/room';
 
-import Dot from '@assets/images/Chat/Dot.svg';
 import Arrow from '@assets/images/Chat/Arrow.svg';
 import Money from '@assets/images/Chat/Money.svg';
 import People from '@assets/images/Chat/People.svg';
-
+import DeleteStatus from '@assets/images/Chat/DeleteStatus.svg';
+import CompleteStatus from '@assets/images/Chat/CompleteStatus.svg';
+import ProceedingStatus from '@assets/images/Chat/ProceedingStatus.svg';
 interface RoomInfoComponentProps {
   roomPreview: RoomPreview;
 }
@@ -41,10 +40,9 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomPreview }) =>
             </Text>
           </View>
 
-          <View className="flex-row items-center justify-center rounded-lg bg-gray-200 px-3 py-[6px]">
-            <Dot className="mr-1" />
-            <Text className="text-[12px] text-gray-500">출발전</Text>
-          </View>
+          {roomPreview.roomStatus === 'PROCEEDING' && <ProceedingStatus />}
+          {roomPreview.roomStatus === 'COMPLETE' && <CompleteStatus />}
+          {roomPreview.roomStatus === 'DELETE' && <DeleteStatus />}
         </View>
 
         <View className="mt-2 flex-row items-center justify-between">
@@ -63,7 +61,9 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ roomPreview }) =>
           <View className="flex-row">
             <View className="mr-2 flex-row items-center justify-center">
               <People className="mr-1" />
-              <Text className="text-[12px] text-[#7c7c7c]">{roomPreview.currentHeadcount} / {roomPreview.wishHeadcount}</Text>
+              <Text className="text-[12px] text-[#7c7c7c]">
+                {roomPreview.currentHeadcount} / {roomPreview.wishHeadcount}
+              </Text>
             </View>
 
             <View className="flex-row items-center justify-center">

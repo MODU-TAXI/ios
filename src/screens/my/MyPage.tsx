@@ -23,7 +23,6 @@ import SplitLine from '@assets/images/My/SplitLine.svg';
 import NextButton from '@assets/images/My/NextButton.svg';
 import LogoutButton from '@assets/images/My/LogoutButton.svg';
 import ResignButton from '@assets/images/My/ResignButton.svg';
-import ContactButton from '@assets/images/My/ContactButton.svg';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const userInfo = useRecoilValue(userInfoState);

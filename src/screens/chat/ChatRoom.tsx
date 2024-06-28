@@ -42,9 +42,9 @@ Object.assign('global', {
 const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [appState, setAppState] = useState(AppState.currentState);
 
-  const { roomId, managerId, readonly } = route.params;
+  const { roomId, readonly } = route.params;
 
-  const { roomPreview, messages, messagesRefetch } = useChatDetail(roomId);
+  const { roomPreview, messages, roomPreviewRefetch, messagesRefetch } = useChatDetail(roomId);
 
   const { mutateAsync: matchComplete, isPending: matchCompletePending } = useMatchComplete(roomId);
   const { mutateAsync: exitParticipateRoomMutate, isPending: exitParticipateRoomPending } =
@@ -60,7 +60,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [userInfo, setUserInfo] = useState<UserPreview>();
   const [accessToken, setNewAccessToken] = useAccessToken(); // socket을 위한 token hook
   const myInfo = useRecoilValue(userInfoState);
-  const myRoom = managerId == myInfo.id;
+  const myRoom = roomPreview!.managerId == myInfo.id;
 
   useEnterChatRoom(); // 채팅스크린에 있을때는 알람안오게 해야하므로 recoil로 상태 저장
 
@@ -303,6 +303,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const completeMatch = async () => {
     if (!readonly) {
       await matchComplete();
+      await roomPreviewRefetch();
     }
   };
 
@@ -350,7 +351,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   return (
     <SafeAreaView
-      className="flex-1 bg-white"
+      className="flex-1 bg-white "
       edges={readonly ? ['top', 'left', 'right'] : undefined}
     >
       {(matchCompletePending || exitParticipateRoomPending) && <TransparentLoadingComponent />}
@@ -364,7 +365,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         {/* 메세지 Component */}
         <MessagesComponent
           memberId={myInfo.id}
-          managerId={managerId}
+          managerId={roomPreview!.managerId}
           newMessages={newMessages}
           messages={messages.messages}
           openUserInfoModal={openUserInfoModal}

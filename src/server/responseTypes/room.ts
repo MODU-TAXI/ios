@@ -83,10 +83,11 @@ export interface CreateRoomResponse {
 // [방 미리보기 조회] /api/rooms/preview/{id}
 export interface GetRoomPreviewResponse {
   roomId: number;
+  managerId: number;
   departureTime: string;
   departureName: string;
   arrivalName: string;
-  roomStatus: string;
+  roomStatus: 'PROCEEDING' | 'COMPLETE' | 'DELETE';
   currentHeadcount: number;
   wishHeadcount: number;
   expectedChargePerPerson: number;

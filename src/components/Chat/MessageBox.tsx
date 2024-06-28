@@ -39,12 +39,12 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
 }) => {
   // Join message인 경우
   if (message.messageType === 'JOIN') {
-    return <JoinMessageBoxComponent message={message} />;
+    return <JoinMessageBoxComponent message={message} openUserInfoModal={openUserInfoModal} />;
   }
 
   // Leave message인 경우
   if (message.messageType === 'LEAVE') {
-    return <LeaveMessageBoxComponent message={message} />;
+    return <LeaveMessageBoxComponent message={message} openUserInfoModal={openUserInfoModal} />;
   }
 
   if (message.messageType === 'CHAT') {

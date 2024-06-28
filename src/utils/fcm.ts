@@ -21,6 +21,7 @@ export const onMessageReceivedForeground = async (
     return;
   }
 
+  // 채팅관련 FCM
   if (messageType === 'CHAT' || messageType === 'IMAGE') {
     if (chatIn) return;
 
@@ -28,30 +29,63 @@ export const onMessageReceivedForeground = async (
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
   } else if (messageType === 'JOIN') {
+    if (chatIn) return;
+
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
   } else if (messageType === 'LEAVE') {
+    if (chatIn) return;
+
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
-  } else if (messageType === 'ROOM_UPDATE') {
+  } else if (messageType === 'CHAT_BOT') {
+    if (chatIn) return;
+
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
-  } else if (messageType === 'PARTICIPATE_REQUEST') {
+  } else if (messageType === 'CALL_TAXI') {
+    if (chatIn) return;
+
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
   } else if (messageType === 'MATCHING_COMPLETE') {
+    if (chatIn) return;
+
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
-  } else if (messageType === 'REMIT_REQUEST') {
+  } else if (messageType === 'PAYMENT_REQUEST') {
+    if (chatIn) return;
+
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
-  } else if (messageType === 'ROOM_DELETE') {
+  } else if (messageType === 'PAYMENT_REQUEST_COMPLETE') {
+    if (chatIn) return;
+
+    if (roomId && typeof roomId === 'string') {
+      await handleFirebaseMessage(title, body, messageType, roomId);
+    }
+  } else if (messageType === 'PAYMENT_COMPLETE') {
+    if (chatIn) return;
+
+    if (roomId && typeof roomId === 'string') {
+      await handleFirebaseMessage(title, body, messageType, roomId);
+    }
+  } else if (messageType === 'PAYMENT_ALL_COMPLETE') {
+    if (chatIn) return;
+
+    if (roomId && typeof roomId === 'string') {
+      await handleFirebaseMessage(title, body, messageType, roomId);
+    }
+  }
+
+  // 매칭관련 FCM
+  else if (messageType === 'PARTICIPATE_REQUEST') {
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
@@ -59,15 +93,19 @@ export const onMessageReceivedForeground = async (
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
-  } else if (messageType === 'TIME_TO_DEPART') {
+  }
+
+  // 방 업데이트 관련 FCM
+  else if (messageType === 'ROOM_UPDATE') {
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
-  } else if (messageType === 'DEPART_10_MINUTES_AGO') {
-    if (roomId && typeof roomId === 'string') {
-      await handleFirebaseMessage(title, body, messageType, roomId);
-    }
-  } else {
+  } else if (messageType === 'ROOM_DELETE') {
+    await handleFirebaseMessage(title, body, messageType);
+  }
+
+  // 나머지 FCM
+  else {
     await handleFirebaseMessage(title, body, messageType);
   }
 };
@@ -97,8 +135,8 @@ export const onMessageReceivedBackground = async (
   if (typeof messageType !== 'string') {
     return;
   }
-
-  if (messageType === 'CHAT' || messageType === 'IMAGE ') {
+  // 채팅관련 FCM
+  if (messageType === 'CHAT' || messageType === 'IMAGE') {
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
@@ -110,11 +148,11 @@ export const onMessageReceivedBackground = async (
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
-  } else if (messageType === 'ROOM_UPDATE') {
+  } else if (messageType === 'CHAT_BOT') {
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
-  } else if (messageType === 'PARTICIPATE_REQUEST') {
+  } else if (messageType === 'CALL_TAXI') {
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
@@ -122,11 +160,26 @@ export const onMessageReceivedBackground = async (
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
-  } else if (messageType === 'REMIT_REQUEST') {
+  } else if (messageType === 'PAYMENT_REQUEST') {
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
-  } else if (messageType === 'ROOM_DELETE') {
+  } else if (messageType === 'PAYMENT_REQUEST_COMPLETE') {
+    if (roomId && typeof roomId === 'string') {
+      await handleFirebaseMessage(title, body, messageType, roomId);
+    }
+  } else if (messageType === 'PAYMENT_COMPLETE') {
+    if (roomId && typeof roomId === 'string') {
+      await handleFirebaseMessage(title, body, messageType, roomId);
+    }
+  } else if (messageType === 'PAYMENT_ALL_COMPLETE') {
+    if (roomId && typeof roomId === 'string') {
+      await handleFirebaseMessage(title, body, messageType, roomId);
+    }
+  }
+
+  // 매칭관련 FCM
+  else if (messageType === 'PARTICIPATE_REQUEST') {
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
@@ -134,15 +187,19 @@ export const onMessageReceivedBackground = async (
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
-  } else if (messageType === 'TIME_TO_DEPART') {
+  }
+
+  // 방 업데이트 관련 FCM
+  else if (messageType === 'ROOM_UPDATE') {
     if (roomId && typeof roomId === 'string') {
       await handleFirebaseMessage(title, body, messageType, roomId);
     }
-  } else if (messageType === 'DEPART_10_MINUTES_AGO') {
-    if (roomId && typeof roomId === 'string') {
-      await handleFirebaseMessage(title, body, messageType, roomId);
-    }
-  } else {
+  } else if (messageType === 'ROOM_DELETE') {
+    await handleFirebaseMessage(title, body, messageType);
+  }
+
+  // 나머지 FCM
+  else {
     await handleFirebaseMessage(title, body, messageType);
   }
 };

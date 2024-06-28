@@ -38,6 +38,7 @@ export const useChatDetail = (roomId: number) => {
     combine: (results) => {
       return {
         roomPreview: results[0].data,
+        roomPreviewRefetch: results[0].refetch,
         messages: results[1].data,
         messagesRefetch: results[1].refetch,
       };

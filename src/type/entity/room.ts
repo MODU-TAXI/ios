@@ -1,10 +1,11 @@
 // 방 간단 정보
 export interface RoomPreview {
   roomId: number;
+  managerId: number;
   departureTime: string;
   departureName: string;
   arrivalName: string;
-  roomStatus: string;
+  roomStatus: 'PROCEEDING' | 'COMPLETE' | 'DELETE';
   currentHeadcount: number;
   wishHeadcount: number;
   expectedChargePerPerson: number;

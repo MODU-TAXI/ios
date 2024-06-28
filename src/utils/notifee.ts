@@ -31,19 +31,33 @@ export const handleNotificationPress = async (detail: EventDetail) => {
   const roomId = detail.notification?.data?.roomId;
 
   switch (messageType) {
+    // 채팅방으로 이동
     case 'CHAT':
+    case 'IMAGE':
+    case 'CHAT_BOT':
+    case 'CALL_TAXI':
+    case 'MATCHING_COMPLETE':
+    case 'PAYMENT_REQUEST':
+    case 'PAYMENT_REQUEST_COMPLETE':
+    case 'PAYMENT_COMPLETE':
+    case 'PAYMENT_ALL_COMPLETE':
+      if (roomId) {
+        await Linking.openURL(`modutaxi://chatRoom/${roomId}`);
+      }
+      break;
+
+    // 매칭방으로 이동
     case 'JOIN':
     case 'LEAVE':
     case 'ROOM_UPDATE':
     case 'PARTICIPATE_REQUEST':
-    case 'MATCHING_COMPLETE':
     case 'MATCHING_SUCCESS':
-    case 'DEPART_10_MINUTES_AGO':
-    case 'REMIT_REQUEST':
       if (roomId) {
         await Linking.openURL(`modutaxi://room/${roomId}`);
       }
       break;
+
+    // 홈으로 이동
     case 'ROOM_DELETE':
       await Linking.openURL('modutaxi://main');
       break;
