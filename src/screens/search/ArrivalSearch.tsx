@@ -14,6 +14,7 @@ import { arrivalState, searchKeywordState } from '@recoil/recoil';
 
 import { useGetSpotList } from '@hooks/api/spot';
 import { useNaverSearch } from '@hooks/api/search';
+import { useLocationPermission } from '@hooks/permission/location';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
 import { convertCoordinates, getCurrentLocation } from '@utils/map';
@@ -27,6 +28,8 @@ import { ArrivalSearchScreenProps } from '@type/param/loginStack';
 const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useState<string>("");
+  const locationPermission = useLocationPermission();
+
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({
@@ -153,7 +156,7 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
                 keyword={keyword}
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
-                distance={item.distance}
+                distance={locationPermission === 'GRANTED' ? item.distance : null}
                 isFirst={false}
               />
             </Pressable>

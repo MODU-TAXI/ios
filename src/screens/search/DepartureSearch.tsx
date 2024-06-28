@@ -11,6 +11,7 @@ import DepartureSearchBoxComponent from '@components/Search/DepartureSearchBox';
 import { searchParamState, searchKeywordState } from '@recoil/recoil';
 
 import { useNaverSearch } from '@hooks/api/search';
+import { useLocationPermission } from '@hooks/permission/location';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
 import { convertCoordinates, getCurrentLocation } from '@utils/map';
@@ -23,6 +24,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useState<string>("");
   const [, setSearchParams] = useRecoilState(searchParamState);
+  const locationPermission = useLocationPermission();
 
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
@@ -107,7 +109,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
                 keyword={keyword}
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
-                distance={item.distance}
+                distance={locationPermission === 'GRANTED' ? item.distance : null}
                 isFirst={index===0}
               />
             </Pressable>
