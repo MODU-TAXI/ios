@@ -184,10 +184,6 @@ export const useDeleteMember = (): UseMutationResult<void, void, void> => {
     },
     onSuccess: () => {
       // TODO: 카카오 연결 끊기
-      // TODO: 애플 토큰 revoke 처리; 회원탈퇴용 Apple client secret을 얻기 위한 별도 JWT 생성의 보안상 이유로 서버에서 처리 예정
-      // appleAuth.performRequest({
-      //   requestedOperation: appleAuth.Operation.LOGOUT,
-      // });
     },
   });
 };

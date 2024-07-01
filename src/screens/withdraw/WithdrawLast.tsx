@@ -2,6 +2,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
@@ -21,8 +22,8 @@ const WithdrawLastScreen = ({ navigation }: WithdrawLastScreenProps) => {
   const { mutateAsync: deleteMemberMutate, isPending: deleteMemberPending } = useDeleteMember();
 
   const toWithdrawCompleteScreen = async () => {
-    await deleteToken();
     await deleteMemberMutate();
+    await deleteToken();
     navigation.navigate('WithdrawCompleteScreen');
   };
 
