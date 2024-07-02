@@ -18,8 +18,7 @@ const MyImageMessageBoxComponent: React.FC<MyImageMessageBoxComponentProps> = ({
   return (
     <Pressable className="my-2 flex-row" onPress={() => openImageModal(message.content)}>
       <View className="mr-1 flex-1 flex-col items-end justify-end ">
-        <Text className="text-[10px]">2</Text>
-        <Text className="text-[10px] text-gray-300">{dayjs(message.dateTime).format('HH:MM')}</Text>
+        <Text className="text-[10px] text-gray-300">{dayjs(message.dateTime).format('HH:mm')}</Text>
       </View>
 
       {/* 이미지 */}

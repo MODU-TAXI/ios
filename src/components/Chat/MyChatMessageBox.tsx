@@ -12,8 +12,7 @@ const MyChatMessageBoxComponent: React.FC<MyChatMessageBoxComponentProps> = ({ m
   return (
     <View className="my-4 flex-row">
       <View className="mr-1 flex-1 flex-col items-end justify-end">
-        <Text className="text-[10px]">2</Text>
-        <Text className="text-[10px] text-gray-300">{dayjs(message.dateTime).format('HH:MM')}</Text>
+        <Text className="text-[10px] text-gray-300">{dayjs(message.dateTime).format('HH:mm')}</Text>
       </View>
 
       {/* 메세지 */}
