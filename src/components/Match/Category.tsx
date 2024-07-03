@@ -5,23 +5,23 @@ import CheckBox from '@assets/images/Match/CheckBox.svg';
 import SelectedCheckBox from '@assets/images/Match/SelectedCheckBox.svg';
 
 interface CategoryComponentProps {
-  checkedCategorys: boolean[];
-  setCheckedCategorys: React.Dispatch<React.SetStateAction<boolean[]>>;
+  checkedCategories: boolean[];
+  setCheckedCategories: React.Dispatch<React.SetStateAction<boolean[]>>;
   index: number;
   category: string;
 }
 
 const CategoryComponent: React.FC<CategoryComponentProps> = ({
-  checkedCategorys,
-  setCheckedCategorys,
+  checkedCategories,
+  setCheckedCategories,
   index,
   category,
 }) => {
-  const checked = checkedCategorys[index];
+  const checked = checkedCategories[index];
 
   // 카테고리 선택
   const selectCategory = (index: number) => {
-    setCheckedCategorys((prevState) => {
+    setCheckedCategories((prevState) => {
       const newState = [...prevState];
       newState[index] = !newState[index];
       return newState;

@@ -25,7 +25,7 @@ import { ArrivalSearchScreenProps } from '@type/param/loginStack';
 
 
 /** 도착 거점 검색 */
-const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
+const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) => {
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useState<string>("");
   const locationPermission = useLocationPermission();
@@ -122,6 +122,7 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
     navigation.navigate('ArrivalMapScreen', {
       type: 'spot',
       spot: spot,
+      isPatch: route.params?.isPatch,
     });
   }
 

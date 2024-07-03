@@ -19,14 +19,14 @@ export type LoginStackParamList = {
   SearchScreen: undefined;
   ChatRoomScreen: { roomId: number; readonly: boolean };
   AlarmScreen: undefined;
-  HomeSearchScreen: undefined;
+  HomeSearchScreen: undefined | { toMainMap: () => void };
 
   // 생성
   CreateRoomScreen: undefined;
   DepartureMapScreen: undefined;
   DepartureSearchScreen: undefined;
-  ArrivalMapScreen: undefined | { type: string; searchParams?: SearchResultParams; spot?: Spot };
-  ArrivalSearchScreen: undefined;
+  ArrivalMapScreen: undefined | { type: string; searchParams?: SearchResultParams; spot?: Spot; isPatch?: boolean};
+  ArrivalSearchScreen: undefined | { isPatch?: boolean; };
 
   // 조회, 수정
   RoomDetailScreen: { roomId: number };

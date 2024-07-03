@@ -1,19 +1,20 @@
 import dayjs from 'dayjs';
 import { useRecoilState } from 'recoil';
-import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState, Suspense, useEffect, useCallback } from 'react';
 
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import DatePickerComponent from '@components/DatePicker';
+import LoadingComponent from '@components/Common/Loading';
 import DescriptionComponent from '@components/Description';
 import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { userInfoState } from '@recoil/recoil';
+import { arrivalState, userInfoState, departureState } from '@recoil/recoil';
 
 import { usePatchRoom } from '@hooks/api/rooms';
 
@@ -35,21 +36,34 @@ import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
 
 dayjs.locale('ko');
 
-const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
+const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
   const { roomDetail } = route.params;
 
   const { mutateAsync: patchRoomMutate, isPending: patchRoomPending } = usePatchRoom(
     roomDetail.roomId,
   );
 
-  const [start, setStart] = useState<string>(roomDetail.departureName); // 출발지
-  const [end, setEnd] = useState<string>(roomDetail.arrivalName); // 도착지
+  const [departure, setDeparture] = useRecoilState(departureState); // 출발지 이름, 좌표
+  const [arrival, setArrival] = useRecoilState(arrivalState); // 도착지 이름, 거점 id
   const [departureTime, setDepartureTime] = useState<Date>(new Date()); // 설정 날짜
   const [datePicked, setDatePicked] = useState<boolean>(true); // 날짜 선택 여부
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
-  const [passangersNumber, setPassengersNumber] = useState<number | null>(roomDetail.wishHeadcount); // 탑승 인원
-  const [checkedCategorys, setCheckedCategorys] = useState<boolean[]>([false, false, false]); // 카테고리
+  const [passengersNumber, setPassengersNumber] = useState<number | null>(roomDetail.wishHeadcount - 1); // 탑승 인원
+  const [checkedCategories, setCheckedCategories] = useState<boolean[]>([false, false, false]); // 카테고리
   const [userInfo, ] = useRecoilState(userInfoState);
+
+  // 첫 렌더링 시 roomDetail 정보 저장
+  useEffect(() => {
+    setDeparture({
+      name: roomDetail.departureName,
+      latitude: roomDetail.departureLatitude,
+      longitude: roomDetail.departureLongitude,
+    });
+    setArrival({
+      name: roomDetail.arrivalName,
+      spotId: roomDetail.spotId,
+    });
+  }, [])
 
   // 날짜 다시 활성화
   useEffect(() => {
@@ -76,16 +90,16 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
       return origin_categories.indexOf(roomCategory.trim());
     });
 
-    selected_indexs.map((selected_index) => (checkedCategorys[selected_index] = true));
+    selected_indexs.map((selected_index) => (checkedCategories[selected_index] = true));
 
-    const new_categories = [...checkedCategorys];
+    const new_categories = [...checkedCategories];
 
-    setCheckedCategorys(new_categories);
+    setCheckedCategories(new_categories);
   }, []);
 
   // 파티 수정
   const patchMatch = async () => {
-    if (!passangersNumber || !datePicked) {
+    if (!passengersNumber || !datePicked) {
       return ErrorToastMessage('힝목을 모두 체크해주세요');
     }
 
@@ -94,20 +108,22 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
       categories[1] = 'ONLY_MAN';
     }
 
-    const filteredCategories = categories.filter((_, index) => checkedCategorys[index]);
+    const filteredCategories = categories.filter((_, index) => checkedCategories[index]);
 
     // 개발환경시 기기가 미국이라 9시간 더해주기
     const departureTimeForServer = new Date(departureTime.getTime() + 9 * 60 * 60 * 1000);
 
     await patchRoomMutate({
-      spotId: 1,
-      departureLongitude: 126.69487873676,
-      departureLatitude: 37.463182225352,
+      spotId: arrival.spotId,
+      departureLongitude: departure.longitude,
+      departureLatitude: departure.latitude,
       roomTagBitMask: filteredCategories,
       departureTime: departureTimeForServer,
-      departureName: '주안역',
-      wishHeadcount: passangersNumber,
+      departureName: departure.name,
+      wishHeadcount: passengersNumber,
     });
+
+    resetRecoilValue();
 
     // stack을 지우며 해당 roomDetail로 이동
     navigation.reset({
@@ -126,16 +142,27 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
 
   // TODO : 서버 연동 시 검색한 거점명 받아서 start, destination 저장 비동기 처리
   /** 출발지 선택시 검색창 오픈 */
-  const handleStart = () => {
-    navigation.navigate('SearchScreen');
-    setStart('인하대학교 후문');
+  const handleDeparture = () => {
+    navigation.navigate('DepartureMapScreen');
   };
 
   /** 도착지 선택시 검색창 오픈 */
-  const handleEnd = () => {
-    navigation.navigate('SearchScreen');
-    setEnd('주안역');
+  const handleArrival = () => {
+    navigation.navigate('ArrivalSearchScreen', { isPatch: true });
   };
+
+  /** 출발, 도착지 초기화 */
+  const resetRecoilValue = useCallback(() => {
+    setDeparture({
+      name: '',
+      latitude: 0,
+      longitude: 0,
+    });
+    setArrival({
+      name: '',
+      spotId: 0,
+    });
+  }, [setDeparture, setArrival]);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -160,17 +187,15 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
             </View>
 
             <View className="my-2 ml-[6px] flex-row">
-              {start && end ? (
-                <View className="h-[46px] w-px bg-main" />
-              ) : (
-                <View className="h-[46px] w-px bg-gray300" />
-              )}
-              <Pressable onPress={handleStart}>
-                {start ? (
-                  <Text className="ml-6 text-[16px] font-semibold text-gray900 ">{start}</Text>
+              <View className="h-[46px] w-px bg-main" />
+              <Pressable onPress={handleDeparture}>
+                {departure.name === '' ? (
+                  <Text className="ml-6 text-[16px] font-semibold text-gray900 ">
+                    {roomDetail.departureName}
+                  </Text>
                 ) : (
-                  <Text className="ml-6 text-[16px] font-semibold text-gray300 ">
-                    출발지를 선택해주세요
+                  <Text className="ml-6 text-[16px] font-semibold text-gray900 ">
+                    {departure.name}
                   </Text>
                 )}
               </Pressable>
@@ -178,18 +203,18 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
 
             <View>
               <View className="flex-row items-center">
-                {end ? <EndCircle /> : <EndGrayCircle />}
+                <EndCircle width={12} />
                 <Text className="ml-4 text-sm font-normal text-gray700">도착지</Text>
               </View>
 
-              <Pressable onPress={handleEnd}>
-                {end ? (
+              <Pressable onPress={handleArrival}>
+                {arrival.name === '' ? (
                   <Text className="ml-[31px] mt-2 text-[16px] font-semibold text-gray900 ">
-                    {end}
+                    {roomDetail.arrivalName}
                   </Text>
                 ) : (
-                  <Text className="ml-[31px] mt-2 text-[16px] font-semibold text-gray300 ">
-                    도착지를 선택해주세요
+                  <Text className="ml-[31px] mt-2 text-[16px] font-semibold text-gray900 ">
+                    {arrival.name}
                   </Text>
                 )}
               </Pressable>
@@ -233,7 +258,7 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
               index={1}
               unSelectedIcon={<UnSelectedPerson1 />}
               selectedIcon={<SelectedPerson1 />}
-              passengersNumber={passangersNumber}
+              passengersNumber={passengersNumber}
               setPassengersNumber={setPassengersNumber}
             />
 
@@ -241,7 +266,7 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
               index={2}
               unSelectedIcon={<UnSelectedPerson2 />}
               selectedIcon={<SelectedPerson2 />}
-              passengersNumber={passangersNumber}
+              passengersNumber={passengersNumber}
               setPassengersNumber={setPassengersNumber}
             />
 
@@ -249,7 +274,7 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
               index={3}
               unSelectedIcon={<UnSelectedPerson3 />}
               selectedIcon={<SelectedPerson3 />}
-              passengersNumber={passangersNumber}
+              passengersNumber={passengersNumber}
               setPassengersNumber={setPassengersNumber}
             />
           </View>
@@ -267,8 +292,8 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
               <CategoryComponent
                 index={0}
                 category={'학생인증'}
-                checkedCategorys={checkedCategorys}
-                setCheckedCategorys={setCheckedCategorys}
+                checkedCategories={checkedCategories}
+                setCheckedCategories={setCheckedCategories}
               />
             ) : (
               <Pressable
@@ -284,23 +309,23 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
               <CategoryComponent
                 index={1}
                 category={'남자만'}
-                checkedCategorys={checkedCategorys}
-                setCheckedCategorys={setCheckedCategorys}
+                checkedCategories={checkedCategories}
+                setCheckedCategories={setCheckedCategories}
               />
             ) : (
               <CategoryComponent
                 index={1}
                 category={'여자만'}
-                checkedCategorys={checkedCategorys}
-                setCheckedCategorys={setCheckedCategorys}
+                checkedCategories={checkedCategories}
+                setCheckedCategories={setCheckedCategories}
               />
             )}
 
             <CategoryComponent
               index={2}
               category={'조용히'}
-              checkedCategorys={checkedCategorys}
-              setCheckedCategorys={setCheckedCategorys}
+              checkedCategories={checkedCategories}
+              setCheckedCategories={setCheckedCategories}
             />
           </View>
         </View>
@@ -312,7 +337,7 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
             borderColor={'border-main'}
             textColor={'white'}
             text={'매칭팟 수정하기'}
-            disabled={!datePicked || !passangersNumber}
+            disabled={!datePicked || !passengersNumber}
             onPress={patchMatch}
           />
         </View>
@@ -321,4 +346,12 @@ const PatchRoom = ({ navigation, route }: PatchRoomScreenProps) => {
   );
 };
 
-export default PatchRoom;
+const PatchRoomScreen = ({ route, navigation }: PatchRoomScreenProps) => {
+  return (
+    <Suspense fallback={<LoadingComponent />}>
+      <PatchRoomComponent navigation={navigation} route={route} />
+    </Suspense>
+  )
+}
+
+export default PatchRoomScreen;

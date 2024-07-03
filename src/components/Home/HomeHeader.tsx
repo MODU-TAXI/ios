@@ -4,6 +4,7 @@ import { View, Text, Pressable } from 'react-native';
 import InputBoxComponent from './InputBox';
 
 import { User } from '@type/entity/user';
+import { HomeScreenProps } from '@type/param/loginStack';
 
 import Logo from '@assets/images/Home/Logo.svg';
 import Bell from '@assets/images/Home/Bell.svg';
@@ -11,23 +12,29 @@ import Bell from '@assets/images/Home/Bell.svg';
 interface HomeHeaderComponentProps {
   userInfo: User;
   roomId: number;
-  toSearchScreen: () => void;
+  toMapScreen: () => void;
   toAlarmScreen: () => void;
   alarmsCount: number | undefined;
+  navigation: HomeScreenProps['navigation'];
 }
 
 const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
   userInfo,
   roomId,
-  toSearchScreen,
+  toMapScreen,
   toAlarmScreen,
   alarmsCount,
+  navigation,
 }) => {
   const roomIn = roomId > 0;
 
   const topStyle = roomIn
     ? 'flex-col bg-main pt-10 px-4 rounded-b-[18px] pb-[18px]'
     : 'flex-col bg-[#4F4F4F] pt-10 px-4 rounded-b-[18px] pb-[18px]';
+
+  const toSearchScreen = () => {
+    navigation.navigate('HomeSearchScreen', { toMainMap: toMapScreen });
+  }
 
   return (
     <View className={topStyle}>
@@ -66,7 +73,11 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
       </View>
 
       {/* 검색 */}
-      <InputBoxComponent toSearchScreen={toSearchScreen} />
+      <Pressable
+        onPress={toSearchScreen}
+      >
+        <InputBoxComponent />
+      </Pressable>
     </View>
   );
 };

@@ -100,13 +100,21 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
   }
 
   const toSearchScreen = () => {
+    if (route.params?.isPatch) {
+      navigation.navigate('ArrivalSearchScreen', { isPatch: true });
+    }
     navigation.navigate('ArrivalSearchScreen');
   }
   
   // 도착 거점을 저장하며 이동
   const [, setArrival] = useRecoilState(arrivalState);
   const handleSelectArrival = () => {
-    navigation.navigate('CreateRoomScreen');
+    if (route.params?.isPatch) {
+      navigation.pop(2);
+    } else {
+      navigation.navigate('CreateRoomScreen');
+    }
+    
     if (selectedSpot) {
       setArrival({
         name: selectedSpot.name,

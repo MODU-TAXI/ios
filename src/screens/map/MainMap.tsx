@@ -84,18 +84,23 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   // 택시팟 생성 버튼 위치 설정 변수
   const buttonSizeRef = useRef<View>(null);
   const [buttonSize, setButtonSize] = useState({
-    width: 0,
-    height: 0,
+    width: 164,
+    height: 40,
   });
 
   /** 택시팟 버튼 크기 계산 */
   useEffect(() => {
-    if (buttonSizeRef.current) {
-      buttonSizeRef.current.measure((x, y, width, height) => {
-        setButtonSize({width: width, height: height});
-      });
-    }
-  }, [buttonSizeRef.current])
+    const measureButtonSize = () => {
+      if (buttonSizeRef.current) {
+        buttonSizeRef.current.measure((x, y, width, height) => {
+          if (width !== 0 && height !== 0) {
+            setButtonSize({width: width, height: height});
+          }
+        });
+      }
+    };
+    measureButtonSize();
+  }, [buttonSizeRef.current]);
 
   // 현재 카메라 중심좌표 저장, 초기값 인하대 후문
   const [currentCamera, setCurrentCamera] = useState<Camera>({

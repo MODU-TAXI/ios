@@ -94,10 +94,11 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
       {/* 로고, 알림 */}
       <HomeHeaderComponent
         userInfo={userInfo}
-        toSearchScreen={toSearchScreen}
+        toMapScreen={toMapScreen}
         toAlarmScreen={toAlarmScreen}
         alarmsCount={alarmsCount?.counts}
         roomId={socketRoomId}
+        navigation={navigation}
       />
 
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
