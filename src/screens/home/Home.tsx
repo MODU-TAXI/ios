@@ -17,8 +17,8 @@ import { roomState, userInfoState } from '@recoil/recoil';
 
 import { getMyChatInfo } from '@server/api/chat';
 
-import { useGetRoomPreview } from '@hooks/api/rooms';
 import { useGetAlarmsCount } from '@hooks/api/alarms';
+import { useGetRoomList, useGetRoomPreview } from '@hooks/api/rooms';
 
 import { vibration } from '@utils/effect';
 
@@ -42,6 +42,15 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
   const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(socketRoomId);
 
+  const { rooms: recentRooms, refetch: refetchRoomList } = useGetRoomList({
+    "page": 0,
+    "size": 10,
+    "sortType": "NEW",
+    "searchLatitude": 37.46504,
+    "searchLongitude": 126.68045,
+    "radius": 500000,
+  })
+
   useFocusEffect(
     React.useCallback(() => {
       checkMyRoom();
@@ -54,6 +63,8 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
     vibration();
 
+    refetchRoomList();
+
     const response = await getMyChatInfo();
 
     const { roomId } = response;
@@ -65,7 +76,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
     }
 
     setRefreshing(false);
-  }, [refetchRoomPreview]);
+  }, [refetchRoomPreview, refetchRoomList]);
 
   const toCreateRoomScreen = () => {
     navigation.navigate('CreateRoomScreen');
@@ -73,10 +84,6 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
   const toMapScreen = async () => {
     navigation.navigate('MainMapScreen');
-  };
-
-  const toSearchScreen = () => {
-    navigation.navigate('HomeSearchScreen');
   };
 
   const toChatRoomScreen = () => {
@@ -117,7 +124,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         <View className="my-6 h-2 bg-[#F2F2F2]" />
 
         {/* 실시간 택시팟 */}
-        <PartiesComponent navigation={navigation} />
+        <PartiesComponent navigation={navigation} rooms={recentRooms} />
 
         <View className="my-6 h-2 bg-[#F2F2F2]" />
 
