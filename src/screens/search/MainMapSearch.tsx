@@ -109,7 +109,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
                 keyword={keyword}
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
-                distance={locationPermission === 'GRANTED' ? item.distance : null}
+                distance={locationPermission === 'granted' ? item.distance : null}
                 isFirst={index === 0}
               />
             </Pressable>

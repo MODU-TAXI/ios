@@ -75,8 +75,6 @@ const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) =>
   }, [items, currentLocation])
 
   const [spotSearchParams, setSpotSearchParams] = useState({
-    currentLongitude: currentLocation.longitude,
-    currentLatitude: currentLocation.latitude,
     departureLongitude: currentLocation.longitude,
     departureLatitude: currentLocation.latitude,
   });
@@ -85,21 +83,18 @@ const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) =>
   useEffect(() => {
     if (sortedItems.length > 0) {
       setSpotSearchParams({
-        currentLongitude: currentLocation.longitude,
-        currentLatitude: currentLocation.latitude,
         departureLongitude: sortedItems[0].longitude,
         departureLatitude: sortedItems[0].latitude,
       })
     }
   }, [sortedItems])
 
-  const { spots, refetch: refetchSpotList } = useGetSpotList(
-    1, 1, 
-    spotSearchParams?.currentLongitude,
-    spotSearchParams?.currentLatitude,
-    spotSearchParams?.departureLongitude,
-    spotSearchParams?.departureLatitude,
-  );
+  const { spots, refetch: refetchSpotList } = useGetSpotList({
+    "page": 0, 
+    "size": 1, 
+    "searchLongitude": spotSearchParams?.departureLongitude,
+    "searchLatitude": spotSearchParams?.departureLatitude,
+  });
 
   /** 검색어 선택: 선택한 검색어를 전달하며 이동 */
   const toArrivalMapScreen = (
@@ -157,7 +152,7 @@ const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) =>
                 keyword={keyword}
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
-                distance={locationPermission === 'GRANTED' ? item.distance : null}
+                distance={locationPermission === 'granted' ? item.distance : null}
                 isFirst={false}
               />
             </Pressable>
