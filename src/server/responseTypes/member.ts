@@ -70,7 +70,6 @@ export interface SocialLoginResponse {
     matchingCount: number;
     blocked: boolean;
   };
-  key: string;
 }
 
 // [소셜 회원가입] /api/members/sign-up

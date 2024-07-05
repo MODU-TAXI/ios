@@ -40,24 +40,27 @@ export const useKakaoLogin = (
       });
 
       // 기존 유저인지의 여부
-      const existent: boolean = socialResponse.key === undefined;
+      const existent: boolean = socialResponse.status === 200;
 
       // 기존 유저
       if (existent) {
-        const { accessToken, refreshToken } = socialResponse.tokenResponse;
+        console.log(socialResponse);
+        const { accessToken, refreshToken } = socialResponse.data.tokenResponse;
 
         await setAccessToken(accessToken);
         await setRefreshToken(refreshToken);
 
-        setUserInfo(socialResponse.memberInfoResponse);
+        setUserInfo(socialResponse.data.memberInfoResponse);
         setLoggedIn(true);
 
-        // 신규 유저
+        // 신규 유저 or 에러
       } else {
-        if (socialResponse.key) {
+        if (socialResponse.signUpKey) {
+          const key = socialResponse.signUpKey;
+          console.log(key);
           setSignUpUser((prevState: SignUpUser) => ({
             ...prevState,
-            key: socialResponse.key,
+            key: key,
           }));
           navigation.navigate('CheckPermissionScreen');
 
@@ -93,24 +96,25 @@ export const useAppleLogin = (
       });
 
       // 기존 유저인지의 여부
-      const existent: boolean = socialResponse.key === undefined;
+      const existent: boolean = socialResponse.status === 200;
 
       // 기존 유저
       if (existent) {
-        const { accessToken, refreshToken } = socialResponse.tokenResponse;
+        const { accessToken, refreshToken } = socialResponse.data.tokenResponse;
 
         await setAccessToken(accessToken);
         await setRefreshToken(refreshToken);
 
-        setUserInfo(socialResponse.memberInfoResponse);
+        setUserInfo(socialResponse.data.memberInfoResponse);
         setLoggedIn(true);
 
-        // 신규 유저
+        // 신규 유저 or 에러
       } else {
-        if (socialResponse.key) {
+        if (socialResponse.signUpKey) {
+          const key = socialResponse.signUpKey;
           setSignUpUser((prevState: SignUpUser) => ({
             ...prevState,
-            key: socialResponse.key,
+            key: key,
           }));
           navigation.navigate('CheckPermissionScreen');
 
