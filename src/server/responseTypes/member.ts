@@ -72,6 +72,11 @@ export interface SocialLoginResponse {
   };
 }
 
+export interface SocialLoginError {
+  code: string;
+  message: string;
+}
+
 // [소셜 회원가입] /api/members/sign-up
 export interface SignUpResponse {
   tokenResponse: {

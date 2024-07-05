@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { useRecoilState } from 'recoil';
 import appleAuth from '@invertase/react-native-apple-authentication';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
@@ -10,6 +11,7 @@ import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 import { PatchMemberRequest, RegisterNicknameRequest } from '@server/requestTypes/member';
 import { socialLogin, patchMember, deleteMember, registerNickname } from '@server/api/member';
 import {
+  SocialLoginError,
   AppleLoginResponse,
   KakaoLoginResponse,
   PatchMemberResponse,
@@ -52,26 +54,20 @@ export const useKakaoLogin = (
 
         setUserInfo(socialResponse.data.memberInfoResponse);
         setLoggedIn(true);
-
-        // 신규 유저 or 에러
-      } else {
-        if (socialResponse.signUpKey) {
-          const key = socialResponse.signUpKey;
-          console.log(key);
-          setSignUpUser((prevState: SignUpUser) => ({
-            ...prevState,
-            key: key,
-          }));
-          navigation.navigate('CheckPermissionScreen');
-
-          // 에러 처리
-        } else {
-          throw new Error('카카오 로그인에 실패하였습니다');
-        }
       }
     },
-    onError: (error) => {
-      mutateErrorHandler(error, setLoggedIn);
+    onError: (error: AxiosError<SocialLoginError>) => {
+      if (error.response?.data?.code === 'MEMBER_004') {
+        const key = error.response?.data?.message;
+        setSignUpUser((prevState) => ({
+          ...prevState,
+          key: key,
+        }));
+      
+        navigation.navigate('CheckPermissionScreen');
+      } else {
+        mutateErrorHandler(error, setLoggedIn);
+      }
     },
   });
 };
@@ -84,7 +80,7 @@ export const useAppleLogin = (
   const [, setUserInfo] = useRecoilState(userInfoState);
   const [, setLoggedIn] = useRecoilState(loggedInState);
   const [, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
-
+  
   return useMutation({
     mutationFn: () => appleLoginAuth(),
     onSuccess: async (response: AppleLoginResponse) => {
@@ -107,25 +103,20 @@ export const useAppleLogin = (
 
         setUserInfo(socialResponse.data.memberInfoResponse);
         setLoggedIn(true);
-
-        // 신규 유저 or 에러
-      } else {
-        if (socialResponse.signUpKey) {
-          const key = socialResponse.signUpKey;
-          setSignUpUser((prevState: SignUpUser) => ({
-            ...prevState,
-            key: key,
-          }));
-          navigation.navigate('CheckPermissionScreen');
-
-          // 에러 처리
-        } else {
-          throw new Error('애플 로그인에 실패하였습니다');
-        }
       }
     },
-    onError: (error) => {
-      mutateErrorHandler(error, setLoggedIn);
+    onError: (error: AxiosError<SocialLoginError>) => {
+      if (error.response?.data?.code === 'MEMBER_004') {
+        const key = error.response?.data?.message;
+        setSignUpUser((prevState) => ({
+          ...prevState,
+          key: key,
+        }));
+      
+        navigation.navigate('CheckPermissionScreen');
+      } else {
+        mutateErrorHandler(error, setLoggedIn);
+      }
     },
   });
 };
