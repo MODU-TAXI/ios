@@ -4,26 +4,18 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import PartyComponent from './Party';
 
-import { useGetRoomList } from '@hooks/api/rooms';
-
+import { RoomList } from '@type/entity/room';
 import { HomeScreenProps } from '@type/param/loginStack';
 
 interface PartiesComponentProps {
   navigation: HomeScreenProps['navigation'];
+  rooms: RoomList[];
 }
 
 const PartiesComponent: React.FC<PartiesComponentProps> = ({
-  navigation
+  navigation,
+  rooms,
 }) => {
-  const { rooms, refetch } = useGetRoomList({
-    "page": 0,
-    "size": 10,
-    "sortType": "NEW",
-    "searchLatitude": 37.46504,
-    "searchLongitude": 126.68045,
-    "radius": 500000,
-  })
-
   /** 해당 room 으로 이동 */
   const toRoomDetailScreen = (roomId: number) => {
     navigation.navigate('RoomDetailScreen', {roomId: roomId});

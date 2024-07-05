@@ -11,6 +11,7 @@ import DepartureSearchBoxComponent from '@components/Search/DepartureSearchBox';
 import { searchParamState, searchKeywordState } from '@recoil/recoil';
 
 import { useNaverSearch } from '@hooks/api/search';
+import { useLocationPermission } from '@hooks/permission/location';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
 import { convertCoordinates, getCurrentLocation } from '@utils/map';
@@ -21,8 +22,9 @@ import { DepartureSearchScreenProps } from '@type/param/loginStack';
 /** 출발지 검색: 거점검색 기능 제외 */
 const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
   /** 검색어 저장 변수 */
-  const [keyword, ] = useRecoilState<string>(searchKeywordState);
+  const [keyword, setKeyword] = useState<string>("");
   const [, setSearchParams] = useRecoilState(searchParamState);
+  const locationPermission = useLocationPermission();
 
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
@@ -49,6 +51,10 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
     }
     refetchNaverSearch();
   }, [keyword, refetchNaverSearch])
+
+  const handleKeyword = (input: string) => {
+    setKeyword(input);
+  }
 
   // 좌표계 변환, 두 지점 사이 거리 계산하여 새 배열에 저장
   useEffect(() => {
@@ -84,7 +90,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
         
         {/** 검색창 */}
         <View className="mb-3 mt-2">
-          <DepartureSearchBoxComponent />
+          <DepartureSearchBoxComponent keyword={keyword} handleKeyword={handleKeyword} />
         </View>
 
         {/** 추천 검색어 */}
@@ -103,7 +109,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
                 keyword={keyword}
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
-                distance={item.distance}
+                distance={locationPermission === 'granted' ? item.distance : null}
                 isFirst={index===0}
               />
             </Pressable>

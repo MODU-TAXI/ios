@@ -16,11 +16,18 @@ import { useNaverSearch } from '@hooks/api/search';
 
 import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
 
+interface ArrivalSearchBoxProps {
+  keyword: string;
+  handleKeyword: (input: string) => void;
+}
+
 /** 검색 바 */
-const ArrivalSearchBoxComponent = () => {
+const ArrivalSearchBoxComponent: React.FC<ArrivalSearchBoxProps> = ({
+  keyword,
+  handleKeyword,
+}) => {
   // focusing ref
   const inputRef = React.useRef<TextInput>(null);
-  const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
 
   const navigate = useNavigation();
 
@@ -28,7 +35,7 @@ const ArrivalSearchBoxComponent = () => {
   const valueHandleChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
-    setKeyword(e.nativeEvent.text);
+    handleKeyword(e.nativeEvent.text);
   };
 
   // 검색창 클릭 시에도 focusing

@@ -20,17 +20,17 @@ import HomeScreen from './src/screens/home/Home';
 import MyPageScreen from './src/screens/my/MyPage';
 import AlarmScreen from './src/screens/alarm/alarm';
 import NaverMapScreen from './src/screens/NaverMap';
-import PatchRoom from './src/screens/room/PatchRoom';
 import MainMapScreen from './src/screens/map/MainMap';
-import SearchScreen from './src/screens/search/Search';
 import SignInScreen from './src/screens/signIn/SignIn';
 import ChatRoomScreen from './src/screens/chat/ChatRoom';
 import HistoryScreen from './src/screens/history/History';
 import AmountScreen from './src/screens/calculate/Amount';
+import PatchRoomScreen from './src/screens/room/PatchRoom';
 import ArrivalMapScreen from './src/screens/map/ArrivalMap';
 import AccountScreen from './src/screens/calculate/Account';
 import CreateRoomScreen from './src/screens/room/CreateRoom';
 import RoomDetailScreen from './src/screens/room/RoomDetail';
+import SearchScreen from './src/screens/search/MainMapSearch';
 import HomeSearchScreen from './src/screens/search/HomeSearch';
 import DepartureMapScreen from './src/screens/map/DepartureMap';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
@@ -129,7 +129,7 @@ function AppInner() {
 
             {/* 조회, 수정 Screen */}
             <LogInStack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
-            <LogInStack.Screen name="PatchRoomScreen" component={PatchRoom} />
+            <LogInStack.Screen name="PatchRoomScreen" component={PatchRoomScreen} />
 
             {/* 정산 Screen */}
             <LogInStack.Screen name="CheckDepartureScreen" component={CheckDepartureScreen} />

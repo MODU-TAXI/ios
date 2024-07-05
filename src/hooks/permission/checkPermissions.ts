@@ -1,14 +1,4 @@
-import {
-  RESULTS,
-  Permission,
-  PERMISSIONS,
-  checkMultiple,
-  IOSPermission,
-  requestMultiple,
-  PermissionStatus,
-  checkNotifications,
-  requestNotifications,
-} from 'react-native-permissions';
+import { check, RESULTS, PERMISSIONS, checkMultiple, requestMultiple, checkNotifications, requestNotifications } from 'react-native-permissions';
 
 /** 초기 온보딩 화면에서의 권한 요청 */
 async function checkPermissions(): Promise<any> {
@@ -42,7 +32,6 @@ async function checkPermissions(): Promise<any> {
         ) {
           return requestNotifications(['alert', 'sound']);
         } else {
-          console.log('알림: ' + status);
           throw new Error('알림 에러');
         }
       });
@@ -54,8 +43,8 @@ async function checkPermissions(): Promise<any> {
         PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
       ]);
     }
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    throw new Error(error);
   }
 }
 

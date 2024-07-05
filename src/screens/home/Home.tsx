@@ -17,14 +17,16 @@ import { roomState, userInfoState } from '@recoil/recoil';
 
 import { getMyChatInfo } from '@server/api/chat';
 
-import { useGetRoomPreview } from '@hooks/api/rooms';
 import { useGetAlarmsCount } from '@hooks/api/alarms';
+import { useGetHistoriesByMonth } from '@hooks/api/history';
+import { useGetRoomList, useGetRoomPreview } from '@hooks/api/rooms';
 
 import { vibration } from '@utils/effect';
 
 import { HomeScreenProps } from '@type/param/loginStack';
 
 const HomeComponent = ({ navigation }: HomeScreenProps) => {
+  const date = new Date();
   const userInfo = useRecoilValue(userInfoState);
 
   const [socketRoomId, setSocketRoomId] = useRecoilState(roomState);
@@ -42,6 +44,17 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
   const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(socketRoomId);
 
+  const { rooms: recentRooms, refetch: refetchRoomList } = useGetRoomList({
+    "page": 0,
+    "size": 10,
+    "sortType": "NEW",
+    "searchLatitude": 37.46504,
+    "searchLongitude": 126.68045,
+    "radius": 500000,
+  })
+
+  const { data: histories, refetch: refetchHistories } = useGetHistoriesByMonth(date.getFullYear(), date.getMonth());
+
   useFocusEffect(
     React.useCallback(() => {
       checkMyRoom();
@@ -54,6 +67,9 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
     vibration();
 
+    refetchRoomList();
+    refetchHistories();
+
     const response = await getMyChatInfo();
 
     const { roomId } = response;
@@ -65,7 +81,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
     }
 
     setRefreshing(false);
-  }, [refetchRoomPreview]);
+  }, [refetchRoomPreview, refetchRoomList]);
 
   const toCreateRoomScreen = () => {
     navigation.navigate('CreateRoomScreen');
@@ -73,10 +89,6 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
   const toMapScreen = async () => {
     navigation.navigate('MainMapScreen');
-  };
-
-  const toSearchScreen = () => {
-    navigation.navigate('HomeSearchScreen');
   };
 
   const toChatRoomScreen = () => {
@@ -87,17 +99,18 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('AlarmScreen');
   };
 
-  if (!userInfo || !socketRoomId) return <LoadingComponent />;
+  if (!userInfo || !socketRoomId || !histories) return <LoadingComponent />;
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['left', 'right']}>
       {/* 로고, 알림 */}
       <HomeHeaderComponent
         userInfo={userInfo}
-        toSearchScreen={toSearchScreen}
+        toMapScreen={toMapScreen}
         toAlarmScreen={toAlarmScreen}
         alarmsCount={alarmsCount?.counts}
         roomId={socketRoomId}
+        navigation={navigation}
       />
 
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
@@ -116,12 +129,12 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         <View className="my-6 h-2 bg-[#F2F2F2]" />
 
         {/* 실시간 택시팟 */}
-        <PartiesComponent navigation={navigation} />
+        <PartiesComponent navigation={navigation} rooms={recentRooms} />
 
         <View className="my-6 h-2 bg-[#F2F2F2]" />
 
         {/* 기타 */}
-        <UserSummaryComponent navigation={navigation} />
+        <UserSummaryComponent navigation={navigation} histories={histories} month={date.getMonth()} />
       </ScrollView>
     </SafeAreaView>
   );

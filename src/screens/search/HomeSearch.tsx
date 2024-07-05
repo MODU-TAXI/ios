@@ -13,6 +13,7 @@ import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 import { searchParamState, searchKeywordState } from '@recoil/recoil';
 
 import { useNaverSearch } from '@hooks/api/search';
+import { useLocationPermission } from '@hooks/permission/location';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
 
@@ -20,9 +21,11 @@ import { SortedItemType } from '@type/entity/search';
 import { HomeSearchScreenProps } from '@type/param/loginStack';
 
 /** 메인맵 도착지 검색 */
-const HomeSearchScreen = ({ navigation }: HomeSearchScreenProps) => {
+const HomeSearchScreen = ({ route, navigation }: HomeSearchScreenProps) => {
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
+  const locationPermission = useLocationPermission();
+  
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({
@@ -78,7 +81,7 @@ const HomeSearchScreen = ({ navigation }: HomeSearchScreenProps) => {
       longitude: longitude,
     })
     setKeyword(''); // 검색어 삭제
-    navigation.goBack();
+    route.params?.toMainMap();
   }
 
   return (
@@ -106,7 +109,7 @@ const HomeSearchScreen = ({ navigation }: HomeSearchScreenProps) => {
                 keyword={keyword}
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
-                distance={item.distance}
+                distance={locationPermission === 'granted' ? item.distance : null}
                 isFirst={index === 0}
               />
             </Pressable>

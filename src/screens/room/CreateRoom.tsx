@@ -46,7 +46,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   const [datePicked, setDatePicked] = useState<boolean>(false); // 날짜 선택 여부
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
   const [passangersNumber, setPassengersNumber] = useState<number | null>(null); // 탑승 인원
-  const [checkedCategorys, setCheckedCategorys] = useState<boolean[]>([false, false, false]); // 카테고리
+  const [checkedCategories, setCheckedCategories] = useState<boolean[]>([false, false, false]); // 카테고리
   const [userInfo] = useRecoilState(userInfoState);
 
   // 파티 생성
@@ -60,7 +60,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
       categories[1] = 'ONLY_MAN';
     }
 
-    const filteredCategories = categories.filter((_, index) => checkedCategorys[index]);
+    const filteredCategories = categories.filter((_, index) => checkedCategories[index]);
 
     // 개발환경시 기기가 미국이라 9시간 더해주기
     const departureTimeForServer = new Date(departureTime.getTime() + 9 * 60 * 60 * 1000);
@@ -117,10 +117,6 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
       spotId: 0,
     });
   }, [setDeparture, setArrival]);
-
-  useEffect(() => {
-    return resetRecoilValue;
-  }, [resetRecoilValue]);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -258,8 +254,8 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
               <CategoryComponent
                 index={0}
                 category={'학생인증'}
-                checkedCategorys={checkedCategorys}
-                setCheckedCategorys={setCheckedCategorys}
+                checkedCategories={checkedCategories}
+                setCheckedCategories={setCheckedCategories}
               />
             ) : (
               <Pressable
@@ -275,23 +271,23 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
               <CategoryComponent
                 index={1}
                 category={'남자만'}
-                checkedCategorys={checkedCategorys}
-                setCheckedCategorys={setCheckedCategorys}
+                checkedCategories={checkedCategories}
+                setCheckedCategories={setCheckedCategories}
               />
             ) : (
               <CategoryComponent
                 index={1}
                 category={'여자만'}
-                checkedCategorys={checkedCategorys}
-                setCheckedCategorys={setCheckedCategorys}
+                checkedCategories={checkedCategories}
+                setCheckedCategories={setCheckedCategories}
               />
             )}
 
             <CategoryComponent
               index={2}
               category={'조용히'}
-              checkedCategorys={checkedCategorys}
-              setCheckedCategorys={setCheckedCategorys}
+              checkedCategories={checkedCategories}
+              setCheckedCategories={setCheckedCategories}
             />
           </View>
         </View>

@@ -10,6 +10,7 @@ import TransparentSearchBoxComponent from "@components/Search/TransparentSearchB
 import { departureState, searchParamState } from "@recoil/recoil";
 
 import { useReverseGeocoding } from "@hooks/api/search";
+import { useLocationPermission } from "@hooks/permission/location";
 
 import { getCurrentLocation } from "@utils/map";
 
@@ -29,6 +30,7 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
 
   const [, setDeparture] = useRecoilState(departureState);
   const [searchParams, setSearchParams] = useRecoilState(searchParamState);
+  const [buildingName, setBuildingName] = useState<string>("");
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
 
   const [currentCamera, setCurrentCamera] = useState<Camera>({
@@ -36,18 +38,6 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
     longitude: 126.656496,
     zoom: 16,
   });
-
-  // 검색결과 넘어올 경우 카메라 이동
-  useEffect(() => {
-    if (searchParams.title !== "") {
-      const searchCamera: Camera = {
-        latitude: searchParams.latitude,
-        longitude: searchParams.longitude,
-        zoom: 16,
-      }
-      mapRef.current?.animateCameraTo(searchCamera);
-    }
-  }, [searchParams])
 
   // reverse geocoding
   const { results, refetch, isFetching } = useReverseGeocoding(
@@ -58,7 +48,10 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
   // 화면의 어디에서 멈추는지 snap point
   const snapPoints = useMemo(() => ['27%'], []);
 
-  // 처음 렌더링 시 현재위치
+  // 위치 권한 정보
+  const locationPermission = useLocationPermission();
+
+  // 처음 렌더링 시 카메라 제어
   useEffect(() => {
     const fetchCurrentLocation = async () => {
       const location = await getCurrentLocation();
@@ -69,8 +62,26 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
       });
       mapRef.current?.animateCameraTo(location);
     };
-    fetchCurrentLocation();
-  }, []);
+
+    const fetchSearchLocation = () => {
+      const searchLocation: Camera = {
+        latitude: searchParams.latitude,
+        longitude: searchParams.longitude,
+        zoom: 16,
+      };
+      setCurrentCamera(searchLocation);
+      setBuildingName(searchParams.title);
+      mapRef.current?.animateCameraTo(searchLocation);
+    };
+
+    if (locationPermission === 'granted' && searchParams.title === "") {
+      fetchCurrentLocation();
+    } else if (searchParams.title !== "") {
+      fetchSearchLocation();
+      setSearchBoxValue(searchParams.title);
+      setIsSearched(true);
+    }
+  }, [locationPermission, searchParams.latitude, searchParams.longitude]);
 
   // timeout 정보 저장 Ref
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -96,18 +107,17 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
   }, []);
 
   useEffect(() => {
-    if (!isBlocked && searchParams.title !== "") {
-      setSearchParams({
-        ...searchParams,
-        title: "",
-      })
-    }
-  }, [currentCamera, refetch])
+    formatBuildingName();
+  }, [refetch, results])
 
   // 카메라 옮기면 500ms간 버튼 비활성화
   useEffect(() => {
     if (isTouching) {
       setIsBlocked(true);
+      setSearchParams({
+        ...searchParams,
+        title: "",
+      });
     } else {
       const timeout = setTimeout(() => {
         setIsBlocked(false);
@@ -116,8 +126,9 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
     }
   }, [isTouching])
 
-  /** 현재 위치로 */
+  /** 현재 위치로, 1000ms간 버튼 비활성화 */
   const moveToCurrentLocation = async() => {
+    setIsBlocked(true);
     const currentLocation = await getCurrentLocation();
     setCurrentCamera({
       latitude: currentLocation.latitude,
@@ -126,18 +137,27 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
     });
 
     mapRef.current?.animateCameraTo(currentLocation);
+    const timeout = setTimeout(() => {
+      setIsBlocked(false);
+    }, 1000);
+    return () => clearTimeout(timeout);
   }
 
   /** 빌딩 이름 유무에 따른 렌더링 */
   const formatBuildingName = () => {
+    if (searchParams.title !== "") {
+      setBuildingName(searchParams.title);
+      return;
+    }
+
     const value = results?.[1]?.land.addition0.value;
 
     if (value === undefined) {
-      return "주소 정보 없음";
+      setBuildingName("주소 정보 없음");
     } else if (value === "") {
-      return "건물 정보 없음";
+      setBuildingName("건물 정보 없음");
     } else {
-      return value;
+      setBuildingName(value);
     }
   }
 
@@ -145,6 +165,7 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
   const formatAddress = () => {
     const area1 = results?.[0]?.region.area1.name;
     const area2 = results?.[0]?.region.area2.name;
+    const area3 = results?.[0]?.region.area3.name;
     const landName = results?.[1]?.land.name;
     const landNumber1 = results?.[1]?.land.number1;
     const landNumber2 = results?.[1]?.land.number2;
@@ -153,6 +174,9 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
 
     area1 && (addressString += area1);
     area2 && (addressString += " " + area2);
+    if (results?.length === 1) {
+      area3 && (addressString += " " + area3);
+    }
     landName && (addressString += " " + landName);
     landNumber1 && (addressString += " " + landNumber1);
     landNumber2 && (addressString += "-" + landNumber2);
@@ -162,18 +186,18 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
 
   /** 출발지 저장 로직 */
   const handleSearch = () => {
-    if (formatBuildingName() === "건물 정보 없음") {
+    if (buildingName === "건물 정보 없음") {
       setDeparture({
         name: formatAddress(),
         longitude: currentCamera.longitude,
         latitude: currentCamera.latitude,
       });
       setIsSearched(true);
-    } else if (formatBuildingName() === "주소 정보 없음") {
+    } else if (buildingName === "주소 정보 없음") {
       setIsSearched(false);
     } else {
       setDeparture({
-        name: formatBuildingName(),
+        name: buildingName,
         longitude: currentCamera.longitude,
         latitude: currentCamera.latitude,
       });
@@ -284,14 +308,14 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
 
             <Text className="mb-2 font-medium text-base text-boxFont">출발지</Text>
             <Text className="text-lg font-semibold text-main">
-              {searchParams.title !== "" ? searchParams.title : formatBuildingName()}
+              {buildingName}
             </Text>
             <Text className="text-gray600">
               {formatAddress()}
             </Text>
 
             {/** 출발지 설정 버튼 */}
-            {formatBuildingName() === "주소 정보 없음" || isTouching || isFetching || isBlocked ? (
+            {buildingName === "주소 정보 없음" || isTouching || isFetching || isBlocked ? (
               <Pressable
                 className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-disabled2"
                 disabled={true}

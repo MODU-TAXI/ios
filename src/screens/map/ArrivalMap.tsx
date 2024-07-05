@@ -12,6 +12,8 @@ import { arrivalState } from "@recoil/recoil";
 
 import { useGetSpotMap } from "@hooks/api/spot";
 
+import { calculateDist } from "@utils/search";
+
 import { Spot } from "@type/entity/spot";
 import { ArrivalMapScreenProps } from "@type/param/loginStack";
 
@@ -33,36 +35,54 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
     zoom: 14,
   });
 
+  // 첫 렌더링 시 [거점 or 검색어] 선택에 따른 처리
   useEffect(() => {
     if (route.params?.type === "spot" && route.params.spot) {
       setSelectedSpot(route.params.spot);
       setCurrentCamera({
-        latitude: route.params.spot?.latitude,
-        longitude: route.params.spot?.longitude,
+        latitude: route.params.spot.latitude,
+        longitude: route.params.spot.longitude,
         zoom: 14,
       });
+      setSearchBoxValue(route.params.spot.name);
+      setIsSearched(true);
     } else if (route.params?.type === "search" && route.params.searchParams) {
       setSelectedSpot(undefined);
       setCurrentCamera({
-        latitude: route.params.searchParams?.latitude,
-        longitude: route.params.searchParams?.longitude,
+        latitude: route.params.searchParams.latitude,
+        longitude: route.params.searchParams.longitude,
         zoom: 14,
       });
+      setSearchBoxValue(route.params.searchParams.title);
+      setIsSearched(true);
     }
   }, []);
 
+  /** 거점 3개 디스플레이되는 카메라 조정 */
+  // useEffect(() => {
+  //   const baseDist = 1000;
+  //   const dist = calculateDist(spotData.maxLatitude, spotData.maxLongitude, spotData.minLatitude, spotData.minLongitude);
+  //   const scaleFactor = Math.log10(dist / baseDist + 1) * 0.05;
+
+  //   const deltaMax = 1 + scaleFactor;
+  //   const deltaMin = 1 - scaleFactor;
+
+  //   mapRef.current?.animateCameraWithTwoCoords({
+  //     coord1: {
+  //       latitude: spotData.maxLatitude * deltaMax,
+  //       longitude: spotData.maxLongitude * deltaMax,
+  //     },
+  //     coord2: {
+  //       latitude: spotData.minLatitude * deltaMin,
+  //       longitude: spotData.minLongitude * deltaMin,
+  //     }
+  //   })
+  // }, [route.params?.searchParams?.title])
+
+  /** 검색 결과 좌표로 카메라 조정 */
   useEffect(() => {
-    mapRef.current?.animateCameraWithTwoCoords({
-      coord1: {
-        latitude: spotData.maxLatitude * 1.00005,
-        longitude: spotData.maxLongitude * 1.00005,
-      },
-      coord2: {
-        latitude: spotData.minLatitude * 0.99995,
-        longitude: spotData.minLongitude * 0.99995,
-      }
-    })
-  }, [route.params?.searchParams?.title])
+    mapRef.current?.animateCameraTo(currentCamera);
+  }, [currentCamera])
 
   // 거점 3개와 고정카메라 좌표 리턴
   const { spotData, refetch } = useGetSpotMap({
@@ -80,13 +100,21 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
   }
 
   const toSearchScreen = () => {
+    if (route.params?.isPatch) {
+      navigation.navigate('ArrivalSearchScreen', { isPatch: true });
+    }
     navigation.navigate('ArrivalSearchScreen');
   }
   
   // 도착 거점을 저장하며 이동
   const [, setArrival] = useRecoilState(arrivalState);
   const handleSelectArrival = () => {
-    navigation.navigate('CreateRoomScreen');
+    if (route.params?.isPatch) {
+      navigation.pop(2);
+    } else {
+      navigation.navigate('CreateRoomScreen');
+    }
+    
     if (selectedSpot) {
       setArrival({
         name: selectedSpot.name,

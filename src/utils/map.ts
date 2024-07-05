@@ -1,7 +1,7 @@
 import { Coord } from "@mj-studio/react-native-naver-map";
 import Geolocation from "@react-native-community/geolocation";
 
-import checkLocationPermission from "@hooks/permission/checkLocation";
+import { useLocationPermission } from "@hooks/permission/location";
 
 /** zoom 레벨에 따른 range 조정 */
 export const calculateRadius = (zoom: number) => {
@@ -23,9 +23,9 @@ export const convertCoordinates = (mapx: number, mapy: number) => {
   };
 }
 
-/** 권한허용 + 현재위치 리턴 함수 */
+/** 현재위치 리턴 함수 */
 export const getCurrentLocation = async (): Promise<Coord> => {
-  await checkLocationPermission();
+
   
   return new Promise((resolve, reject) => {
     Geolocation.getCurrentPosition(

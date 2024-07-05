@@ -14,6 +14,7 @@ import { arrivalState, searchKeywordState } from '@recoil/recoil';
 
 import { useGetSpotList } from '@hooks/api/spot';
 import { useNaverSearch } from '@hooks/api/search';
+import { useLocationPermission } from '@hooks/permission/location';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
 import { convertCoordinates, getCurrentLocation } from '@utils/map';
@@ -24,9 +25,11 @@ import { ArrivalSearchScreenProps } from '@type/param/loginStack';
 
 
 /** 도착 거점 검색 */
-const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
+const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) => {
   /** 검색어 저장 변수 */
-  const [keyword, ] = useRecoilState<string>(searchKeywordState);
+  const [keyword, setKeyword] = useState<string>("");
+  const locationPermission = useLocationPermission();
+
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({
@@ -53,6 +56,10 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
     refetchNaverSearch();
   }, [keyword, refetchNaverSearch])
 
+  const handleKeyword = (input: string) => {
+    setKeyword(input);
+  }
+
   // 좌표계 변환, 두 지점 사이 거리 계산하여 새 배열에 저장
   useEffect(() => {
     if (items && items.length > 0) {
@@ -68,8 +75,6 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
   }, [items, currentLocation])
 
   const [spotSearchParams, setSpotSearchParams] = useState({
-    currentLongitude: currentLocation.longitude,
-    currentLatitude: currentLocation.latitude,
     departureLongitude: currentLocation.longitude,
     departureLatitude: currentLocation.latitude,
   });
@@ -78,21 +83,18 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
   useEffect(() => {
     if (sortedItems.length > 0) {
       setSpotSearchParams({
-        currentLongitude: currentLocation.longitude,
-        currentLatitude: currentLocation.latitude,
         departureLongitude: sortedItems[0].longitude,
         departureLatitude: sortedItems[0].latitude,
       })
     }
   }, [sortedItems])
 
-  const { spots, refetch: refetchSpotList } = useGetSpotList(
-    1, 1, 
-    spotSearchParams?.currentLongitude,
-    spotSearchParams?.currentLatitude,
-    spotSearchParams?.departureLongitude,
-    spotSearchParams?.departureLatitude,
-  );
+  const { spots, refetch: refetchSpotList } = useGetSpotList({
+    "page": 0, 
+    "size": 1, 
+    "searchLongitude": spotSearchParams?.departureLongitude,
+    "searchLatitude": spotSearchParams?.departureLatitude,
+  });
 
   /** 검색어 선택: 선택한 검색어를 전달하며 이동 */
   const toArrivalMapScreen = (
@@ -115,6 +117,7 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
     navigation.navigate('ArrivalMapScreen', {
       type: 'spot',
       spot: spot,
+      isPatch: route.params?.isPatch,
     });
   }
 
@@ -124,7 +127,7 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
         
         {/** 검색창 */}
         <View className="mb-3 mt-2">
-          <ArrivalSearchBoxComponent />
+          <ArrivalSearchBoxComponent keyword={keyword} handleKeyword={handleKeyword} />
         </View>
 
         {keyword && (
@@ -149,7 +152,7 @@ const ArrivalSearchScreen = ({ navigation }: ArrivalSearchScreenProps) => {
                 keyword={keyword}
                 fullKeyword={deleteTagTitle(item.title)}
                 address={item.address} 
-                distance={item.distance}
+                distance={locationPermission === 'granted' ? item.distance : null}
                 isFirst={false}
               />
             </Pressable>

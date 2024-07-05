@@ -8,7 +8,7 @@ interface RecommendedSearchProps {
   keyword: string;
   fullKeyword: string;
   address: string;
-  distance: number;
+  distance: number | null;
   isFirst: boolean;
 }
 
@@ -52,7 +52,11 @@ const RecommendedSearchComponent: React.FC<RecommendedSearchProps> = ({
           >
             {address}
           </Text>
-          <Text className="w-1/5 text-right text-sm text-gray600">{modifyDistStr(distance)}</Text>
+          {distance !== null ? (
+            <Text className="w-1/5 text-right text-sm text-gray600">{modifyDistStr(distance)}</Text>
+          ) : (
+            <Text className="w-1/5 text-right text-sm text-gray600"></Text>
+          )}
         </View>
       </View>
     </View>

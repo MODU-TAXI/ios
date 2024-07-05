@@ -42,7 +42,7 @@ const SpotSelectionSearchComponent: React.FC<SpotSearchProps> = ({
           >
             {address}
           </Text>
-          <Text className="w-1/5 text-right text-sm text-gray600">{modifyDistStr(distance)}</Text>
+          <Text className="w-1/5 text-right text-sm text-gray600"></Text>
         </View>
       </View>
     </View>

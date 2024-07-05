@@ -40,8 +40,8 @@ export const useReverseGeocoding = (
         `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc`, {
           params: {
             coords: coords,
-            // sourcecrs: "epsg:4326",
-            // targetcrs: "epsg:4326",
+            sourcecrs: "epsg:4326",
+            targetcrs: "epsg:4326",
             orders: "admcode,roadaddr",
             output: "json",
           },

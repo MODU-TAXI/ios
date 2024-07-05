@@ -5,7 +5,7 @@ import {
   DeleteAxiosInstance,
 } from '@axios/axios.method';
 
-import { CheckSpotRequest, GetSpotMapRequest } from '@server/requestTypes/spot';
+import { CheckSpotRequest, GetSpotMapRequest, GetSpotListRequest } from '@server/requestTypes/spot';
 import { CheckSpotResponse, GetSpotMapResponse, GetSpotListResponse } from '@server/responseTypes/spot';
 
 export const checkSpot = async ({
@@ -21,21 +21,14 @@ export const checkSpot = async ({
 
 // [지점 근처 거점 리스트 조회] /api/spots/list
 export const getSpotList = async (
-  page: number,
-  size: number,
-  currentLongitude: number,
-  currentLatitude: number,
-  searchLongitude: number,
-  searchLatitude: number,
+  data: GetSpotListRequest
 ): Promise<GetSpotListResponse> => {
   const response = await GetAxiosInstance<GetSpotListResponse>(`/api/spots/list`, {
     params: {
-      page: page,
-      size: size,
-      currentLongitude: currentLongitude,
-      currentLatitude: currentLatitude,
-      searchLongitude: searchLongitude,
-      searchLatitude: searchLatitude,
+      page: data.page,
+      size: data.size,
+      searchLongitude: data.searchLongitude,
+      searchLatitude: data.searchLatitude,
     },
   });
   return response.data;

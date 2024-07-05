@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 
-import { ErrorToastMessage } from '@utils/toastMessage';
+import { HistoriesMonthlyResponse } from '@server/responseTypes/history';
 
 import { HomeScreenProps } from '@type/param/loginStack';
 
@@ -10,12 +10,15 @@ import Receipt from '@assets/images/Home/Receipt.svg';
 
 interface UserSummaryComponentProps {
   navigation: HomeScreenProps['navigation'];
+  histories: HistoriesMonthlyResponse;
+  month: number;
 }
 
-const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({ navigation }) => {
-  const date = new Date();
-  const month = date.getMonth();
-
+const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({ 
+  navigation,
+  histories,
+  month,
+}) => {
   const toSummaryScreen = () => {
     navigation.navigate('HistoryScreen');
   };
@@ -33,7 +36,7 @@ const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({ navigation 
           <View className="ml-1 flex truncate">
             <Text className="text-xs text-gray700">{month}월 한달동안</Text>
             <View className="flex flex-row items-center">
-              <Text className="text-sm font-semibold text-success">000원</Text>
+              <Text className="text-sm font-semibold text-success">{histories.accumulateTotalCharge}원</Text>
               <Text className="text-xs text-gray700"> 아꼈어요!</Text>
             </View>
           </View>
