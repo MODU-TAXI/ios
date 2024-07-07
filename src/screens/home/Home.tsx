@@ -16,6 +16,7 @@ import HomeMainPanelComponent from '@components/Home/HomeMainPanel';
 import { roomState, userInfoState } from '@recoil/recoil';
 
 import { getMyChatInfo } from '@server/api/chat';
+import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useGetAlarmsCount } from '@hooks/api/alarms';
 import { useGetHistoriesByMonth } from '@hooks/api/history';
@@ -149,9 +150,11 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
 const HomeScreen = ({ route, navigation }: HomeScreenProps) => {
   return (
-    <Suspense fallback={<LoadingComponent />}>
-      <HomeComponent navigation={navigation} route={route} />
-    </Suspense>
+    <SuspenseErrorHandler navigation={navigation}>
+      <Suspense fallback={<LoadingComponent />}>
+        <HomeComponent navigation={navigation} route={route} />
+      </Suspense>
+    </SuspenseErrorHandler>
   );
 };
 

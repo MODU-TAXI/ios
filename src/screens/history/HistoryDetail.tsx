@@ -1,11 +1,14 @@
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { Text, View, SafeAreaView } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
+import LoadingComponent from '@components/Common/Loading';
 import UserModalComponent from '@components/Common/UserModal';
 import HistoryMembersComponent from '@components/History/HistoryMembers';
+
+import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useGetHistoryDetail } from '@hooks/api/history';
 
@@ -21,7 +24,7 @@ export interface RoomMember {
   thisIsMe: boolean;
 }
 
-const HistoryDetailScreen = ({ navigation, route }: HistoryDetailScreenProps) => {
+const HistoryDetailComponent = ({ navigation, route }: HistoryDetailScreenProps) => {
   const { historyId } = route.params;
 
   const { data: history } = useGetHistoryDetail(historyId);
@@ -167,6 +170,16 @@ const HistoryDetailScreen = ({ navigation, route }: HistoryDetailScreenProps) =>
         />
       )}
     </SafeAreaView>
+  );
+};
+
+const HistoryDetailScreen = ({ route, navigation }: HistoryDetailScreenProps) => {
+  return (
+    <SuspenseErrorHandler navigation={navigation}>
+      <Suspense fallback={<LoadingComponent />}>
+        <HistoryDetailComponent navigation={navigation} route={route} />
+      </Suspense>
+    </SuspenseErrorHandler>
   );
 };
 

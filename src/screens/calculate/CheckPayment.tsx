@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Alert, Pressable, Vibration, ScrollView, RefreshControl } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
+import LoadingComponent from '@components/Common/Loading';
 import { GetBankComponent } from '@components/Calculate/GetBank';
 import PaymentMembersComponent from '@components/Calculate/PaymentMembers';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
+
+import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useCompletePayment, useGetPaymentDetail } from '@hooks/api/payment';
 
@@ -18,7 +21,7 @@ import { CheckPaymentScreenProps } from '@type/param/loginStack';
 
 import CopyButton from '@assets/images/Calculate/CopyButton.svg';
 
-const CheckPaymentScreen = ({ navigation, route }: CheckPaymentScreenProps) => {
+const CheckPaymentComponent = ({ navigation, route }: CheckPaymentScreenProps) => {
   const { roomPreview } = route.params;
 
   const [refreshing, setRefreshing] = useState(false); // 새로고침시 필요한 변수
@@ -141,6 +144,16 @@ const CheckPaymentScreen = ({ navigation, route }: CheckPaymentScreenProps) => {
         />
       </View>
     </SafeAreaView>
+  );
+};
+
+const CheckPaymentScreen = ({ route, navigation }: CheckPaymentScreenProps) => {
+  return (
+    <SuspenseErrorHandler navigation={navigation}>
+      <Suspense fallback={<LoadingComponent />}>
+        <CheckPaymentComponent navigation={navigation} route={route} />
+      </Suspense>
+    </SuspenseErrorHandler>
   );
 };
 

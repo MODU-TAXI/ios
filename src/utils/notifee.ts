@@ -8,18 +8,26 @@ export const handleFirebaseMessage = async (
   messageType: string,
   roomId?: string,
 ): Promise<string> => {
+  Vibration.vibrate(1);
+
   if (roomId) {
-    Vibration.vibrate(1);
+    if (messageType === 'CHAT' || messageType === 'IMAGE') {
+      return notifee.displayNotification({
+        title: title,
+        body: content,
+        data: { messageType: messageType, roomId: roomId },
+      });
+    }
+
     return notifee.displayNotification({
-      title: '모두의 택시',
+      title: title,
       body: content,
       data: { messageType: messageType, roomId: roomId },
     });
   }
 
-  Vibration.vibrate(1);
   return notifee.displayNotification({
-    title: '모두의 택시',
+    title: title,
     body: content,
     data: { messageType: messageType },
   });
