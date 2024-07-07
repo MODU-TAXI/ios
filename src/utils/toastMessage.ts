@@ -5,7 +5,7 @@ export const InfoToastMessage = (content: string): void => {
   return Toast.show({
     type: 'infoToast',
     props: { content: content },
-    position: 'bottom',
+    position: 'top',
     bottomOffset: 30,
   });
 };
@@ -15,7 +15,7 @@ export const ErrorToastMessage = (message: string): void => {
   return Toast.show({
     type: 'errorToast',
     props: { message: message },
-    position: 'bottom',
+    position: 'top',
     bottomOffset: 30,
   });
 };
@@ -24,7 +24,7 @@ export const ErrorToastMessage = (message: string): void => {
 export const StartChatToastMessage = (): void => {
   return Toast.show({
     type: 'startChatToast',
-    position: 'bottom',
+    position: 'top',
     bottomOffset: 30,
   });
 };
@@ -33,7 +33,7 @@ export const StartChatToastMessage = (): void => {
 export const RegisterAccountToastMessage = (): void => {
   return Toast.show({
     type: 'registerAccountToast',
-    position: 'bottom',
+    position: 'top',
     bottomOffset: 30,
   });
 };
@@ -42,7 +42,7 @@ export const RegisterAccountToastMessage = (): void => {
 export const CompleteRegisterAccountToastMessage = (): void => {
   return Toast.show({
     type: 'completeRegisterAccountToast',
-    position: 'bottom',
+    position: 'top',
     bottomOffset: 30,
   });
 };
@@ -51,7 +51,7 @@ export const CompleteRegisterAccountToastMessage = (): void => {
 export const CompleteMatchToastMessage = (): void => {
   return Toast.show({
     type: 'completeMatchToast',
-    position: 'bottom',
+    position: 'top',
     bottomOffset: 30,
   });
 };
