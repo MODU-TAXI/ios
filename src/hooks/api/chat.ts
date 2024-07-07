@@ -1,10 +1,13 @@
 import { useRecoilState } from 'recoil';
 import { useSuspenseQuery, useSuspenseQueries } from '@tanstack/react-query';
 
+import { MessageBody } from '@recoil/type';
 import { memberIdState } from '@recoil/recoil';
 
 import { getRoomPreview } from '@server/api/room';
 import { getMyChatInfo, getChatMessages } from '@server/api/chat';
+
+import { combineChatMessages } from '@utils/chat';
 
 // 내가 참여하고 있는 채팅방 정보 가져오기
 export const useGetMyInfo = () => {
@@ -39,7 +42,7 @@ export const useChatDetail = (roomId: number) => {
       return {
         roomPreview: results[0].data,
         roomPreviewRefetch: results[0].refetch,
-        messages: results[1].data,
+        messages: combineChatMessages(results[1].data.messages),
         messagesRefetch: results[1].refetch,
       };
     },

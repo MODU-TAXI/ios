@@ -28,6 +28,7 @@ import { useEnterChatRoom } from '@hooks/chat';
 import { useChatDetail } from '@hooks/api/chat';
 import { useMatchComplete, useExitParticipateRoom } from '@hooks/api/rooms';
 
+import { combineChatMessages } from '@utils/chat';
 import { openAlbum, openCamera } from '@utils/image';
 import { setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
 
@@ -97,7 +98,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const onMessageReceived = (message: Message) => {
     const newMessage: MessageBody = JSON.parse(message.body);
 
-    setNewMeesages((prev: MessageBody[]) => [...prev, newMessage]);
+    setNewMeesages((prev: MessageBody[]) => combineChatMessages([...prev, newMessage]));
   };
 
   // socket 연결 해제
@@ -367,7 +368,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
           memberId={myInfo.id}
           managerId={roomPreview!.managerId}
           newMessages={newMessages}
-          messages={messages.messages}
+          messages={messages}
           openUserInfoModal={openUserInfoModal}
           openImageModal={openImageModal}
           toCalculateScreen={toCalculateScreen}

@@ -9,6 +9,8 @@ export type SignUpUser = {
 };
 
 export type MessageBody = {
+  first: boolean;
+  last: boolean;
   content: string;
   dateTime: Date;
   memberId: number;
@@ -50,7 +52,7 @@ export type Calculate = {
 };
 
 export type SearchParam = {
-  title: string,
-  latitude: number,
-  longitude: number,
-}
+  title: string;
+  latitude: number;
+  longitude: number;
+};
