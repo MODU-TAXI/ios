@@ -45,15 +45,18 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
   const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(socketRoomId);
 
   const { rooms: recentRooms, refetch: refetchRoomList } = useGetRoomList({
-    "page": 0,
-    "size": 10,
-    "sortType": "NEW",
-    "searchLatitude": 37.46504,
-    "searchLongitude": 126.68045,
-    "radius": 500000,
-  })
+    page: 0,
+    size: 10,
+    sortType: 'NEW',
+    searchLatitude: 37.46504,
+    searchLongitude: 126.68045,
+    radius: 500000,
+  });
 
-  const { data: histories, refetch: refetchHistories } = useGetHistoriesByMonth(date.getFullYear(), date.getMonth());
+  const { data: histories, refetch: refetchHistories } = useGetHistoriesByMonth(
+    date.getFullYear(),
+    date.getMonth(),
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -134,7 +137,11 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         <View className="my-6 h-2 bg-[#F2F2F2]" />
 
         {/* 기타 */}
-        <UserSummaryComponent navigation={navigation} histories={histories} month={date.getMonth()} />
+        <UserSummaryComponent
+          navigation={navigation}
+          histories={histories}
+          month={date.getMonth()}
+        />
       </ScrollView>
     </SafeAreaView>
   );

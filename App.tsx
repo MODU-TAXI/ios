@@ -44,9 +44,7 @@ function App(): React.JSX.Element {
         <SafeAreaProvider>
           <NavigationContainer linking={linking} fallback={<LoadingComponent />}>
             <QueryClientProvider client={queryClient}>
-              <CustomErrorHandler>
-                <AppInner />
-              </CustomErrorHandler>
+              <AppInner />
             </QueryClientProvider>
           </NavigationContainer>
         </SafeAreaProvider>

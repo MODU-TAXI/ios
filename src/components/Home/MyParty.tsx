@@ -29,13 +29,13 @@ const MyPartyComponent: React.FC<MyPartyComponentProps> = ({ roomPreview, toChat
 
         {/* 출발지, 도착지 */}
         <View className="mt-2 flex-row items-center truncate">
-          <View>
+          {/* <View>
             <Text className="text-[16px] font-semibold text-[#272727]">
               {roomPreview.departureName}
             </Text>
           </View>
 
-          <Arrow className="mx-2" />
+          <Arrow className="mx-2" /> */}
 
           <View>
             <Text className="text-[16px] font-semibold text-[#272727]">
