@@ -19,26 +19,26 @@ const OthersImageMessageBoxComponent: React.FC<OthersImageMessageBoxComponentPro
 }) => {
   return (
     <View className="my-2 flex-col">
-      <Pressable
-        className="flex-row items-center"
-        onPress={() =>
-          openUserInfoModal({
-            memberId: message.memberId,
-            nickname: message.sender,
-            imageUrl: message.imageUrl,
-            thisIsMe: false,
-          })
-        }
-      >
-        <FastImage
-          source={{ uri: message.imageUrl }}
-          className="mr-2 h-[24px] w-[24px] rounded-full"
-        />
-
+      <View className="flex-row items-center">
+        <Pressable
+          onPress={() =>
+            openUserInfoModal({
+              memberId: message.memberId,
+              nickname: message.sender,
+              imageUrl: message.imageUrl,
+              thisIsMe: false,
+            })
+          }
+        >
+          <FastImage
+            source={{ uri: message.imageUrl }}
+            className="mr-2 h-[24px] w-[24px] rounded-full"
+          />
+        </Pressable>
         <View>
           <Text className="font-medium tracking-tight text-[#5D5D5D]">{message.sender}</Text>
         </View>
-      </Pressable>
+      </View>
 
       <Pressable className="ml-4 mt-2 flex-row" onPress={() => openImageModal(message.content)}>
         {/* 이미지 */}

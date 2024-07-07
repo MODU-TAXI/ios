@@ -1,6 +1,6 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
 import { Text, View } from 'react-native';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import HeaderComponent from '@components/Header';
