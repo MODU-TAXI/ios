@@ -78,7 +78,6 @@ export const handleNotificationPress = async (detail: EventDetail) => {
 // notifee 알림을 무시했을때 handling
 export const handleNotificationDismissed = async (detail: EventDetail) => {
   if (detail?.notification?.id) {
-    await notifee.cancelNotification(detail.notification.id);
-    await notifee.cancelDisplayedNotification(detail.notification.id);
+    await Promise.all([notifee.cancelAllNotifications(), notifee.cancelDisplayedNotifications()]);
   }
 };

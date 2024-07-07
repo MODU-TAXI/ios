@@ -252,9 +252,9 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   // 앨범에서 이미지 고르기
   const selectImageFromAlbum = async (): Promise<void> => {
-    closeSelectImageModal();
-
     const image = await openAlbum();
+
+    closeSelectImageModal();
 
     if (image) {
       sendImage(image);
