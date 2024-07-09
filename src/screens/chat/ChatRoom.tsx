@@ -61,6 +61,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [viewImages, setViewImages] = useState([{ uri: '' }]);
   const [userInfo, setUserInfo] = useState<UserPreview>();
   const [accessToken, setNewAccessToken] = useAccessToken(); // socket을 위한 token hook
+  const [refresh, setRefresh] = useState(false);
   const myInfo = useRecoilValue(userInfoState);
   const myRoom = roomPreview!.managerId == myInfo.id;
 
@@ -130,7 +131,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     }
   };
 
-  const connect = () => {
+  const connect = async () => {
     // 읽기 모드에선 socket x
     if (readonly) return;
 
@@ -185,15 +186,9 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
             ],
             { cancelable: false },
           );
-        }
+        } else if (stompError == 'AUTH_003') {
+          setRefresh(true);
 
-        // token 문제
-        if (
-          stompError == 'SOCK_AUTH_007' ||
-          stompError == 'SOCK_AUTH_008' ||
-          stompError == 'SOCK_AUTH_009' ||
-          stompError == 'SOCK_AUTH_010'
-        ) {
           disConnect();
 
           const refreshToken = await getRefreshToken();
@@ -208,38 +203,49 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
             setNewAccessToken(newAccessToken);
 
             connect();
+
+            setRefresh(false);
+          } else {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'MainScreen' }],
+            });
           }
+        } else {
+          disConnect();
+
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'MainScreen' }],
+          });
         }
       };
     }
   };
 
+  // 들어왔을때 socket 연결
+  useEffect(() => {
+    connect();
+
+    return () => {
+      disConnect();
+      clearMessages();
+    };
+  }, [accessToken]);
+
   // 화면을 다시켰을때 socket 연결
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', (nextAppState) => {
+    const subscription = AppState.addEventListener('change', async (nextAppState) => {
       if (appState.match(/inactive|background/) && nextAppState === 'active') {
-        connect();
-        clearMessages();
-        messagesRefetch();
+        setRefresh(true);
+        await Promise.all([clearMessages(), messagesRefetch(), connect()]);
+        setRefresh(false);
       }
       setAppState(nextAppState);
     });
 
     return () => {
       subscription.remove();
-    };
-  }, [accessToken, appState, clearMessages, messagesRefetch]);
-
-  // 들어왔을때 socket 연결
-  useEffect(() => {
-    connect();
-  }, [accessToken]);
-
-  // 나갔을때 메세지 clear
-  useEffect(() => {
-    return () => {
-      disConnect();
-      clearMessages();
     };
   }, []);
 
@@ -376,7 +382,9 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
       className="flex-1 bg-white "
       edges={readonly ? ['top', 'left', 'right'] : undefined}
     >
-      {(matchCompletePending || exitParticipateRoomPending) && <TransparentLoadingComponent />}
+      {(matchCompletePending || exitParticipateRoomPending || refresh) && (
+        <TransparentLoadingComponent />
+      )}
 
       <ChatHeaderComponent myRoom={myRoom} openExitModal={openExitModal} />
 

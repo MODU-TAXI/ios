@@ -1,12 +1,13 @@
 import { useRecoilState } from 'recoil';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import {
+  useQuery,
   useMutation,
   useQueryClient,
   useSuspenseQuery,
   UseMutationResult,
   useSuspenseQueries,
-  UseSuspenseQueryResult,
+  UseQueryResult,
 } from '@tanstack/react-query';
 
 import { loggedInState } from '@recoil/recoil';
@@ -76,10 +77,8 @@ export const useCreateRoom = (): UseMutationResult<
 };
 
 // 특정 방 간략정보 가져오기
-export const useGetRoomPreview = (
-  roomId: number,
-): UseSuspenseQueryResult<GetRoomPreviewResponse, void> => {
-  return useSuspenseQuery({
+export const useGetRoomPreview = (roomId: number): UseQueryResult<GetRoomPreviewResponse, void> => {
+  return useQuery({
     queryKey: [`/api/rooms/preview/${roomId}`],
     queryFn: () => getRoomPreview(roomId),
   });
@@ -89,7 +88,7 @@ export const useGetRoomPreview = (
 export const useGetRoomDetail = (roomId: number) => {
   const queryClient = useQueryClient();
 
-  const result =  useSuspenseQueries({
+  const result = useSuspenseQueries({
     queries: [
       {
         queryKey: [`/api/rooms/${roomId}`, roomId],
@@ -168,7 +167,7 @@ export const useGetRoomDetail = (roomId: number) => {
     },
   });
 
-  return { ...result, queryClient }
+  return { ...result, queryClient };
 };
 
 // 특정 방 가져오기

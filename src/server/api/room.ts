@@ -107,9 +107,9 @@ export const getRoomIntegration = async (
     sortType: data.sortType,
   });
 
-  data.radius && (params.append('radius', data.radius.toString()));
-  data.spotId && (params.append('spotId', data.spotId.toString()));
-  data.isImminent && (params.append('isImminent', data.isImminent.toString()));
+  data.radius && params.append('radius', data.radius.toString());
+  data.spotId && params.append('spotId', data.spotId.toString());
+  data.isImminent && params.append('isImminent', data.isImminent.toString());
 
   if (data.roomTags && data.roomTags.length > 0) {
     data.roomTags.forEach((tag) => {
@@ -117,7 +117,9 @@ export const getRoomIntegration = async (
     });
   }
 
-  const response = await GetAxiosInstance<GetRoomIntegrationResponse[]>(`/api/rooms/integration?${params.toString()}`);
+  const response = await GetAxiosInstance<GetRoomIntegrationResponse[]>(
+    `/api/rooms/integration?${params.toString()}`,
+  );
 
   return response.data.rooms;
 };

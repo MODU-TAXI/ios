@@ -22,7 +22,7 @@ import MapPinGray from '@assets/images/Map/MapPinGray.svg';
 import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 import ChevronBackwardCircle from '@assets/images/Map/chevronBackwardCircle.svg';
 
-const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
+const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
   useDeleteAllNotifee();
 
   const insets = useSafeAreaInsets();

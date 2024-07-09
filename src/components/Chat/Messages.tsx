@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import { View, Keyboard, FlatList } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Keyboard, FlatList, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 
 import { MessageBoxComponent } from '@components/Chat/MessageBox';
 
@@ -28,6 +28,15 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
   toPaymentScreen,
 }) => {
   const flatListRef = useRef<FlatList>(null);
+  const [scrollOffset, setScrollOffset] = useState(0);
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+
+    console.log(offsetY);
+
+    setScrollOffset(offsetY);
+  };
 
   // 키보드 밑으로 내리기 위함
   useEffect(() => {
@@ -67,6 +76,8 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
       className="bg-white px-4"
       ref={flatListRef}
       data={messages}
+      onScroll={handleScroll}
+      scrollEventThrottle={16}
       inverted={true}
       renderItem={renderItem}
       keyExtractor={(item, index) => index.toString()}
