@@ -20,13 +20,17 @@ const HistoryInfoComponent: React.FC<HistoryInfoComponentProps> = ({
     <Pressable className="px-2 py-4" onPress={() => toHistoryDetailScreen(history.historyId)}>
       {/* 날짜, 금액 */}
       <View className="flex-row items-center justify-between">
-        <View className="flex-row items-center">
-          <Text className="font-medium tracking-tight text-[#5D5D5D]">{history.departureName}</Text>
+        {/* 첫번째 */}
+        <View className="shrink flex-row items-center ">
+          <Text className="shrink font-medium tracking-tight text-[#5D5D5D] ">
+            {history.departureName}
+          </Text>
           <Arrow className="mx-1" />
-          <Text className="font-medium tracking-tight text-[#5D5D5D]">{history.arrivalName}</Text>
+          <Text className="font-medium tracking-tight text-[#5D5D5D]  ">{history.arrivalName}</Text>
         </View>
 
-        <View className="flex-row items-center">
+        {/* 두번째 */}
+        <View className="ml-1 flex-row items-center">
           <Text>-{history.portionCharge.toLocaleString('ko-KR')}원</Text>
 
           <NextButton />
