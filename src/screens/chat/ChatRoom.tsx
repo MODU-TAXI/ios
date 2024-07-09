@@ -398,8 +398,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         <MessagesComponent
           memberId={myInfo.id}
           managerId={roomPreview!.managerId}
-          newMessages={newMessages}
-          messages={messages}
+          messages={[...messages, ...newMessages].reverse()}
           openUserInfoModal={openUserInfoModal}
           openImageModal={openImageModal}
           toCalculateScreen={toCalculateScreen}

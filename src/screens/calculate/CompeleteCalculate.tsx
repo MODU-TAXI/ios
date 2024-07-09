@@ -15,7 +15,6 @@ const CompleteCalculateScreen = ({ navigation, route }: CompleteCalculateScreenP
       routes: [
         { name: 'MainScreen' },
         { name: 'RoomDetailScreen', params: { roomId: roomPreview.roomId } },
-        { name: 'ChatRoomScreen', params: { roomId: roomPreview.roomId, readonly: false } },
       ],
     });
   };

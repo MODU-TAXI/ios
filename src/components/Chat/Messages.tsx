@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { View, Keyboard, ScrollView } from 'react-native';
+import { View, Keyboard, FlatList } from 'react-native';
 
 import { MessageBoxComponent } from '@components/Chat/MessageBox';
 
@@ -10,7 +10,6 @@ interface MessagesComponentProps {
   memberId: number;
   managerId: number;
   messages: ChatMessage[];
-  newMessages: ChatMessage[];
   openUserInfoModal: (user: UserPreview) => void;
   openImageModal: (imageUrl: string) => void;
   toCalculateScreen: () => void;
@@ -22,20 +21,19 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
   memberId,
   managerId,
   messages,
-  newMessages,
   openUserInfoModal,
   openImageModal,
   toCalculateScreen,
   matchComplete,
   toPaymentScreen,
 }) => {
-  const scrollViewRef = useRef<ScrollView>(null);
+  const flatListRef = useRef<FlatList>(null);
 
   // 키보드 밑으로 내리기 위함
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      if (scrollViewRef.current) {
-        scrollViewRef.current.scrollToEnd({ animated: false });
+      if (flatListRef.current) {
+        flatListRef.current.scrollToOffset({ offset: 0, animated: true });
       }
     });
 
@@ -49,50 +47,37 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
     };
   }, []);
 
+  const renderItem = ({ item, index }: { item: ChatMessage; index: number }) => (
+    <View key={index} className="px-2">
+      <MessageBoxComponent
+        message={item}
+        managerId={managerId}
+        openUserInfoModal={openUserInfoModal}
+        memberId={memberId}
+        openImageModal={openImageModal}
+        toCalculateScreen={toCalculateScreen}
+        matchComplete={matchComplete}
+        toPaymentScreen={toPaymentScreen}
+      />
+    </View>
+  );
+
   return (
-    <ScrollView
+    <FlatList
       className="bg-white px-4"
-      ref={scrollViewRef}
+      ref={flatListRef}
+      data={messages}
+      inverted={true}
+      renderItem={renderItem}
+      keyExtractor={(item, index) => index.toString()}
       contentContainerStyle={{ flexGrow: 1 }}
       keyboardShouldPersistTaps="handled"
       onContentSizeChange={() => {
-        if (scrollViewRef.current) {
-          scrollViewRef.current.scrollToEnd({ animated: false });
+        if (flatListRef.current) {
+          flatListRef.current.scrollToOffset({ offset: 0, animated: true });
         }
       }}
-    >
-      {messages.map((chat, index) => (
-        <View key={index} className="px-2">
-          {/* 말풍선 */}
-          <MessageBoxComponent
-            message={chat}
-            managerId={managerId}
-            openUserInfoModal={openUserInfoModal}
-            memberId={memberId}
-            openImageModal={openImageModal}
-            toCalculateScreen={toCalculateScreen}
-            matchComplete={matchComplete}
-            toPaymentScreen={toPaymentScreen}
-          />
-        </View>
-      ))}
-
-      {newMessages.map((chat, index) => (
-        <View key={index} className="px-2">
-          {/* 말풍선 */}
-          <MessageBoxComponent
-            message={chat}
-            managerId={managerId}
-            openUserInfoModal={openUserInfoModal}
-            memberId={memberId}
-            openImageModal={openImageModal}
-            toCalculateScreen={toCalculateScreen}
-            matchComplete={matchComplete}
-            toPaymentScreen={toPaymentScreen}
-          />
-        </View>
-      ))}
-    </ScrollView>
+    />
   );
 };
 
