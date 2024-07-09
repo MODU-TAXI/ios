@@ -6,12 +6,17 @@ import ButtonComponent from '@components/Button';
 
 import { CompleteCalculateScreenProps } from '@type/param/loginStack';
 
-const CompleteCalculateScreen = ({ navigation }: CompleteCalculateScreenProps) => {
-  const toMainScreen = () => {
-    // stack을 지우며 해당 roomDetail로 이동
+const CompleteCalculateScreen = ({ navigation, route }: CompleteCalculateScreenProps) => {
+  const { roomPreview } = route.params;
+
+  const toChatScreen = () => {
     navigation.reset({
-      index: 0,
-      routes: [{ name: 'MainScreen' }],
+      index: 2,
+      routes: [
+        { name: 'MainScreen' },
+        { name: 'RoomDetailScreen', params: { roomId: roomPreview.roomId } },
+        { name: 'ChatRoomScreen', params: { roomId: roomPreview.roomId, readonly: false } },
+      ],
     });
   };
 
@@ -35,7 +40,7 @@ const CompleteCalculateScreen = ({ navigation }: CompleteCalculateScreenProps) =
           textColor={'white'}
           text={'확인'}
           disabled={false}
-          onPress={toMainScreen}
+          onPress={toChatScreen}
         />
       </View>
     </SafeAreaView>
