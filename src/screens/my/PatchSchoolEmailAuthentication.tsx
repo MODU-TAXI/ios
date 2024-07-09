@@ -10,6 +10,7 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { emailState, userInfoState } from '@recoil/recoil';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useEmailConfirm, useEmailAuthentication } from '@hooks/api/member.mail';
 
 import { InfoToastMessage } from '@utils/toastMessage';
@@ -21,6 +22,8 @@ import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 const PatchSchoolEmailAuthenticationScreen = ({
   navigation,
 }: PatchSchoolEmailAuthenticationScreenProps) => {
+  useDeleteAllNotifee();
+
   const email = useRecoilValue(emailState); // 재전송할 이메일
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [code, setCode] = useState<string>(''); // 인증코드

@@ -12,6 +12,7 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import { loggedInState, userInfoState } from '@recoil/recoil';
 
 import { usePatchMember } from '@hooks/api/member';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { deleteToken } from '@utils/token';
 import { openAlbum, openCamera } from '@utils/image';
@@ -25,6 +26,8 @@ import LogoutButton from '@assets/images/My/LogoutButton.svg';
 import ResignButton from '@assets/images/My/ResignButton.svg';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
+  useDeleteAllNotifee();
+
   const userInfo = useRecoilValue(userInfoState);
 
   const { mutateAsync: patchMemberMutate, isPending: patchMemberPending } = usePatchMember();

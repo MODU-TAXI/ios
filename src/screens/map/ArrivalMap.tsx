@@ -1,30 +1,38 @@
-import { useRecoilState } from "recoil";
-import { View, Text, Pressable } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import React, { useRef, useMemo, useState, useEffect } from "react";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { Camera, NaverMapView, NaverMapViewRef, NaverMapMarkerOverlay } from "@mj-studio/react-native-naver-map";
+import { useRecoilState } from 'recoil';
+import { View, Text, Pressable } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import {
+  Camera,
+  NaverMapView,
+  NaverMapViewRef,
+  NaverMapMarkerOverlay,
+} from '@mj-studio/react-native-naver-map';
 
-import SpotMarker from "@components/Marker/SpotMarker";
-import TransparentSearchBoxComponent from "@components/Search/TransparentSearchBox";
+import SpotMarker from '@components/Marker/SpotMarker';
+import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 
-import { arrivalState } from "@recoil/recoil";
+import { arrivalState } from '@recoil/recoil';
 
-import { useGetSpotMap } from "@hooks/api/spot";
+import { useGetSpotMap } from '@hooks/api/spot';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 
-import { calculateDist } from "@utils/search";
+import { calculateDist } from '@utils/search';
 
-import { Spot } from "@type/entity/spot";
-import { ArrivalMapScreenProps } from "@type/param/loginStack";
+import { Spot } from '@type/entity/spot';
+import { ArrivalMapScreenProps } from '@type/param/loginStack';
 
-import SpotPinSvg from "@assets/images/Map/spotPin.svg";
-import SpotPinGraySvg from "@assets/images/Map/spotPinGray.svg";
+import SpotPinSvg from '@assets/images/Map/spotPin.svg';
+import SpotPinGraySvg from '@assets/images/Map/spotPinGray.svg';
 import ChevronBackwardCircle from '@assets/images/Map/chevronBackwardCircle.svg';
 
 const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
+  useDeleteAllNotifee();
+
   const insets = useSafeAreaInsets();
   const mapRef = useRef<NaverMapViewRef>(null);
-  const [searchBoxValue, setSearchBoxValue] = useState<string>("도착지를 입력하세요");
+  const [searchBoxValue, setSearchBoxValue] = useState<string>('도착지를 입력하세요');
   const [isSearched, setIsSearched] = useState<boolean>(false);
   const [selectedSpot, setSelectedSpot] = useState<Spot | undefined>(route.params?.spot);
   const snapPoints = useMemo(() => ['27%'], []);
@@ -37,7 +45,7 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
 
   // 첫 렌더링 시 [거점 or 검색어] 선택에 따른 처리
   useEffect(() => {
-    if (route.params?.type === "spot" && route.params.spot) {
+    if (route.params?.type === 'spot' && route.params.spot) {
       setSelectedSpot(route.params.spot);
       setCurrentCamera({
         latitude: route.params.spot.latitude,
@@ -46,7 +54,7 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
       });
       setSearchBoxValue(route.params.spot.name);
       setIsSearched(true);
-    } else if (route.params?.type === "search" && route.params.searchParams) {
+    } else if (route.params?.type === 'search' && route.params.searchParams) {
       setSelectedSpot(undefined);
       setCurrentCamera({
         latitude: route.params.searchParams.latitude,
@@ -82,30 +90,30 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
   /** 검색 결과 좌표로 카메라 조정 */
   useEffect(() => {
     mapRef.current?.animateCameraTo(currentCamera);
-  }, [currentCamera])
+  }, [currentCamera]);
 
   // 거점 3개와 고정카메라 좌표 리턴
   const { spotData, refetch } = useGetSpotMap({
-    "count": 3,
-    "searchLongitude": currentCamera.longitude,
-    "searchLatitude": currentCamera.latitude,
+    count: 3,
+    searchLongitude: currentCamera.longitude,
+    searchLatitude: currentCamera.latitude,
   });
 
   const handleSelectSpot = (spot: Spot) => {
     setSelectedSpot(spot);
-  }
+  };
 
   const toBack = () => {
     navigation.goBack();
-  }
+  };
 
   const toSearchScreen = () => {
     if (route.params?.isPatch) {
       navigation.navigate('ArrivalSearchScreen', { isPatch: true });
     }
     navigation.navigate('ArrivalSearchScreen');
-  }
-  
+  };
+
   // 도착 거점을 저장하며 이동
   const [, setArrival] = useRecoilState(arrivalState);
   const handleSelectArrival = () => {
@@ -114,20 +122,20 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
     } else {
       navigation.navigate('CreateRoomScreen');
     }
-    
+
     if (selectedSpot) {
       setArrival({
         name: selectedSpot.name,
         spotId: selectedSpot.id,
       });
     }
-  }
-  
+  };
+
   return (
     <View className="flex-1 items-center bg-white" style={{ marginTop: 0 }}>
-      <NaverMapView 
+      <NaverMapView
         ref={mapRef}
-        style={{ flex: 1, width: "100%", padding: -40 }}
+        style={{ flex: 1, width: '100%', padding: -40 }}
         mapType="Basic"
         initialCamera={currentCamera}
         locale="ko"
@@ -172,21 +180,13 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
           top: insets.top + 8,
         }}
       >
-        <Pressable
-          onPress={toSearchScreen}
-        >
-          <TransparentSearchBoxComponent 
-            isSearched={isSearched}
-            value={searchBoxValue}
-          />
+        <Pressable onPress={toSearchScreen}>
+          <TransparentSearchBoxComponent isSearched={isSearched} value={searchBoxValue} />
         </Pressable>
       </View>
 
       <View className="absolute bottom-[29%] flex w-full flex-row items-center justify-between px-4">
-        <Pressable 
-          onPress={toBack}
-          className=""
-        >
+        <Pressable onPress={toBack} className="">
           <ChevronBackwardCircle />
         </Pressable>
       </View>
@@ -208,22 +208,16 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
         index={0}
         snapPoints={snapPoints}
       >
-        <BottomSheetView
-          className="flex-1 items-center"
-        >
+        <BottomSheetView className="flex-1 items-center">
           <View className="flex-1 flex-col px-6 py-2">
             {selectedSpot ? (
               <View className="flex-1">
                 <Text className="mb-2 font-medium text-base text-boxFont">도착지</Text>
                 <View className="flex flex-row items-center">
                   <SpotPinSvg width={15} height={20} />
-                  <Text className="ml-1 text-lg font-semibold text-main">
-                    {selectedSpot.name}
-                  </Text>
+                  <Text className="ml-1 text-lg font-semibold text-main">{selectedSpot.name}</Text>
                 </View>
-                <Text className="text-gray600">
-                  {selectedSpot.address}
-                </Text>
+                <Text className="text-gray600">{selectedSpot.address}</Text>
                 <Pressable
                   className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-main"
                   onPress={() => handleSelectArrival()}
@@ -233,16 +227,16 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
               </View>
             ) : (
               <View className="flex-1">
-                <Text className="mb-2 font-medium text-base text-boxFont">근처 거점 포인트를 선택해주세요!</Text>
+                <Text className="mb-2 font-medium text-base text-boxFont">
+                  근처 거점 포인트를 선택해주세요!
+                </Text>
                 <View className="flex flex-row items-center">
                   <SpotPinGraySvg width={15} height={20} />
                   <Text className="ml-1 text-lg font-semibold text-gray500">
                     거점지를 선택해주세요
                   </Text>
                 </View>
-                <Text className="text-sm text-gray600">
-                  -
-                </Text>
+                <Text className="text-sm text-gray600">-</Text>
                 <Pressable
                   className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-gray500"
                   disabled={true}
@@ -257,7 +251,7 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
         </BottomSheetView>
       </BottomSheet>
     </View>
-  )
+  );
 };
 
 export default ArrivalMapScreen;

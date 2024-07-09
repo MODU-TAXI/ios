@@ -10,6 +10,7 @@ import HistoryMembersComponent from '@components/History/HistoryMembers';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useGetHistoryDetail } from '@hooks/api/history';
 
 import { UserPreview } from '@type/entity/user';
@@ -25,6 +26,8 @@ export interface RoomMember {
 }
 
 const HistoryDetailComponent = ({ navigation, route }: HistoryDetailScreenProps) => {
+  useDeleteAllNotifee();
+
   const { historyId } = route.params;
 
   const { data: history } = useGetHistoryDetail(historyId);

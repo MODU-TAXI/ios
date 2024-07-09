@@ -10,6 +10,7 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { userInfoState } from '@recoil/recoil';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useRegisterNickname } from '@hooks/api/member';
 
 import { InfoToastMessage } from '@utils/toastMessage';
@@ -17,6 +18,8 @@ import { InfoToastMessage } from '@utils/toastMessage';
 import { PatchNicknameScreenProps } from '@type/param/loginStack';
 
 const PatchNicknameScreen = ({ navigation }: PatchNicknameScreenProps) => {
+  useDeleteAllNotifee();
+
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [nickname, setNickname] = useState<string>(userInfo.nickname);
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지

@@ -11,6 +11,7 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useGetHistoryDuration, useGetHistoriesByMonth } from '@hooks/api/history';
 
 import { HistoryPreview } from '@type/entity/history';
@@ -21,6 +22,8 @@ import DropDown from '@assets/images/History/DropDown.svg';
 import BeforeBar from '@assets/images/History/BeforeBar.svg';
 
 const HistoryComponent = ({ navigation }: HistoryScreenProps) => {
+  useDeleteAllNotifee();
+
   const [date, setDate] = useState<Date>(new Date());
   const [show, setShow] = useState<boolean>(false);
 

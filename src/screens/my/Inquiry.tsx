@@ -3,11 +3,15 @@ import { Text, View, Alert, Linking, SafeAreaView } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
+
 import { InquiryScreenProps } from '@type/param/loginStack';
 
 import InquiryKakao from '@assets/images/My/InquiryKakao.svg';
 
 const InquiryScreen = ({ navigation }: InquiryScreenProps) => {
+  useDeleteAllNotifee();
+
   const inquiryKakao = async () => {
     // URL을 열 수 있는지 확인
     const canOpen = await Linking.canOpenURL('https://open.kakao.com/o/sIHBVkzg');

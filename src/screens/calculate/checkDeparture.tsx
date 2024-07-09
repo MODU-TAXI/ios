@@ -10,11 +10,14 @@ import MembersComponent from '@components/Calculate/Members';
 import { calculateState } from '@recoil/recoil';
 
 import { useGetRoomMembers } from '@hooks/api/rooms';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { UserPreview } from '@type/entity/user';
 import { CheckDepartureScreenProps } from '@type/param/loginStack';
 
 const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) => {
+  useDeleteAllNotifee();
+
   const { roomPreview } = route.params;
 
   const { roomMembers } = useGetRoomMembers(roomPreview.roomId); // 참여자 목록

@@ -3,13 +3,7 @@ import { useSharedValue } from 'react-native-reanimated';
 import Animated, { runOnJS } from 'react-native-reanimated';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import React, {
-  useRef,
-  useMemo,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
+import React, { useRef, useMemo, useState, useEffect, useCallback } from 'react';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
   Camera,
@@ -22,7 +16,7 @@ import BottomSheet, {
   BottomSheetModal,
   BottomSheetBackdrop,
   BottomSheetModalProvider,
-  BottomSheetBackdropProps
+  BottomSheetBackdropProps,
 } from '@gorhom/bottom-sheet';
 
 import MapBottomSheetScreen from '../../components/Modal/MapBottomSheet';
@@ -36,6 +30,7 @@ import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDige
 import { userInfoState, searchParamState } from '@recoil/recoil';
 
 import { useGetSpotMap } from '@hooks/api/spot';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useGetRoomIntegration } from '@hooks/api/rooms';
 
 import { calculateRadius, getCurrentLocation } from '@utils/map';
@@ -47,11 +42,13 @@ import RefreshButton from '@assets/images/Map/refreshButton.svg';
 import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 
 const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
+  useDeleteAllNotifee();
+
   const insets = useSafeAreaInsets();
   const userInfo = useRecoilValue(userInfoState);
   const mapRef = useRef<NaverMapViewRef>(null);
   const [selectedRoom, setSelectedRoom] = useState<RoomIntegration | null>(null);
-  
+
   // bottomSheet 인덱스 정의, 최초 렌더링 시 40% 설정
   const snapPoints = useMemo(() => ['10%', '20%', '40%', '85%'], []);
   const [mapBottomSheetIndex, setMapBottomSheetIndex] = useState<number>(1);
@@ -61,7 +58,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   // bottomSheet, bottomSheetModal 핸들러
   const handleBottomSheetIndex = (index: number) => {
     setMapBottomSheetIndex(index);
-  }
+  };
 
   const handleOpenSpotModal = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -69,7 +66,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
 
   const handleCloseSpotModal = () => {
     bottomSheetModalRef.current?.close();
-  }
+  };
 
   // bottomSheetModal
   const modalSnapPoints = useMemo(() => ['85%'], []);
@@ -94,7 +91,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
       if (buttonSizeRef.current) {
         buttonSizeRef.current.measure((x, y, width, height) => {
           if (width !== 0 && height !== 0) {
-            setButtonSize({width: width, height: height});
+            setButtonSize({ width: width, height: height });
           }
         });
       }
@@ -130,41 +127,44 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
       });
       mapRef.current?.animateCameraTo(location);
     }
-  }, [searchParams])
+  }, [searchParams]);
 
   // 필터링 상태값
   const [filterParam, setFilterParam] = useState<RoomFilterParam>({
-    "sortType": "NEW",
-    "spotId": undefined,
-    "roomTags": [],
-    "isImminent": false,
+    sortType: 'NEW',
+    spotId: undefined,
+    roomTags: [],
+    isImminent: false,
   });
-  
+
   // 매칭방 탐색
   const { rooms: rooms, refetch } = useGetRoomIntegration({
-    "searchLongitude": currentCamera.longitude,
-    "searchLatitude": currentCamera.latitude,
-    "radius": radius,
-    "sortType": filterParam.sortType,
-    "spotId": filterParam.spotId,
-    "roomTags": filterParam.roomTags,
-    "isImminent": filterParam.isImminent,
+    searchLongitude: currentCamera.longitude,
+    searchLatitude: currentCamera.latitude,
+    radius: radius,
+    sortType: filterParam.sortType,
+    spotId: filterParam.spotId,
+    roomTags: filterParam.roomTags,
+    isImminent: filterParam.isImminent,
   });
 
   // 거점 3개와 고정카메라 좌표 리턴
   const { spotData, refetch: refetchSpot } = useGetSpotMap({
-    "count": 3,
-    "searchLongitude": currentCamera.longitude,
-    "searchLatitude": currentCamera.latitude,
+    count: 3,
+    searchLongitude: currentCamera.longitude,
+    searchLatitude: currentCamera.latitude,
   });
 
   /** 필터링 부여 함수 */
-  const handleFiltering = useCallback((category: string, value: any) => {
-    setFilterParam({
-      ...filterParam,
-      [category]: value
-    })
-  }, [filterParam]);
+  const handleFiltering = useCallback(
+    (category: string, value: any) => {
+      setFilterParam({
+        ...filterParam,
+        [category]: value,
+      });
+    },
+    [filterParam],
+  );
 
   // 처음 렌더링 시 현재위치로
   useEffect(() => {
@@ -177,7 +177,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
       mapRef.current?.animateCameraTo(location);
     };
     fetchCurrentLocation();
-  }, [])
+  }, []);
 
   // timeout 정보 저장 Ref
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -188,7 +188,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    
+
     setMapBottomSheetIndex(1);
     setSelectedRoom(null);
 
@@ -210,7 +210,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   }, []);
 
   /** 현재위치 이동 버튼 */
-  const moveToCurrentLocation = async() => {
+  const moveToCurrentLocation = async () => {
     const currentLocation = await getCurrentLocation();
     setCurrentCamera({
       latitude: currentLocation.latitude,
@@ -218,45 +218,43 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
       zoom: 16,
     });
     mapRef.current?.animateCameraTo(currentLocation);
-  }
+  };
 
   /** 방 선택 및 bottomSheet 10%로 내림 */
   const handleSelectRoom = (room: RoomIntegration) => {
     setSelectedRoom(room);
     setMapBottomSheetIndex(0);
-  }
+  };
 
   /** 탭 이벤트 감지: selectedRoom 초기화, bottomSheet 40% 에서 탭 감지 시 20% 복귀 */
-  const tap = Gesture.Tap()
-    .onTouchesDown(() => {
-      if (mapBottomSheetIndex === 2) {
-        runOnJS(setMapBottomSheetIndex)(1);
-      }
-      runOnJS(setSelectedRoom)(null);
-    });
+  const tap = Gesture.Tap().onTouchesDown(() => {
+    if (mapBottomSheetIndex === 2) {
+      runOnJS(setMapBottomSheetIndex)(1);
+    }
+    runOnJS(setSelectedRoom)(null);
+  });
 
   /** 해당 마커의 room 으로 이동 */
   const toRoomDetailScreen = useCallback((roomId: number) => {
-    navigation.navigate('RoomDetailScreen', {roomId: roomId});
+    navigation.navigate('RoomDetailScreen', { roomId: roomId });
   }, []);
 
   /** 매칭방 생성으로 이동 */
   const toCreateRoomScreen = () => {
     navigation.navigate('CreateRoomScreen');
-  }
+  };
 
   /** 검색창 이동 */
   const toSearchScreen = () => {
     resetSearchParams();
     navigation.navigate('SearchScreen');
-  }
-  
+  };
+
   return (
     <GestureHandlerRootView className="flex-1">
-
       {/** 지도 */}
-      <GestureDetector gesture={tap} >
-        <NaverMapView 
+      <GestureDetector gesture={tap}>
+        <NaverMapView
           ref={mapRef}
           style={{ flex: 1 }}
           mapType="Basic"
@@ -281,7 +279,11 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
                     onTap={() => handleSelectRoom(room)}
                     anchor={{ x: 0.5, y: 0.5 }}
                   >
-                    <RoomMarkerComponent roomId={selectedRoom.roomId} spotName={selectedRoom.arrivalName} selected />
+                    <RoomMarkerComponent
+                      roomId={selectedRoom.roomId}
+                      spotName={selectedRoom.arrivalName}
+                      selected
+                    />
                   </NaverMapMarkerOverlay>
                 ))}
               {rooms
@@ -294,7 +296,11 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
                     onTap={() => handleSelectRoom(room)}
                     anchor={{ x: 0.5, y: 0.5 }}
                   >
-                    <RoomMarkerComponent roomId={room.roomId} spotName={room.arrivalName} selected={false} />
+                    <RoomMarkerComponent
+                      roomId={room.roomId}
+                      spotName={room.arrivalName}
+                      selected={false}
+                    />
                   </NaverMapMarkerOverlay>
                 ))}
             </>
@@ -308,7 +314,11 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
                 onTap={() => handleSelectRoom(room)}
                 anchor={{ x: 0.5, y: 0.5 }}
               >
-                <RoomMarkerComponent roomId={room.roomId} spotName={room.arrivalName} selected={false} />
+                <RoomMarkerComponent
+                  roomId={room.roomId}
+                  spotName={room.arrivalName}
+                  selected={false}
+                />
               </NaverMapMarkerOverlay>
             ))
           )}
@@ -323,16 +333,11 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
           top: insets.top + 8,
         }}
       >
-        <Pressable
-          onPress={toSearchScreen}
-        >
+        <Pressable onPress={toSearchScreen}>
           {searchParams.title !== '' ? (
-            <TransparentSearchBoxComponent 
-              value={searchParams.title}
-              isSearched={true}
-            />
+            <TransparentSearchBoxComponent value={searchParams.title} isSearched={true} />
           ) : (
-            <TransparentSearchBoxComponent 
+            <TransparentSearchBoxComponent
               value={`${userInfo.name}님 우리 어디로 떠날까요?`}
               isSearched={false}
             />
@@ -341,43 +346,35 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
       </View>
 
       {/** 방 미리보기 */}
-      {selectedRoom &&
-        <View className='absolute top-[68%] w-full'>
+      {selectedRoom && (
+        <View className="absolute top-[68%] w-full">
           <Pressable onPress={() => toRoomDetailScreen(selectedRoom.roomId)}>
             <SelectedRoomDigestComponent roomId={selectedRoom.roomId} roomList={rooms} />
           </Pressable>
         </View>
-      }
+      )}
 
       {/** 생성, 내위치, 새로고침 버튼 */}
-      <Animated.View 
+      <Animated.View
         className="absolute left-1/2 flex flex-row"
         style={{
           top: bottomSheetPosition,
           transform: [
-            { translateX: -(buttonSize.width/2) }, 
-            { translateY: -(buttonSize.height*1.5) }
+            { translateX: -(buttonSize.width / 2) },
+            { translateY: -(buttonSize.height * 1.5) },
           ],
           display: mapBottomSheetIndex === 3 ? 'none' : 'flex',
         }}
       >
-        <Pressable
-          ref={buttonSizeRef}
-          onPress={toCreateRoomScreen}
-        >
+        <Pressable ref={buttonSizeRef} onPress={toCreateRoomScreen}>
           <CreateRoomButtonComponent />
         </Pressable>
 
-        <Pressable
-          className='ml-2'
-          onPress={moveToCurrentLocation}
-        >
+        <Pressable className="ml-2" onPress={moveToCurrentLocation}>
           <CurrentLocationButton />
         </Pressable>
 
-        <Pressable
-          onPress={() => refetch()}
-        >
+        <Pressable onPress={() => refetch()}>
           <RefreshButton />
         </Pressable>
       </Animated.View>
@@ -403,13 +400,11 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
           snapPoints={snapPoints}
           animatedPosition={bottomSheetPosition}
         >
-          <BottomSheetView
-            className="flex-1 items-center"
-          >
-            <MapBottomSheetScreen 
-              roomList={rooms} 
-              navigation={navigation} 
-              index={mapBottomSheetIndex} 
+          <BottomSheetView className="flex-1 items-center">
+            <MapBottomSheetScreen
+              roomList={rooms}
+              navigation={navigation}
+              index={mapBottomSheetIndex}
               handleModal={handleOpenSpotModal}
               handleFilter={handleFiltering}
               filterParam={filterParam}
@@ -439,16 +434,16 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
           backdropComponent={renderBackdrop}
         >
           <BottomSheetView className="flex-1">
-            <SpotFilterModalScreen 
+            <SpotFilterModalScreen
               spotData={spotData}
-              handleClose={handleCloseSpotModal} 
+              handleClose={handleCloseSpotModal}
               handleFilter={handleFiltering}
             />
           </BottomSheetView>
         </BottomSheetModal>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
-  )
-}
+  );
+};
 
 export default MainMapScreen;

@@ -21,6 +21,7 @@ import { roomState, userInfoState } from '@recoil/recoil';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import {
   useJoinRoom,
   useDeleteRoom,
@@ -40,6 +41,8 @@ import StartCircle from '@assets/images/Match/StartCircle.svg';
 dayjs.locale('ko');
 
 const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
+  useDeleteAllNotifee();
+
   const { roomId } = route.params;
 
   const [, setSocketRoomId] = useRecoilState(roomState);

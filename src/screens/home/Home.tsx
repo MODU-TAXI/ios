@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { useState, Suspense } from 'react';
 import { View, RefreshControl } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -18,6 +18,7 @@ import { roomState, userInfoState } from '@recoil/recoil';
 import { getMyChatInfo } from '@server/api/chat';
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useGetAlarmsCount } from '@hooks/api/alarms';
 import { useGetHistoriesByMonth } from '@hooks/api/history';
 import { useGetRoomList, useGetRoomPreview } from '@hooks/api/rooms';
@@ -27,12 +28,14 @@ import { vibration } from '@utils/effect';
 import { HomeScreenProps } from '@type/param/loginStack';
 
 const HomeComponent = ({ navigation }: HomeScreenProps) => {
+  useDeleteAllNotifee();
+
   const date = new Date();
   const userInfo = useRecoilValue(userInfoState);
 
   const [socketRoomId, setSocketRoomId] = useRecoilState(roomState);
 
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const checkMyRoom = async () => {
     const response = await getMyChatInfo();

@@ -8,9 +8,13 @@ import HeaderComponent from '@components/Header';
 
 import { userInfoState } from '@recoil/recoil';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
+
 import { WithdrawCheckScreenProps } from '@type/param/loginStack';
 
 const WithdrawCheckScreen = ({ navigation }: WithdrawCheckScreenProps) => {
+  useDeleteAllNotifee();
+
   const myInfo = useRecoilValue(userInfoState);
 
   const toWithdrawSurveyScreen = () => {

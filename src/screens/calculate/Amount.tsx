@@ -10,10 +10,13 @@ import InputBoxComponent from '@components/Calculate/InputBox';
 import { calculateState } from '@recoil/recoil';
 
 import { useGetRoomMembers } from '@hooks/api/rooms';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { AmountScreenProps } from '@type/param/loginStack';
 
 const AmountScreen = ({ navigation, route }: AmountScreenProps) => {
+  useDeleteAllNotifee();
+
   const { roomPreview } = route.params;
 
   const { roomMembers } = useGetRoomMembers(roomPreview.roomId); // 참여자 목록

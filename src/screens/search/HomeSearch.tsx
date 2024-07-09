@@ -13,6 +13,7 @@ import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 import { searchParamState, searchKeywordState } from '@recoil/recoil';
 
 import { useNaverSearch } from '@hooks/api/search';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useLocationPermission } from '@hooks/permission/location';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
@@ -27,17 +28,19 @@ LogBox.ignoreLogs([
 
 /** 홈 도착지 검색 */
 const HomeSearchScreen = ({ route, navigation }: HomeSearchScreenProps) => {
+  useDeleteAllNotifee();
+
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
   const locationPermission = useLocationPermission();
-  
+
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
   const [sortedItems, setSortedItems] = useState<SortedItemType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coord>({
     latitude: 37.5665,
     longitude: 126.978,
   });
-  
+
   // 검색어 선택시 넘겨줄 값
   const [, setSearchParam] = useRecoilState(searchParamState);
 
@@ -50,79 +53,75 @@ const HomeSearchScreen = ({ route, navigation }: HomeSearchScreenProps) => {
       });
     };
     fetchCurrentLocation();
-  }, [])
+  }, []);
 
   // 검색어에 따른 처리
   useEffect(() => {
-    if (keyword === "") {
+    if (keyword === '') {
       setSortedItems([]);
     }
     refetchNaverSearch();
-  }, [keyword, refetchNaverSearch])
+  }, [keyword, refetchNaverSearch]);
 
   // 좌표계 변환, 두 지점 사이 거리 계산하여 새 배열에 저장
   useEffect(() => {
     if (items && items.length > 0) {
       const updatedItems = items?.map((item) => {
         const { latitude, longitude } = convertCoordinates(item.mapx, item.mapy);
-        const distance = calculateDist(currentLocation.latitude, currentLocation.longitude, latitude, longitude);
+        const distance = calculateDist(
+          currentLocation.latitude,
+          currentLocation.longitude,
+          latitude,
+          longitude,
+        );
         return { ...item, latitude: latitude, longitude: longitude, distance: distance };
-      })
+      });
       // 정렬하여 sortedItems에 저장
       updatedItems?.sort((a, b) => a.distance - b.distance);
       setSortedItems(updatedItems);
     }
-  }, [items, currentLocation])
+  }, [items, currentLocation]);
 
   /** 선택한 검색어를 전달하며 이동 */
-  const toMainMapScreen = (
-    title: string,
-    latitude: number,
-    longitude: number,
-  ) => {
+  const toMainMapScreen = (title: string, latitude: number, longitude: number) => {
     setSearchParam({
       title: title,
       latitude: latitude,
       longitude: longitude,
-    })
+    });
     setKeyword(''); // 검색어 삭제
     route.params?.toMainMap();
-  }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="mx-4 flex-1">
-        
         {/** 검색창 */}
         <View className="mb-3 mt-2">
           <SearchBoxComponent />
         </View>
 
         {/** 추천 검색어 */}
-        {sortedItems && 
+        {sortedItems &&
           sortedItems.map((item, index) => (
             <Pressable
               key={index}
-              onPress={() => toMainMapScreen(
-                deleteTagTitle(item.title),
-                item.latitude,
-                item.longitude,
-              )}
+              onPress={() =>
+                toMainMapScreen(deleteTagTitle(item.title), item.latitude, item.longitude)
+              }
             >
-              <RecommendedSearchComponent 
+              <RecommendedSearchComponent
                 key={index}
                 keyword={keyword}
                 fullKeyword={deleteTagTitle(item.title)}
-                address={item.address} 
+                address={item.address}
                 distance={locationPermission === 'granted' ? item.distance : null}
                 isFirst={index === 0}
               />
             </Pressable>
-        ))}
+          ))}
 
-        {sortedItems.length === 0 && !keyword && 
-          <EmptySearchRenderComponent />
-        }
+        {sortedItems.length === 0 && !keyword && <EmptySearchRenderComponent />}
       </View>
     </SafeAreaView>
   );

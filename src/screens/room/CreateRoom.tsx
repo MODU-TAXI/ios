@@ -19,6 +19,7 @@ import { roomState, arrivalState, userInfoState, departureState } from '@recoil/
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useCreateRoom } from '@hooks/api/rooms';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { ErrorToastMessage } from '@utils/toastMessage';
 
@@ -40,6 +41,8 @@ import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
 dayjs.locale('ko');
 
 const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
+  useDeleteAllNotifee();
+
   const { mutateAsync: createRoomMutate, isPending: createRoomPending } = useCreateRoom();
 
   const [, setSocketRoomId] = useRecoilState(roomState);

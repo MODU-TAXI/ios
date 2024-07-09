@@ -8,11 +8,14 @@ import LoadingComponent from '@components/Common/Loading';
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useGetAlarms } from '@hooks/api/alarms';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { Alarm } from '@type/entity/alarm';
 import { AlarmScreenProps } from '@type/param/loginStack';
 
 const AlarmComponent = ({ navigation }: AlarmScreenProps) => {
+  useDeleteAllNotifee();
+
   const [page, setPage] = useState<number>(0);
   const [alarmsList, setAlarmsList] = useState<Alarm[]>([]);
 

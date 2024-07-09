@@ -16,6 +16,7 @@ import { calculateState } from '@recoil/recoil';
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useGetAccounts } from '@hooks/api/account';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { Bank } from '@type/entity/account';
 import { AccountScreenProps } from '@type/param/loginStack';
@@ -23,6 +24,8 @@ import { AccountScreenProps } from '@type/param/loginStack';
 import SelectBank from '@assets/images/Calculate/SelectBank.svg';
 
 const AccountComponent = ({ navigation, route }: AccountScreenProps) => {
+  useDeleteAllNotifee();
+
   const { roomPreview } = route.params;
 
   const { accounts } = useGetAccounts(); // 계좌 정보들 가져오기
