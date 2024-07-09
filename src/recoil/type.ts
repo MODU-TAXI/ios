@@ -17,7 +17,7 @@ export type MessageBody = {
   roomId: number;
   sender: string;
   imageUrl: string;
-  messageType: 'JOIN' | 'CHAT' | 'LEAVE';
+  messageType: string;
 };
 
 export type UserInfo = {

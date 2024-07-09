@@ -1,7 +1,7 @@
 import React, { Suspense, useState } from 'react';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, View, Alert, Pressable, Vibration, ScrollView, RefreshControl } from 'react-native';
+import { Text, View, Alert, Pressable, ScrollView, RefreshControl } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
@@ -14,6 +14,7 @@ import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useCompletePayment, useGetPaymentDetail } from '@hooks/api/payment';
 
+import { vibration } from '@utils/effect';
 import { InfoToastMessage } from '@utils/toastMessage';
 
 import { banks } from '@type/entity/account';
@@ -46,7 +47,8 @@ const CheckPaymentComponent = ({ navigation, route }: CheckPaymentScreenProps) =
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
 
-    Vibration.vibrate(0.1); // 새로고침시 진동
+    vibration();
+
     await getPaymentMembersRefetch();
 
     setRefreshing(false);
@@ -98,7 +100,7 @@ const CheckPaymentComponent = ({ navigation, route }: CheckPaymentScreenProps) =
             <Text className="ml-2 mr-1 text-[16px] font-medium tracking-tight">
               {banks[payment.bank]}
             </Text>
-            <Text className="text-[16px] font-medium tracking-tight">{payment.totalCharge}</Text>
+            <Text className="text-[16px] font-medium tracking-tight">{payment.accountNumber}</Text>
 
             <Pressable onPress={copyAccount}>
               <CopyButton />

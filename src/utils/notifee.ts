@@ -73,11 +73,13 @@ export const handleNotificationPress = async (detail: EventDetail) => {
       await Linking.openURL('modutaxi://main');
       break;
   }
+
+  await notifee.cancelAllNotifications();
 };
 
 // notifee 알림을 무시했을때 handling
 export const handleNotificationDismissed = async (detail: EventDetail) => {
   if (detail?.notification?.id) {
-    await Promise.all([notifee.cancelAllNotifications(), notifee.cancelDisplayedNotifications()]);
+    await notifee.cancelAllNotifications();
   }
 };
