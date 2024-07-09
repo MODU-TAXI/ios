@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, View, Alert, Pressable, Vibration, ScrollView, RefreshControl } from 'react-native';
+import { Text, View, Alert, Pressable, ScrollView, RefreshControl } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
+import LoadingComponent from '@components/Common/Loading';
 import { GetBankComponent } from '@components/Calculate/GetBank';
 import PaymentMembersComponent from '@components/Calculate/PaymentMembers';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
+import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
+
 import { useCompletePayment, useGetPaymentDetail } from '@hooks/api/payment';
 
+import { vibration } from '@utils/effect';
 import { InfoToastMessage } from '@utils/toastMessage';
 
 import { banks } from '@type/entity/account';
@@ -18,7 +22,7 @@ import { CheckPaymentScreenProps } from '@type/param/loginStack';
 
 import CopyButton from '@assets/images/Calculate/CopyButton.svg';
 
-const CheckPaymentScreen = ({ navigation, route }: CheckPaymentScreenProps) => {
+const CheckPaymentComponent = ({ navigation, route }: CheckPaymentScreenProps) => {
   const { roomPreview } = route.params;
 
   const [refreshing, setRefreshing] = useState(false); // 새로고침시 필요한 변수
@@ -43,7 +47,8 @@ const CheckPaymentScreen = ({ navigation, route }: CheckPaymentScreenProps) => {
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
 
-    Vibration.vibrate(0.1); // 새로고침시 진동
+    vibration();
+
     await getPaymentMembersRefetch();
 
     setRefreshing(false);
@@ -95,7 +100,7 @@ const CheckPaymentScreen = ({ navigation, route }: CheckPaymentScreenProps) => {
             <Text className="ml-2 mr-1 text-[16px] font-medium tracking-tight">
               {banks[payment.bank]}
             </Text>
-            <Text className="text-[16px] font-medium tracking-tight">{payment.totalCharge}</Text>
+            <Text className="text-[16px] font-medium tracking-tight">{payment.accountNumber}</Text>
 
             <Pressable onPress={copyAccount}>
               <CopyButton />
@@ -141,6 +146,16 @@ const CheckPaymentScreen = ({ navigation, route }: CheckPaymentScreenProps) => {
         />
       </View>
     </SafeAreaView>
+  );
+};
+
+const CheckPaymentScreen = ({ route, navigation }: CheckPaymentScreenProps) => {
+  return (
+    <SuspenseErrorHandler navigation={navigation}>
+      <Suspense fallback={<LoadingComponent />}>
+        <CheckPaymentComponent navigation={navigation} route={route} />
+      </Suspense>
+    </SuspenseErrorHandler>
   );
 };
 

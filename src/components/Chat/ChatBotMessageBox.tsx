@@ -34,9 +34,8 @@ const ChatBotMessageBoxComponent: React.FC<ChatBotMessageBoxComponentProps> = ({
         </View>
 
         <View className="ml-1 flex-1 flex-col items-start justify-end">
-          <Text className="text-[10px] tracking-tight">2</Text>
           <Text className="text-[10px] tracking-tight  text-gray-300">
-            {dayjs(message.dateTime).format('HH:MM')}
+            {dayjs(message.dateTime).format('HH:mm')}
           </Text>
         </View>
       </View>

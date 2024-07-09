@@ -1,6 +1,8 @@
 export type ChatMessage = {
+  first: boolean;
+  last: boolean;
   roomId: number;
-  messageType: 'JOIN' | 'CHAT' | 'LEAVE';
+  messageType: string;
   content: string;
   sender: string;
   memberId: number;

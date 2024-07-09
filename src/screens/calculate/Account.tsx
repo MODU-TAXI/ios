@@ -1,16 +1,19 @@
 import { useRecoilState } from 'recoil';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
+import LoadingComponent from '@components/Common/Loading';
 import InputBoxComponent from '@components/Calculate/InputBox';
 import BankModalComponent from '@components/Calculate/BankModal';
 import { GetBankComponent } from '@components/Calculate/GetBank';
 import MyAccountsComponent from '@components/Calculate/MyAccounts';
 
 import { calculateState } from '@recoil/recoil';
+
+import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useGetAccounts } from '@hooks/api/account';
 
@@ -19,7 +22,7 @@ import { AccountScreenProps } from '@type/param/loginStack';
 
 import SelectBank from '@assets/images/Calculate/SelectBank.svg';
 
-const AccountScreen = ({ navigation, route }: AccountScreenProps) => {
+const AccountComponent = ({ navigation, route }: AccountScreenProps) => {
   const { roomPreview } = route.params;
 
   const { accounts } = useGetAccounts(); // 계좌 정보들 가져오기
@@ -110,6 +113,16 @@ const AccountScreen = ({ navigation, route }: AccountScreenProps) => {
         setBank={setBank}
       />
     </SafeAreaView>
+  );
+};
+
+const AccountScreen = ({ route, navigation }: AccountScreenProps) => {
+  return (
+    <SuspenseErrorHandler navigation={navigation}>
+      <Suspense fallback={<LoadingComponent />}>
+        <AccountComponent navigation={navigation} route={route} />
+      </Suspense>
+    </SuspenseErrorHandler>
   );
 };
 

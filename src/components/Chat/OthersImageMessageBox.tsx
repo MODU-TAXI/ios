@@ -17,28 +17,39 @@ const OthersImageMessageBoxComponent: React.FC<OthersImageMessageBoxComponentPro
   openUserInfoModal,
   openImageModal,
 }) => {
-  return (
-    <View className="my-2 flex-col">
-      <Pressable
-        className="flex-row items-center"
-        onPress={() =>
-          openUserInfoModal({
-            memberId: message.memberId,
-            nickname: message.sender,
-            imageUrl: message.imageUrl,
-            thisIsMe: false,
-          })
-        }
-      >
-        <FastImage
-          source={{ uri: message.imageUrl }}
-          className="mr-2 h-[24px] w-[24px] rounded-full"
-        />
+  const messageMargin =
+    message.first && message.last
+      ? 'flex-col my-4'
+      : message.first
+        ? 'flex-col mt-4 mb-1'
+        : message.last
+          ? 'flex-col mt-1 mb-4'
+          : 'flex-col my-1';
 
-        <View>
-          <Text className="font-medium tracking-tight text-[#5D5D5D]">{message.sender}</Text>
+  return (
+    <View className={messageMargin}>
+      {message.first && (
+        <View className="flex-row items-center">
+          <Pressable
+            onPress={() =>
+              openUserInfoModal({
+                memberId: message.memberId,
+                nickname: message.sender,
+                imageUrl: message.imageUrl,
+                thisIsMe: false,
+              })
+            }
+          >
+            <FastImage
+              source={{ uri: message.imageUrl }}
+              className="mr-2 h-[24px] w-[24px] rounded-full"
+            />
+          </Pressable>
+          <View>
+            <Text className="font-medium tracking-tight text-[#5D5D5D]">{message.sender}</Text>
+          </View>
         </View>
-      </Pressable>
+      )}
 
       <Pressable className="ml-4 mt-2 flex-row" onPress={() => openImageModal(message.content)}>
         {/* 이미지 */}
@@ -50,10 +61,11 @@ const OthersImageMessageBoxComponent: React.FC<OthersImageMessageBoxComponentPro
         />
 
         <View className="ml-1 flex-1 flex-col items-start justify-end">
-          <Text className="text-[10px]">2</Text>
-          <Text className="text-[10px] text-gray-300">
-            {dayjs(message.dateTime).format('HH:MM')}
-          </Text>
+          {message.last && (
+            <Text className="text-[10px] text-gray-300">
+              {dayjs(message.dateTime).format('HH:mm')}
+            </Text>
+          )}
         </View>
       </Pressable>
     </View>

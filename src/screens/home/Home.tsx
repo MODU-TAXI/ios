@@ -16,6 +16,7 @@ import HomeMainPanelComponent from '@components/Home/HomeMainPanel';
 import { roomState, userInfoState } from '@recoil/recoil';
 
 import { getMyChatInfo } from '@server/api/chat';
+import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useGetAlarmsCount } from '@hooks/api/alarms';
 import { useGetHistoriesByMonth } from '@hooks/api/history';
@@ -45,15 +46,18 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
   const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(socketRoomId);
 
   const { rooms: recentRooms, refetch: refetchRoomList } = useGetRoomList({
-    "page": 0,
-    "size": 10,
-    "sortType": "NEW",
-    "searchLatitude": 37.46504,
-    "searchLongitude": 126.68045,
-    "radius": 500000,
-  })
+    page: 0,
+    size: 10,
+    sortType: 'NEW',
+    searchLatitude: 37.46504,
+    searchLongitude: 126.68045,
+    radius: 500000,
+  });
 
-  const { data: histories, refetch: refetchHistories } = useGetHistoriesByMonth(date.getFullYear(), date.getMonth());
+  const { data: histories, refetch: refetchHistories } = useGetHistoriesByMonth(
+    date.getFullYear(),
+    date.getMonth(),
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -134,7 +138,11 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         <View className="my-6 h-2 bg-[#F2F2F2]" />
 
         {/* 기타 */}
-        <UserSummaryComponent navigation={navigation} histories={histories} month={date.getMonth()} />
+        <UserSummaryComponent
+          navigation={navigation}
+          histories={histories}
+          month={date.getMonth()}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -142,9 +150,11 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
 const HomeScreen = ({ route, navigation }: HomeScreenProps) => {
   return (
-    <Suspense fallback={<LoadingComponent />}>
-      <HomeComponent navigation={navigation} route={route} />
-    </Suspense>
+    <SuspenseErrorHandler navigation={navigation}>
+      <Suspense fallback={<LoadingComponent />}>
+        <HomeComponent navigation={navigation} route={route} />
+      </Suspense>
+    </SuspenseErrorHandler>
   );
 };
 

@@ -1,13 +1,15 @@
 import { Text, View, Pressable } from 'react-native';
-import React, { useState, useCallback } from 'react';
 import MonthPicker from 'react-native-month-year-picker';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState, Suspense, useCallback } from 'react';
 
 import HeaderComponent from '@components/Header';
 import LoadingComponent from '@components/Common/Loading';
 import HistoryInfoComponent from '@components/History/HistoryInfo';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
+
+import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useGetHistoryDuration, useGetHistoriesByMonth } from '@hooks/api/history';
 
@@ -18,7 +20,7 @@ import AfterBar from '@assets/images/History/AfterBar.svg';
 import DropDown from '@assets/images/History/DropDown.svg';
 import BeforeBar from '@assets/images/History/BeforeBar.svg';
 
-const HistoryScreen = ({ navigation }: HistoryScreenProps) => {
+const HistoryComponent = ({ navigation }: HistoryScreenProps) => {
   const [date, setDate] = useState<Date>(new Date());
   const [show, setShow] = useState<boolean>(false);
 
@@ -139,6 +141,16 @@ const HistoryScreen = ({ navigation }: HistoryScreenProps) => {
         />
       )}
     </SafeAreaView>
+  );
+};
+
+const HistoryScreen = ({ route, navigation }: HistoryScreenProps) => {
+  return (
+    <SuspenseErrorHandler navigation={navigation}>
+      <Suspense fallback={<LoadingComponent />}>
+        <HistoryComponent navigation={navigation} route={route} />
+      </Suspense>
+    </SuspenseErrorHandler>
   );
 };
 

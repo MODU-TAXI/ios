@@ -35,20 +35,19 @@ const PaymentMessageBoxComponent: React.FC<PaymentMessageBoxComponentProps> = ({
           <Text className="font-medium tracking-tight  text-[#3E3E3E]">{arriveTime}</Text>
 
           <Text className="mt-1 font-medium tracking-tight  text-[#3E3E3E] ">{payment}</Text>
-
+          {/* 
           <Pressable className="mt-2" onPress={toPaymentScreen}>
             <View className="rounded-lg border-[1px] border-main bg-white px-6 py-3">
               <Text className="text-center text-[12px] font-medium tracking-tight text-main">
                 돈 보내주기
               </Text>
             </View>
-          </Pressable>
+          </Pressable> */}
         </View>
 
         <View className="ml-1 flex-1 flex-col items-start justify-end">
-          <Text className="text-[10px] tracking-tight">2</Text>
           <Text className="text-[10px] tracking-tight  text-gray-300">
-            {dayjs(message.dateTime).format('HH:MM')}
+            {dayjs(message.dateTime).format('HH:mm')}
           </Text>
         </View>
       </View>

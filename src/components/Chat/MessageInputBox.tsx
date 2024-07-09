@@ -52,7 +52,6 @@ const MessageInputBoxComponent: React.FC<MessageInputBoxComponentProps> = ({
             style={{
               paddingTop: 0,
               paddingBottom: 0,
-              textAlignVertical: 'top',
             }}
           />
         </View>

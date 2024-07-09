@@ -10,6 +10,7 @@ import People from '@assets/images/Chat/People.svg';
 import DeleteStatus from '@assets/images/Chat/DeleteStatus.svg';
 import CompleteStatus from '@assets/images/Chat/CompleteStatus.svg';
 import ProceedingStatus from '@assets/images/Chat/ProceedingStatus.svg';
+
 interface RoomInfoComponentProps {
   roomPreview: RoomPreview;
 }

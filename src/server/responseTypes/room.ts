@@ -87,7 +87,7 @@ export interface GetRoomPreviewResponse {
   departureTime: string;
   departureName: string;
   arrivalName: string;
-  roomStatus: 'PROCEEDING' | 'COMPLETE' | 'DELETE';
+  roomStatus: string;
   currentHeadcount: number;
   wishHeadcount: number;
   expectedChargePerPerson: number;

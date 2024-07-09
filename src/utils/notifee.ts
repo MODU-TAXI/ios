@@ -8,18 +8,26 @@ export const handleFirebaseMessage = async (
   messageType: string,
   roomId?: string,
 ): Promise<string> => {
+  Vibration.vibrate(1);
+
   if (roomId) {
-    Vibration.vibrate(1);
+    if (messageType === 'CHAT' || messageType === 'IMAGE') {
+      return notifee.displayNotification({
+        title: title,
+        body: content,
+        data: { messageType: messageType, roomId: roomId },
+      });
+    }
+
     return notifee.displayNotification({
-      title: '모두의 택시',
+      title: title,
       body: content,
       data: { messageType: messageType, roomId: roomId },
     });
   }
 
-  Vibration.vibrate(1);
   return notifee.displayNotification({
-    title: '모두의 택시',
+    title: title,
     body: content,
     data: { messageType: messageType },
   });
@@ -65,12 +73,13 @@ export const handleNotificationPress = async (detail: EventDetail) => {
       await Linking.openURL('modutaxi://main');
       break;
   }
+
+  await notifee.cancelAllNotifications();
 };
 
 // notifee 알림을 무시했을때 handling
 export const handleNotificationDismissed = async (detail: EventDetail) => {
   if (detail?.notification?.id) {
-    await notifee.cancelNotification(detail.notification.id);
-    await notifee.cancelDisplayedNotification(detail.notification.id);
+    await notifee.cancelAllNotifications();
   }
 };

@@ -8,11 +8,11 @@ import { Alert, AppState, KeyboardAvoidingView } from 'react-native';
 import React, { useRef, Suspense, useState, useEffect, useCallback } from 'react';
 
 import MessagesComponent from '@components/Chat/Messages';
-import RoomInfoComponent from '@components/Chat/RoomInfo';
 import LoadingComponent from '@components/Common/Loading';
 import ExitModalComponent from '@components/Chat/ExitModal';
 import UserModalComponent from '@components/Common/UserModal';
 import ChatHeaderComponent from '@components/Chat/ChatHeader';
+import RoomStatusComponent from '@components/Chat/RoomStatus';
 import SelectImageModal from '@components/Common/SelectImageModal';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
@@ -28,6 +28,7 @@ import { useEnterChatRoom } from '@hooks/chat';
 import { useChatDetail } from '@hooks/api/chat';
 import { useMatchComplete, useExitParticipateRoom } from '@hooks/api/rooms';
 
+import { combineChatMessages } from '@utils/chat';
 import { openAlbum, openCamera } from '@utils/image';
 import { setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
 
@@ -53,6 +54,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [, setSocketRoomId] = useRecoilState(roomState);
   const [newMessages, setNewMeesages] = useState<MessageBody[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
+  const [roomStatus, setRoomStatus] = useState<string | undefined>(roomPreview?.roomStatus);
   const [imageModalVisible, setImageModalVisible] = useState(false); // 이미지 뷰 모달
   const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
   const [exitModalVisible, setExitModalVisible] = useState<boolean>(false); // 퇴장 모달 뷰
@@ -68,6 +70,8 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   // 메세지 보내기
   const sendMessage = (inputMessage: string, type: string) => {
+    if (!inputMessage.trim()) return;
+
     try {
       if (stompClient.current.connected) {
         stompClient.current.publish({
@@ -88,6 +92,22 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     }
   };
 
+  // 방 상태 변경하기
+  const changeRoomStatus = (messageType: string) => {
+    // 매칭중 -> 매칭완료
+    if (messageType === 'PAYMENT_REQUEST') {
+      setRoomStatus('AFTER_MATCHING');
+    }
+    // 매칭완료 -> 정산중
+    else if (messageType === 'PAYMENT_REQUEST_COMPLETE') {
+      setRoomStatus('BEFORE_PAYMENT');
+    }
+    // 정산중 -> 정산완료
+    else if (messageType === 'PAYMENT_ALL_COMPLETE') {
+      setRoomStatus('AFTER_PAYMENT');
+    }
+  };
+
   // 메세지 초기화
   const clearMessages = useCallback(() => {
     setNewMeesages([]);
@@ -97,7 +117,9 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const onMessageReceived = (message: Message) => {
     const newMessage: MessageBody = JSON.parse(message.body);
 
-    setNewMeesages((prev: MessageBody[]) => [...prev, newMessage]);
+    setNewMeesages((prev: MessageBody[]) => combineChatMessages([...prev, newMessage]));
+
+    changeRoomStatus(newMessage.messageType);
   };
 
   // socket 연결 해제
@@ -251,9 +273,9 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   // 앨범에서 이미지 고르기
   const selectImageFromAlbum = async (): Promise<void> => {
-    closeSelectImageModal();
-
     const image = await openAlbum();
+
+    closeSelectImageModal();
 
     if (image) {
       sendImage(image);
@@ -358,16 +380,25 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
       <ChatHeaderComponent myRoom={myRoom} openExitModal={openExitModal} />
 
+      {!readonly && roomPreview && (
+        <RoomStatusComponent
+          roomStatus={roomStatus}
+          myRoom={myRoom}
+          completeMatch={completeMatch}
+          toCalculateScreen={toCalculateScreen}
+          toPaymentScreen={toPaymentScreen}
+        />
+      )}
+
       {/* 방 정보 Component */}
-      {roomPreview && <RoomInfoComponent roomPreview={roomPreview} />}
+      {/* {roomPreview && <RoomInfoComponent roomPreview={roomPreview} />} */}
 
       <KeyboardAvoidingView className="flex-1 bg-white" behavior="padding">
         {/* 메세지 Component */}
         <MessagesComponent
           memberId={myInfo.id}
           managerId={roomPreview!.managerId}
-          newMessages={newMessages}
-          messages={messages.messages}
+          messages={[...messages, ...newMessages].reverse()}
           openUserInfoModal={openUserInfoModal}
           openImageModal={openImageModal}
           toCalculateScreen={toCalculateScreen}

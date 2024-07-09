@@ -85,7 +85,6 @@ function AppInner() {
   if (!appLoaded)
     return (
       <Animated.View
-        entering={FadeIn.duration(800)}
         exiting={FadeOut.duration(300)}
         style={{
           flex: 1,

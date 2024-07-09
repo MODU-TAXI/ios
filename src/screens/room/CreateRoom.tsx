@@ -3,17 +3,20 @@ import { useRecoilState } from 'recoil';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, Suspense, useEffect, useCallback } from 'react';
 
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import DatePickerComponent from '@components/DatePicker';
+import LoadingComponent from '@components/Common/Loading';
 import DescriptionComponent from '@components/Description';
 import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { roomState, arrivalState, userInfoState, departureState } from '@recoil/recoil';
+
+import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useCreateRoom } from '@hooks/api/rooms';
 
@@ -36,7 +39,7 @@ import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
 
 dayjs.locale('ko');
 
-const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
+const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
   const { mutateAsync: createRoomMutate, isPending: createRoomPending } = useCreateRoom();
 
   const [, setSocketRoomId] = useRecoilState(roomState);
@@ -305,6 +308,16 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
         </View>
       </ScrollView>
     </SafeAreaView>
+  );
+};
+
+const CreateRoomScreen = ({ route, navigation }: CreateRoomScreenProps) => {
+  return (
+    <SuspenseErrorHandler navigation={navigation}>
+      <Suspense fallback={<LoadingComponent />}>
+        <CreateRoomComponent navigation={navigation} route={route} />
+      </Suspense>
+    </SuspenseErrorHandler>
   );
 };
 

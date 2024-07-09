@@ -9,11 +9,23 @@ interface MyChatMessageBoxComponentProps {
 }
 
 const MyChatMessageBoxComponent: React.FC<MyChatMessageBoxComponentProps> = ({ message }) => {
+  const messageMargin =
+    message.first && message.last
+      ? 'flex-row my-4'
+      : message.first
+        ? 'flex-row mt-1 mb-1'
+        : message.last
+          ? 'flex-row mt-1 mb-4'
+          : 'flex-row my-2';
+
   return (
-    <View className="my-4 flex-row">
+    <View className={messageMargin}>
       <View className="mr-1 flex-1 flex-col items-end justify-end">
-        <Text className="text-[10px]">2</Text>
-        <Text className="text-[10px] text-gray-300">{dayjs(message.dateTime).format('HH:MM')}</Text>
+        {message.last && (
+          <Text className="text-[10px] text-gray-300">
+            {dayjs(message.dateTime).format('HH:mm')}
+          </Text>
+        )}
       </View>
 
       {/* 메세지 */}

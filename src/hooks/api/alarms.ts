@@ -8,6 +8,7 @@ export const useGetAlarms = (page: number) => {
     queryKey: [`/api/alarms`, page],
     queryFn: async () => getAlarms(page),
     placeholderData: keepPreviousData,
+    staleTime: 0,
   });
 };
 

@@ -16,6 +16,8 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { arrivalState, userInfoState, departureState } from '@recoil/recoil';
 
+import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
+
 import { usePatchRoom } from '@hooks/api/rooms';
 
 import { ErrorToastMessage } from '@utils/toastMessage';
@@ -48,9 +50,11 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
   const [departureTime, setDepartureTime] = useState<Date>(new Date()); // 설정 날짜
   const [datePicked, setDatePicked] = useState<boolean>(true); // 날짜 선택 여부
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
-  const [passengersNumber, setPassengersNumber] = useState<number | null>(roomDetail.wishHeadcount - 1); // 탑승 인원
+  const [passengersNumber, setPassengersNumber] = useState<number | null>(
+    roomDetail.wishHeadcount - 1,
+  ); // 탑승 인원
   const [checkedCategories, setCheckedCategories] = useState<boolean[]>([false, false, false]); // 카테고리
-  const [userInfo, ] = useRecoilState(userInfoState);
+  const [userInfo] = useRecoilState(userInfoState);
 
   // 첫 렌더링 시 roomDetail 정보 저장
   useEffect(() => {
@@ -63,7 +67,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
       name: roomDetail.arrivalName,
       spotId: roomDetail.spotId,
     });
-  }, [])
+  }, []);
 
   // 날짜 다시 활성화
   useEffect(() => {
@@ -82,7 +86,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
   // 카테고리 선택했던 것들 활성화
   useEffect(() => {
     const origin_categories = ['학생인증', '여자만', '조용히'];
-    if (userInfo && userInfo.gender === "MALE") {
+    if (userInfo && userInfo.gender === 'MALE') {
       origin_categories[1] = '남자만';
     }
 
@@ -104,7 +108,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
     }
 
     const categories = ['STUDENT_CERTIFICATION', 'ONLY_WOMAN', 'QUIET'];
-    if (userInfo && userInfo.gender === "MALE") {
+    if (userInfo && userInfo.gender === 'MALE') {
       categories[1] = 'ONLY_MAN';
     }
 
@@ -288,7 +292,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
           <DescriptionComponent description="카테고리를 선택해주세요" />
 
           <View className="mt-4 flex-row justify-between">
-          {userInfo.email ? (
+            {userInfo.email ? (
               <CategoryComponent
                 index={0}
                 category={'학생인증'}
@@ -305,7 +309,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
               </Pressable>
             )}
 
-            {userInfo.gender === "MALE" ? (
+            {userInfo.gender === 'MALE' ? (
               <CategoryComponent
                 index={1}
                 category={'남자만'}
@@ -348,10 +352,12 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
 
 const PatchRoomScreen = ({ route, navigation }: PatchRoomScreenProps) => {
   return (
-    <Suspense fallback={<LoadingComponent />}>
-      <PatchRoomComponent navigation={navigation} route={route} />
-    </Suspense>
-  )
-}
+    <SuspenseErrorHandler navigation={navigation}>
+      <Suspense fallback={<LoadingComponent />}>
+        <PatchRoomComponent navigation={navigation} route={route} />
+      </Suspense>
+    </SuspenseErrorHandler>
+  );
+};
 
 export default PatchRoomScreen;

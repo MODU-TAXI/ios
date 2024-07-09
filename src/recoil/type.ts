@@ -9,13 +9,15 @@ export type SignUpUser = {
 };
 
 export type MessageBody = {
+  first: boolean;
+  last: boolean;
   content: string;
   dateTime: Date;
   memberId: number;
   roomId: number;
   sender: string;
   imageUrl: string;
-  messageType: 'JOIN' | 'CHAT' | 'LEAVE';
+  messageType: string;
 };
 
 export type UserInfo = {
@@ -50,7 +52,7 @@ export type Calculate = {
 };
 
 export type SearchParam = {
-  title: string,
-  latitude: number,
-  longitude: number,
-}
+  title: string;
+  latitude: number;
+  longitude: number;
+};
