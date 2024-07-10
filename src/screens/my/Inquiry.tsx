@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Alert, Linking, SafeAreaView } from 'react-native';
+import { Text, View, Alert, Image, Linking, Pressable, SafeAreaView } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 
@@ -7,18 +7,16 @@ import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { InquiryScreenProps } from '@type/param/loginStack';
 
-import InquiryKakao from '@assets/images/My/InquiryKakao.svg';
-
 const InquiryScreen = ({ navigation }: InquiryScreenProps) => {
   useDeleteAllNotifee();
 
   const inquiryKakao = async () => {
     // URL을 열 수 있는지 확인
-    const canOpen = await Linking.canOpenURL('https://open.kakao.com/o/sIHBVkzg');
+    const canOpen = await Linking.canOpenURL('http://pf.kakao.com/_txeipG/chat');
 
     if (canOpen) {
       // URL 열기
-      Linking.openURL('https://open.kakao.com/o/sIHBVkzg');
+      Linking.openURL('http://pf.kakao.com/_txeipG/chat');
     } else {
       Alert.alert('에러', '카카오톡을 오픈하는데 실패하였습니다.');
     }
@@ -36,9 +34,15 @@ const InquiryScreen = ({ navigation }: InquiryScreenProps) => {
       </View>
 
       <View className="flex-1 items-center justify-center">
-        <InquiryKakao onPress={inquiryKakao} />
+        <Pressable onPress={inquiryKakao}>
+          <Image
+            source={require('@assets/images/My/InquiryKakao.png')}
+            className="h-[100px] w-[100px]"
+            resizeMode="contain"
+          />
+        </Pressable>
 
-        <View className="mt-11">
+        <View className="mt-3">
           <Text className="text-[12px] tracking-tight text-[#5D5D5D]">
             누르면 해당 문의 채널로 연결됩니다
           </Text>

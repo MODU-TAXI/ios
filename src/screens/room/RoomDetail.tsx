@@ -111,9 +111,21 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
 
   // 대기열에서 퇴장
   const exitWaitingRoom = async () => {
-    await exitWaitingRoomMutate();
+    Alert.alert('알림', '대기신청을 취소하시겠습니까?', [
+      {
+        text: '취소',
+        style: 'cancel',
+      },
 
-    await Promise.all([refetchParticipateMembers(), refetchWaitingMembers()]);
+      {
+        text: '확인',
+        onPress: async () => {
+          await exitWaitingRoomMutate();
+
+          await Promise.all([refetchParticipateMembers(), refetchWaitingMembers()]);
+        },
+      },
+    ]);
   };
 
   // 방 입장 수락
@@ -180,7 +192,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     queryClient.invalidateQueries();
     refetchRoomDetail();
     setUpdateModalVisible(false);
-  
+
     navigation.navigate('PatchRoomScreen', { roomDetail: roomDetail });
   };
 
@@ -304,8 +316,8 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
         ) : isWaiting ? (
           <View className="mx-5 mb-10 mt-[78px]">
             <ButtonComponent
-              color={'bg-main'}
-              borderColor={'border-main'}
+              color={'bg-gray-400'}
+              borderColor={'border-gray-400'}
               textColor={'white'}
               text={'대기 취소하기'}
               disabled={false}

@@ -45,7 +45,10 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   const { roomId, readonly } = route.params;
 
-  const { roomPreview, messages, roomPreviewRefetch, messagesRefetch } = useChatDetail(roomId);
+  const { roomPreview, messages, roomPreviewRefetch, messagesRefetch } = useChatDetail(
+    roomId,
+    readonly,
+  );
 
   const { mutateAsync: matchComplete, isPending: matchCompletePending } = useMatchComplete(roomId);
   const { mutateAsync: exitParticipateRoomMutate, isPending: exitParticipateRoomPending } =
@@ -63,7 +66,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [accessToken, setNewAccessToken] = useAccessToken(); // socket을 위한 token hook
   const [refresh, setRefresh] = useState(false);
   const myInfo = useRecoilValue(userInfoState);
-  const myRoom = roomPreview!.managerId == myInfo.id;
+  const myRoom = readonly ? false : roomPreview!.managerId == myInfo.id;
 
   useEnterChatRoom(); // 채팅스크린에 있을때는 알람안오게 해야하므로 recoil로 상태 저장
 
@@ -433,7 +436,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         {/* 메세지 Component */}
         <MessagesComponent
           memberId={myInfo.id}
-          managerId={roomPreview!.managerId}
+          managerId={readonly ? 0 : roomPreview!.managerId}
           messages={[...messages, ...newMessages].reverse()}
           openUserInfoModal={openUserInfoModal}
           openImageModal={openImageModal}

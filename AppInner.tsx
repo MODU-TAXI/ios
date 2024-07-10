@@ -1,7 +1,7 @@
 import { useRecoilState } from 'recoil';
+import React, { useState } from 'react';
 import LottieView from 'lottie-react-native';
 import messaging from '@react-native-firebase/messaging';
-import React, { useRef, useState, useEffect } from 'react';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';

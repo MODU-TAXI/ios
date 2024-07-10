@@ -48,6 +48,8 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
 
   // 내가 채팅 입력했을때만 밑으로 내리기
   useEffect(() => {
+    if (messages.length === 0) return;
+
     if (messages[0].memberId == memberId) {
       if (flatListRef.current) {
         flatListRef.current.scrollToOffset({ offset: 0, animated: false });

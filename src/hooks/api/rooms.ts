@@ -4,10 +4,10 @@ import {
   useQuery,
   useMutation,
   useQueryClient,
+  UseQueryResult,
   useSuspenseQuery,
   UseMutationResult,
   useSuspenseQueries,
-  UseQueryResult,
 } from '@tanstack/react-query';
 
 import { loggedInState } from '@recoil/recoil';
