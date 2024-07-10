@@ -30,7 +30,7 @@ export type LoginStackParamList = {
 
   // 조회, 수정
   RoomDetailScreen: { roomId: number };
-  PatchRoomScreen: { roomDetail: RoomDetail, queryClient: any };
+  PatchRoomScreen: { roomDetail: RoomDetail };
   MyPageScreen: undefined;
 
   // 정산

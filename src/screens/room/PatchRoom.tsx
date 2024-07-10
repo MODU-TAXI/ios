@@ -39,7 +39,7 @@ import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
 dayjs.locale('ko');
 
 const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
-  const { roomDetail, queryClient } = route.params;
+  const { roomDetail } = route.params;
 
   const { mutateAsync: patchRoomMutate, isPending: patchRoomPending } = usePatchRoom(
     roomDetail.roomId,
@@ -128,7 +128,6 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
     });
 
     resetRecoilValue();
-    queryClient.invalidateQueries('rooms');
 
     // stack을 지우며 해당 roomDetail로 이동
     navigation.reset({

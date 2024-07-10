@@ -173,12 +173,13 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   };
 
   // 방 수정페이지로 이동
-  const toPatchRoomScreen = useCallback(async (): Promise<void> => {
+  const toPatchRoomScreen = async (): Promise<void> => {
+    queryClient.invalidateQueries();
     refetchRoomDetail();
     setUpdateModalVisible(false);
-
-    navigation.navigate('PatchRoomScreen', { roomDetail: roomDetail, queryClient: queryClient });
-  }, []);
+  
+    navigation.navigate('PatchRoomScreen', { roomDetail: roomDetail });
+  };
 
   // 채팅방으로 이동
   const toChatRoomScreen = async () => {
