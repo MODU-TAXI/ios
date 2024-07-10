@@ -1,9 +1,10 @@
 import React from 'react';
-import { Text, View, Pressable, StyleSheet } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
+
+import DisplayStatusBar from '@components/Chat/DisplayStatusBar';
 
 import { RoomPreview } from '@type/entity/room';
 
-import Arrow from '@assets/images/Chat/Arrow.svg';
 import Money from '@assets/images/Chat/Money.svg';
 import Check from '@assets/images/Home/Check.svg';
 import People from '@assets/images/Chat/People.svg';
@@ -29,14 +30,6 @@ const MyPartyComponent: React.FC<MyPartyComponentProps> = ({ roomPreview, toChat
 
         {/* 출발지, 도착지 */}
         <View className="mt-2 flex-row items-center truncate">
-          {/* <View>
-            <Text className="text-[16px] font-semibold text-[#272727]">
-              {roomPreview.departureName}
-            </Text>
-          </View>
-
-          <Arrow className="mx-2" /> */}
-
           <View>
             <Text className="text-[16px] font-semibold text-[#272727]">
               {roomPreview.arrivalName}
@@ -45,7 +38,7 @@ const MyPartyComponent: React.FC<MyPartyComponentProps> = ({ roomPreview, toChat
         </View>
 
         {/* 인원수, 가격 */}
-        <View className="mt-2  flex-row">
+        <View className="mb-4  mt-2 flex-row">
           <View className="mr-2 flex-row items-center justify-center">
             <People className="mr-1" />
             <Text className="text-[12px] text-[#7c7c7c]">
@@ -60,6 +53,9 @@ const MyPartyComponent: React.FC<MyPartyComponentProps> = ({ roomPreview, toChat
             </Text>
           </View>
         </View>
+
+        {/* 상태바 */}
+        <DisplayStatusBar roomStatus={roomPreview.roomStatus} />
 
         <Pressable
           className="mt-4 rounded-[8px] border-[1px] border-main px-4 py-3"

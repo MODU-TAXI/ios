@@ -346,8 +346,20 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   // 매칭 완료하기
   const completeMatch = async () => {
     if (!readonly) {
-      await matchComplete();
-      await roomPreviewRefetch();
+      Alert.alert('알림', '매칭완료 하시겠습니까?', [
+        {
+          text: '취소',
+          style: 'cancel',
+        },
+
+        {
+          text: '확인',
+          onPress: async () => {
+            await matchComplete();
+            await roomPreviewRefetch();
+          },
+        },
+      ]);
     }
   };
 
