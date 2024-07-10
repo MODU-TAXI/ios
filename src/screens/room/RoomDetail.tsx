@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useState, Suspense, useCallback } from 'react';
 import { View, Text, Alert, RefreshControl } from 'react-native';
+import React, { useState, Suspense, useEffect, useCallback } from 'react';
 
 import ButtonComponent from '@components/Button';
 import LoadingComponent from '@components/Common/Loading';
@@ -53,6 +53,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     refetchParticipateMembers,
     refetchWaitingMembers,
     pending,
+    queryClient,
   } = useGetRoomDetail(roomId); // 방정보들 가져오기
 
   const myInfo = useRecoilValue(userInfoState);
@@ -173,9 +174,10 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
 
   // 방 수정페이지로 이동
   const toPatchRoomScreen = useCallback(async (): Promise<void> => {
+    refetchRoomDetail();
     setUpdateModalVisible(false);
 
-    navigation.navigate('PatchRoomScreen', { roomDetail: roomDetail });
+    navigation.navigate('PatchRoomScreen', { roomDetail: roomDetail, queryClient: queryClient });
   }, []);
 
   // 채팅방으로 이동

@@ -6,13 +6,17 @@ import BackButton from '@assets/images/Header/BackButton.svg';
 
 interface HeaderComponentProps {
   title: string;
+  resetRecoilValue?: () => void;
 }
 
-const HeaderComponent: React.FC<HeaderComponentProps> = ({ title }) => {
+const HeaderComponent: React.FC<HeaderComponentProps> = ({ title, resetRecoilValue }) => {
   const navigation = useNavigation();
 
   const goBack = () => {
     navigation.goBack();
+    if (resetRecoilValue) {
+      resetRecoilValue();
+    }
   };
 
   return (

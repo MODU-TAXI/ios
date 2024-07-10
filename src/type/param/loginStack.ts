@@ -23,14 +23,14 @@ export type LoginStackParamList = {
 
   // 생성
   CreateRoomScreen: undefined;
-  DepartureMapScreen: undefined;
+  DepartureMapScreen: undefined | { roomDetail?: RoomDetail };
   DepartureSearchScreen: undefined;
   ArrivalMapScreen: undefined | { type: string; searchParams?: SearchResultParams; spot?: Spot; isPatch?: boolean};
   ArrivalSearchScreen: undefined | { isPatch?: boolean; };
 
   // 조회, 수정
   RoomDetailScreen: { roomId: number };
-  PatchRoomScreen: { roomDetail: RoomDetail };
+  PatchRoomScreen: { roomDetail: RoomDetail, queryClient: any };
   MyPageScreen: undefined;
 
   // 정산

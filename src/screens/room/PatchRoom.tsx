@@ -39,7 +39,7 @@ import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
 dayjs.locale('ko');
 
 const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
-  const { roomDetail } = route.params;
+  const { roomDetail, queryClient } = route.params;
 
   const { mutateAsync: patchRoomMutate, isPending: patchRoomPending } = usePatchRoom(
     roomDetail.roomId,
@@ -67,7 +67,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
       name: roomDetail.arrivalName,
       spotId: roomDetail.spotId,
     });
-  }, []);
+  }, [])
 
   // 날짜 다시 활성화
   useEffect(() => {
@@ -128,6 +128,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
     });
 
     resetRecoilValue();
+    queryClient.invalidateQueries('rooms');
 
     // stack을 지우며 해당 roomDetail로 이동
     navigation.reset({
@@ -147,7 +148,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
   // TODO : 서버 연동 시 검색한 거점명 받아서 start, destination 저장 비동기 처리
   /** 출발지 선택시 검색창 오픈 */
   const handleDeparture = () => {
-    navigation.navigate('DepartureMapScreen');
+    navigation.navigate('DepartureMapScreen', { roomDetail: roomDetail });
   };
 
   /** 도착지 선택시 검색창 오픈 */
@@ -174,7 +175,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
       {patchRoomPending && <TransparentLoadingComponent />}
 
       {/* 헤더 */}
-      <HeaderComponent title={'수정 페이지'} />
+      <HeaderComponent title={'수정 페이지'} resetRecoilValue={resetRecoilValue} />
 
       <ScrollView className="flex-1 px-4">
         {/* 출발지, 도착지 선택*/}

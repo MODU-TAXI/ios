@@ -21,7 +21,7 @@ import MapPinGray from '@assets/images/Map/MapPinGray.svg';
 import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 import ChevronBackwardCircle from '@assets/images/Map/chevronBackwardCircle.svg';
 
-const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
+const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
   const insets = useSafeAreaInsets();
   const mapRef = useRef<NaverMapViewRef>(null);
   const [isTouching, setIsTouching] = useState<boolean>(false);
@@ -74,14 +74,32 @@ const DepartureMapScreen = ({ navigation }: DepartureMapScreenProps) => {
       mapRef.current?.animateCameraTo(searchLocation);
     };
 
-    if (locationPermission === 'granted' && searchParams.title === "") {
+    const fetchRoomDetailLocation = () => {
+      if (route.params?.roomDetail) {
+        const roomDetail = route.params?.roomDetail;
+        const roomLocation: Camera = {
+          latitude: roomDetail?.departureLatitude,
+          longitude: roomDetail?.departureLongitude,
+          zoom: 16,
+        };
+        setCurrentCamera(roomLocation);
+        setBuildingName(roomDetail?.departureName);
+        mapRef.current?.animateCameraTo(roomLocation);
+      }
+    }
+
+    if (locationPermission === 'granted' && searchParams.title === "" && !route.params?.roomDetail) {
       fetchCurrentLocation();
     } else if (searchParams.title !== "") {
       fetchSearchLocation();
       setSearchBoxValue(searchParams.title);
       setIsSearched(true);
+    } else if (route.params?.roomDetail) {
+      fetchRoomDetailLocation();
+      setSearchBoxValue(route.params?.roomDetail.departureName);
+      setIsSearched(true);
     }
-  }, [locationPermission, searchParams.latitude, searchParams.longitude]);
+  }, [locationPermission, searchParams.latitude, searchParams.longitude, route.params]);
 
   // timeout 정보 저장 Ref
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
