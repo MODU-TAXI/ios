@@ -127,7 +127,7 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
       {createRoomPending && <TransparentLoadingComponent />}
 
       {/* 헤더 */}
-      <HeaderComponent title={'생성 페이지'} />
+      <HeaderComponent title={'생성 페이지'} resetRecoilValue={resetRecoilValue} />
 
       <ScrollView className="flex-1 px-4">
         {/* 출발지, 도착지 선택*/}

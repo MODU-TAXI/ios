@@ -91,7 +91,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('CreateRoomScreen');
   };
 
-  const toMapScreen = async () => {
+  const toMapScreen = () => {
     navigation.navigate('MainMapScreen');
   };
 

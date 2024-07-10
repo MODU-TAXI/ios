@@ -2,6 +2,7 @@ import { useRecoilState } from 'recoil';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import {
   useMutation,
+  useQueryClient,
   useSuspenseQuery,
   UseMutationResult,
   useSuspenseQueries,
@@ -86,7 +87,9 @@ export const useGetRoomPreview = (
 
 // 특정 방 정보 모두 가져오기
 export const useGetRoomDetail = (roomId: number) => {
-  return useSuspenseQueries({
+  const queryClient = useQueryClient();
+
+  const result =  useSuspenseQueries({
     queries: [
       {
         queryKey: [`/api/rooms/${roomId}`, roomId],
@@ -139,6 +142,7 @@ export const useGetRoomDetail = (roomId: number) => {
             },
           };
         },
+        gcTime: 1000,
       },
       {
         queryKey: [`/api/rooms/${roomId}/members/in`, roomId],
@@ -163,6 +167,8 @@ export const useGetRoomDetail = (roomId: number) => {
       };
     },
   });
+
+  return { ...result, queryClient }
 };
 
 // 특정 방 가져오기

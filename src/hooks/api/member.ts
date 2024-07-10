@@ -46,7 +46,6 @@ export const useKakaoLogin = (
 
       // 기존 유저
       if (existent) {
-        console.log(socialResponse);
         const { accessToken, refreshToken } = socialResponse.data.tokenResponse;
 
         await setAccessToken(accessToken);

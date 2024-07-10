@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
-import { View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { View, LogBox, Pressable } from 'react-native';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -20,7 +20,12 @@ import { calculateDist, deleteTagTitle } from '@utils/search';
 import { SortedItemType } from '@type/entity/search';
 import { HomeSearchScreenProps } from '@type/param/loginStack';
 
-/** 메인맵 도착지 검색 */
+// 경고 무시
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
+
+/** 홈 도착지 검색 */
 const HomeSearchScreen = ({ route, navigation }: HomeSearchScreenProps) => {
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
