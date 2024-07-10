@@ -1,10 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Keyboard, FlatList, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import { View, FlatList, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 
 import { MessageBoxComponent } from '@components/Chat/MessageBox';
 
 import { ChatMessage } from '@type/entity/chat';
 import { UserPreview } from '@type/entity/user';
+
+import ScrollBottomButton from '@assets/images/Chat/ScrollBottomButton.svg';
 
 interface MessagesComponentProps {
   memberId: number;
@@ -29,32 +31,29 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
 }) => {
   const flatListRef = useRef<FlatList>(null);
   const [scrollOffset, setScrollOffset] = useState(0);
+  const [scrollBottomButtonVisible, setScrollBottomButtonVisible] = useState(false);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetY = event.nativeEvent.contentOffset.y;
-
-    console.log(offsetY);
-
     setScrollOffset(offsetY);
   };
 
-  // 키보드 밑으로 내리기 위함
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+    if (scrollOffset > 500) {
+      setScrollBottomButtonVisible(true);
+    } else {
+      setScrollBottomButtonVisible(false);
+    }
+  }, [scrollOffset]);
+
+  // 내가 채팅 입력했을때만 밑으로 내리기
+  useEffect(() => {
+    if (messages[0].memberId == memberId) {
       if (flatListRef.current) {
-        flatListRef.current.scrollToOffset({ offset: 0, animated: true });
+        flatListRef.current.scrollToOffset({ offset: 0, animated: false });
       }
-    });
-
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      // 키보드가 내려가면 아무 동작 없음
-    });
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
+    }
+  }, [messages]);
 
   const renderItem = ({ item, index }: { item: ChatMessage; index: number }) => (
     <View key={index} className="px-2">
@@ -71,24 +70,31 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
     </View>
   );
 
+  const toBottom = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToOffset({ offset: 0, animated: true });
+    }
+  };
+
   return (
-    <FlatList
-      className="bg-white px-4"
-      ref={flatListRef}
-      data={messages}
-      onScroll={handleScroll}
-      scrollEventThrottle={16}
-      inverted={true}
-      renderItem={renderItem}
-      keyExtractor={(item, index) => index.toString()}
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
-      onContentSizeChange={() => {
-        if (flatListRef.current) {
-          flatListRef.current.scrollToOffset({ offset: 0, animated: true });
-        }
-      }}
-    />
+    <View className="flex-1 bg-white">
+      <FlatList
+        className="bg-white px-4"
+        ref={flatListRef}
+        data={messages}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        inverted={true}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      />
+
+      {scrollBottomButtonVisible && (
+        <ScrollBottomButton onPress={toBottom} className="absolute bottom-0 right-3 p-4" />
+      )}
+    </View>
   );
 };
 
