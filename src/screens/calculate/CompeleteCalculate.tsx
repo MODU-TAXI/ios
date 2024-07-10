@@ -4,9 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ButtonComponent from '@components/Button';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
+
 import { CompleteCalculateScreenProps } from '@type/param/loginStack';
 
 const CompleteCalculateScreen = ({ navigation, route }: CompleteCalculateScreenProps) => {
+  useDeleteAllNotifee();
+
   const { roomPreview } = route.params;
 
   const toChatScreen = () => {

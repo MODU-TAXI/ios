@@ -6,10 +6,13 @@ import HeaderComponent from '@components/Header';
 import AccountsComponent from '@components/My/Accounts';
 
 import { useGetAccounts } from '@hooks/api/account';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { ManageAccountScreenProps } from '@type/param/loginStack';
 
 const ManageAccountScreen = ({ navigation }: ManageAccountScreenProps) => {
+  useDeleteAllNotifee();
+
   const { accounts } = useGetAccounts(); // 계좌 정보들 가져오기
 
   return (

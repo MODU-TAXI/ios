@@ -7,7 +7,7 @@ import Arrow from '@assets/images/Chat/Arrow.svg';
 import Money from '@assets/images/Chat/Money.svg';
 import Check from '@assets/images/Home/Check.svg';
 import People from '@assets/images/Chat/People.svg';
-
+import ArriveFlag from '@assets/images/RoomDigest/ArriveFlag.svg';
 interface PartyComponentProps {
   roomDetail: RoomList;
 }
@@ -23,13 +23,7 @@ const PartyComponent: React.FC<PartyComponentProps> = ({ roomDetail }) => {
 
       {/* 출발지, 도착지 */}
       <View className="mt-2 h-4 flex-row items-center truncate bg-white ">
-        {/* <View>
-          <Text className="text-[14px] font-semibold text-gray800 ">
-            {roomDetail.departureName}
-          </Text>
-        </View>
-
-        <Arrow className="mx-2" /> */}
+        <ArriveFlag />
 
         <View>
           <Text className="text-[14px] font-semibold text-gray800">{roomDetail.arrivalName}</Text>

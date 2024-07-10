@@ -1,7 +1,7 @@
 import { useRecoilState } from 'recoil';
+import React, { useState } from 'react';
 import LottieView from 'lottie-react-native';
 import messaging from '@react-native-firebase/messaging';
-import React, { useRef, useState, useEffect } from 'react';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -60,8 +60,8 @@ import PatchSchoolEmailAuthenticationScreen from './src/screens/my/PatchSchoolEm
 import { loggedInState } from '@recoil/recoil';
 
 import { useFcmMessage } from '@hooks/fcm';
-import { useNotifee } from '@hooks/notifee';
 import { useCheckLogin } from '@hooks/login';
+import { useNotifee, useDeleteAllNotifee } from '@hooks/notifee';
 
 import { onMessageReceivedBackground } from '@utils/fcm';
 
@@ -78,6 +78,7 @@ function AppInner() {
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
   const [appLoaded, setAppLoaded] = useState<boolean>(false);
 
+  useDeleteAllNotifee();
   useCheckLogin(setLoggedIn, setAppLoaded); // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
   useFcmMessage(); // Foreground에서 FCM Message 수신
   useNotifee(); // notifeecation제어

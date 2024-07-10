@@ -12,11 +12,14 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { userInfoState, signUpUserState } from '@recoil/recoil';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useSmsChangeAuthentication } from '@hooks/api/member.sms';
 
 import { PatchUserInfoScreenProps } from '@type/param/loginStack';
 
 const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
+  useDeleteAllNotifee();
+
   const [, setSignUpUser] = useRecoilState(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
   const [userInfo] = useRecoilState(userInfoState);
 

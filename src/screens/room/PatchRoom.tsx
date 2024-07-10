@@ -19,6 +19,7 @@ import { arrivalState, userInfoState, departureState } from '@recoil/recoil';
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { usePatchRoom } from '@hooks/api/rooms';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { ErrorToastMessage } from '@utils/toastMessage';
 
@@ -28,7 +29,6 @@ import CheckBox from '@assets/images/Match/CheckBox.svg';
 import EndCircle from '@assets/images/Match/EndCircle.svg';
 import DottedLine from '@assets/images/Match/DottedLine.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
-import EndGrayCircle from '@assets/images/Match/EndGrayCircle.svg';
 import SelectedPerson1 from '@assets/images/Match/SelectedPerson1.svg';
 import SelectedPerson2 from '@assets/images/Match/SelectedPerson2.svg';
 import SelectedPerson3 from '@assets/images/Match/SelectedPerson3.svg';
@@ -39,6 +39,8 @@ import UnSelectedPerson3 from '@assets/images/Match/UnSelectedPerson3.svg';
 dayjs.locale('ko');
 
 const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
+  useDeleteAllNotifee();
+
   const { roomDetail } = route.params;
 
   const { mutateAsync: patchRoomMutate, isPending: patchRoomPending } = usePatchRoom(

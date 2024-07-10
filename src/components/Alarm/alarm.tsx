@@ -1,6 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import { Text, View } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
 
 import { Alarm } from '@type/entity/alarm';
 
@@ -10,6 +10,7 @@ import Declaration from '@assets/images/Alarm/Declaration.svg';
 
 interface AlaramComponentProps {
   alarm: Alarm;
+  toMatchingRoom: (roomId: number, roomType: string) => void;
 }
 
 const alarmComponents = {
@@ -22,7 +23,7 @@ const alarmComponents = {
   REPORT_SUCCESS: Declaration,
 };
 
-const AlaramComponent: React.FC<AlaramComponentProps> = ({ alarm }) => {
+const AlaramComponent: React.FC<AlaramComponentProps> = ({ alarm, toMatchingRoom }) => {
   const AlarmIcon = alarmComponents[alarm.type];
 
   if (!AlarmIcon) return <View></View>;
@@ -31,12 +32,15 @@ const AlaramComponent: React.FC<AlaramComponentProps> = ({ alarm }) => {
     <View className="mb-10 flex-row items-center px-3">
       <AlarmIcon className="mr-3" />
 
-      <View className="flex-col justify-center">
+      <Pressable
+        className="flex-col justify-center"
+        onPress={() => toMatchingRoom(alarm.resourceId, alarm.type)}
+      >
         <Text className="mb-[2px] font-medium tracking-tight text-[#3E3E3E]">{alarm.message}</Text>
         <Text className="text-[10px] tracking-tight text-[#9C9C9C]">
           {dayjs(alarm.dateTime).format('YYYY.MM.DD')}
         </Text>
-      </View>
+      </Pressable>
     </View>
   );
 };

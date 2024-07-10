@@ -3,9 +3,13 @@ import { Text, View, Switch, SafeAreaView } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
+
 import { ManageAlarmScreenProps } from '@type/param/loginStack';
 
 const ManageAlarmScreen = ({ navigation }: ManageAlarmScreenProps) => {
+  useDeleteAllNotifee();
+
   const [marketingAlarmEnable, setMarketingAlarmEnable] = useState(false);
   const [eventAlarmEnable, setEventAlarmEnable] = useState(false);
   const [modutaxiAlarmEnable, setModutaxiAlarmEnable] = useState(false);

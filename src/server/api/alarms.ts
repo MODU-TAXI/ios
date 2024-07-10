@@ -4,7 +4,7 @@ import { GetAlaramsResponse, GetAlarmsCountResponse } from '@server/responseType
 
 // [알림들 가져오기] /api/alarms
 export const getAlarms = async (page: number): Promise<GetAlaramsResponse> => {
-  const response = await GetAxiosInstance<GetAlaramsResponse>(`/api/alarms?page=${page}&size=20`);
+  const response = await GetAxiosInstance<GetAlaramsResponse>(`/api/alarms?page=${page}&size=15`);
 
   return response.data;
 };

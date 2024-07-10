@@ -10,11 +10,14 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { calculateState } from '@recoil/recoil';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useRegisterAccount } from '@hooks/api/account';
 
 import { CheckAccountScreenProps } from '@type/param/loginStack';
 
 const CheckAccountScreen = ({ navigation, route }: CheckAccountScreenProps) => {
+  useDeleteAllNotifee();
+
   const { roomPreview } = route.params;
 
   const [calculateData, setCalculateData] = useRecoilState(calculateState);

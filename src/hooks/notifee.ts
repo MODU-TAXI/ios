@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import notifee, { EventType } from '@notifee/react-native';
 
-import { handleNotificationPress } from '@utils/notifee';
+import { deleteAllNotifee, handleNotificationPress } from '@utils/notifee';
 
 // notifee 관리
 export const useNotifee = () => {
@@ -24,4 +25,12 @@ export const useNotifee = () => {
       }
     });
   }, []);
+};
+
+export const useDeleteAllNotifee = () => {
+  useFocusEffect(
+    React.useCallback(() => {
+      deleteAllNotifee();
+    }, []),
+  );
 };

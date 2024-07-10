@@ -12,6 +12,7 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useCompletePayment, useGetPaymentDetail } from '@hooks/api/payment';
 
 import { vibration } from '@utils/effect';
@@ -23,6 +24,8 @@ import { CheckPaymentScreenProps } from '@type/param/loginStack';
 import CopyButton from '@assets/images/Calculate/CopyButton.svg';
 
 const CheckPaymentComponent = ({ navigation, route }: CheckPaymentScreenProps) => {
+  useDeleteAllNotifee();
+
   const { roomPreview } = route.params;
 
   const [refreshing, setRefreshing] = useState(false); // 새로고침시 필요한 변수

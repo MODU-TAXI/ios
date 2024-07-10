@@ -7,9 +7,13 @@ import ButtonComponent from '@components/Button';
 
 import { loggedInState } from '@recoil/recoil';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
+
 import { WithdrawCompleteScreenProps } from '@type/param/loginStack';
 
 const WithdrawCompleteScreen = ({ navigation }: WithdrawCompleteScreenProps) => {
+  useDeleteAllNotifee();
+
   const [, setLoggedIn] = useRecoilState(loggedInState);
 
   // 회원탈퇴

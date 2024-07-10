@@ -10,11 +10,14 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { emailState } from '@recoil/recoil';
 
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useEmailAuthentication } from '@hooks/api/member.mail';
 
 import { PatchSchoolEmailScreenProps } from '@type/param/loginStack';
 
 const PatchSchoolEmailScreen = ({ navigation }: PatchSchoolEmailScreenProps) => {
+  useDeleteAllNotifee();
+
   const [email, setEmail] = useRecoilState<string>(emailState); // 이메일
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
 

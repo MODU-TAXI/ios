@@ -16,6 +16,7 @@ import SelectBoxComponent from '@components/Declaration/SelectBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { useReport } from '@hooks/api/report';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { InfoToastMessage } from '@utils/toastMessage';
 
@@ -25,6 +26,8 @@ import DeclarationBell from '@assets/images/Declaration/DeclarationBell.svg';
 import DeclarationAlert from '@assets/images/Declaration/DeclarationAlert.svg';
 
 const DeclarationScreen = ({ navigation, route }: DeclarationScreenProps) => {
+  useDeleteAllNotifee();
+
   const { userInfo, roomId } = route.params;
 
   const [declareType, setDeclareType] = useState<string>(''); // 신구 유형

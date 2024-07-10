@@ -14,6 +14,7 @@ import UnParticipateMembersComponent from '@components/Calculate/UnParticipateMe
 import { calculateState } from '@recoil/recoil';
 
 import { usePayment } from '@hooks/api/payment';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { InfoToastMessage } from '@utils/toastMessage';
 
@@ -23,6 +24,8 @@ import { CheckCalculateScreenProps } from '@type/param/loginStack';
 import CopyButton from '@assets/images/Calculate/CopyButton.svg';
 
 const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) => {
+  useDeleteAllNotifee();
+
   const { roomPreview } = route.params;
 
   const calculateData = useRecoilValue(calculateState);

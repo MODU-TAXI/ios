@@ -24,13 +24,18 @@ export const useGetMyInfo = () => {
 };
 
 // 채팅방 세부정보 다 가져오기
-export const useChatDetail = (roomId: number) => {
+export const useChatDetail = (roomId: number, readonly: boolean) => {
   return useSuspenseQueries({
     queries: [
       {
         retry: 1,
         queryKey: [`/api/rooms/preview/${roomId}`],
-        queryFn: () => getRoomPreview(roomId),
+        queryFn: () => {
+          if (!readonly) {
+            return getRoomPreview(roomId);
+          }
+          return null;
+        },
       },
       {
         retry: 1,
@@ -40,7 +45,7 @@ export const useChatDetail = (roomId: number) => {
     ],
     combine: (results) => {
       return {
-        roomPreview: results[0].data,
+        roomPreview: readonly ? null : results[0].data,
         roomPreviewRefetch: results[0].refetch,
         messages: combineChatMessages(results[1].data.messages),
         messagesRefetch: results[1].refetch,

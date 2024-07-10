@@ -11,6 +11,7 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import { userInfoState, signUpUserState } from '@recoil/recoil';
 
 import { usePatchMember } from '@hooks/api/member';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useSmsChangeConfirm, useSmsChangeAuthentication } from '@hooks/api/member.sms';
 
 import { InfoToastMessage } from '@utils/toastMessage';
@@ -22,6 +23,8 @@ import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 const PatchUserInfoAuthenticationScreen = ({
   navigation,
 }: PatchUserInfoAuthenticationScreenProps) => {
+  useDeleteAllNotifee();
+
   const [signUpUser] = useRecoilState(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [code, setCode] = useState<string>(''); // 인증코드

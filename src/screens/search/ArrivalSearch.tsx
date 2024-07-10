@@ -1,7 +1,5 @@
-import { useRecoilState } from 'recoil';
+import { View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { Coord } from '@mj-studio/react-native-naver-map';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,10 +8,9 @@ import ArrivalSearchBoxComponent from '@components/Search/ArrivalSearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 
-import { arrivalState, searchKeywordState } from '@recoil/recoil';
-
 import { useGetSpotList } from '@hooks/api/spot';
 import { useNaverSearch } from '@hooks/api/search';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useLocationPermission } from '@hooks/permission/location';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
@@ -23,11 +20,12 @@ import { Spot } from '@type/entity/spot';
 import { SortedItemType } from '@type/entity/search';
 import { ArrivalSearchScreenProps } from '@type/param/loginStack';
 
-
 /** 도착 거점 검색 */
 const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) => {
+  useDeleteAllNotifee();
+
   /** 검색어 저장 변수 */
-  const [keyword, setKeyword] = useState<string>("");
+  const [keyword, setKeyword] = useState<string>('');
   const locationPermission = useLocationPermission();
 
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
@@ -46,33 +44,38 @@ const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) =>
       });
     };
     fetchCurrentLocation();
-  }, [])
+  }, []);
 
   // 검색어에 따른 처리
   useEffect(() => {
-    if (keyword === "") {
+    if (keyword === '') {
       setSortedItems([]);
     }
     refetchNaverSearch();
-  }, [keyword, refetchNaverSearch])
+  }, [keyword, refetchNaverSearch]);
 
   const handleKeyword = (input: string) => {
     setKeyword(input);
-  }
+  };
 
   // 좌표계 변환, 두 지점 사이 거리 계산하여 새 배열에 저장
   useEffect(() => {
     if (items && items.length > 0) {
       const updatedItems = items?.map((item) => {
         const { latitude, longitude } = convertCoordinates(item.mapx, item.mapy);
-        const distance = calculateDist(currentLocation.latitude, currentLocation.longitude, latitude, longitude);
+        const distance = calculateDist(
+          currentLocation.latitude,
+          currentLocation.longitude,
+          latitude,
+          longitude,
+        );
         return { ...item, latitude: latitude, longitude: longitude, distance: distance };
-      })
+      });
       // 정렬하여 sortedItems에 저장
       updatedItems?.sort((a, b) => a.distance - b.distance);
       setSortedItems(updatedItems);
     }
-  }, [items, currentLocation])
+  }, [items, currentLocation]);
 
   const [spotSearchParams, setSpotSearchParams] = useState({
     departureLongitude: currentLocation.longitude,
@@ -85,32 +88,28 @@ const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) =>
       setSpotSearchParams({
         departureLongitude: sortedItems[0].longitude,
         departureLatitude: sortedItems[0].latitude,
-      })
+      });
     }
-  }, [sortedItems])
+  }, [sortedItems]);
 
   const { spots, refetch: refetchSpotList } = useGetSpotList({
-    "page": 0, 
-    "size": 1, 
-    "searchLongitude": spotSearchParams?.departureLongitude,
-    "searchLatitude": spotSearchParams?.departureLatitude,
+    page: 0,
+    size: 1,
+    searchLongitude: spotSearchParams?.departureLongitude,
+    searchLatitude: spotSearchParams?.departureLatitude,
   });
 
   /** 검색어 선택: 선택한 검색어를 전달하며 이동 */
-  const toArrivalMapScreen = (
-    title: string,
-    latitude: number,
-    longitude: number,
-  ) => {
+  const toArrivalMapScreen = (title: string, latitude: number, longitude: number) => {
     navigation.navigate('ArrivalMapScreen', {
       type: 'search',
       searchParams: {
         title: title,
         latitude: latitude,
         longitude: longitude,
-      }
+      },
     });
-  }
+  };
 
   /** 거점 선택: 거점 정보 가져가며 이동 */
   const toArrivalMapScreenWithSpot = (spot: Spot) => {
@@ -119,12 +118,11 @@ const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) =>
       spot: spot,
       isPatch: route.params?.isPatch,
     });
-  }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="mx-4 flex-1">
-        
         {/** 검색창 */}
         <View className="mb-3 mt-2">
           <ArrivalSearchBoxComponent keyword={keyword} handleKeyword={handleKeyword} />
@@ -137,31 +135,27 @@ const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) =>
         )}
 
         {/** 추천 검색어 */}
-        {sortedItems && 
+        {sortedItems &&
           sortedItems.map((item, index) => (
             <Pressable
               key={index}
-              onPress={() => toArrivalMapScreen(
-                deleteTagTitle(item.title),
-                item.latitude,
-                item.longitude,
-              )}
+              onPress={() =>
+                toArrivalMapScreen(deleteTagTitle(item.title), item.latitude, item.longitude)
+              }
             >
-              <RecommendedSearchComponent 
+              <RecommendedSearchComponent
                 key={index}
                 keyword={keyword}
                 fullKeyword={deleteTagTitle(item.title)}
-                address={item.address} 
+                address={item.address}
                 distance={locationPermission === 'granted' ? item.distance : null}
                 isFirst={false}
               />
             </Pressable>
-        ))}
+          ))}
 
         {/** 빈 화면 렌더링 */}
-        {sortedItems.length === 0 && !keyword &&
-          <EmptySearchRenderComponent />
-        }
+        {sortedItems.length === 0 && !keyword && <EmptySearchRenderComponent />}
       </View>
     </SafeAreaView>
   );

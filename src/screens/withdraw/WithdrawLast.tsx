@@ -11,12 +11,15 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import { userInfoState } from '@recoil/recoil';
 
 import { useDeleteMember } from '@hooks/api/member';
+import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { deleteToken } from '@utils/token';
 
 import { WithdrawLastScreenProps } from '@type/param/loginStack';
 
 const WithdrawLastScreen = ({ navigation }: WithdrawLastScreenProps) => {
+  useDeleteAllNotifee();
+
   const myInfo = useRecoilValue(userInfoState);
 
   const { mutateAsync: deleteMemberMutate, isPending: deleteMemberPending } = useDeleteMember();

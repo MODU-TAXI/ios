@@ -1,6 +1,11 @@
 import { Linking, Vibration } from 'react-native';
 import notifee, { EventDetail } from '@notifee/react-native';
 
+// notifee 모두 삭제
+export const deleteAllNotifee = async () => {
+  await notifee.cancelAllNotifications();
+};
+
 // notifee로 알림 보여주는 handling
 export const handleFirebaseMessage = async (
   title: string,
@@ -74,12 +79,12 @@ export const handleNotificationPress = async (detail: EventDetail) => {
       break;
   }
 
-  await notifee.cancelAllNotifications();
+  await deleteAllNotifee();
 };
 
 // notifee 알림을 무시했을때 handling
 export const handleNotificationDismissed = async (detail: EventDetail) => {
   if (detail?.notification?.id) {
-    await notifee.cancelAllNotifications();
+    await deleteAllNotifee();
   }
 };

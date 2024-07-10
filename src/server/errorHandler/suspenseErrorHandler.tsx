@@ -31,7 +31,7 @@ const ErrorFallback = ({
     Alert.alert('로그아웃 되었습니다.');
   }
 
-  const errorCode = error.response.data.code;
+  const errorCode = error?.response?.data?.code;
 
   useEffect(() => {
     // 존재하지 않는 것들에 대한 에러 처리 -> mainScreen 이동
