@@ -23,7 +23,7 @@ const AlaramsComponent: React.FC<AlaramsComponentProps> = ({
       keyExtractor={(item, index) => index.toString()}
       renderItem={({ item }) => <AlaramComponent alarm={item} toMatchingRoom={toMatchingRoom} />}
       onEndReached={loadMoreAlarms}
-      onEndReachedThreshold={0.7}
+      onEndReachedThreshold={0.75}
       showsVerticalScrollIndicator={false}
     />
   );

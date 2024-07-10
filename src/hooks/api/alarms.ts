@@ -1,14 +1,20 @@
-import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { useQuery, keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 
 import { getAlarms, getAlarmsCount } from '@server/api/alarms';
 
 // 알림들 가져오기
-export const useGetAlarms = (page: number) => {
-  return useQuery({
-    queryKey: [`/api/alarms`, page],
-    queryFn: async () => getAlarms(page),
-    placeholderData: keepPreviousData,
-    staleTime: 0,
+export const useGetAlarms = () => {
+  return useInfiniteQuery({
+    queryKey: [`/api/alarms`],
+    queryFn: ({ pageParam }) => getAlarms(pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.hasNext) {
+        return lastPage.page + 1;
+      }
+
+      return null;
+    },
   });
 };
 

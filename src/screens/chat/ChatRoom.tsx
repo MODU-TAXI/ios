@@ -131,6 +131,43 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     }
   };
 
+  // 방에서 내쫓기
+  const expelRoom = () => {
+    Alert.alert(
+      'ROOM ERROR',
+      '일시적 에러',
+      [
+        {
+          text: 'OK',
+          onPress: () =>
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'MainScreen' }],
+            }),
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+
+  const toMainScreen = () => {
+    Alert.alert(
+      'ROOM ERROR',
+      '존재하지 않는 방입니다.',
+      [
+        {
+          text: 'OK',
+          onPress: () =>
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'MainScreen' }],
+            }),
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+
   const connect = async () => {
     // 읽기 모드에선 socket x
     if (readonly) return;
@@ -171,21 +208,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         // 존재하지 않은 방인 경우
         if (stompError == 'SOCK_ROOM_003') {
           disConnect();
-          Alert.alert(
-            'ROOM ERROR',
-            '존재하지 않는 방입니다.',
-            [
-              {
-                text: 'OK',
-                onPress: () =>
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'MainScreen' }],
-                  }),
-              },
-            ],
-            { cancelable: false },
-          );
+          toMainScreen();
         } else if (stompError == 'AUTH_003') {
           setRefresh(true);
 
@@ -206,18 +229,11 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
             setRefresh(false);
           } else {
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'MainScreen' }],
-            });
+            expelRoom();
           }
         } else {
           disConnect();
-
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'MainScreen' }],
-          });
+          expelRoom();
         }
       };
     }
