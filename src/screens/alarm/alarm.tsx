@@ -21,6 +21,12 @@ const AlarmComponent = ({ navigation }: AlarmScreenProps) => {
 
   const { data: alarms, isFetching } = useGetAlarms(page);
 
+  const toMatchingRoom = (roomId: number, roomType: string) => {
+    if (roomType !== 'REPORT_SUCCESS') {
+      navigation.navigate('RoomDetailScreen', { roomId: roomId });
+    }
+  };
+
   useEffect(() => {
     if (alarms) {
       setAlarmsList((prevAlarms) => [...prevAlarms, ...alarms.result]);
@@ -38,7 +44,11 @@ const AlarmComponent = ({ navigation }: AlarmScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       <HeaderComponent title={'알림'} />
-      <AlaramsComponent alarms={alarmsList} loadMoreAlarms={loadMoreAlarms} />
+      <AlaramsComponent
+        alarms={alarmsList}
+        loadMoreAlarms={loadMoreAlarms}
+        toMatchingRoom={toMatchingRoom}
+      />
     </SafeAreaView>
   );
 };
