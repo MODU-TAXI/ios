@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from 'nativewind';
-import { Text, View, Pressable } from 'react-native';
+import { Text, View } from 'react-native';
 
 import RoomCategoryComponent from './RoomCategory';
 

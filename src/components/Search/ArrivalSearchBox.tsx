@@ -1,6 +1,5 @@
-import { useRecoilState } from 'recoil';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import React, { useRef, useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -9,10 +8,6 @@ import {
   NativeSyntheticEvent,
   TextInputChangeEventData,
 } from 'react-native';
-
-import { searchKeywordState } from '@recoil/recoil';
-
-import { useNaverSearch } from '@hooks/api/search';
 
 import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
 

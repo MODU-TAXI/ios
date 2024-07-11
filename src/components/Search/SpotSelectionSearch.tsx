@@ -1,7 +1,7 @@
 import React from "react"
 import { View, Text } from "react-native"
 
-import { modifyDistStr } from "@utils/search";
+// import { modifyDistStr } from "@utils/search";
 
 import SpotCircleMintReverse from "@assets/images/Search/SpotCircleMintReverse.svg"
 

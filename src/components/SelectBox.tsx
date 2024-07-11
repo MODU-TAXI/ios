@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, Pressable } from 'react-native';
+
+type Item = { index: number; content: string; select: boolean };
 
 interface SelectBoxComponentProps {
   items: Item[];
   setItems: React.Dispatch<React.SetStateAction<Item[]>>;
 }
-
-type Item = { index: number; content: string; select: boolean };
 
 const SelectBoxComponent: React.FC<SelectBoxComponentProps> = ({ items, setItems }) => {
   // item 선택

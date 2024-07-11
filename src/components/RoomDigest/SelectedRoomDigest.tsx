@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-import { useGetRoom } from '@hooks/api/rooms';
-
 import { RoomList } from '@type/entity/room';
 
 import Arrow from '@assets/images/Chat/Arrow.svg';
