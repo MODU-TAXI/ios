@@ -51,15 +51,17 @@ const ArrivalSearchBoxComponent: React.FC<ArrivalSearchBoxProps> = ({
         onPress={handleFocus}
         className="flex h-full flex-1 flex-row rounded-xl bg-gray100 p-2"
       >
-        <View className="px-1">
+        <View className="flex justify-center px-1">
           <MagnifyingGlassMainSvg></MagnifyingGlassMainSvg>
         </View>
-        <View className="mb-1 flex-col justify-center">
+        <View className="flex-row justify-center">
           <TextInput
             ref={inputRef}
             value={keyword}
             onChange={valueHandleChange}
-            className="text-base"
+            multiline={true}
+            numberOfLines={1}
+            className="pt-0 text-base"
             placeholder="도착지를 검색해주세요"
           />
         </View>
