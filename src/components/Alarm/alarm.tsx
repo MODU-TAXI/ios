@@ -39,8 +39,10 @@ const getRelativeTime = (dateTime: Date) => {
     return `${diffInDays}일 전`;
   } else if (diffInHours >= 1) {
     return `${diffInHours}시간 전`;
-  } else {
+  } else if (diffInMinutes >= 1) {
     return `${diffInMinutes}분 전`;
+  } else {
+    return `방금 전`;
   }
 };
 
