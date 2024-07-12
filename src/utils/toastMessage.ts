@@ -7,6 +7,7 @@ export const InfoToastMessage = (content: string): void => {
     props: { content: content },
     position: 'bottom',
     bottomOffset: 30,
+    visibilityTime: 2000,
   });
 };
 
@@ -17,6 +18,7 @@ export const ErrorToastMessage = (message: string): void => {
     props: { message: message },
     position: 'bottom',
     bottomOffset: 30,
+    visibilityTime: 2000,
   });
 };
 
@@ -26,6 +28,7 @@ export const StartChatToastMessage = (): void => {
     type: 'startChatToast',
     position: 'bottom',
     bottomOffset: 30,
+    visibilityTime: 2000,
   });
 };
 
@@ -35,6 +38,7 @@ export const RegisterAccountToastMessage = (): void => {
     type: 'registerAccountToast',
     position: 'bottom',
     bottomOffset: 30,
+    visibilityTime: 2000,
   });
 };
 
@@ -44,6 +48,7 @@ export const CompleteRegisterAccountToastMessage = (): void => {
     type: 'completeRegisterAccountToast',
     position: 'bottom',
     bottomOffset: 30,
+    visibilityTime: 2000,
   });
 };
 
@@ -53,5 +58,6 @@ export const CompleteMatchToastMessage = (): void => {
     type: 'completeMatchToast',
     position: 'bottom',
     bottomOffset: 30,
+    visibilityTime: 2000,
   });
 };

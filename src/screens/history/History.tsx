@@ -59,7 +59,7 @@ const HistoryComponent = ({ navigation }: HistoryScreenProps) => {
   if (!histories || !historyDuration) return <LoadingComponent />;
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       <HeaderComponent title="이용내역" />
 
       {(getHistoriesPending || historyDurationPending) && <TransparentLoadingComponent />}
@@ -123,13 +123,23 @@ const HistoryComponent = ({ navigation }: HistoryScreenProps) => {
           <Text className="font-medium tracking-tight text-[#9C9C9C]">이용내역</Text>
         </View>
 
-        {histories.historySimpleListResponse.map((history: HistoryPreview) => (
-          <HistoryInfoComponent
-            key={history.historyId}
-            history={history}
-            toHistoryDetailScreen={toHistoryDetailScreen}
-          />
-        ))}
+        {histories.historySimpleListResponse.length === 0 ? (
+          <View className="h-[400px] items-center justify-center">
+            <Text className="text-[12px] font-medium tracking-tight text-[#9C9C9C]">
+              {month}월달 모두의 택시를 이용한 내역이 없어요
+            </Text>
+          </View>
+        ) : (
+          <View>
+            {histories.historySimpleListResponse.reverse().map((history: HistoryPreview) => (
+              <HistoryInfoComponent
+                key={history.historyId}
+                history={history}
+                toHistoryDetailScreen={toHistoryDetailScreen}
+              />
+            ))}
+          </View>
+        )}
       </ScrollView>
 
       {show && (

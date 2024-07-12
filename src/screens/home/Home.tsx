@@ -59,7 +59,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
   const { data: histories, refetch: refetchHistories } = useGetHistoriesByMonth(
     date.getFullYear(),
-    date.getMonth(),
+    date.getMonth() + 1,
   );
 
   useFocusEffect(

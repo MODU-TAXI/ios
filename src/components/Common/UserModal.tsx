@@ -1,6 +1,9 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import FastImage from 'react-native-fast-image';
 import { Text, View, Modal, Pressable } from 'react-native';
+
+import { userInfoState } from '@recoil/recoil';
 
 import { UserPreview } from '@type/entity/user';
 
@@ -22,6 +25,8 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
   closeUserInfoModal,
   toDeclarationScreen,
 }) => {
+  const myInfo = useRecoilValue(userInfoState);
+
   return (
     <Modal animationType="fade" transparent={true} visible={modalVisible}>
       <View
@@ -30,9 +35,9 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
       >
         <Pressable className="flex-1" onPress={closeUserInfoModal} />
 
-        <View className="flex-col items-center justify-center rounded-t-[20px] bg-white pt-[50px]">
+        <View className="flex-col items-center justify-center rounded-t-[20px] bg-white pt-6">
           {/* 사진 */}
-          <View className="mt-10">
+          <View className="mt-4">
             <FastImage
               source={{ uri: userInfo.imageUrl }}
               className="h-[160px] w-[160px] rounded-full"
@@ -60,9 +65,14 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
           </View>
 
           {/* 신고하기 */}
-          <Pressable className="mb-8 mt-4 p-4" onPress={toDeclarationScreen}>
-            <Declaration />
-          </Pressable>
+
+          {myInfo.id !== userInfo.memberId ? (
+            <Pressable className="mb-8 mt-4 p-4" onPress={toDeclarationScreen}>
+              <Declaration />
+            </Pressable>
+          ) : (
+            <View className="mb-8 mt-4 p-4" />
+          )}
         </View>
       </View>
     </Modal>

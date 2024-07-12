@@ -1,4 +1,5 @@
-import React from 'react';
+import DeviceInfo from 'react-native-device-info';
+import React, { useState, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import HomeScreen from 'src/screens/home/Home';
@@ -14,18 +15,50 @@ import { TabNavigatorParamList } from '@type/param/loginStack';
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
 const MainScreen = () => {
+  const [isOldiPhone, setIsOldiPhone] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = async () => {
+      const model = await DeviceInfo.getModel();
+      // iPhone X 이하 모델 체크
+      const oldModels = [
+        'iPhone 6',
+        'iPhone 6 Plus',
+        'iPhone 6s',
+        'iPhone 6s Plus',
+        'iPhone 7',
+        'iPhone 7 Plus',
+        'iPhone 8',
+        'iPhone 8 Plus',
+        'iPhone SE',
+      ];
+      setIsOldiPhone(oldModels.includes(model));
+    };
+
+    checkDevice();
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: 'white',
-          opacity: 0.95,
-          paddingTop: 12,
-          borderRadius: 24,
-          borderTopWidth: 0,
-          position: 'absolute',
-        },
+        tabBarStyle: isOldiPhone
+          ? {
+              backgroundColor: 'white',
+              opacity: 0.95,
+              paddingTop: 12,
+              paddingBottom: 12,
+              borderTopWidth: 0,
+              position: 'absolute',
+            }
+          : {
+              backgroundColor: 'white',
+              opacity: 0.95,
+              paddingTop: 12,
+              borderRadius: 24,
+              borderTopWidth: 0,
+              position: 'absolute',
+            },
       }}
     >
       <Tab.Screen

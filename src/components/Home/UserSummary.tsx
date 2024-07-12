@@ -14,7 +14,7 @@ interface UserSummaryComponentProps {
   month: number;
 }
 
-const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({ 
+const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({
   navigation,
   histories,
   month,
@@ -36,7 +36,12 @@ const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({
           <View className="ml-1 flex truncate">
             <Text className="text-xs text-gray700">{month}월 한달동안</Text>
             <View className="flex flex-row items-center">
-              <Text className="text-sm font-semibold text-success">{histories.accumulateTotalCharge}원</Text>
+              <Text className="text-sm font-semibold text-success">
+                {(
+                  histories.accumulateTotalCharge - histories.accumulatePortionCharge
+                ).toLocaleString('ko-KR')}
+                원
+              </Text>
               <Text className="text-xs text-gray700"> 아꼈어요!</Text>
             </View>
           </View>

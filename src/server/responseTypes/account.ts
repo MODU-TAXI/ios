@@ -11,3 +11,8 @@ export interface RegisterAccountResponse {
   accountNumber: string;
   bank: string;
 }
+
+// [계좌 삭제] /api/accounts
+export interface DeleteAccountResponse {
+  success: boolean;
+}

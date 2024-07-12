@@ -3,7 +3,6 @@ import DatePicker from 'react-native-date-picker';
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 
-
 interface DatePickerComponentProps {
   date: Date;
   setDate: React.Dispatch<React.SetStateAction<Date>>;
@@ -23,8 +22,8 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
   setDatePickerOpen,
   openDatePicker,
 }) => {
-  const today = new Date;
-  const tomorrow = new Date;
+  const today = new Date();
+  const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   return (
@@ -39,17 +38,11 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
               {dayjs(date).format('YYYY년 MM월 DD일')}
             </Text>
             <Text className="mt-1 font-semibold text-base text-main">
-              {dayjs(date)
-                .format('A HH시 mm분')
-                .replace('AM', '오전')
-                .replace('PM', '오후')}
+              {dayjs(date).format('A HH시 mm분').replace('AM', '오전').replace('PM', '오후')}
             </Text>
           </View>
 
-          <Pressable
-            className="rounded-[37px] bg-main px-4 py-[6px]"
-            onPress={openDatePicker}
-          >
+          <Pressable className="rounded-[37px] bg-main px-4 py-[6px]" onPress={openDatePicker}>
             <Text className="text-white">수정</Text>
           </Pressable>
         </Pressable>
@@ -61,9 +54,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
           <Text className="font-medium text-base text-emphasized">
             {dayjs().format('YYYY년 MM월 DD일')}
           </Text>
-          <Text className="mt-1 text-base text-gray300">
-            출발시간을 설정해주세요
-          </Text>
+          <Text className="mt-1 text-base text-gray300">출발시간을 설정해주세요</Text>
         </Pressable>
       )}
 
@@ -71,10 +62,11 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
         modal
         open={datePickerOpen}
         date={date}
-        locale='ko-KR'
+        locale="ko-KR"
         minimumDate={today}
         maximumDate={tomorrow}
         mode="datetime"
+        is24hourSource="locale"
         onConfirm={(date) => {
           setDatePickerOpen(false);
           setDate(date);

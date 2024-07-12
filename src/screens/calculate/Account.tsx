@@ -33,9 +33,7 @@ const AccountComponent = ({ navigation, route }: AccountScreenProps) => {
   const [, setCalculateData] = useRecoilState(calculateState);
   const [account, setAccount] = useState<string>(''); // 계좌번호
   const [bank, setBank] = useState<Bank>({ identifier: '', name: '' }); // 은행
-  const [bankModalIndex, setBankModalIndex] = useState<number>(
-    accounts.accounts.length === 0 ? 1 : 0,
-  ); // modal index
+  const [bankModalIndex, setBankModalIndex] = useState<number>(1); // modal index
 
   // bank modal 열기
   const openBankModal = () => {
@@ -103,7 +101,7 @@ const AccountComponent = ({ navigation, route }: AccountScreenProps) => {
               borderColor={'border-main'}
               textColor={'white'}
               text={'확인'}
-              disabled={!account || !bank}
+              disabled={!account || !bank.name}
               onPress={toNext}
             />
           </View>

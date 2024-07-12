@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
@@ -27,6 +27,16 @@ const AmountScreen = ({ navigation, route }: AmountScreenProps) => {
   const amountError = parseInt(amount) > expectedAmount;
 
   const toAccountPage = async () => {
+    const amountNumber = Number(amount);
+
+    if (isNaN(amountNumber)) {
+      return Alert.alert('숫자만 입력해주세요');
+    }
+
+    if (amountNumber > 1000000) {
+      return Alert.alert('백만원 이하의 금액만 입력해주세요');
+    }
+
     setCalculateData((prev) => ({
       ...prev,
       amount: amount,
