@@ -18,7 +18,6 @@ const AlaramsComponent: React.FC<AlaramsComponentProps> = ({
 }) => {
   return (
     <FlatList
-      contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 32 }}
       data={alarms}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({ item }) => <AlaramComponent alarm={item} toMatchingRoom={toMatchingRoom} />}

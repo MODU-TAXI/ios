@@ -1,5 +1,15 @@
+import FastImage from 'react-native-fast-image';
 import React, { useRef, useState, useEffect } from 'react';
-import { View, FlatList, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Pressable,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from 'react-native';
+
+import LastMessageComponent from './LastMessageComponent';
 
 import { MessageBoxComponent } from '@components/Chat/MessageBox';
 
@@ -32,19 +42,35 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
   const flatListRef = useRef<FlatList>(null);
   const [scrollOffset, setScrollOffset] = useState(0);
   const [scrollBottomButtonVisible, setScrollBottomButtonVisible] = useState(false);
+  const [lastMessageVisible, setLastMessageVisible] = useState(false);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     setScrollOffset(offsetY);
   };
 
+  const toBottom = () => {
+    if (flatListRef.current) {
+      setLastMessageVisible(false);
+      setScrollBottomButtonVisible(false);
+      flatListRef.current.scrollToOffset({ offset: 0, animated: false });
+    }
+  };
+
   useEffect(() => {
     if (scrollOffset > 500) {
-      setScrollBottomButtonVisible(true);
+      // 새로운 메세지가 들어온 경우
+      if (messages.length > 0 && messages[0].memberId != memberId) {
+        return setLastMessageVisible(true);
+      } else {
+        setScrollBottomButtonVisible(true);
+        setLastMessageVisible(false);
+      }
     } else {
+      setLastMessageVisible(false);
       setScrollBottomButtonVisible(false);
     }
-  }, [scrollOffset]);
+  }, [scrollOffset, messages]);
 
   // 내가 채팅 입력했을때만 밑으로 내리기
   useEffect(() => {
@@ -72,12 +98,6 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
     </View>
   );
 
-  const toBottom = () => {
-    if (flatListRef.current) {
-      flatListRef.current.scrollToOffset({ offset: 0, animated: true });
-    }
-  };
-
   return (
     <View className="flex-1 bg-white">
       <FlatList
@@ -93,8 +113,12 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
         keyboardShouldPersistTaps="handled"
       />
 
-      {scrollBottomButtonVisible && (
+      {scrollBottomButtonVisible && !lastMessageVisible && (
         <ScrollBottomButton onPress={toBottom} className="absolute bottom-0 right-3 p-4" />
+      )}
+
+      {messages.length > 0 && lastMessageVisible && (
+        <LastMessageComponent toBottom={toBottom} lastMessage={messages[0]} />
       )}
     </View>
   );

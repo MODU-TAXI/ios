@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import { AppState } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import notifee, { EventType } from '@notifee/react-native';
 
@@ -28,6 +29,21 @@ export const useNotifee = () => {
 };
 
 export const useDeleteAllNotifee = () => {
+  const [appState, setAppState] = useState(AppState.currentState);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', async (nextAppState) => {
+      if (appState.match(/inactive|background/) && nextAppState === 'active') {
+        deleteAllNotifee();
+      }
+      setAppState(nextAppState);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   useFocusEffect(
     React.useCallback(() => {
       deleteAllNotifee();

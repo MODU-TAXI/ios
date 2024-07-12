@@ -1,7 +1,11 @@
-import { GetAxiosInstance, PostAxiosInstance } from '@axios/axios.method';
+import { GetAxiosInstance, PostAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
 
 import { RegisterAccountRequest } from '@server/requestTypes/account';
-import { GetAccountResponse, RegisterAccountResponse } from '@server/responseTypes/account';
+import {
+  GetAccountResponse,
+  DeleteAccountResponse,
+  RegisterAccountResponse,
+} from '@server/responseTypes/account';
 
 // [계좌 등록] /api/accounts
 export const registerAccount = async (
@@ -15,6 +19,13 @@ export const registerAccount = async (
 // [계좌 목록 조회] /api/accounts
 export const getAccounts = async (): Promise<GetAccountResponse> => {
   const response = await GetAxiosInstance<GetAccountResponse>(`/api/accounts`);
+
+  return response.data;
+};
+
+// [계좌 삭제] /api/accounts
+export const deleteAccount = async (accountId: number): Promise<DeleteAccountResponse> => {
+  const response = await DeleteAxiosInstance<DeleteAccountResponse>(`/api/accounts/${accountId}`);
 
   return response.data;
 };

@@ -78,14 +78,17 @@ const HistoryDetailComponent = ({ navigation, route }: HistoryDetailScreenProps)
         <View className="rounded-[20px] border-[1px] border-[#EAEAEA] p-5">
           {/* 출발지, 도착지, 날짜*/}
           <View>
-            <View className="flex-row items-center">
+            <View className="flex-col justify-center">
               <Text className="text-[16px] font-semibold tracking-tight text-[#1F1F1F]">
                 {history.departureName}
               </Text>
-              <Arrow className="mx-1" />
-              <Text className="text-[16px] font-semibold tracking-tight text-[#1F1F1F]">
-                {history.arrivalName}
-              </Text>
+
+              <View className="my-1 flex-row items-center">
+                <Arrow className="mr-1" />
+                <Text className="text-[16px] font-semibold tracking-tight text-[#1F1F1F]">
+                  {history.arrivalName}
+                </Text>
+              </View>
             </View>
 
             <View className="mt-1">

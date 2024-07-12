@@ -21,12 +21,17 @@ const HistoryInfoComponent: React.FC<HistoryInfoComponentProps> = ({
       {/* 날짜, 금액 */}
       <View className="flex-row items-center justify-between">
         {/* 첫번째 */}
-        <View className="shrink flex-row items-center ">
-          <Text className="shrink font-medium tracking-tight text-[#5D5D5D] ">
+        <View className="shrink flex-col justify-center ">
+          <Text className="shrink truncate font-medium tracking-tight text-[#5D5D5D]">
             {history.departureName}
           </Text>
-          <Arrow className="mx-1" />
-          <Text className="font-medium tracking-tight text-[#5D5D5D]  ">{history.arrivalName}</Text>
+
+          <View className="my-1 flex-row items-center">
+            <Arrow className="mr-1" />
+            <Text className="font-medium tracking-tight text-[#5D5D5D]  ">
+              {history.arrivalName}
+            </Text>
+          </View>
         </View>
 
         {/* 두번째 */}

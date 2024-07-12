@@ -10,4 +10,6 @@ export type Alarm = {
   message: string;
   resourceId: number;
   dateTime: Date;
+
+  checked: boolean;
 };

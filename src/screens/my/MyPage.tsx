@@ -215,13 +215,13 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             <NextButton />
           </Pressable>
 
-          <Pressable
+          {/* <Pressable
             className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
             onPress={toManageAlarmScreen}
           >
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">알림설정</Text>
             <NextButton />
-          </Pressable>
+          </Pressable> */}
 
           <Pressable
             className="flex-row items-center justify-between py-4"

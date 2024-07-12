@@ -41,7 +41,7 @@ const CheckPaymentComponent = ({ navigation, route }: CheckPaymentScreenProps) =
   const paymentPerPerson = payment.totalCharge / paymentMembers.participantList.length;
 
   const copyAccount = () => {
-    Clipboard.setString(String(payment.totalCharge));
+    Clipboard.setString(banks[payment.bank] + ' ' + String(payment.accountNumber));
 
     InfoToastMessage('계좌번호가 복사되었습니다.');
   };

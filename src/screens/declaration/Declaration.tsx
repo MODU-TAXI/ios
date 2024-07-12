@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Text,
@@ -61,60 +62,62 @@ const DeclarationScreen = ({ navigation, route }: DeclarationScreenProps) => {
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView>
-          <View className="px-7">
-            <View className="flx-col mt-8 items-center justify-center">
-              <DeclarationBell />
+          <ScrollView>
+            <View className="px-7">
+              <View className="flx-col mt-8 items-center justify-center">
+                <DeclarationBell />
 
-              <View className="flex-row items-center">
-                <Text className="text-[16px] font-semibold tracking-tight text-[#3E3E3E]">
-                  {userInfo.nickname}
+                <View className="flex-row items-center">
+                  <Text className="text-[16px] font-semibold tracking-tight text-[#3E3E3E]">
+                    {userInfo.nickname}
+                  </Text>
+                  <Text className="text-[16px] font-semibold tracking-tight text-[#7C7C7C]">
+                    님을 신고합니다
+                  </Text>
+                </View>
+              </View>
+
+              {/* 신고 유형 */}
+              <View className="mt-10">
+                <Text className="text-[14px] font-semibold tracking-tight text-[#5D5D5D]">
+                  신고 유형
                 </Text>
-                <Text className="text-[16px] font-semibold tracking-tight text-[#7C7C7C]">
-                  님을 신고합니다
+
+                <SelectBoxComponent setDeclareType={setDeclareType} />
+              </View>
+
+              {/* 신고 내용 */}
+              <View className="mt-10">
+                <Text className="text-[14px] font-semibold tracking-tight text-[#5D5D5D]">
+                  신고 내용
+                </Text>
+                <InputBoxComponent
+                  declareContent={declareContent}
+                  setDeclareContent={setDeclareContent}
+                />
+              </View>
+
+              {/* 안내 문구 */}
+              <View className="mt-3 flex-row items-center">
+                <DeclarationAlert className="mr-1" />
+
+                <Text className="text-[12px]  tracking-tight text-[#AFAFAF]">
+                  신고 접수 후 패널티 조치까지 3-5일정도 소요될 수 있어요!
                 </Text>
               </View>
             </View>
 
-            {/* 신고 유형 */}
-            <View className="mt-10">
-              <Text className="text-[14px] font-semibold tracking-tight text-[#5D5D5D]">
-                신고 유형
-              </Text>
-
-              <SelectBoxComponent setDeclareType={setDeclareType} />
-            </View>
-
-            {/* 신고 내용 */}
-            <View className="mt-10">
-              <Text className="text-[14px] font-semibold tracking-tight text-[#5D5D5D]">
-                신고 내용
-              </Text>
-              <InputBoxComponent
-                declareContent={declareContent}
-                setDeclareContent={setDeclareContent}
+            <View className="mx-7 mb-10 mt-[78px]">
+              <ButtonComponent
+                color={'bg-main'}
+                borderColor={'border-main'}
+                textColor={'white'}
+                text={'신고하기'}
+                disabled={!declareType || !declareContent}
+                onPress={delcareUser}
               />
             </View>
-
-            {/* 안내 문구 */}
-            <View className="mt-3 flex-row items-center">
-              <DeclarationAlert className="mr-1" />
-
-              <Text className="text-[12px]  tracking-tight text-[#AFAFAF]">
-                신고 접수 후 패널티 조치까지 3-5일정도 소요될 수 있어요!
-              </Text>
-            </View>
-          </View>
-
-          <View className="mx-7 mb-10 mt-[78px]">
-            <ButtonComponent
-              color={'bg-main'}
-              borderColor={'border-main'}
-              textColor={'white'}
-              text={'신고하기'}
-              disabled={!declareType || !declareContent}
-              onPress={delcareUser}
-            />
-          </View>
+          </ScrollView>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </SafeAreaView>
