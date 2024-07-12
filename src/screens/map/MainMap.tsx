@@ -1,4 +1,5 @@
 import { View, Pressable } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import { useSharedValue } from 'react-native-reanimated';
 import Animated, { runOnJS } from 'react-native-reanimated';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
@@ -43,6 +44,29 @@ import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 
 const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   useDeleteAllNotifee();
+
+  const [isOldiPhone, setIsOldiPhone] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = async () => {
+      const model = await DeviceInfo.getModel();
+      // iPhone X 이하 모델 체크
+      const oldModels = [
+        'iPhone 6',
+        'iPhone 6 Plus',
+        'iPhone 6s',
+        'iPhone 6s Plus',
+        'iPhone 7',
+        'iPhone 7 Plus',
+        'iPhone 8',
+        'iPhone 8 Plus',
+        'iPhone SE',
+      ];
+      setIsOldiPhone(oldModels.includes(model));
+    };
+
+    checkDevice();
+  }, []);
 
   const insets = useSafeAreaInsets();
   const userInfo = useRecoilValue(userInfoState);
@@ -347,7 +371,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
 
       {/** 방 미리보기 */}
       {selectedRoom && (
-        <View className="absolute top-[68%] w-full">
+        <View className={`${isOldiPhone && "-translate-y-8"} absolute top-[68%] w-full`}>
           <Pressable onPress={() => toRoomDetailScreen(selectedRoom.roomId)}>
             <SelectedRoomDigestComponent roomId={selectedRoom.roomId} roomList={rooms} />
           </Pressable>
