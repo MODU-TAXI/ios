@@ -1,4 +1,5 @@
-import React from 'react';
+import DeviceInfo from 'react-native-device-info';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 
 import InputBoxComponent from './InputBox';
@@ -26,15 +27,42 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
   alarmsCount,
   navigation,
 }) => {
+  const [isOldiPhone, setIsOldiPhone] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = async () => {
+      const model = await DeviceInfo.getModel();
+      // iPhone X 이하 모델 체크
+      const oldModels = [
+        'iPhone 6',
+        'iPhone 6 Plus',
+        'iPhone 6s',
+        'iPhone 6s Plus',
+        'iPhone 7',
+        'iPhone 7 Plus',
+        'iPhone 8',
+        'iPhone 8 Plus',
+        'iPhone SE',
+      ];
+      setIsOldiPhone(oldModels.includes(model));
+    };
+
+    checkDevice();
+  }, []);
+
   const roomIn = roomId > 0;
 
   const topStyle = roomIn
-    ? 'flex-col bg-main pt-10 px-4 rounded-b-[18px] pb-[18px]'
-    : 'flex-col bg-[#4F4F4F] pt-10 px-4 rounded-b-[18px] pb-[18px]';
+    ? isOldiPhone
+      ? 'flex-col bg-main px-4 pt-2 rounded-b-[18px] pb-[18px]'
+      : 'flex-col bg-main pt-10 px-4 rounded-b-[18px] pb-[18px]'
+    : isOldiPhone
+      ? 'flex-col bg-[#4F4F4F] pt-2 px-4 rounded-b-[18px] pb-[18px]'
+      : 'flex-col bg-[#4F4F4F] pt-10 px-4 rounded-b-[18px] pb-[18px]';
 
   const toSearchScreen = () => {
     navigation.navigate('HomeSearchScreen', { toMainMap: toMapScreen });
-  }
+  };
 
   return (
     <View className={topStyle}>
@@ -73,9 +101,7 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
       </View>
 
       {/* 검색 */}
-      <Pressable
-        onPress={toSearchScreen}
-      >
+      <Pressable onPress={toSearchScreen}>
         <InputBoxComponent />
       </Pressable>
     </View>
