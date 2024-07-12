@@ -28,16 +28,17 @@ const SelectedRoomDigestComponent: React.FC<SelectedRoomDigestProps> = ({ roomId
 
       {/* 출발지, 도착지 */}
       <View className="mt-2 flex-row items-center truncate">
-        <View>
-          <Text className="text-[16px] font-semibold text-[#272727]">
+        <View className="shrink flex-col justify-center">
+          <Text className="shrink truncate text-[16px] font-semibold text-[#272727]" numberOfLines={1} >
             {roomDetail.departureName}
           </Text>
         </View>
 
-        <Arrow className="mx-2" />
-
-        <View>
-          <Text className="text-[16px] font-semibold text-[#272727]">{roomDetail.arrivalName}</Text>
+        <View className="my-1 flex-row items-center">
+          <Arrow className="mx-2" />
+          <Text className="text-[16px] font-semibold text-[#272727]">
+            {roomDetail.arrivalName}
+          </Text>
         </View>
       </View>
 
