@@ -7,6 +7,7 @@ import ButtonComponent from '@components/Button';
 
 import { loggedInState } from '@recoil/recoil';
 
+import { useIsOldiPhone } from '@hooks/device';
 import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { WithdrawCompleteScreenProps } from '@type/param/loginStack';
@@ -15,6 +16,7 @@ const WithdrawCompleteScreen = ({ navigation }: WithdrawCompleteScreenProps) => 
   useDeleteAllNotifee();
 
   const [, setLoggedIn] = useRecoilState(loggedInState);
+  const isOldiPhone = useIsOldiPhone();
 
   // 회원탈퇴
   const withdrawComplete = async () => {
@@ -31,7 +33,7 @@ const WithdrawCompleteScreen = ({ navigation }: WithdrawCompleteScreenProps) => 
         </Text>
       </View>
 
-      <View className="px-6">
+      <View className={`px-6 ${isOldiPhone && "mb-4"}`}>
         <ButtonComponent
           color={'bg-main'}
           borderColor={'border-main'}

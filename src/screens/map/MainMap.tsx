@@ -30,6 +30,7 @@ import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDige
 
 import { userInfoState, searchParamState } from '@recoil/recoil';
 
+import { useIsOldiPhone } from '@hooks/device';
 import { useGetSpotMap } from '@hooks/api/spot';
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useGetRoomIntegration } from '@hooks/api/rooms';
@@ -45,28 +46,7 @@ import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   useDeleteAllNotifee();
 
-  const [isOldiPhone, setIsOldiPhone] = useState(false);
-
-  useEffect(() => {
-    const checkDevice = async () => {
-      const model = await DeviceInfo.getModel();
-      // iPhone X 이하 모델 체크
-      const oldModels = [
-        'iPhone 6',
-        'iPhone 6 Plus',
-        'iPhone 6s',
-        'iPhone 6s Plus',
-        'iPhone 7',
-        'iPhone 7 Plus',
-        'iPhone 8',
-        'iPhone 8 Plus',
-        'iPhone SE',
-      ];
-      setIsOldiPhone(oldModels.includes(model));
-    };
-
-    checkDevice();
-  }, []);
+  const isOldiPhone = useIsOldiPhone();
 
   const insets = useSafeAreaInsets();
   const userInfo = useRecoilValue(userInfoState);
