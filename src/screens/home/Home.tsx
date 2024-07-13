@@ -145,6 +145,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
           navigation={navigation}
           histories={histories}
           month={date.getMonth()}
+          userInfo={userInfo}
         />
       </ScrollView>
     </SafeAreaView>
