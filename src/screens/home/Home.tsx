@@ -120,15 +120,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         navigation={navigation}
       />
 
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            className="bg-black"
-          ></RefreshControl>
-        }
-      >
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {/* 지도, 택시팟 */}
         <HomeMainPanelComponent toMapScreen={toMapScreen} toCreateRoomScreen={toCreateRoomScreen} />
 
