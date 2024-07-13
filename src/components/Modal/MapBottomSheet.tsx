@@ -1,8 +1,7 @@
 import { useRecoilValue } from 'recoil';
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import { ScrollView } from 'react-native-gesture-handler';
-import { View, Text, Modal, Pressable, Touchable, LayoutChangeEvent } from 'react-native';
+import { View, Text, Modal, Pressable } from 'react-native';
 
 import DropDownModal from './DropDownModal';
 
@@ -50,7 +49,7 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
     if (filterParam.spotId) {
       setSelectedSpotName(spotData.spots.find((spot) => spot.id === filterParam.spotId)?.name || '');
     }
-  }, [filterParam.spotId])
+  }, [filterParam.spotId, spotData.spots])
 
   /** 거점 선택 취소 */
   const deleteSpotFilter = () => {

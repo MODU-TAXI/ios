@@ -8,6 +8,7 @@ import HeaderComponent from '@components/Header';
 
 import { userInfoState } from '@recoil/recoil';
 
+import { useIsOldiPhone } from '@hooks/device';
 import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { WithdrawCheckScreenProps } from '@type/param/loginStack';
@@ -16,6 +17,7 @@ const WithdrawCheckScreen = ({ navigation }: WithdrawCheckScreenProps) => {
   useDeleteAllNotifee();
 
   const myInfo = useRecoilValue(userInfoState);
+  const isOldiPhone = useIsOldiPhone();
 
   const toWithdrawSurveyScreen = () => {
     navigation.navigate('WithdrawSurveyScreen');
@@ -58,7 +60,7 @@ const WithdrawCheckScreen = ({ navigation }: WithdrawCheckScreenProps) => {
         </View>
       </View>
 
-      <View className="px-6">
+      <View className={`px-6 ${isOldiPhone && "mb-4"}`}>
         <ButtonComponent
           color={'bg-main'}
           borderColor={'border-main'}

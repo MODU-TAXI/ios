@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
+import React from 'react';
 import DatePicker from 'react-native-date-picker';
-import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 
 interface DatePickerComponentProps {

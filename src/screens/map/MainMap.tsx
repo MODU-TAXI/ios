@@ -1,4 +1,5 @@
 import { View, Pressable } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import { useSharedValue } from 'react-native-reanimated';
 import Animated, { runOnJS } from 'react-native-reanimated';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
@@ -29,6 +30,7 @@ import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDige
 
 import { userInfoState, searchParamState } from '@recoil/recoil';
 
+import { useIsOldiPhone } from '@hooks/device';
 import { useGetSpotMap } from '@hooks/api/spot';
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useGetRoomIntegration } from '@hooks/api/rooms';
@@ -43,6 +45,8 @@ import CurrentLocationButton from '@assets/images/Map/currentLocation.svg';
 
 const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   useDeleteAllNotifee();
+
+  const isOldiPhone = useIsOldiPhone();
 
   const insets = useSafeAreaInsets();
   const userInfo = useRecoilValue(userInfoState);
@@ -347,7 +351,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
 
       {/** 방 미리보기 */}
       {selectedRoom && (
-        <View className="absolute top-[68%] w-full">
+        <View className={`${isOldiPhone && "-translate-y-8"} absolute top-[68%] w-full`}>
           <Pressable onPress={() => toRoomDetailScreen(selectedRoom.roomId)}>
             <SelectedRoomDigestComponent roomId={selectedRoom.roomId} roomList={rooms} />
           </Pressable>

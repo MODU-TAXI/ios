@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, Modal, Pressable, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
 
 interface DropDownModalProps {
   handleSelectSortType: (param: string, label: string) => void;

@@ -4,6 +4,8 @@ import { View, Text, Pressable } from 'react-native';
 
 import InputBoxComponent from './InputBox';
 
+import { useIsOldiPhone } from '@hooks/device';
+
 import { User } from '@type/entity/user';
 import { HomeScreenProps } from '@type/param/loginStack';
 
@@ -27,28 +29,7 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
   alarmsCount,
   navigation,
 }) => {
-  const [isOldiPhone, setIsOldiPhone] = useState(false);
-
-  useEffect(() => {
-    const checkDevice = async () => {
-      const model = await DeviceInfo.getModel();
-      // iPhone X 이하 모델 체크
-      const oldModels = [
-        'iPhone 6',
-        'iPhone 6 Plus',
-        'iPhone 6s',
-        'iPhone 6s Plus',
-        'iPhone 7',
-        'iPhone 7 Plus',
-        'iPhone 8',
-        'iPhone 8 Plus',
-        'iPhone SE',
-      ];
-      setIsOldiPhone(oldModels.includes(model));
-    };
-
-    checkDevice();
-  }, []);
+  const isOldiPhone = useIsOldiPhone();
 
   const roomIn = roomId > 0;
 

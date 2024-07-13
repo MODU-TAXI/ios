@@ -1,6 +1,6 @@
+import React from 'react';
 import { useRecoilState } from 'recoil';
 import { useNavigation } from '@react-navigation/native';
-import React, { useRef, useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -11,8 +11,6 @@ import {
 } from 'react-native';
 
 import { searchKeywordState } from '@recoil/recoil';
-
-import { useNaverSearch } from '@hooks/api/search';
 
 import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
 
@@ -39,6 +37,7 @@ const SearchBoxComponent = () => {
   };
 
   const goBack = (): void => {
+    setKeyword('');
     navigate.goBack();
   };
 
@@ -49,15 +48,17 @@ const SearchBoxComponent = () => {
         onPress={handleFocus}
         className="flex h-full flex-1 flex-row rounded-xl bg-gray100 p-2"
       >
-        <View className="px-1">
+        <View className="flex justify-center px-1">
           <MagnifyingGlassMainSvg></MagnifyingGlassMainSvg>
         </View>
-        <View className="mb-1 flex-col justify-center">
+        <View className="flex-row justify-center">
           <TextInput
             ref={inputRef}
             value={keyword}
             onChange={valueHandleChange}
-            className="text-base"
+            multiline={true}
+            numberOfLines={1}
+            className="pt-0 text-base"
             placeholder="도착지를 검색해주세요"
           />
         </View>

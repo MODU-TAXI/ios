@@ -10,6 +10,7 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { userInfoState } from '@recoil/recoil';
 
+import { useIsOldiPhone } from '@hooks/device';
 import { useDeleteMember } from '@hooks/api/member';
 import { useDeleteAllNotifee } from '@hooks/notifee';
 
@@ -21,6 +22,7 @@ const WithdrawLastScreen = ({ navigation }: WithdrawLastScreenProps) => {
   useDeleteAllNotifee();
 
   const myInfo = useRecoilValue(userInfoState);
+  const isOldiPhone = useIsOldiPhone();
 
   const { mutateAsync: deleteMemberMutate, isPending: deleteMemberPending } = useDeleteMember();
 
@@ -72,7 +74,7 @@ const WithdrawLastScreen = ({ navigation }: WithdrawLastScreenProps) => {
         </View>
       </View>
 
-      <View className="px-6">
+      <View className={`px-6 ${isOldiPhone && "mb-4"}`}>
         <ButtonComponent
           color={'bg-main'}
           borderColor={'border-main'}

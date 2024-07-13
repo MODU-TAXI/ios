@@ -8,6 +8,7 @@ import HeaderComponent from '@components/Header';
 
 import { userInfoState } from '@recoil/recoil';
 
+import { useIsOldiPhone } from '@hooks/device';
 import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { WithdrawSurveyScreenProps } from '@type/param/loginStack';
@@ -16,6 +17,7 @@ const WithdrawSurveyScreen = ({ navigation }: WithdrawSurveyScreenProps) => {
   useDeleteAllNotifee();
 
   const myInfo = useRecoilValue(userInfoState);
+  const isOldiPhone = useIsOldiPhone();
 
   const [selectedItem, setSelectedItem] = useState<number>(-1);
   const [otherReason, setOtherReason] = useState<string>('');
@@ -75,7 +77,7 @@ const WithdrawSurveyScreen = ({ navigation }: WithdrawSurveyScreenProps) => {
         </View>
       </View>
 
-      <View className="px-6">
+      <View className={`px-6 ${isOldiPhone && "mb-4"}`}>
         <ButtonComponent
           color={'bg-main'}
           borderColor={'border-main'}

@@ -1,5 +1,5 @@
+import React from 'react';
 import { View } from 'react-native';
-import React, { useState } from 'react';
 
 import MapPin from '@assets/images/Map/MapPin.svg';
 import MapPinGray from '@assets/images/Map/MapPinGray.svg';

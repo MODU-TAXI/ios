@@ -1,9 +1,5 @@
-import { useRecoilValue } from 'recoil';
-import {
-  Text,
-  View,
-} from 'react-native';
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
+import { Text, View } from 'react-native';
 
 import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
 

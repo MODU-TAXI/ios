@@ -8,9 +8,9 @@ import ArrivalSearchBoxComponent from '@components/Search/ArrivalSearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 
-import { useGetSpotList } from '@hooks/api/spot';
 import { useNaverSearch } from '@hooks/api/search';
 import { useDeleteAllNotifee } from '@hooks/notifee';
+import { useGetSpotMap, useGetSpotList } from '@hooks/api/spot';
 import { useLocationPermission } from '@hooks/permission/location';
 
 import { calculateDist, deleteTagTitle } from '@utils/search';
@@ -99,6 +99,12 @@ const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) =>
     searchLatitude: spotSearchParams?.departureLatitude,
   });
 
+  const { spotData, refetch: refetchSpotMap } = useGetSpotMap({
+    count: 3,
+    searchLongitude: 126.68045,
+    searchLatitude: 37.46504,
+  });
+
   /** 검색어 선택: 선택한 검색어를 전달하며 이동 */
   const toArrivalMapScreen = (title: string, latitude: number, longitude: number) => {
     navigation.navigate('ArrivalMapScreen', {
@@ -130,7 +136,10 @@ const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) =>
 
         {keyword && (
           <Pressable onPress={() => toArrivalMapScreenWithSpot(spots[0])}>
-            <SpotSearchComponent spotName={spots[0].name} />
+            <SpotSearchComponent 
+              spotName={spots[0].name} 
+              isFirst={true}
+            />
           </Pressable>
         )}
 
@@ -154,8 +163,20 @@ const ArrivalSearchScreen = ({ route, navigation }: ArrivalSearchScreenProps) =>
             </Pressable>
           ))}
 
-        {/** 빈 화면 렌더링 */}
-        {sortedItems.length === 0 && !keyword && <EmptySearchRenderComponent />}
+        {/** 초기화면 추천 거점 렌더링 */}
+        {sortedItems.length === 0 && !keyword && 
+          spotData.spots.map((spot, index) => (
+            <Pressable
+              key={index}  
+              onPress={() => toArrivalMapScreenWithSpot(spot)}
+            >
+              <SpotSearchComponent
+                spotName={spot.name}
+                isFirst={index === 0}
+              />
+            </Pressable>
+          ))
+        }
       </View>
     </SafeAreaView>
   );
