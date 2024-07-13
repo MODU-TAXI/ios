@@ -35,3 +35,11 @@ export type UserInfo = {
   matchingCount: number;
   blocked: boolean;
 }
+
+export type MemberInfo = {
+  id: number;
+  nickname: string;
+  matchingCount: number;
+  imageUrl: string;
+  certified: boolean;
+}

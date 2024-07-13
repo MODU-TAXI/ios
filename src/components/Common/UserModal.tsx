@@ -5,6 +5,8 @@ import { Text, View, Modal, Pressable } from 'react-native';
 
 import { userInfoState } from '@recoil/recoil';
 
+import { useGetMemberInfo } from '@hooks/api/member';
+
 import { UserPreview } from '@type/entity/user';
 
 import Question from '@assets/images/Chat/Question.svg';
@@ -26,6 +28,7 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
   toDeclarationScreen,
 }) => {
   const myInfo = useRecoilValue(userInfoState);
+  const { data: memberInfo, refetch } = useGetMemberInfo(userInfo.memberId);
 
   return (
     <Modal animationType="fade" transparent={true} visible={modalVisible}>
@@ -52,15 +55,17 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
           </View>
 
           <View className="flex-row items-center">
-            <View className="mr-2 flex-row items-center">
-              <SchoolBadge className="mr-1" />
-              <Text>학생인증</Text>
-            </View>
+            {memberInfo.certified && 
+              <View className="mr-2 flex-row items-center">
+                <SchoolBadge className="mr-1" />
+                <Text className="text-gray700">학생인증 완료</Text>
+              </View>
+            }
 
             <View className="flex-row items-center">
               <Question className="mr-1" />
-              <Text className="mr-1 tracking-tight text-[#272727]">최근 매칭 확률</Text>
-              <Text className="font-medium text-[#5d5d5d]">80%</Text>
+              <Text className="mr-1 tracking-tight text-gray700">최근 매칭 횟수</Text>
+              <Text className="font-medium text-gray700">{memberInfo.matchingCount}회</Text>
             </View>
           </View>
 

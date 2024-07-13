@@ -2,7 +2,7 @@ import axios from 'axios';
 import Config from 'react-native-config';
 
 import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
-import { PostAxiosInstance, PatchAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
+import { GetAxiosInstance, PostAxiosInstance, PatchAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
 
 import {
   SignUpRequest,
@@ -16,6 +16,7 @@ import {
   SocialLoginResponse,
   PatchMemberResponse,
   RefreshTokenResponse,
+  GetMemberInfoResponse,
   CheckMembershipResponse,
   RegisterNicknameResponse,
 } from '@server/responseTypes/member';
@@ -85,3 +86,11 @@ export const deleteMember = async () => {
 
   return response.data;
 };
+
+export const getMemberInfo = async (
+  userId: number,
+): Promise<GetMemberInfoResponse> => {
+  const response = await GetAxiosInstance(`/api/members/${userId}`);
+
+  return response.data;
+}

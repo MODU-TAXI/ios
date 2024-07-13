@@ -1,26 +1,29 @@
 import { AxiosError } from 'axios';
 import { useRecoilState } from 'recoil';
 import appleAuth from '@invertase/react-native-apple-authentication';
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
+import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
 import { SignUpUser } from '@recoil/type';
 import { loggedInState, userInfoState, signUpUserState } from '@recoil/recoil';
 
 import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 import { PatchMemberRequest, RegisterNicknameRequest } from '@server/requestTypes/member';
-import { socialLogin, patchMember, deleteMember, registerNickname } from '@server/api/member';
+import { socialLogin, patchMember, deleteMember, getMemberInfo, registerNickname } from '@server/api/member';
 import {
   SocialLoginError,
   AppleLoginResponse,
   KakaoLoginResponse,
   PatchMemberResponse,
+  GetMemberInfoResponse,
   RegisterNicknameResponse,
 } from '@server/responseTypes/member';
 
 import { useFcmToken } from '@hooks/fcm';
 
 import { setAccessToken, setRefreshToken } from '@utils/token';
+
+import { MemberInfo } from '@type/entity/user';
 
 // 카카오 로그인
 export const useKakaoLogin = (
@@ -181,3 +184,17 @@ export const useDeleteMember = (): UseMutationResult<void, void, void> => {
     },
   });
 };
+
+export const useGetMemberInfo = (
+  userId: number,
+): { data: MemberInfo; refetch: () => void } => {
+  const { data, refetch } = useSuspenseQuery({
+    queryKey: ['memberInfo', userId],
+    queryFn: () => getMemberInfo(userId),
+    select: (response: GetMemberInfoResponse) => {
+      return response;
+    }
+  });
+  
+  return { data, refetch };
+}
