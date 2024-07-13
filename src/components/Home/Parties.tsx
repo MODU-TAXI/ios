@@ -7,7 +7,7 @@ import PartyComponent from './Party';
 import { RoomList } from '@type/entity/room';
 import { HomeScreenProps } from '@type/param/loginStack';
 
-import EmptyLiveMatch from '@assets/images/Home/EmptyLiveMatch.svg';
+import SadFace from '@assets/images/Home/SadFace.svg';
 
 interface PartiesComponentProps {
   navigation: HomeScreenProps['navigation'];
@@ -34,7 +34,12 @@ const PartiesComponent: React.FC<PartiesComponentProps> = ({ navigation, rooms }
           ))}
         </ScrollView>
       ) : (
-        <EmptyLiveMatch className="mt-3" />
+        <View className="mt-3 h-[128px] flex-col items-center justify-center rounded-xl border-[1px] border-[#D7D7D7]">
+          <SadFace />
+          <Text className="mt-2 text-[12px] font-medium tracking-tight text-[#D7D7D7]">
+            실시간 택시팟이 없어요!
+          </Text>
+        </View>
       )}
     </View>
   );
