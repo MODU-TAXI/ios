@@ -37,8 +37,8 @@ const ErrorFallback = ({
     // 존재하지 않는 것들에 대한 에러 처리 -> mainScreen 이동
     if (errorCode === 'ROOM_001') {
       Alert.alert(
-        '에러 발생',
-        '존재하지 않는 방입니다.',
+        '에러',
+        '종료된 매칭입니다.',
         [
           {
             text: '확인',

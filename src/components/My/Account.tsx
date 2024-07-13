@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
 
 import { GetBankComponent } from '@components/Calculate/GetBank';
 
@@ -27,7 +27,9 @@ const AccountComponent: React.FC<AccountComponentProps> = ({ account, deleteAcco
         </Text>
       </View>
 
-      <DeleteAccountButton onPress={() => deleteAccount(account.id)} />
+      <Pressable onPress={() => deleteAccount(account.id)}>
+        <DeleteAccountButton />
+      </Pressable>
     </View>
   );
 };

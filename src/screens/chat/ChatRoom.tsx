@@ -137,7 +137,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   // 방에서 내쫓기
   const expelRoom = () => {
     Alert.alert(
-      'ROOM ERROR',
+      '에러',
       '일시적 에러',
       [
         {
@@ -156,7 +156,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const toMainScreen = () => {
     Alert.alert(
       'ROOM ERROR',
-      '존재하지 않는 방입니다.',
+      '종료된 매칭입니다.',
       [
         {
           text: 'OK',
@@ -410,7 +410,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   return (
     <SafeAreaView
-      className="flex-1 bg-white "
+      className={readonly ? 'flex-1 bg-white pb-4' : 'flex-1 bg-white '}
       edges={readonly ? ['top', 'left', 'right'] : undefined}
     >
       {(matchCompletePending || exitParticipateRoomPending || refresh) && (
@@ -443,6 +443,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
           toCalculateScreen={toCalculateScreen}
           matchComplete={completeMatch}
           toPaymentScreen={toPaymentScreen}
+          readonly={readonly}
         />
 
         {/* 입력창 Component */}

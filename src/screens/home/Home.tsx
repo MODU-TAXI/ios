@@ -1,6 +1,6 @@
 import React, { useState, Suspense } from 'react';
-import { View, RefreshControl } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { View, Text, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
