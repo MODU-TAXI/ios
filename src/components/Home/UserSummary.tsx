@@ -3,6 +3,7 @@ import { Text, View, Pressable } from 'react-native';
 
 import { HistoriesMonthlyResponse } from '@server/responseTypes/history';
 
+import { UserInfo } from '@type/entity/user';
 import { HomeScreenProps } from '@type/param/loginStack';
 
 import Check from '@assets/images/Home/Popper.svg';
@@ -12,12 +13,14 @@ interface UserSummaryComponentProps {
   navigation: HomeScreenProps['navigation'];
   histories: HistoriesMonthlyResponse;
   month: number;
+  userInfo: UserInfo;
 }
 
 const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({
   navigation,
   histories,
   month,
+  userInfo,
 }) => {
   const toSummaryScreen = () => {
     navigation.navigate('HistoryScreen');
@@ -54,8 +57,8 @@ const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({
         <View className="flex h-20 flex-row items-center justify-start truncate rounded-xl border border-gray200 px-3">
           <Check width={32} />
           <View className="mx-1 flex">
-            <Text className="text-xs text-gray700">현재 상위 00%에요!</Text>
-            <Text className="text-sm font-semibold text-success">매칭률 97%</Text>
+            <Text className="text-xs text-gray700">{userInfo.name}님의 매칭횟수</Text>
+            <Text className="text-sm font-semibold text-success">{userInfo.matchingCount}회</Text>
           </View>
         </View>
       </View>

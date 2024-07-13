@@ -23,3 +23,23 @@ export type PaymentUser = {
   status: 'COMPLETE' | 'INCOMPLETE';
   me: boolean;
 };
+
+export type UserInfo = {
+  id: number;
+  name: string;
+  nickname: string;
+  gender: string;
+  phoneNumber: string;
+  email: string;
+  imageUrl: string;
+  matchingCount: number;
+  blocked: boolean;
+}
+
+export type MemberInfo = {
+  id: number;
+  nickname: string;
+  matchingCount: number;
+  imageUrl: string;
+  certified: boolean;
+}

@@ -103,3 +103,11 @@ export interface PatchMemberResponse {
   phoneNumber: string;
   imageUrl: string;
 }
+
+export interface GetMemberInfoResponse {
+  id: number;
+  nickname: string;
+  matchingCount: number;
+  imageUrl: string;
+  certified: boolean;
+}

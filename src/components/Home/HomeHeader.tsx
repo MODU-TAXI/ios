@@ -1,5 +1,4 @@
-import DeviceInfo from 'react-native-device-info';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 
 import InputBoxComponent from './InputBox';
@@ -35,11 +34,11 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
 
   const topStyle = roomIn
     ? isOldiPhone
-      ? 'flex-col bg-main px-4 pt-2 rounded-b-[18px] pb-[18px]'
-      : 'flex-col bg-main pt-10 px-4 rounded-b-[18px] pb-[18px]'
+      ? 'flex-col bg-main px-4 pt-2 rounded-b-[18px] pb-[18px] shadow-md'
+      : 'flex-col bg-main pt-10 px-4 rounded-b-[18px] pb-[18px] shadow-md'
     : isOldiPhone
-      ? 'flex-col bg-[#4F4F4F] pt-2 px-4 rounded-b-[18px] pb-[18px]'
-      : 'flex-col bg-[#4F4F4F] pt-10 px-4 rounded-b-[18px] pb-[18px]';
+      ? 'flex-col bg-[#4F4F4F] pt-2 px-4 rounded-b-[18px] pb-[18px] shadow-md'
+      : 'flex-col bg-[#4F4F4F] pt-10 px-4 rounded-b-[18px] pb-[18px] shadow-md';
 
   const toSearchScreen = () => {
     navigation.navigate('HomeSearchScreen', { toMainMap: toMapScreen });
