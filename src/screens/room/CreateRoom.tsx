@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useState, Suspense, useEffect, useCallback } from 'react';
+import React, { useState, Suspense, useCallback } from 'react';
 
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
@@ -54,6 +54,19 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
   const [passangersNumber, setPassengersNumber] = useState<number | null>(null); // 탑승 인원
   const [checkedCategories, setCheckedCategories] = useState<boolean[]>([false, false, false]); // 카테고리
   const [userInfo] = useRecoilState(userInfoState);
+
+  /** 출발, 도착지 초기화 */
+  const resetRecoilValue = useCallback(() => {
+    setDeparture({
+      name: '',
+      latitude: 0,
+      longitude: 0,
+    });
+    setArrival({
+      name: '',
+      spotId: 0,
+    });
+  }, [setDeparture, setArrival]);
 
   // 파티 생성
   const createMatch = async () => {
@@ -110,19 +123,6 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
   const handleArrival = () => {
     navigation.navigate('ArrivalSearchScreen');
   };
-
-  /** 출발, 도착지 초기화 */
-  const resetRecoilValue = useCallback(() => {
-    setDeparture({
-      name: '',
-      latitude: 0,
-      longitude: 0,
-    });
-    setArrival({
-      name: '',
-      spotId: 0,
-    });
-  }, [setDeparture, setArrival]);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>

@@ -103,6 +103,19 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
     setCheckedCategories(new_categories);
   }, []);
 
+    /** 출발, 도착지 초기화 */
+    const resetRecoilValue = useCallback(() => {
+      setDeparture({
+        name: '',
+        latitude: 0,
+        longitude: 0,
+      });
+      setArrival({
+        name: '',
+        spotId: 0,
+      });
+    }, [setDeparture, setArrival]);
+
   // 파티 수정
   const patchMatch = async () => {
     if (!passengersNumber || !datePicked) {
@@ -156,19 +169,6 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
   const handleArrival = () => {
     navigation.navigate('ArrivalSearchScreen', { isPatch: true });
   };
-
-  /** 출발, 도착지 초기화 */
-  const resetRecoilValue = useCallback(() => {
-    setDeparture({
-      name: '',
-      latitude: 0,
-      longitude: 0,
-    });
-    setArrival({
-      name: '',
-      spotId: 0,
-    });
-  }, [setDeparture, setArrival]);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>

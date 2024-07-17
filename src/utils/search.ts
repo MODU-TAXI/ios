@@ -1,5 +1,3 @@
-import dist from "react-native-image-viewing";
-
 /** 스트링의 html 태그 제거 */
 export const deleteTagTitle = (title: string) => {
   const newTitle = title

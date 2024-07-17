@@ -101,7 +101,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
       }
     };
     measureButtonSize();
-  }, [buttonSizeRef.current]);
+  }, []);
 
   // 현재 카메라 중심좌표 저장, 초기값 인하대 후문
   const [currentCamera, setCurrentCamera] = useState<Camera>({

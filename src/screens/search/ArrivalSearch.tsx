@@ -6,7 +6,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import SpotSearchComponent from '@components/Search/SpotSearch';
 import ArrivalSearchBoxComponent from '@components/Search/ArrivalSearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
-import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 
 import { useNaverSearch } from '@hooks/api/search';
 import { useDeleteAllNotifee } from '@hooks/notifee';
