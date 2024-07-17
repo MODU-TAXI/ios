@@ -61,6 +61,7 @@ const DepartureSearchBoxComponent: React.FC<DepartureSearchBoxProps> = ({
             onChange={valueHandleChange}
             multiline={true}
             numberOfLines={1}
+            blurOnSubmit={true}
             className="pt-0 text-base"
             placeholder="출발지를 검색해주세요"
           />
