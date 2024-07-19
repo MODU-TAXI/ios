@@ -38,7 +38,9 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const { data: alarmsCount, refetch: alarmsCountRefetch } = useGetAlarmsCount();
+  const { data: alarmsCountData, refetch: alarmsCountRefetch } = useGetAlarmsCount();
+
+  const [alarmsCount, setAlarmsCount] = useState<number | undefined>(alarmsCountData?.counts);
 
   const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(socketRoomId);
 
@@ -105,6 +107,8 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
   const toAlarmScreen = () => {
     navigation.navigate('AlarmScreen');
+
+    setAlarmsCount(0);
   };
 
   if (!userInfo || !socketRoomId || !histories) return <LoadingComponent />;
@@ -116,7 +120,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         userInfo={userInfo}
         toMapScreen={toMapScreen}
         toAlarmScreen={toAlarmScreen}
-        alarmsCount={alarmsCount?.counts}
+        alarmsCount={alarmsCount}
         roomId={socketRoomId}
         navigation={navigation}
       />
