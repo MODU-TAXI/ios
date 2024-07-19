@@ -76,23 +76,17 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const sendMessage = (inputMessage: string, type: string) => {
     if (!inputMessage.trim()) return;
 
-    try {
-      if (stompClient.current.connected) {
-        stompClient.current.publish({
-          destination: '/pub/chat',
-          body: JSON.stringify({
-            roomId: roomId,
-            memberId: myInfo.id,
-            type: type,
-            content: inputMessage,
-            imageUrl: myInfo.imageUrl,
-          }),
-        });
-      } else {
-        // 여기다 저장해놨다가 connect되면 한번에 send?
-      }
-    } catch (error) {
-      console.log(error);
+    if (stompClient.current.connected) {
+      stompClient.current.publish({
+        destination: '/pub/chat',
+        body: JSON.stringify({
+          roomId: roomId,
+          memberId: myInfo.id,
+          type: type,
+          content: inputMessage,
+          imageUrl: myInfo.imageUrl,
+        }),
+      });
     }
   };
 
@@ -130,7 +124,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const disConnect = () => {
     if (stompClient.current.activate) {
       stompClient.current.deactivate();
-      console.log('Socket 연결 해제!');
     }
   };
 
@@ -185,9 +178,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         brokerURL: Config.SOCKET_URL,
         connectHeaders: {
           token: accessToken,
-        },
-        debug: function (str) {
-          console.log(str);
         },
         reconnectDelay: 500,
         heartbeatIncoming: 4000,

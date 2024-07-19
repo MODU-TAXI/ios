@@ -11,6 +11,7 @@ interface DatePickerComponentProps {
   datePickerOpen: boolean;
   setDatePickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   openDatePicker: () => void;
+  disable: boolean;
 }
 
 const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
@@ -21,6 +22,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
   datePickerOpen,
   setDatePickerOpen,
   openDatePicker,
+  disable,
 }) => {
   const today = new Date();
   const tomorrow = new Date();
@@ -28,7 +30,22 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
 
   return (
     <View>
-      {datePicked ? (
+      {disable ? (
+        <Pressable className="mt-4 flex-row items-center justify-between rounded-xl border-2 border-disabled px-4 py-3">
+          <View>
+            <Text className="font-medium text-base text-disabled">
+              {dayjs(date).format('YYYY년 MM월 DD일')}
+            </Text>
+            <Text className="mt-1 font-semibold text-base text-disabled">
+              {dayjs(date).format('A HH시 mm분').replace('AM', '오전').replace('PM', '오후')}
+            </Text>
+          </View>
+
+          <Pressable className="rounded-[37px] bg-disabled px-4 py-[6px]">
+            <Text className="text-white">수정</Text>
+          </Pressable>
+        </Pressable>
+      ) : datePicked ? (
         <Pressable
           className="mt-4 flex-row items-center justify-between rounded-xl border-2 border-main px-4 py-3"
           onPress={openDatePicker}

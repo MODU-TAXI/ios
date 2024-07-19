@@ -165,7 +165,7 @@ const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) 
               borderColor={'border-main'}
               textColor={'white'}
               text={'정산 요청하기'}
-              disabled={false}
+              disabled={participateMembers.length === 0}
               onPress={toCompleteCalculateScreen}
             />
           </View>

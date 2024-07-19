@@ -69,7 +69,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
       name: roomDetail.arrivalName,
       spotId: roomDetail.spotId,
     });
-  }, [])
+  }, []);
 
   // 날짜 다시 활성화
   useEffect(() => {
@@ -243,6 +243,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
             datePickerOpen={datePickerOpen}
             setDatePickerOpen={setDatePickerOpen}
             openDatePicker={openDatePicker}
+            disable={true}
           />
         </View>
 

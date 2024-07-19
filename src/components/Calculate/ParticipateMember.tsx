@@ -5,7 +5,6 @@ import { View, Text, Pressable } from 'react-native';
 import { UserPreview } from '@type/entity/user';
 
 import MinusButton from '@assets/images/Calculate/MinusButton.svg';
-import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
 
 interface ParticipateMemberComponentProps {
   participateMember: UserPreview;
@@ -19,7 +18,7 @@ const ParticipateMemberComponent: React.FC<ParticipateMemberComponentProps> = ({
   exceptUser,
 }) => {
   return (
-    <View key={participateMember.memberId} className="mt-4 flex-row items-center justify-between">
+    <View key={participateMember.memberId} className="mt-1 flex-row items-center justify-between">
       <View className="flex-row items-center">
         <FastImage
           source={{ uri: participateMember.imageUrl }}
@@ -33,7 +32,7 @@ const ParticipateMemberComponent: React.FC<ParticipateMemberComponentProps> = ({
       </View>
 
       <Pressable
-        className="flex-row items-center justify-center"
+        className="flex-row items-center justify-center py-3 "
         onPress={() => exceptUser(participateMember)}
       >
         <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C]">

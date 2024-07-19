@@ -19,7 +19,7 @@ const UnParticipateMemberComponent: React.FC<UnParticipateMemberComponentProps> 
   addUser,
 }) => {
   return (
-    <View key={unParticipateMember.memberId} className="mt-4 flex-row items-center justify-between">
+    <View key={unParticipateMember.memberId} className="mt-1 flex-row items-center justify-between">
       <View className="flex-row items-center">
         <FastImage
           source={{ uri: unParticipateMember.imageUrl }}
@@ -33,10 +33,10 @@ const UnParticipateMemberComponent: React.FC<UnParticipateMemberComponentProps> 
       </View>
 
       <Pressable
-        className="flex-row items-center justify-center"
+        className="flex-row items-center justify-center py-3"
         onPress={() => addUser(unParticipateMember)}
       >
-        <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C]">
+        <Text className="mr-1 text-[16px] tracking-tight text-[#9C9C9C]">
           {price.toLocaleString('ko-KR')}원
         </Text>
 

@@ -52,14 +52,14 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
 
   return (
     <View className={topStyle}>
-      <View className="mt-6 flex-row items-center justify-between">
+      <View className="mt-3 flex-row items-center justify-between">
         <View>
           <Logo />
         </View>
 
-        <Pressable onPress={toAlarmScreen} className={alarmsCount ? `mr-[6px]` : `mr-1`}>
+        <Pressable onPress={toAlarmScreen}>
           {alarmsCount && alarmsCount > 0 ? (
-            <View className="absolute bottom-3 left-3 z-10 h-[18px] w-[18px] items-center justify-center rounded-full bg-[#FF4949]">
+            <View className="absolute right-1 top-0 z-10 h-[18px]   w-[18px] items-center justify-center rounded-full bg-[#FF4949]">
               <Text className="text-[12px] font-medium tracking-tight text-white">
                 {alarmsCount}
               </Text>
@@ -71,7 +71,7 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
       </View>
 
       {/* 이름 */}
-      <View className="mt-5 flex-row px-1">
+      <View className="mt-5 flex-row ">
         {blocked ? (
           <View className="flex-row items-center justify-center">
             <Text className="text-[18px] font-semibold text-white">{userInfo.name}님,</Text>

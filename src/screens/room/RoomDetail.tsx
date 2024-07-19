@@ -32,6 +32,7 @@ import {
 
 import { vibration } from '@utils/effect';
 
+import { RoomWaitingMember } from '@type/entity/room';
 import { RoomDetailScreenProps } from '@type/param/loginStack';
 
 import EndCircle from '@assets/images/Match/EndCircle.svg';
@@ -129,10 +130,10 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   };
 
   // 방 입장 수락
-  const applyJoinRoom = async (memberId: number) => {
+  const applyJoinRoom = async (waitingMember: RoomWaitingMember) => {
     Alert.alert(
       '참여 수락',
-      '대기 멤버의 참여를 수락하시겠어요?',
+      `${waitingMember.nickname}님의 참여를 수락하시겠어요?`,
       [
         {
           text: '취소',
@@ -140,7 +141,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
         {
           text: '확인',
           onPress: async () => {
-            await applyJoinRoomMutate(memberId);
+            await applyJoinRoomMutate(waitingMember.memberId);
 
             await Promise.all([refetchParticipateMembers(), refetchWaitingMembers()]);
           },

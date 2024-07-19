@@ -205,6 +205,7 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
             datePickerOpen={datePickerOpen}
             setDatePickerOpen={setDatePickerOpen}
             openDatePicker={openDatePicker}
+            disable={false}
           />
         </View>
 
