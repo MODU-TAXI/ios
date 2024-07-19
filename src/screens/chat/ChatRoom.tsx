@@ -206,7 +206,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
       stompClient.current.onStompError = async (error: any) => {
         const stompError = new TextDecoder('utf-8').decode(new Uint8Array(error._binaryBody));
-        console.log('stompError:', stompError);
 
         // 존재하지 않은 방인 경우
         if (stompError == 'SOCK_ROOM_003') {
@@ -257,7 +256,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     const subscription = AppState.addEventListener('change', async (nextAppState) => {
       if (appState.match(/inactive|background/) && nextAppState === 'active') {
         setRefresh(true);
-        await Promise.all([clearMessages(), messagesRefetch(), connect()]);
+        await Promise.all([clearMessages(), messagesRefetch(), roomPreviewRefetch(), connect()]);
         setRefresh(false);
       }
       setAppState(nextAppState);

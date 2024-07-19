@@ -28,21 +28,15 @@ import { vibration } from '@utils/effect';
 import { HomeScreenProps } from '@type/param/loginStack';
 
 const HomeComponent = ({ navigation }: HomeScreenProps) => {
+  const date = new Date();
+
   useDeleteAllNotifee();
 
-  const date = new Date();
   const userInfo = useRecoilValue(userInfoState);
 
   const [socketRoomId, setSocketRoomId] = useRecoilState(roomState);
 
   const [refreshing, setRefreshing] = useState(false);
-
-  const checkMyRoom = async () => {
-    const response = await getMyChatInfo();
-    const { roomId } = response;
-
-    setSocketRoomId(roomId);
-  };
 
   const { data: alarmsCount, refetch: alarmsCountRefetch } = useGetAlarmsCount();
 
@@ -61,6 +55,13 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
     date.getFullYear(),
     date.getMonth() + 1,
   );
+
+  const checkMyRoom = async () => {
+    const response = await getMyChatInfo();
+    const { roomId } = response;
+
+    setSocketRoomId(roomId);
+  };
 
   useFocusEffect(
     React.useCallback(() => {
