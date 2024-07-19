@@ -30,15 +30,21 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
 }) => {
   const isOldiPhone = useIsOldiPhone();
 
+  const blocked = userInfo.blocked;
+
   const roomIn = roomId > 0;
 
-  const topStyle = roomIn
+  const topStyle = blocked
     ? isOldiPhone
-      ? 'flex-col bg-main px-4 pt-2 rounded-b-[18px] pb-[18px] shadow-md'
-      : 'flex-col bg-main pt-10 px-4 rounded-b-[18px] pb-[18px] shadow-md'
-    : isOldiPhone
-      ? 'flex-col bg-[#4F4F4F] pt-2 px-4 rounded-b-[18px] pb-[18px] shadow-md'
-      : 'flex-col bg-[#4F4F4F] pt-10 px-4 rounded-b-[18px] pb-[18px] shadow-md';
+      ? 'flex-col bg-[#F34343] px-4 pt-2 rounded-b-[18px] pb-[18px] shadow-md'
+      : 'flex-col bg-[#F34343] pt-10 px-4 rounded-b-[18px] pb-[18px] shadow-md'
+    : roomIn
+      ? isOldiPhone
+        ? 'flex-col bg-main px-4 pt-2 rounded-b-[18px] pb-[18px] shadow-md'
+        : 'flex-col bg-main pt-10 px-4 rounded-b-[18px] pb-[18px] shadow-md'
+      : isOldiPhone
+        ? 'flex-col bg-[#4F4F4F] pt-2 px-4 rounded-b-[18px] pb-[18px] shadow-md'
+        : 'flex-col bg-[#4F4F4F] pt-10 px-4 rounded-b-[18px] pb-[18px] shadow-md';
 
   const toSearchScreen = () => {
     navigation.navigate('HomeSearchScreen', { toMainMap: toMapScreen });
@@ -66,7 +72,12 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
 
       {/* 이름 */}
       <View className="mt-5 flex-row px-1">
-        {roomIn ? (
+        {blocked ? (
+          <View className="flex-row items-center justify-center">
+            <Text className="text-[18px] font-semibold text-white">{userInfo.name}님,</Text>
+            <Text className="text-[18px] font-medium text-white">현재 이용정지 상태입니다.</Text>
+          </View>
+        ) : roomIn ? (
           <View className="flex-row items-center justify-center">
             <Text className="text-[18px] font-semibold text-white">{userInfo.name}님, </Text>
             <Text className="text-[18px] font-medium text-white">택시 이용중이에요!</Text>
