@@ -1,5 +1,5 @@
+import React from 'react';
 import { useRecoilState } from 'recoil';
-import React, { useEffect } from 'react';
 import { Text, View, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 

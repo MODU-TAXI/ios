@@ -14,12 +14,10 @@ import WithdrawCheckScreen from 'src/screens/withdraw/WithdrawCheck';
 import WithdrawSurveyScreen from 'src/screens/withdraw/WithdrawSurvey';
 import WithdrawCompleteScreen from 'src/screens/withdraw/WithdrawComplete';
 
-import TestScreen from './src/screens/test';
 import MainScreen from './src/screens/main/Main';
 import HomeScreen from './src/screens/home/Home';
 import MyPageScreen from './src/screens/my/MyPage';
 import AlarmScreen from './src/screens/alarm/alarm';
-import NaverMapScreen from './src/screens/NaverMap';
 import MainMapScreen from './src/screens/map/MainMap';
 import SignInScreen from './src/screens/signIn/SignIn';
 import ChatRoomScreen from './src/screens/chat/ChatRoom';
@@ -113,7 +111,6 @@ function AppInner() {
             <LogInStack.Screen name="MainScreen" component={MainScreen} />
             <LogInStack.Screen name="HomeScreen" component={HomeScreen} />
             <LogInStack.Screen name="MyPageScreen" component={MyPageScreen} />
-            <LogInStack.Screen name="NaverMapScreen" component={NaverMapScreen} />
             <LogInStack.Screen name="MainMapScreen" component={MainMapScreen} />
             <LogInStack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
             <LogInStack.Screen name="AlarmScreen" component={AlarmScreen} />
@@ -167,7 +164,6 @@ function AppInner() {
             {/* 신고 Screen */}
             <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />
 
-            <LogInStack.Screen name="TestScreen" component={TestScreen} />
           </LogInStack.Navigator>
         </Animated.View>
       ) : (

@@ -1,9 +1,4 @@
-import {
-  GetAxiosInstance,
-  PostAxiosInstance,
-  PatchAxiosInstance,
-  DeleteAxiosInstance,
-} from '@axios/axios.method';
+import { GetAxiosInstance } from '@axios/axios.method';
 
 import { CheckSpotRequest, GetSpotMapRequest, GetSpotListRequest } from '@server/requestTypes/spot';
 import { CheckSpotResponse, GetSpotMapResponse, GetSpotListResponse } from '@server/responseTypes/spot';

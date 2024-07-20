@@ -2,7 +2,6 @@ import {
   GetAxiosInstance,
   PostAxiosInstance,
   PatchAxiosInstance,
-  DeleteAxiosInstance,
 } from '@axios/axios.method';
 
 import { PaymentRequest } from '@server/requestTypes/payment';

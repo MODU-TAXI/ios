@@ -48,7 +48,7 @@ const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenPr
             <View className="mt-14 flex">
               <Text className="text-xl font-bold">학교 인증을 하면</Text>
               <Text className="text-xl font-bold">
-                매칭률이 <Text className="text-basic">72% </Text>이상 올라가요!
+                매칭률이 <Text className="text-main">72% </Text>이상 올라가요!
               </Text>
             </View>
 

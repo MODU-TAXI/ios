@@ -1,8 +1,6 @@
 import { Coord } from "@mj-studio/react-native-naver-map";
 import Geolocation from "@react-native-community/geolocation";
 
-import { useLocationPermission } from "@hooks/permission/location";
-
 /** zoom 레벨에 따른 range 조정 */
 export const calculateRadius = (zoom: number) => {
   return Math.round(15000000 * Math.pow(2, -zoom));

@@ -61,6 +61,7 @@ const ArrivalSearchBoxComponent: React.FC<ArrivalSearchBoxProps> = ({
             onChange={valueHandleChange}
             multiline={true}
             numberOfLines={1}
+            blurOnSubmit={true}
             className="pt-0 text-base"
             placeholder="도착지를 검색해주세요"
           />

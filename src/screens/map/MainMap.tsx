@@ -1,5 +1,4 @@
 import { View, Pressable } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
 import { useSharedValue } from 'react-native-reanimated';
 import Animated, { runOnJS } from 'react-native-reanimated';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
@@ -101,7 +100,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
       }
     };
     measureButtonSize();
-  }, [buttonSizeRef.current]);
+  }, []);
 
   // 현재 카메라 중심좌표 저장, 초기값 인하대 후문
   const [currentCamera, setCurrentCamera] = useState<Camera>({

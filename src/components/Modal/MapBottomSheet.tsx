@@ -147,7 +147,7 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
               />
             </Pressable>
 
-            {userInfo.gender === "MALE" ? (
+            {/* {userInfo.gender === "MALE" ? (
               <Pressable onPress={() => handleRoomTagFilter("ONLY_MAN")}>
                 <FilterButtonComponent 
                   label="남자만" 
@@ -161,7 +161,7 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
                   selected={selectedTags.find((tag) => tag === "ONLY_WOMAN") !== undefined} 
                 />
               </Pressable>           
-            )}
+            )} */}
 
             <Pressable onPress={() => handleRoomTagFilter("QUIET")}>
               <FilterButtonComponent 

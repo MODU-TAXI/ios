@@ -2,7 +2,6 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';

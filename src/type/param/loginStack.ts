@@ -15,7 +15,6 @@ export type LoginStackParamList = {
   MainScreen: undefined;
   HomeScreen: undefined;
   MainMapScreen: undefined;
-  NaverMapScreen: undefined;
   SearchScreen: undefined;
   ChatRoomScreen: { roomId: number; readonly: boolean };
   AlarmScreen: undefined;
@@ -62,14 +61,10 @@ export type LoginStackParamList = {
 
   // 신고
   DeclarationScreen: { userInfo: UserPreview; roomId: number };
-
-  // 테스트
-  TestScreen: undefined;
 };
 
 export type HomeScreenProps = NativeStackScreenProps<LoginStackParamList, 'HomeScreen'>;
 export type MainMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'MainMapScreen'>;
-export type NaverMapScreenProps = NativeStackScreenProps<LoginStackParamList, 'NaverMapScreen'>;
 export type SearchScreenProps = NativeStackScreenProps<LoginStackParamList, 'SearchScreen'>;
 export type ChatRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'ChatRoomScreen'>;
 export type AlarmScreenProps = NativeStackScreenProps<LoginStackParamList, 'AlarmScreen'>;
@@ -179,6 +174,3 @@ export type DeclarationScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'DeclarationScreen'
 >;
-
-// 테스트 페이지
-export type TestScreenProps = NativeStackScreenProps<LoginStackParamList, 'TestScreen'>;

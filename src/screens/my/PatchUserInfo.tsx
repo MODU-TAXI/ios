@@ -26,10 +26,10 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
   const [name, setName] = useState<string>(userInfo.name);
   const [gender, setGender] = useState<string>(userInfo.gender === 'MALE' ? '남자' : '여자');
   const [phoneNumber, setPhoneNumber] = useState<string>(userInfo.phoneNumber);
-  const [items, setItems] = useState([
-    { index: 1, item: '남자', select: userInfo.gender === 'MALE' },
-    { index: 2, item: '여자', select: userInfo.gender === 'FEMALE' },
-  ]);
+  // const [items, setItems] = useState([
+  //   { index: 1, item: '남자', select: userInfo.gender === 'MALE' },
+  //   { index: 2, item: '여자', select: userInfo.gender === 'FEMALE' },
+  // ]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
@@ -38,11 +38,11 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
 
   useEffect(() => {
     const hasNameChanged = name !== userInfo.name;
-    const hasGenderChanged =
-      (userInfo.gender === 'MALE' && gender !== '남자') ||
-      (userInfo.gender === 'FEMALE' && gender !== '여자');
+    // const hasGenderChanged =
+    //   (userInfo.gender === 'MALE' && gender !== '남자') ||
+    //   (userInfo.gender === 'FEMALE' && gender !== '여자');
     const hasPhoneNumberChanged = phoneNumber !== userInfo.phoneNumber;
-    setIsButtonDisabled(!(hasNameChanged || hasGenderChanged || hasPhoneNumberChanged));
+    setIsButtonDisabled(!(hasNameChanged || hasPhoneNumberChanged));
   }, [name, gender, phoneNumber, userInfo]);
 
   // 다음으로
@@ -81,7 +81,7 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
             </View>
 
             {/* 성별 선택란 */}
-            <View className="mt-4">
+            {/* <View className="mt-4">
               <RadioBoxComponent
                 title="성별"
                 value={gender}
@@ -89,7 +89,7 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
                 items={items}
                 setItems={setItems}
               />
-            </View>
+            </View> */}
 
             {/* 전화번호 */}
             <View className="mt-4">

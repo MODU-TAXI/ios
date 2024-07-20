@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useState, Suspense, useEffect, useCallback } from 'react';
+import React, { useState, Suspense, useCallback } from 'react';
 
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
@@ -55,16 +55,29 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
   const [checkedCategories, setCheckedCategories] = useState<boolean[]>([false, false, false]); // 카테고리
   const [userInfo] = useRecoilState(userInfoState);
 
+  /** 출발, 도착지 초기화 */
+  const resetRecoilValue = useCallback(() => {
+    setDeparture({
+      name: '',
+      latitude: 0,
+      longitude: 0,
+    });
+    setArrival({
+      name: '',
+      spotId: 0,
+    });
+  }, [setDeparture, setArrival]);
+
   // 파티 생성
   const createMatch = async () => {
     if (!passangersNumber || !datePicked) {
       return ErrorToastMessage('힝목을 모두 체크해주세요');
     }
 
-    const categories = ['STUDENT_CERTIFICATION', 'ONLY_WOMAN', 'QUIET'];
-    if (userInfo && userInfo.gender === 'MALE') {
-      categories[1] = 'ONLY_MAN';
-    }
+    const categories = ['STUDENT_CERTIFICATION', 'QUIET'];
+    // if (userInfo && userInfo.gender === 'MALE') {
+    //   categories[1] = 'ONLY_MAN';
+    // }
 
     const filteredCategories = categories.filter((_, index) => checkedCategories[index]);
 
@@ -110,19 +123,6 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
   const handleArrival = () => {
     navigation.navigate('ArrivalSearchScreen');
   };
-
-  /** 출발, 도착지 초기화 */
-  const resetRecoilValue = useCallback(() => {
-    setDeparture({
-      name: '',
-      latitude: 0,
-      longitude: 0,
-    });
-    setArrival({
-      name: '',
-      spotId: 0,
-    });
-  }, [setDeparture, setArrival]);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -255,7 +255,7 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
         <View className="px-2 py-8">
           <DescriptionComponent description="카테고리를 선택해주세요" />
 
-          <View className="mt-4 flex-row justify-between">
+          <View className="mt-4 flex-row">
             {userInfo.email ? (
               <CategoryComponent
                 index={0}
@@ -273,7 +273,7 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
               </Pressable>
             )}
 
-            {userInfo.gender === 'MALE' ? (
+            {/* {userInfo.gender === 'MALE' ? (
               <CategoryComponent
                 index={1}
                 category={'남자만'}
@@ -287,10 +287,12 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
                 checkedCategories={checkedCategories}
                 setCheckedCategories={setCheckedCategories}
               />
-            )}
+            )} */}
+
+            <View className="mr-6" />
 
             <CategoryComponent
-              index={2}
+              index={1}
               category={'조용히'}
               checkedCategories={checkedCategories}
               setCheckedCategories={setCheckedCategories}

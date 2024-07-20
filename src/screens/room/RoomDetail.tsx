@@ -1,10 +1,10 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
+import React, { useState, Suspense } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Alert, RefreshControl } from 'react-native';
-import React, { useState, Suspense, useEffect, useCallback } from 'react';
 
 import ButtonComponent from '@components/Button';
 import LoadingComponent from '@components/Common/Loading';
