@@ -4,6 +4,7 @@ import { Text, View, Alert, Pressable, SafeAreaView } from 'react-native';
 
 import ButtonComponent from '@components/Button';
 import { GetBankComponent } from '@components/Calculate/GetBank';
+import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useCompletePayment, useGetPaymentDetail } from '@hooks/api/payment';
@@ -23,13 +24,11 @@ const SendMoneyScreen = ({ navigation, route }: SendMoneyScreenProps) => {
 
   const { roomPreview } = route.params;
 
-  const { payment, paymentMembers } = useGetPaymentDetail(roomPreview.roomId);
+  const { payment } = useGetPaymentDetail(roomPreview.roomId);
 
   const { mutateAsync: completePayment, isPending: completePaymentPending } = useCompletePayment(
     roomPreview.roomId,
   );
-
-  const paymentPerPerson = payment.totalCharge / paymentMembers.participantList.length;
 
   const copyAccount = () => {
     Clipboard.setString(banks[payment.bank] + ' ' + String(payment.accountNumber));
@@ -64,6 +63,8 @@ const SendMoneyScreen = ({ navigation, route }: SendMoneyScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {completePaymentPending && <TransparentLoadingComponent />}
+
       <View className="flex-1 px-7 pt-8">
         <View className="flex-1">
           {/* 글씨 */}
