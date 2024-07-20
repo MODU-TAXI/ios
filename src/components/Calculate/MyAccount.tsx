@@ -18,7 +18,7 @@ const MyAccountComponent: React.FC<MyAccountComponentProps> = ({
 }) => {
   return (
     <Pressable
-      className={`mt-4 flex-row items-center rounded-xl border-[1px] ${isSelected ? 'border-main' : 'border-[#E2E2E2]'} bg-white px-6 py-4`}
+      className={`mt-4 flex-row items-center rounded-xl border-[1px] ${isSelected ? 'border-main' : 'border-[#E2E2E2]'} bg-white px-4 py-5`}
       onPress={() =>
         onSelect(account.id, account.accountNumber, {
           name: banks[account.bank],

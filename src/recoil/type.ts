@@ -44,6 +44,7 @@ export type Arrival = {
 };
 
 export type Calculate = {
+  name: string;
   account: string;
   accountId: number;
   bank: Bank;

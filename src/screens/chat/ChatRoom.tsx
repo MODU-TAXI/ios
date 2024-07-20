@@ -328,10 +328,18 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     }
   };
 
-  // 유저기준 - 정산하기 페이지로 이동
+  // 정산하기 페이지로 이동
   const toPaymentScreen = () => {
     if (roomPreview && !readonly) {
-      navigation.navigate('CheckPaymentScreen', { roomPreview: roomPreview });
+      // 방장인 경우 정산형황으로 이동
+      if (myRoom) {
+        navigation.navigate('CheckPaymentScreen', { roomPreview: roomPreview });
+      }
+
+      // 파티원인 경우 정산하기로 이동
+      else {
+        navigation.navigate('SendMoneyScreen', { roomPreview: roomPreview });
+      }
     }
   };
 

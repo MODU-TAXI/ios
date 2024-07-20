@@ -24,8 +24,10 @@ export type LoginStackParamList = {
   CreateRoomScreen: undefined;
   DepartureMapScreen: undefined | { roomDetail?: RoomDetail };
   DepartureSearchScreen: undefined;
-  ArrivalMapScreen: undefined | { type: string; searchParams?: SearchResultParams; spot?: Spot; isPatch?: boolean};
-  ArrivalSearchScreen: undefined | { isPatch?: boolean; };
+  ArrivalMapScreen:
+    | undefined
+    | { type: string; searchParams?: SearchResultParams; spot?: Spot; isPatch?: boolean };
+  ArrivalSearchScreen: undefined | { isPatch?: boolean };
 
   // 조회, 수정
   RoomDetailScreen: { roomId: number };
@@ -40,6 +42,7 @@ export type LoginStackParamList = {
   CheckCalculateScreen: { roomPreview: RoomPreview };
   CompleteCalculateScreen: { roomPreview: RoomPreview };
   CheckPaymentScreen: { roomPreview: RoomPreview };
+  SendMoneyScreen: { roomPreview: RoomPreview };
 
   // 마이 페이지
   PatchNicknameScreen: undefined;
@@ -114,6 +117,7 @@ export type CheckPaymentScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'CheckPaymentScreen'
 >;
+export type SendMoneyScreenProps = NativeStackScreenProps<LoginStackParamList, 'SendMoneyScreen'>;
 
 // 마이 페이지
 export type PatchNicknameScreenProps = NativeStackScreenProps<

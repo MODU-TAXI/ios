@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, Suspense } from 'react';
 import { View, RefreshControl } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';

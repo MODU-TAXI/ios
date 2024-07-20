@@ -71,7 +71,7 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
       </View>
 
       {/* 이름 */}
-      <View className="mt-5 flex-row ">
+      <View className={isOldiPhone ? `mt-2 flex-row` : `mt-5 flex-row`}>
         {blocked ? (
           <View className="flex-row items-center justify-center">
             <Text className="text-[18px] font-semibold text-white">{userInfo.name}님,</Text>

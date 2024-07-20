@@ -1,7 +1,7 @@
 import { useRecoilState } from 'recoil';
 import React, { Suspense, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Alert, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
@@ -36,19 +36,30 @@ const AccountComponent = ({ navigation, route }: AccountScreenProps) => {
   const [bankModalIndex, setBankModalIndex] = useState<number>(1); // modal index
 
   // bank modal 열기
-  const openBankModal = () => {
+  const openBankModal = (): void => {
     setBankModalIndex(1);
   };
 
   // bank modal 닫기
-  const closeBankModal = (index: number) => {
+  const closeBankModal = (index: number): void => {
     setBankModalIndex(index);
   };
 
+  // 계좌번호 - 삭제
+  const removeSpacesAndHyphens = (account: string): string => {
+    return account.replace(/[\s-]/g, '');
+  };
+
   const toNext = () => {
+    const refinedAccount = removeSpacesAndHyphens(account);
+
+    if (refinedAccount.length > 16) {
+      return Alert.alert('계좌번호는 16자 이하여야 합니다!');
+    }
+
     setCalculateData((prev) => ({
       ...prev,
-      account: account,
+      account: refinedAccount,
       bank: bank,
     }));
 
@@ -60,9 +71,9 @@ const AccountComponent = ({ navigation, route }: AccountScreenProps) => {
       <HeaderComponent title="도착완료 정산하기" />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1 px-4 pt-8">
-          <View className="flex-1 px-3">
+          <View className="flex-1">
             {/* 글씨 */}
-            <View className="flex-col">
+            <View className="ml-1 flex-col">
               <Text className="text-xl font-semibold tracking-tight">정산받을</Text>
               <Text className="text-xl font-semibold tracking-tight">계좌번호를 알려주세요!</Text>
             </View>
@@ -73,7 +84,7 @@ const AccountComponent = ({ navigation, route }: AccountScreenProps) => {
                 value={account}
                 setValue={setAccount}
                 error={false}
-                placeholder="계좌번호를 입력해주세요"
+                placeholder="'-' 빼고 입력"
               />
             </View>
 

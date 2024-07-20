@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import InquiryScreen from 'src/screens/my/Inquiry';
 import ManageAlarmScreen from 'src/screens/my/ManageAlarm';
+import SendMoneyScreen from 'src/screens/calculate/SendMoney';
 import ManageAccountScreen from 'src/screens/my/ManageAccount';
 import WithdrawLastScreen from 'src/screens/withdraw/WithdrawLast';
 import WithdrawCheckScreen from 'src/screens/withdraw/WithdrawCheck';
@@ -136,6 +137,7 @@ function AppInner() {
             <LogInStack.Screen name="CheckCalculateScreen" component={CheckCalculateScreen} />
             <LogInStack.Screen name="CompleteCalculateScreen" component={CompleteCalculateScreen} />
             <LogInStack.Screen name="CheckPaymentScreen" component={CheckPaymentScreen} />
+            <LogInStack.Screen name="SendMoneyScreen" component={SendMoneyScreen} />
 
             {/* 마이페이지 Screen */}
             <LogInStack.Screen name="PatchNicknameScreen" component={PatchNicknameScreen} />
