@@ -87,10 +87,10 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
 
   // 카테고리 선택했던 것들 활성화
   useEffect(() => {
-    const origin_categories = ['학생인증', '여자만', '조용히'];
-    if (userInfo && userInfo.gender === 'MALE') {
-      origin_categories[1] = '남자만';
-    }
+    const origin_categories = ['학생인증', '조용히'];
+    // if (userInfo && userInfo.gender === 'MALE') {
+    //   origin_categories[1] = '남자만';
+    // }
 
     const selected_indexs = roomDetail.roomCategories.map((roomCategory) => {
       return origin_categories.indexOf(roomCategory.trim());
@@ -122,10 +122,10 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
       return ErrorToastMessage('힝목을 모두 체크해주세요');
     }
 
-    const categories = ['STUDENT_CERTIFICATION', 'ONLY_WOMAN', 'QUIET'];
-    if (userInfo && userInfo.gender === 'MALE') {
-      categories[1] = 'ONLY_MAN';
-    }
+    const categories = ['STUDENT_CERTIFICATION', 'QUIET'];
+    // if (userInfo && userInfo.gender === 'MALE') {
+    //   categories[1] = 'ONLY_MAN';
+    // }
 
     const filteredCategories = categories.filter((_, index) => checkedCategories[index]);
 
@@ -311,7 +311,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
               </Pressable>
             )}
 
-            {userInfo.gender === 'MALE' ? (
+            {/* {userInfo.gender === 'MALE' ? (
               <CategoryComponent
                 index={1}
                 category={'남자만'}
@@ -325,10 +325,12 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
                 checkedCategories={checkedCategories}
                 setCheckedCategories={setCheckedCategories}
               />
-            )}
+            )} */}
+
+            <View className="mr-6" />
 
             <CategoryComponent
-              index={2}
+              index={1}
               category={'조용히'}
               checkedCategories={checkedCategories}
               setCheckedCategories={setCheckedCategories}

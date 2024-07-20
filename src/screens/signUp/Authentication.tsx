@@ -22,12 +22,12 @@ const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
   const [signUpUser, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [name, setName] = useState<string>('');
-  const [gender, setGender] = useState<string>('');
+  const [gender, setGender] = useState<string>('남자');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
-  const [items, setItems] = useState([
-    { index: 1, item: '남자', select: false },
-    { index: 2, item: '여자', select: false },
-  ]);
+  // const [items, setItems] = useState([
+  //   { index: 1, item: '남자', select: false },
+  //   { index: 2, item: '여자', select: false },
+  // ]);
 
   const { mutateAsync: smsAuthentication, isPending: smsAuthenticationPending } =
     useSmsAuthentication(setErrorMessage);
@@ -79,7 +79,7 @@ const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
             </View>
 
             {/* 성별 선택란 */}
-            <View className="mt-4">
+            {/* <View className="mt-4">
               <RadioBoxComponent
                 title="성별"
                 value={gender}
@@ -87,7 +87,7 @@ const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
                 items={items}
                 setItems={setItems}
               />
-            </View>
+            </View> */}
 
             {/* 전화번호 */}
             <View className="mt-4">
@@ -114,7 +114,7 @@ const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
                 borderColor={'border-main'}
                 textColor={'white'}
                 text={'확인'}
-                disabled={!name || !gender || !phoneNumber}
+                disabled={!name || !phoneNumber}
                 onPress={toNext}
               />
             </View>

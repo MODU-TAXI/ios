@@ -1,5 +1,4 @@
 import { View, Pressable } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
 import { useSharedValue } from 'react-native-reanimated';
 import Animated, { runOnJS } from 'react-native-reanimated';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
