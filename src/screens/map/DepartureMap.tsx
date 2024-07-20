@@ -1,5 +1,5 @@
+import { useRecoilState } from 'recoil';
 import { Text, View, Pressable } from 'react-native';
-import { useRecoilState, useResetRecoilState } from 'recoil';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import React, { useRef, useMemo, useState, useEffect, useCallback } from 'react';
@@ -325,14 +325,14 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
                 className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-disabled2"
                 disabled={true}
               >
-                <Text className="font-semibold text-white">출발지로 설정</Text>
+                <Text className="font-semibold text-white">출발지로 설정할 수 없어요.</Text>
               </Pressable>
             ) : (
               <Pressable
                 className="mb-2 mt-4 flex h-[56px] w-full items-center justify-center rounded-full bg-main"
                 onPress={() => handleSearch()}
               >
-                <Text className="font-semibold text-white">출발지로 설정</Text>
+                <Text className="font-semibold text-white">출발지로 설정!</Text>
               </Pressable>
             )}
           </View>
