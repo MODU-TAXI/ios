@@ -35,9 +35,9 @@ const ParticipateMemberComponent: React.FC<ParticipateMemberComponentProps> = ({
         className="flex-row items-center justify-center py-3 "
         onPress={() => exceptUser(participateMember)}
       >
-        <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C]">
+        {/* <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C]">
           {price.toLocaleString('ko-KR')}원
-        </Text>
+        </Text> */}
 
         <MinusButton />
       </Pressable>

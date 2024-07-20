@@ -24,7 +24,9 @@ const SendMoneyScreen = ({ navigation, route }: SendMoneyScreenProps) => {
 
   const { roomPreview } = route.params;
 
-  const { payment } = useGetPaymentDetail(roomPreview.roomId);
+  const { payment, paymentMembers } = useGetPaymentDetail(roomPreview.roomId);
+
+  const paymentPerPerson = payment.totalCharge / paymentMembers.participantList.length;
 
   const { mutateAsync: completePayment, isPending: completePaymentPending } = useCompletePayment(
     roomPreview.roomId,
@@ -43,7 +45,7 @@ const SendMoneyScreen = ({ navigation, route }: SendMoneyScreenProps) => {
 
   // 토스로 돈보내기
   const sendMoneyWithToss = async () => {
-    await payWithToss(banks[payment.bank], payment.accountNumber, payment.totalCharge);
+    await payWithToss(banks[payment.bank], payment.accountNumber, paymentPerPerson);
   };
 
   const checkPayment = async () => {
@@ -74,7 +76,7 @@ const SendMoneyScreen = ({ navigation, route }: SendMoneyScreenProps) => {
             </Text>
             <Text className="text-xl font-semibold tracking-tight text-[#1F1F1F]">
               <Text className="text-xl font-semibold tracking-tight text-main">
-                {payment.totalCharge.toLocaleString('ko-KR')}원
+                {paymentPerPerson.toLocaleString('ko-KR')}원
               </Text>
               을 송금해주세요
             </Text>
