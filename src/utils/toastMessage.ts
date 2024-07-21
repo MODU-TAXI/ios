@@ -28,7 +28,7 @@ export const ErrorToastMessage = (message: string): void => {
     type: 'errorToast',
     props: { message: message },
     position: 'bottom',
-    bottomOffset: 30,
+    bottomOffset: 110,
     visibilityTime: 2000,
   });
 };

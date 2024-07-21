@@ -92,7 +92,9 @@ const CheckAccountScreen = ({ navigation, route }: CheckAccountScreenProps) => {
                 />
               </View>
 
-              <Pencil onPress={focusTextInput} />
+              <Pressable onPress={focusTextInput}>
+                <Pencil />
+              </Pressable>
             </View>
 
             <View className="mt-2 border-b-[1px] border-b-[#EFEFEF]" />
