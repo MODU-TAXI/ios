@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react';
 import { Text, View } from 'react-native';
+import React, { Suspense, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import HeaderComponent from '@components/Header';
@@ -24,15 +24,20 @@ const CheckPaymentComponent = ({ navigation, route }: CheckPaymentScreenProps) =
 
   const { roomPreview } = route.params;
 
-  const { payment, paymentMembers, getPaymentMembersRefetch, paymentMemberPending } =
-    useGetPaymentDetail(roomPreview.roomId);
+  const [resfresh, setRefresh] = useState<boolean>(false);
+
+  const { payment, paymentMembers, getPaymentMembersRefetch } = useGetPaymentDetail(
+    roomPreview.roomId,
+  );
 
   const paymentPerPerson = payment.totalCharge / paymentMembers.participantList.length;
 
   // 정산정보 새로고침
-  const onRefresh = React.useCallback(async () => {
+  const onRefresh = async () => {
+    setRefresh(true);
     await getPaymentMembersRefetch();
-  }, [getPaymentMembersRefetch]);
+    setRefresh(false);
+  };
 
   const completeCheck = async () => {
     navigation.goBack();
@@ -42,7 +47,7 @@ const CheckPaymentComponent = ({ navigation, route }: CheckPaymentScreenProps) =
     <SafeAreaView className="flex-1 bg-white">
       <HeaderComponent title="도착완료 정산하기" />
 
-      {paymentMemberPending && <TransparentLoadingComponent />}
+      {resfresh && <TransparentLoadingComponent />}
 
       <View className="flex-1 px-5 pt-8">
         {/* 글씨 */}

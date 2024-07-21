@@ -10,7 +10,7 @@ import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useCompletePayment, useGetPaymentDetail } from '@hooks/api/payment';
 
 import { payWithToss } from '@utils/pay';
-import { InfoToastMessage } from '@utils/toastMessage';
+import { InfoToastMessage, InfoTopToastMessage } from '@utils/toastMessage';
 
 import { banks } from '@type/entity/account';
 import { SendMoneyScreenProps } from '@type/param/loginStack';
@@ -35,7 +35,7 @@ const SendMoneyScreen = ({ navigation, route }: SendMoneyScreenProps) => {
   const copyAccount = () => {
     Clipboard.setString(banks[payment.bank] + ' ' + String(payment.accountNumber));
 
-    InfoToastMessage('계좌번호가 복사되었습니다.');
+    InfoTopToastMessage('계좌번호가 복사되었습니다.');
   };
 
   const completePay = async () => {
@@ -125,14 +125,16 @@ const SendMoneyScreen = ({ navigation, route }: SendMoneyScreenProps) => {
           </Pressable>
         </View>
 
-        <ButtonComponent
-          color={'bg-main'}
-          borderColor={'border-main'}
-          textColor={'white'}
-          text={'정산완료'}
-          disabled={false}
-          onPress={checkPayment}
-        />
+        <View className="mb-4">
+          <ButtonComponent
+            color={'bg-main'}
+            borderColor={'border-main'}
+            textColor={'white'}
+            text={'정산완료'}
+            disabled={false}
+            onPress={checkPayment}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

@@ -1,8 +1,8 @@
-import { Text, View } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { TextInput } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text, View, Keyboard, Pressable } from 'react-native';
+import { TextInput, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
@@ -58,7 +58,8 @@ const CheckAccountScreen = ({ navigation, route }: CheckAccountScreenProps) => {
       {registerAccountPending && <TransparentLoadingComponent />}
 
       <HeaderComponent title="도착완료 정산하기" />
-      <View className="flex-1 px-4 pt-8">
+
+      <Pressable className="flex-1 px-4 pt-8" onPress={() => Keyboard.dismiss()}>
         <View className="flex-1">
           {/* 글씨 */}
           <View className="ml-1 flex-col">
@@ -76,7 +77,7 @@ const CheckAccountScreen = ({ navigation, route }: CheckAccountScreenProps) => {
 
                 <TextInput
                   ref={textInputRef}
-                  className="max-w-4 max-h-24 text-sm "
+                  className="max-w-4 max-h-24 text-sm"
                   value={name}
                   onChangeText={setName}
                   placeholder="예금주명을 입력하세요"
@@ -86,7 +87,7 @@ const CheckAccountScreen = ({ navigation, route }: CheckAccountScreenProps) => {
                     fontSize: 16,
                     fontWeight: '500',
                     paddingTop: 0,
-                    paddingBottom: 0,
+                    paddingBottom: 1,
                   }}
                 />
               </View>
@@ -120,17 +121,17 @@ const CheckAccountScreen = ({ navigation, route }: CheckAccountScreenProps) => {
             </Text>
           </View>
         </View>
+      </Pressable>
 
-        <View className="mb-4 px-3">
-          <ButtonComponent
-            color={'bg-main'}
-            borderColor={'border-main'}
-            textColor={'white'}
-            text={'확인'}
-            disabled={false}
-            onPress={toNext}
-          />
-        </View>
+      <View className="mb-4 px-7">
+        <ButtonComponent
+          color={'bg-main'}
+          borderColor={'border-main'}
+          textColor={'white'}
+          text={'확인'}
+          disabled={false}
+          onPress={toNext}
+        />
       </View>
     </SafeAreaView>
   );

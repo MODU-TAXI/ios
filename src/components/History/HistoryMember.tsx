@@ -49,12 +49,6 @@ const HistoryMemberComponent: React.FC<HistoryMemberComponentProps> = ({
         ) : (
           <View className="flex-row items-center">
             <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C] ">미완료</Text>
-
-            <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C] ">|</Text>
-
-            <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C]">
-              {price.toLocaleString('ko-KR')}원
-            </Text>
           </View>
         )}
       </View>

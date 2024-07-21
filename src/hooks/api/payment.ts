@@ -45,7 +45,6 @@ export const useGetPaymentDetail = (roomId: number) => {
         payment: results[0].data,
         paymentMembers: results[1].data,
         getPaymentMembersRefetch: results[1].refetch,
-        paymentMemberPending: results[1].isPending,
       };
     },
   });

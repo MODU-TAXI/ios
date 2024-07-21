@@ -13,7 +13,7 @@ import { emailState, userInfoState } from '@recoil/recoil';
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useEmailConfirm, useEmailAuthentication } from '@hooks/api/member.mail';
 
-import { InfoToastMessage } from '@utils/toastMessage';
+import { InfoToastMessage, InfoTopToastMessage } from '@utils/toastMessage';
 
 import { PatchSchoolEmailAuthenticationScreenProps } from '@type/param/loginStack';
 
@@ -38,7 +38,7 @@ const PatchSchoolEmailAuthenticationScreen = ({
   // 인증번호 재전송
   const resendMail = async (): Promise<void> => {
     await emailAuthentication({ mailAddress: email });
-    InfoToastMessage('인증번호가 재전송 되었습니다');
+    InfoTopToastMessage('인증번호가 재전송 되었습니다');
     setTime(180); // 재전송시 timer 재설정
   };
 
