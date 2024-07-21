@@ -169,13 +169,6 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
                 selected={selectedTags.find((tag) => tag === "QUIET") !== undefined} 
               />
             </Pressable>
-
-            <Pressable onPress={() => handleRoomTagFilter("MANNER")}>
-              <FilterButtonComponent 
-                label="매너탑승" 
-                selected={selectedTags.find((tag) => tag === "MANNER") !== undefined} 
-              />
-            </Pressable>
           </View>
         </ScrollView>
       </View>
