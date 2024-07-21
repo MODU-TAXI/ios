@@ -35,7 +35,6 @@ const HistoryMemberComponent: React.FC<HistoryMemberComponentProps> = ({
         />
 
         <Text className="mr-1 font-normal text-base">{historyMember.nickName}</Text>
-        {/* <Text className="font-normal text-base">{historyMember.name}</Text> */}
 
         {historyMember.me && (
           <Text className="ml-1 text-lg font-medium tracking-tight  text-disabled2">(나)</Text>
@@ -46,22 +45,10 @@ const HistoryMemberComponent: React.FC<HistoryMemberComponentProps> = ({
         {historyMember.status === 'COMPLETE' ? (
           <View className="flex-row items-center">
             <Text className="mr-1 text-[16px]  tracking-tight text-main ">완료</Text>
-
-            <Text className="mr-1 text-[16px]  tracking-tight text-main ">|</Text>
-
-            <Text className="mr-1 text-[16px]  tracking-tight text-main">
-              {price.toLocaleString('ko-KR')}원
-            </Text>
           </View>
         ) : (
           <View className="flex-row items-center">
             <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C] ">미완료</Text>
-
-            <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C] ">|</Text>
-
-            <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C]">
-              {price.toLocaleString('ko-KR')}원
-            </Text>
           </View>
         )}
       </View>

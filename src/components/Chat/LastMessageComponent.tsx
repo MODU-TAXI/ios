@@ -26,7 +26,7 @@ const LastMessageComponent: React.FC<LastMessageComponentProps> = ({ lastMessage
         </Text>
 
         <Text className="max-w-[250px] text-[12px] font-medium tracking-tight  text-[#EBEBEB] ">
-          {lastMessage.content}
+          {lastMessage.messageType === 'CHAT' ? lastMessage.content : '사진'}
         </Text>
       </Pressable>
     </View>

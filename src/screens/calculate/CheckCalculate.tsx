@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { Text, View, Pressable } from 'react-native';
-import Clipboard from '@react-native-clipboard/clipboard';
+import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import HeaderComponent from '@components/Header';
@@ -16,12 +15,8 @@ import { calculateState } from '@recoil/recoil';
 import { usePayment } from '@hooks/api/payment';
 import { useDeleteAllNotifee } from '@hooks/notifee';
 
-import { InfoToastMessage } from '@utils/toastMessage';
-
 import { UserPreview } from '@type/entity/user';
 import { CheckCalculateScreenProps } from '@type/param/loginStack';
-
-import CopyButton from '@assets/images/Calculate/CopyButton.svg';
 
 const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) => {
   useDeleteAllNotifee();
@@ -79,26 +74,29 @@ const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) 
     navigation.navigate('CompleteCalculateScreen', { roomPreview: roomPreview });
   };
 
-  const copyAccount = () => {
-    Clipboard.setString(calculateData.account);
-
-    InfoToastMessage('계좌번호가 복사되었습니다.');
-  };
-
   return (
     <SafeAreaView className="flex-1 bg-white">
       {paymentPending && <TransparentLoadingComponent />}
 
       <HeaderComponent title="도착완료 정산하기" />
       <View className="flex-1 px-4 pt-8">
-        <View className="flex-1 px-3 ">
+        <View className="flex-1 pl-1">
           {/* 글씨 */}
-          <View className="flex-col">
+          <View className="flex-col ">
             <Text className="text-xl font-semibold tracking-tight text-[#1F1F1F]">
               정산 내용을 정확히
             </Text>
             <Text className="text-xl font-semibold tracking-tight text-[#1F1F1F]">
               확인해주세요!
+            </Text>
+          </View>
+
+          {/* 예금주 */}
+          <View className="mt-6 flex-row items-center justify-between">
+            <Text className="font-medium tracking-tight text-[#5D5D5D]">예금주</Text>
+
+            <Text className="text-[14px] font-medium tracking-tight text-[#1F1F1F]">
+              {calculateData.name}
             </Text>
           </View>
 
@@ -108,16 +106,12 @@ const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) 
 
             <View className="flex-row items-center">
               <GetBankComponent bank={calculateData.bank.identifier} />
-              <Text className="ml-2 mr-1 text-[16px] font-medium tracking-tight">
+              <Text className="ml-2 mr-1 text-[14px] font-medium tracking-tight text-[#1F1F1F]">
                 {calculateData.bank.name}
               </Text>
-              <Text className="text-[16px] font-medium tracking-tight">
+              <Text className="text-[14px] font-medium tracking-tight text-[#1F1F1F]">
                 {calculateData.account}
               </Text>
-
-              <Pressable onPress={copyAccount}>
-                <CopyButton />
-              </Pressable>
             </View>
           </View>
 
@@ -165,7 +159,7 @@ const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) 
               borderColor={'border-main'}
               textColor={'white'}
               text={'정산 요청하기'}
-              disabled={false}
+              disabled={participateMembers.length === 0}
               onPress={toCompleteCalculateScreen}
             />
           </View>

@@ -14,7 +14,7 @@ interface PartyComponentProps {
 
 const PartyComponent: React.FC<PartyComponentProps> = ({ roomDetail }) => {
   return (
-    <View className="mr-4 h-auto rounded-xl border-[1px] border-gray200 px-4 py-3">
+    <View className="mr-4 h-auto rounded-xl border-2 border-[#EBEBEB] px-4 py-3">
       {/* 출발 시각 */}
       <View className="w-[100px] flex-row items-center justify-center rounded-lg bg-[#EBFBF7] px-3 py-1">
         <Check className="mr-1" width={12} />
@@ -22,7 +22,7 @@ const PartyComponent: React.FC<PartyComponentProps> = ({ roomDetail }) => {
       </View>
 
       {/* 출발지, 도착지 */}
-      <View className="mt-2 h-4 flex-row items-center truncate bg-white ">
+      <View className="mt-2 h-4 flex-row items-center truncate bg-white text-[12px]">
         <ArriveFlag />
 
         <View>

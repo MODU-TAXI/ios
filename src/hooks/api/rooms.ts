@@ -52,7 +52,7 @@ import {
 } from '@server/responseTypes/room';
 
 import { translateCategory } from '@utils/room';
-import { InfoToastMessage } from '@utils/toastMessage';
+import { InfoToastMessage, InfoTopToastMessage } from '@utils/toastMessage';
 
 import { RoomList, RoomDetail, RoomIntegration, RoomCurrentCamera } from '@type/entity/room';
 
@@ -373,7 +373,7 @@ export const useJoinRoom = (
   return useMutation({
     mutationFn: () => joinRoom(roomId),
     onSuccess: () => {
-      InfoToastMessage('택시팟 참여 신청이 완료되었어요!');
+      InfoTopToastMessage('택시팟 참여 신청이 완료되었어요!');
     },
     onError: (error: any) => {
       mutateErrorHandler(error, setLoggedIn);
@@ -429,7 +429,7 @@ export const useExitWaitingRoom = (roomId: number) => {
   return useMutation({
     mutationFn: () => exitWaitingRoom(roomId),
     onSuccess: () => {
-      InfoToastMessage('택시팟 참여 신청이 취소되었어요!');
+      InfoTopToastMessage('택시팟 참여 신청이 취소되었어요!');
     },
     onError: (error: any) => {
       mutateErrorHandler(error, setLoggedIn);

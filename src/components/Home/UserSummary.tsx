@@ -33,7 +33,7 @@ const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({
         <Text className="mb-3 font-semibold text-base text-gray900">이용내역</Text>
         <Pressable
           onPress={toSummaryScreen}
-          className="flex h-20 flex-row items-center justify-start truncate rounded-xl border border-gray200 px-3"
+          className="flex h-20 flex-row items-center justify-start truncate rounded-xl border-2 border-[#EBEBEB] px-3"
         >
           <Receipt width={32} />
           <View className="ml-1 flex truncate">
@@ -54,7 +54,7 @@ const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({
       {/** 나의 매칭률 */}
       <View className="w-1/2 pl-2">
         <Text className="mb-3 font-semibold text-base text-gray900">나의 매칭률</Text>
-        <View className="flex h-20 flex-row items-center justify-start truncate rounded-xl border border-gray200 px-3">
+        <View className="flex h-20 flex-row items-center justify-start truncate rounded-xl border-2 border-[#EBEBEB] px-3">
           <Check width={32} />
           <View className="mx-1 flex">
             <Text className="text-xs text-gray700">{userInfo.name}님의 매칭횟수</Text>

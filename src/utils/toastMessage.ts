@@ -1,5 +1,16 @@
 import Toast from 'react-native-toast-message';
 
+// 알림용 상단 토스트 메세지
+export const InfoTopToastMessage = (content: string): void => {
+  return Toast.show({
+    type: 'infoToast',
+    props: { content: content },
+    position: 'bottom',
+    bottomOffset: 110,
+    visibilityTime: 2000,
+  });
+};
+
 // 알림용 토스트 메세지
 export const InfoToastMessage = (content: string): void => {
   return Toast.show({
@@ -17,7 +28,7 @@ export const ErrorToastMessage = (message: string): void => {
     type: 'errorToast',
     props: { message: message },
     position: 'bottom',
-    bottomOffset: 30,
+    bottomOffset: 110,
     visibilityTime: 2000,
   });
 };

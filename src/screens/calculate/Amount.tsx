@@ -52,9 +52,9 @@ const AmountScreen = ({ navigation, route }: AmountScreenProps) => {
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1 px-4 pt-8">
-          <View className="flex-1 px-3">
+          <View className="flex-1">
             {/* 글씨 */}
-            <View className="flex-col">
+            <View className="ml-1 flex-col">
               <Text className="text-xl font-semibold tracking-tight">목적지 도착 완료!</Text>
               <Text className="text-xl font-semibold tracking-tight">
                 총 얼마가 나왔는지 알려주세요

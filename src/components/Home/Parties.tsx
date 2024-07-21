@@ -34,7 +34,7 @@ const PartiesComponent: React.FC<PartiesComponentProps> = ({ navigation, rooms }
           ))}
         </ScrollView>
       ) : (
-        <View className="mt-3 h-[128px] flex-col items-center justify-center rounded-xl border-[1px] border-[#D7D7D7]">
+        <View className="mt-3 h-[128px] flex-col items-center justify-center rounded-xl border-2 border-[#EBEBEB]">
           <SadFace />
           <Text className="mt-2 text-[12px] font-medium tracking-tight text-[#D7D7D7]">
             실시간 택시팟이 없어요!

@@ -76,23 +76,17 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const sendMessage = (inputMessage: string, type: string) => {
     if (!inputMessage.trim()) return;
 
-    try {
-      if (stompClient.current.connected) {
-        stompClient.current.publish({
-          destination: '/pub/chat',
-          body: JSON.stringify({
-            roomId: roomId,
-            memberId: myInfo.id,
-            type: type,
-            content: inputMessage,
-            imageUrl: myInfo.imageUrl,
-          }),
-        });
-      } else {
-        // 여기다 저장해놨다가 connect되면 한번에 send?
-      }
-    } catch (error) {
-      console.log(error);
+    if (stompClient.current.connected) {
+      stompClient.current.publish({
+        destination: '/pub/chat',
+        body: JSON.stringify({
+          roomId: roomId,
+          memberId: myInfo.id,
+          type: type,
+          content: inputMessage,
+          imageUrl: myInfo.imageUrl,
+        }),
+      });
     }
   };
 
@@ -130,7 +124,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const disConnect = () => {
     if (stompClient.current.activate) {
       stompClient.current.deactivate();
-      console.log('Socket 연결 해제!');
     }
   };
 
@@ -186,9 +179,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         connectHeaders: {
           token: accessToken,
         },
-        debug: function (str) {
-          console.log(str);
-        },
         reconnectDelay: 500,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
@@ -206,7 +196,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
       stompClient.current.onStompError = async (error: any) => {
         const stompError = new TextDecoder('utf-8').decode(new Uint8Array(error._binaryBody));
-        console.log('stompError:', stompError);
 
         // 존재하지 않은 방인 경우
         if (stompError == 'SOCK_ROOM_003') {
@@ -257,7 +246,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     const subscription = AppState.addEventListener('change', async (nextAppState) => {
       if (appState.match(/inactive|background/) && nextAppState === 'active') {
         setRefresh(true);
-        await Promise.all([clearMessages(), messagesRefetch(), connect()]);
+        await Promise.all([clearMessages(), messagesRefetch(), roomPreviewRefetch(), connect()]);
         setRefresh(false);
       }
       setAppState(nextAppState);
@@ -339,10 +328,18 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     }
   };
 
-  // 유저기준 - 정산하기 페이지로 이동
+  // 정산하기 페이지로 이동
   const toPaymentScreen = () => {
     if (roomPreview && !readonly) {
-      navigation.navigate('CheckPaymentScreen', { roomPreview: roomPreview });
+      // 방장인 경우 정산형황으로 이동
+      if (myRoom) {
+        navigation.navigate('CheckPaymentScreen', { roomPreview: roomPreview });
+      }
+
+      // 파티원인 경우 정산하기로 이동
+      else {
+        navigation.navigate('SendMoneyScreen', { roomPreview: roomPreview });
+      }
     }
   };
 

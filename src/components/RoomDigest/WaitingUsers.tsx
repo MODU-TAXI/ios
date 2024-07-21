@@ -9,7 +9,7 @@ import { RoomWaitingMember } from '@type/entity/room';
 interface WaitingUsersComponentProps {
   myRoom: boolean;
   roomWaitingMembers: RoomWaitingMember[];
-  applyJoinRoom: (memberId: number) => Promise<void>;
+  applyJoinRoom: (waitingMember: RoomWaitingMember) => Promise<void>;
 }
 
 const WaitingUsersComponent: React.FC<WaitingUsersComponentProps> = ({

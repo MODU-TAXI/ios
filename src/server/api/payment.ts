@@ -1,8 +1,4 @@
-import {
-  GetAxiosInstance,
-  PostAxiosInstance,
-  PatchAxiosInstance,
-} from '@axios/axios.method';
+import { GetAxiosInstance, PostAxiosInstance, PatchAxiosInstance } from '@axios/axios.method';
 
 import { PaymentRequest } from '@server/requestTypes/payment';
 import {
@@ -30,6 +26,13 @@ export const payment = async (data: PaymentRequest): Promise<PaymentResponse> =>
 
 // [정산 멤버 현황 조회] /api/payment-members
 export const getPaymentMembers = async (roomId: number): Promise<GetPaymentMembersResponse> => {
+  // 너무 짤은 관계로 1초 딜레이
+  await new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 1000);
+  });
+
   const response = await GetAxiosInstance<GetPaymentMembersResponse>(
     `/api/payment-members?roomId=${roomId}`,
   );

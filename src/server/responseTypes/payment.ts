@@ -2,6 +2,7 @@ import { PaymentUser } from '@type/entity/user';
 
 // [정산 정보 조회] /api/payment-rooms
 export interface GetPaymentResponse {
+  ownerName: string;
   accountNumber: string;
   bank: string;
   totalCharge: number;

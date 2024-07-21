@@ -350,7 +350,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
 
       {/** 방 미리보기 */}
       {selectedRoom && (
-        <View className={`${isOldiPhone && "-translate-y-8"} absolute top-[68%] w-full`}>
+        <View className={`${isOldiPhone && '-translate-y-8'} absolute top-[68%] w-full`}>
           <Pressable onPress={() => toRoomDetailScreen(selectedRoom.roomId)}>
             <SelectedRoomDigestComponent roomId={selectedRoom.roomId} roomList={rooms} />
           </Pressable>

@@ -6,6 +6,8 @@ export type User = {
   phoneNumber: string;
   email: string;
   imageUrl: string;
+  matchingCount: number;
+  blocked: boolean;
 };
 
 export type UserPreview = {
@@ -34,7 +36,7 @@ export type UserInfo = {
   imageUrl: string;
   matchingCount: number;
   blocked: boolean;
-}
+};
 
 export type MemberInfo = {
   id: number;
@@ -42,4 +44,4 @@ export type MemberInfo = {
   matchingCount: number;
   imageUrl: string;
   certified: boolean;
-}
+};

@@ -32,23 +32,23 @@ const PaymentMemberComponent: React.FC<PaymentMemberComponentProps> = ({
       <View className="flex-row items-center justify-center">
         {paymentMember.status === 'COMPLETE' ? (
           <View className="flex-row items-center">
-            <Text className="mr-1 text-[16px]  tracking-tight text-main ">완료</Text>
-
+            <Text className="text-[16px]  tracking-tight text-main ">완료</Text>
+            {/* 
             <Text className="mr-1 text-[16px]  tracking-tight text-main ">|</Text>
 
             <Text className="mr-1 text-[16px]  tracking-tight text-main">
               {price.toLocaleString('ko-KR')}원
-            </Text>
+            </Text> */}
           </View>
         ) : (
           <View className="flex-row items-center">
-            <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C] ">미완료</Text>
+            <Text className="text-[16px]  tracking-tight text-[#9C9C9C] ">미완료</Text>
 
-            <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C] ">|</Text>
+            {/* <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C] ">|</Text>
 
             <Text className="mr-1 text-[16px]  tracking-tight text-[#9C9C9C]">
               {price.toLocaleString('ko-KR')}원
-            </Text>
+            </Text> */}
           </View>
         )}
       </View>

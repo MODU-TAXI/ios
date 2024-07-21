@@ -30,15 +30,21 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
 }) => {
   const isOldiPhone = useIsOldiPhone();
 
+  const blocked = userInfo.blocked;
+
   const roomIn = roomId > 0;
 
-  const topStyle = roomIn
+  const topStyle = blocked
     ? isOldiPhone
-      ? 'flex-col bg-main px-4 pt-2 rounded-b-[18px] pb-[18px] shadow-md'
-      : 'flex-col bg-main pt-10 px-4 rounded-b-[18px] pb-[18px] shadow-md'
-    : isOldiPhone
-      ? 'flex-col bg-[#4F4F4F] pt-2 px-4 rounded-b-[18px] pb-[18px] shadow-md'
-      : 'flex-col bg-[#4F4F4F] pt-10 px-4 rounded-b-[18px] pb-[18px] shadow-md';
+      ? 'flex-col bg-[#F34343] px-4 pt-2 rounded-b-[18px] pb-[18px] shadow-md'
+      : 'flex-col bg-[#F34343] pt-10 px-4 rounded-b-[18px] pb-[18px] shadow-md'
+    : roomIn
+      ? isOldiPhone
+        ? 'flex-col bg-main px-4 pt-2 rounded-b-[18px] pb-[18px] shadow-md'
+        : 'flex-col bg-main pt-10 px-4 rounded-b-[18px] pb-[18px] shadow-md'
+      : isOldiPhone
+        ? 'flex-col bg-[#4F4F4F] pt-2 px-4 rounded-b-[18px] pb-[18px] shadow-md'
+        : 'flex-col bg-[#4F4F4F] pt-10 px-4 rounded-b-[18px] pb-[18px] shadow-md';
 
   const toSearchScreen = () => {
     navigation.navigate('HomeSearchScreen', { toMainMap: toMapScreen });
@@ -46,14 +52,14 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
 
   return (
     <View className={topStyle}>
-      <View className="mt-6 flex-row items-center justify-between">
+      <View className="mt-3 flex-row items-center justify-between">
         <View>
           <Logo />
         </View>
 
-        <Pressable onPress={toAlarmScreen} className={alarmsCount ? `mr-[6px]` : `mr-1`}>
+        <Pressable onPress={toAlarmScreen}>
           {alarmsCount && alarmsCount > 0 ? (
-            <View className="absolute bottom-3 left-3 z-10 h-[18px] w-[18px] items-center justify-center rounded-full bg-[#FF4949]">
+            <View className="absolute right-1 top-0 z-10 h-[18px]   w-[18px] items-center justify-center rounded-full bg-[#FF4949]">
               <Text className="text-[12px] font-medium tracking-tight text-white">
                 {alarmsCount}
               </Text>
@@ -65,8 +71,13 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
       </View>
 
       {/* 이름 */}
-      <View className="mt-5 flex-row px-1">
-        {roomIn ? (
+      <View className={isOldiPhone ? `mt-2 flex-row` : `mt-5 flex-row`}>
+        {blocked ? (
+          <View className="flex-row items-center justify-center">
+            <Text className="text-[18px] font-semibold text-white">{userInfo.name}님,</Text>
+            <Text className="text-[18px] font-medium text-white">현재 이용정지 상태입니다.</Text>
+          </View>
+        ) : roomIn ? (
           <View className="flex-row items-center justify-center">
             <Text className="text-[18px] font-semibold text-white">{userInfo.name}님, </Text>
             <Text className="text-[18px] font-medium text-white">택시 이용중이에요!</Text>

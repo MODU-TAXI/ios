@@ -1,6 +1,14 @@
 import { atom } from 'recoil';
 
-import { Arrival, UserInfo, Departure, Calculate, SignUpUser, MessageBody, SearchParam } from '@recoil/type';
+import {
+  Arrival,
+  UserInfo,
+  Departure,
+  Calculate,
+  SignUpUser,
+  MessageBody,
+  SearchParam,
+} from '@recoil/type';
 
 export const signUpUserState = atom<SignUpUser>({
   key: 'tempUser',
@@ -94,12 +102,13 @@ export const searchParamState = atom<SearchParam>({
     longitude: 126.656496,
     latitude: 37.451062,
   },
-})
+});
 
 // 정산 관련
 export const calculateState = atom<Calculate>({
   key: 'calculate',
   default: {
+    name: '',
     amount: '',
     account: '',
     accountId: 0,

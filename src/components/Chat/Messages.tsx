@@ -119,7 +119,7 @@ const MessagesComponent: React.FC<MessagesComponentProps> = ({
         <ScrollBottomButton onPress={toBottom} className="absolute bottom-0 right-3 p-4" />
       )}
 
-      {messages.length > 0 && lastMessageVisible && readonly && (
+      {messages.length > 0 && lastMessageVisible && !readonly && (
         <LastMessageComponent toBottom={toBottom} lastMessage={messages[0]} />
       )}
     </View>

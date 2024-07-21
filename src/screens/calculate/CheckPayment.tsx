@@ -1,7 +1,6 @@
+import { Text, View } from 'react-native';
 import React, { Suspense, useState } from 'react';
-import Clipboard from '@react-native-clipboard/clipboard';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, View, Alert, Pressable, ScrollView, RefreshControl } from 'react-native';
 
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
@@ -13,85 +12,63 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
-import { useCompletePayment, useGetPaymentDetail } from '@hooks/api/payment';
-
-import { vibration } from '@utils/effect';
-import { InfoToastMessage } from '@utils/toastMessage';
+import { useGetPaymentDetail } from '@hooks/api/payment';
 
 import { banks } from '@type/entity/account';
 import { CheckPaymentScreenProps } from '@type/param/loginStack';
 
-import CopyButton from '@assets/images/Calculate/CopyButton.svg';
+import RefreshButton from '@assets/images/Calculate/RefreshButton.svg';
 
 const CheckPaymentComponent = ({ navigation, route }: CheckPaymentScreenProps) => {
   useDeleteAllNotifee();
 
   const { roomPreview } = route.params;
 
-  const [refreshing, setRefreshing] = useState(false); // 새로고침시 필요한 변수
+  const [resfresh, setRefresh] = useState<boolean>(false);
 
   const { payment, paymentMembers, getPaymentMembersRefetch } = useGetPaymentDetail(
     roomPreview.roomId,
   );
 
-  const { mutateAsync: completePayment, isPending: completePaymentPending } = useCompletePayment(
-    roomPreview.roomId,
-  );
-
   const paymentPerPerson = payment.totalCharge / paymentMembers.participantList.length;
 
-  const copyAccount = () => {
-    Clipboard.setString(banks[payment.bank] + ' ' + String(payment.accountNumber));
-
-    InfoToastMessage('계좌번호가 복사되었습니다.');
-  };
-
   // 정산정보 새로고침
-  const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
-
-    vibration();
-
+  const onRefresh = async () => {
+    setRefresh(true);
     await getPaymentMembersRefetch();
-
-    setRefreshing(false);
-  }, [getPaymentMembersRefetch]);
-
-  const completePay = async () => {
-    await completePayment();
-    navigation.goBack();
+    setRefresh(false);
   };
 
-  const checkPayment = async () => {
-    Alert.alert('알림', '정말 정산을 완료했나요?', [
-      {
-        text: '다시 할게요',
-        style: 'cancel',
-      },
-
-      {
-        text: '정산 했어요',
-
-        onPress: completePay,
-      },
-    ]);
+  const completeCheck = async () => {
+    navigation.goBack();
   };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <HeaderComponent title="도착완료 정산하기" />
 
-      {completePaymentPending && <TransparentLoadingComponent />}
+      {resfresh && <TransparentLoadingComponent />}
 
-      <ScrollView
-        className="px-7 pt-8"
-        showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      >
+      <View className="flex-1 px-5 pt-8">
         {/* 글씨 */}
-        <View className="flex-col">
-          <Text className="text-xl font-semibold tracking-tight text-[#1F1F1F]">정산 현황을</Text>
-          <Text className="text-xl font-semibold tracking-tight text-[#1F1F1F]">확인해주세요!</Text>
+        <View className="flex-row items-center justify-between">
+          <View className="flex-col">
+            <Text className="text-xl font-semibold tracking-tight text-[#1F1F1F]">정산 현황을</Text>
+            <Text className="text-xl font-semibold tracking-tight text-[#1F1F1F]">
+              확인해주세요!
+            </Text>
+          </View>
+
+          <RefreshButton onPress={onRefresh} />
+        </View>
+
+        {/* 예금주 */}
+        <View className="mt-6 flex-row items-center justify-between">
+          <Text className="font-medium tracking-tight text-[#5D5D5D]">예금주</Text>
+
+          <Text className="text-[14px] font-medium tracking-tight text-[#1F1F1F]">
+            {payment.ownerName}
+          </Text>
         </View>
 
         {/* 계좌번호 */}
@@ -100,14 +77,12 @@ const CheckPaymentComponent = ({ navigation, route }: CheckPaymentScreenProps) =
 
           <View className="flex-row items-center">
             <GetBankComponent bank={payment.bank} />
-            <Text className="ml-2 mr-1 text-[16px] font-medium tracking-tight">
+            <Text className="ml-2 mr-1 text-[14px] font-medium tracking-tight text-[#1F1F1F]">
               {banks[payment.bank]}
             </Text>
-            <Text className="text-[16px] font-medium tracking-tight">{payment.accountNumber}</Text>
-
-            <Pressable onPress={copyAccount}>
-              <CopyButton />
-            </Pressable>
+            <Text className="text-[14px] font-medium tracking-tight text-[#1F1F1F]">
+              {payment.accountNumber}
+            </Text>
           </View>
         </View>
 
@@ -136,7 +111,7 @@ const CheckPaymentComponent = ({ navigation, route }: CheckPaymentScreenProps) =
           paymentMembers={paymentMembers.participantList}
           price={paymentPerPerson}
         />
-      </ScrollView>
+      </View>
 
       <View className="mb-4 px-7">
         <ButtonComponent
@@ -145,7 +120,7 @@ const CheckPaymentComponent = ({ navigation, route }: CheckPaymentScreenProps) =
           textColor={'white'}
           text={'확인'}
           disabled={false}
-          onPress={checkPayment}
+          onPress={completeCheck}
         />
       </View>
     </SafeAreaView>

@@ -14,7 +14,7 @@ import { usePatchMember } from '@hooks/api/member';
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useSmsChangeConfirm, useSmsChangeAuthentication } from '@hooks/api/member.sms';
 
-import { InfoToastMessage } from '@utils/toastMessage';
+import { InfoToastMessage, InfoTopToastMessage } from '@utils/toastMessage';
 
 import { PatchUserInfoAuthenticationScreenProps } from '@type/param/loginStack';
 
@@ -82,7 +82,7 @@ const PatchUserInfoAuthenticationScreen = ({
   const resendCode = async () => {
     await smsChangeAuthentication({ phoneNumber: signUpUser.phoneNumber });
 
-    InfoToastMessage('인증번호가 재전송 되었습니다');
+    InfoTopToastMessage('인증번호가 재전송 되었습니다');
     setTime(300); // 재전송시 timer 재설정
   };
 

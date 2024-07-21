@@ -9,7 +9,7 @@ import { RoomWaitingMember } from '@type/entity/room';
 interface WaitingUserComponentProps {
   myRoom: boolean;
   roomWaitingMember: RoomWaitingMember;
-  applyJoinRoom: (memberId: number) => Promise<void>;
+  applyJoinRoom: (waitingMember: RoomWaitingMember) => Promise<void>;
 }
 const WaitingUserComponent: React.FC<WaitingUserComponentProps> = ({
   myRoom,
@@ -30,7 +30,7 @@ const WaitingUserComponent: React.FC<WaitingUserComponentProps> = ({
       {myRoom ? (
         <Pressable
           className="rounded-3xl bg-sub100 px-3 py-2"
-          onPress={() => applyJoinRoom(roomWaitingMember.memberId)}
+          onPress={() => applyJoinRoom(roomWaitingMember)}
         >
           <Text className="text-[12px] font-medium text-main">참여수락</Text>
         </Pressable>
