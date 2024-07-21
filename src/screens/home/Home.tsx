@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useState, Suspense } from 'react';
-import { View, RefreshControl } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, Linking, Pressable, RefreshControl } from 'react-native';
 
 import PartiesComponent from '@components/Home/Parties';
 import MyPartyComponent from '@components/Home/MyParty';
@@ -121,6 +121,14 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         roomId={socketRoomId}
         navigation={navigation}
       />
+
+      <Pressable
+        onPress={async () => {
+          await Linking.openURL(`mo111dutaxi://room/111`);
+        }}
+      >
+        <Text>dd</Text>
+      </Pressable>
 
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {/* 지도, 택시팟 */}

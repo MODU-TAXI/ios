@@ -6,7 +6,7 @@ export const InfoTopToastMessage = (content: string): void => {
     type: 'infoToast',
     props: { content: content },
     position: 'bottom',
-    bottomOffset: 120,
+    bottomOffset: 110,
     visibilityTime: 2000,
   });
 };

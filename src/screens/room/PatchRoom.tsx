@@ -88,9 +88,6 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
   // 카테고리 선택했던 것들 활성화
   useEffect(() => {
     const origin_categories = ['학생인증', '조용히'];
-    // if (userInfo && userInfo.gender === 'MALE') {
-    //   origin_categories[1] = '남자만';
-    // }
 
     const selected_indexs = roomDetail.roomCategories.map((roomCategory) => {
       return origin_categories.indexOf(roomCategory.trim());
@@ -103,18 +100,18 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
     setCheckedCategories(new_categories);
   }, []);
 
-    /** 출발, 도착지 초기화 */
-    const resetRecoilValue = useCallback(() => {
-      setDeparture({
-        name: '',
-        latitude: 0,
-        longitude: 0,
-      });
-      setArrival({
-        name: '',
-        spotId: 0,
-      });
-    }, [setDeparture, setArrival]);
+  /** 출발, 도착지 초기화 */
+  const resetRecoilValue = useCallback(() => {
+    setDeparture({
+      name: '',
+      latitude: 0,
+      longitude: 0,
+    });
+    setArrival({
+      name: '',
+      spotId: 0,
+    });
+  }, [setDeparture, setArrival]);
 
   // 파티 수정
   const patchMatch = async () => {
@@ -123,9 +120,6 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
     }
 
     const categories = ['STUDENT_CERTIFICATION', 'QUIET'];
-    // if (userInfo && userInfo.gender === 'MALE') {
-    //   categories[1] = 'ONLY_MAN';
-    // }
 
     const filteredCategories = categories.filter((_, index) => checkedCategories[index]);
 
@@ -294,7 +288,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
         <View className="px-2 py-8">
           <DescriptionComponent description="카테고리를 선택해주세요" />
 
-          <View className="mt-4 flex-row justify-between">
+          <View className="mt-4 flex-row">
             {userInfo.email ? (
               <CategoryComponent
                 index={0}
@@ -311,22 +305,6 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
                 <Text className="text-sm font-normal text-gray700">학생인증</Text>
               </Pressable>
             )}
-
-            {/* {userInfo.gender === 'MALE' ? (
-              <CategoryComponent
-                index={1}
-                category={'남자만'}
-                checkedCategories={checkedCategories}
-                setCheckedCategories={setCheckedCategories}
-              />
-            ) : (
-              <CategoryComponent
-                index={1}
-                category={'여자만'}
-                checkedCategories={checkedCategories}
-                setCheckedCategories={setCheckedCategories}
-              />
-            )} */}
 
             <View className="mr-6" />
 

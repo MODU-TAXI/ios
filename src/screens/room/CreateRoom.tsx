@@ -274,22 +274,6 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
               </Pressable>
             )}
 
-            {/* {userInfo.gender === 'MALE' ? (
-              <CategoryComponent
-                index={1}
-                category={'남자만'}
-                checkedCategories={checkedCategories}
-                setCheckedCategories={setCheckedCategories}
-              />
-            ) : (
-              <CategoryComponent
-                index={1}
-                category={'여자만'}
-                checkedCategories={checkedCategories}
-                setCheckedCategories={setCheckedCategories}
-              />
-            )} */}
-
             <View className="mr-6" />
 
             <CategoryComponent
