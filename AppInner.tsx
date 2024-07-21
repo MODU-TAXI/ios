@@ -6,19 +6,11 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import InquiryScreen from 'src/screens/my/Inquiry';
-import ManageAlarmScreen from 'src/screens/my/ManageAlarm';
-import SendMoneyScreen from 'src/screens/calculate/SendMoney';
-import ManageAccountScreen from 'src/screens/my/ManageAccount';
-import WithdrawLastScreen from 'src/screens/withdraw/WithdrawLast';
-import WithdrawCheckScreen from 'src/screens/withdraw/WithdrawCheck';
-import WithdrawSurveyScreen from 'src/screens/withdraw/WithdrawSurvey';
-import WithdrawCompleteScreen from 'src/screens/withdraw/WithdrawComplete';
-
 import MainScreen from './src/screens/main/Main';
 import HomeScreen from './src/screens/home/Home';
 import MyPageScreen from './src/screens/my/MyPage';
 import AlarmScreen from './src/screens/alarm/alarm';
+import InquiryScreen from './src/screens/my/Inquiry';
 import MainMapScreen from './src/screens/map/MainMap';
 import SignInScreen from './src/screens/signIn/SignIn';
 import ChatRoomScreen from './src/screens/chat/ChatRoom';
@@ -27,28 +19,35 @@ import AmountScreen from './src/screens/calculate/Amount';
 import PatchRoomScreen from './src/screens/room/PatchRoom';
 import ArrivalMapScreen from './src/screens/map/ArrivalMap';
 import AccountScreen from './src/screens/calculate/Account';
+import ManageAlarmScreen from './src/screens/my/ManageAlarm';
 import CreateRoomScreen from './src/screens/room/CreateRoom';
 import RoomDetailScreen from './src/screens/room/RoomDetail';
 import SearchScreen from './src/screens/search/MainMapSearch';
 import HomeSearchScreen from './src/screens/search/HomeSearch';
+import SendMoneyScreen from './src/screens/calculate/SendMoney';
 import DepartureMapScreen from './src/screens/map/DepartureMap';
+import ManageAccountScreen from './src/screens/my/ManageAccount';
 import SurveyFirstScreen from './src/screens/signUp/SurveyFirst';
 import PatchNicknameScreen from './src/screens/my/PatchNickname';
 import PatchUserInfoScreen from './src/screens/my/PatchUserInfo';
 import SurveySecondScreen from './src/screens/signUp/SurveySecond';
+import WithdrawLastScreen from './src/screens/withdraw/WithdrawLast';
 import ArrivalSearchScreen from './src/screens/search/ArrivalSearch';
 import CheckPaymentScreen from './src/screens/calculate/CheckPayment';
 import HistoryDetailScreen from './src/screens/history/HistoryDetail';
 import CheckAccountScreen from './src/screens/calculate/CheckAccount';
 import DeclarationScreen from './src/screens/declaration/Declaration';
+import WithdrawCheckScreen from './src/screens/withdraw/WithdrawCheck';
 import AuthenticationScreen from './src/screens/signUp/Authentication';
 import CompleteSignUpScreen from './src/screens/signUp/CompleteSignUp';
 import PatchSchoolEmailScreen from './src/screens/my/PatchSchoolEmail';
+import WithdrawSurveyScreen from './src/screens/withdraw/WithdrawSurvey';
 import DepartureSearchScreen from './src/screens/search/DepartureSearch';
 import CheckPermissionScreen from './src/screens/signUp/CheckPermission';
 import CheckCalculateScreen from './src/screens/calculate/CheckCalculate';
 import CheckDepartureScreen from './src/screens/calculate/CheckDeparture';
 import RegisterNicknameScreen from './src/screens/signUp/RegisterNickname';
+import WithdrawCompleteScreen from './src/screens/withdraw/WithdrawComplete';
 import CompleteCalculateScreen from './src/screens/calculate/CompeleteCalculate';
 import SchoolAuthenticationScreen from './src/screens/signUp/SchoolAuthentication';
 import EmailAuthenticationCodeScreen from './src/screens/signUp/EmailAuthenticationCode';
@@ -165,7 +164,6 @@ function AppInner() {
 
             {/* 신고 Screen */}
             <LogInStack.Screen name="DeclarationScreen" component={DeclarationScreen} />
-
           </LogInStack.Navigator>
         </Animated.View>
       ) : (
