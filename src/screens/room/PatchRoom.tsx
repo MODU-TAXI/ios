@@ -178,17 +178,16 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
           <DescriptionComponent description="출발지, 도착지를 생성해주세요" />
 
           <View className="mt-6">
-            <View>
+            <Pressable onPress={handleDeparture}>
               <View className="flex-row items-center">
                 <StartCircle />
 
                 <Text className="ml-4 text-sm font-normal text-gray700">출발지</Text>
               </View>
-            </View>
+            
+              <View className="my-2 ml-[6px] flex-row">
+                <View className="h-[46px] w-px bg-main" />
 
-            <View className="my-2 ml-[6px] flex-row">
-              <View className="h-[46px] w-px bg-main" />
-              <Pressable onPress={handleDeparture}>
                 {departure.name === '' ? (
                   <Text className="ml-6 text-[16px] font-semibold text-gray900 ">
                     {roomDetail.departureName}
@@ -198,27 +197,28 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
                     {departure.name}
                   </Text>
                 )}
-              </Pressable>
-            </View>
 
-            <View>
+              </View>
+            </Pressable>
+
+            <Pressable onPress={handleArrival}>
               <View className="flex-row items-center">
-                <EndCircle width={12} />
+                <EndCircle width={14} />
                 <Text className="ml-4 text-sm font-normal text-gray700">도착지</Text>
               </View>
 
-              <Pressable onPress={handleArrival}>
+              <View>
                 {arrival.name === '' ? (
-                  <Text className="ml-[31px] mt-2 text-[16px] font-semibold text-gray900 ">
+                  <Text className="ml-7 mt-2 text-[16px] font-semibold text-gray900 ">
                     {roomDetail.arrivalName}
                   </Text>
                 ) : (
-                  <Text className="ml-[31px] mt-2 text-[16px] font-semibold text-gray900 ">
+                  <Text className="ml-7 mt-2 text-[16px] font-semibold text-gray900 ">
                     {arrival.name}
                   </Text>
                 )}
-              </Pressable>
-            </View>
+              </View>
+            </Pressable>
           </View>
         </View>
 
