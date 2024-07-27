@@ -2,6 +2,7 @@ import React from 'react';
 import FastImage from 'react-native-fast-image';
 import { View, Text, Pressable } from 'react-native';
 
+import { UserPreview } from '@type/entity/user';
 import { RoomWaitingMember } from '@type/entity/room';
 
 // import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
@@ -10,22 +11,27 @@ interface WaitingUserComponentProps {
   myRoom: boolean;
   roomWaitingMember: RoomWaitingMember;
   applyJoinRoom: (waitingMember: RoomWaitingMember) => Promise<void>;
+  openUserInfoModal: (user: UserPreview) => void;
 }
 const WaitingUserComponent: React.FC<WaitingUserComponentProps> = ({
   myRoom,
   roomWaitingMember,
   applyJoinRoom,
+  openUserInfoModal,
 }) => {
   return (
     <View className="mt-4 flex-row items-center justify-between">
-      <View className="flex-row items-center">
+      <Pressable
+        className="flex-row items-center"
+        onPress={() => openUserInfoModal(roomWaitingMember)}
+      >
         <FastImage
           source={{ uri: roomWaitingMember.imageUrl }}
           className="mr-2 h-[24px] w-[24px] rounded-full"
         />
 
         <Text className="mr-1 font-normal text-base">{roomWaitingMember.nickname}</Text>
-      </View>
+      </Pressable>
 
       {myRoom ? (
         <Pressable

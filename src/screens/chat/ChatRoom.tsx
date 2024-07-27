@@ -68,7 +68,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [userInfo, setUserInfo] = useState<UserPreview>();
   const [accessToken, setNewAccessToken] = useAccessToken(); // socket을 위한 token hook
   const [refresh, setRefresh] = useState(false);
-  const [isFirstRender, setIsFirstRender] = useState(true);
   const myInfo = useRecoilValue(userInfoState);
   const myRoom = readonly ? false : roomPreview!.managerId == myInfo.id;
 
@@ -134,8 +133,8 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   // 방에서 내쫓기
   const expelRoom = () => {
     Alert.alert(
-      '에러',
-      '일시적 에러',
+      'ROOM ERROR',
+      '종료된 매칭입니다.',
       [
         {
           text: 'OK',

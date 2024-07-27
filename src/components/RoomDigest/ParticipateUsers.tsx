@@ -6,12 +6,17 @@ import ZeroUserComponent from './ZeroUser';
 import ParticipateUserComponent from '@components/RoomDigest/ParticipateUser';
 
 import { RoomMember } from '@type/entity/room';
+import { UserPreview } from '@type/entity/user';
 
 interface ParticipateUsersComponentProps {
   roomMembers: RoomMember[];
+  openUserInfoModal: (user: UserPreview) => void;
 }
 
-const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({ roomMembers }) => {
+const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({
+  roomMembers,
+  openUserInfoModal,
+}) => {
   return (
     <View className="px-1 py-8">
       <View>
@@ -19,7 +24,11 @@ const ParticipateUsersComponent: React.FC<ParticipateUsersComponentProps> = ({ r
       </View>
 
       {roomMembers.map((roomMember, index) => (
-        <ParticipateUserComponent key={index} roomMember={roomMember} />
+        <ParticipateUserComponent
+          key={index}
+          roomMember={roomMember}
+          openUserInfoModal={openUserInfoModal}
+        />
       ))}
 
       {/* 멤버가 0명일때 보여줄 view */}

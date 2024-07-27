@@ -9,6 +9,7 @@ import { View, Text, Alert, RefreshControl } from 'react-native';
 import ButtonComponent from '@components/Button';
 import LoadingComponent from '@components/Common/Loading';
 import RoomMapComponent from '@components/RoomDigest/RoomMap';
+import UserModalComponent from '@components/Common/UserModal';
 import RoomHeaderComponent from '@components/RoomDigest/RoomHeader';
 import UpdateModalComponent from '@components/RoomDigest/UpdateModal';
 import ManagerComponent from '@components/RoomDigest/ManagerComponent';
@@ -32,6 +33,7 @@ import {
 
 import { vibration } from '@utils/effect';
 
+import { UserPreview } from '@type/entity/user';
 import { RoomWaitingMember } from '@type/entity/room';
 import { RoomDetailScreenProps } from '@type/param/loginStack';
 
@@ -68,6 +70,8 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const { mutateAsync: exitWaitingRoomMutate, isPending: exitWaitingRoomPending } =
     useExitWaitingRoom(roomId); // 대기열에서 퇴장 mutate
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
+  const [userInfo, setUserInfo] = useState<UserPreview>();
+  const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
 
   // 방장
   const manager = participateMembers.inList.filter(
@@ -188,6 +192,17 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     );
   };
 
+  // 유저 인포 모달 열기
+  const openUserInfoModal = (user: UserPreview) => {
+    setUserInfo(user);
+    setModalVisible(true);
+  };
+
+  // 유저 인포 모달 닫기
+  const closeUserInfoModal = () => {
+    setModalVisible(false);
+  };
+
   // 방 수정페이지로 이동
   const toPatchRoomScreen = async (): Promise<void> => {
     queryClient.invalidateQueries();
@@ -270,16 +285,17 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
         <DottedLine width="100%" />
 
         {/* 방장 */}
-        <ManagerComponent manager={manager[0]} />
+        <ManagerComponent manager={manager[0]} openUserInfoModal={openUserInfoModal} />
 
         {/* 참여멤버 */}
-        <ParticipateUsersComponent roomMembers={members} />
+        <ParticipateUsersComponent roomMembers={members} openUserInfoModal={openUserInfoModal} />
 
         {/* 대기 멤버 */}
         <WaitingUsersComponent
           roomWaitingMembers={waitingMembers.waitingList}
           applyJoinRoom={applyJoinRoom}
           myRoom={roomDetail.myRoom}
+          openUserInfoModal={openUserInfoModal}
         />
 
         {/* 점선 */}
@@ -336,6 +352,15 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
               onPress={joinRoom}
             />
           </View>
+        )}
+
+        {/* 유저 정보 modal */}
+        {userInfo && (
+          <UserModalComponent
+            userInfo={userInfo}
+            modalVisible={modalVisible}
+            closeUserInfoModal={closeUserInfoModal}
+          />
         )}
 
         {/* 수정,삭제 모달 */}
