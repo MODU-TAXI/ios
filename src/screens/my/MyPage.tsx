@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import LoadingComponent from '@components/Common/Loading';
 import SelectImageModal from '@components/Common/SelectImageModal';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
+import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';
 
 import { loggedInState, userInfoState } from '@recoil/recoil';
 
@@ -33,6 +34,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const { mutateAsync: patchMemberMutate, isPending: patchMemberPending } = usePatchMember();
   const [profileImage, setProfileImage] = useState<string>(userInfo.imageUrl);
   const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
+  const [imageUploageLoading, setImageUploadLoading] = useState<boolean>(false);
   const [, setLoggedIn] = useRecoilState(loggedInState);
 
   // 로그아웃
@@ -64,9 +66,11 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
   // 카메라로 이미지 고르기
   const selectImageFromCamera = async (): Promise<void> => {
-    const imageUrl = await openCamera();
+    setImageUploadLoading(true);
 
     closeSelectImageModal();
+
+    const imageUrl = await openCamera();
 
     if (imageUrl) {
       patchMemberMutate({
@@ -77,10 +81,14 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
       });
       setProfileImage(imageUrl);
     }
+
+    setImageUploadLoading(false);
   };
 
   // 앨범에서 이미지 고르기
   const selectImageFromAlbum = async (): Promise<void> => {
+    setImageUploadLoading(true);
+
     closeSelectImageModal();
 
     const imageUrl = await openAlbum();
@@ -95,6 +103,8 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
       setProfileImage(imageUrl);
     }
+
+    setImageUploadLoading(false);
   };
 
   // 닉네임 수정 페이지 이동
@@ -142,6 +152,8 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {patchMemberPending && <TransparentLoadingComponent />}
+
+      {imageUploageLoading && <ImageUploadtLoadingComponent />}
 
       <ScrollView className="px-4">
         <View className="py-3">

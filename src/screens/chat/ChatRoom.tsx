@@ -16,6 +16,7 @@ import RoomStatusComponent from '@components/Chat/RoomStatus';
 import SelectImageModal from '@components/Common/SelectImageModal';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
+import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';
 
 import { MessageBody } from '@recoil/type';
 import { roomState, userInfoState } from '@recoil/recoil';
@@ -55,6 +56,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     useExitParticipateRoom(); // 현재 내가 참여하고 있는 방 퇴장 mutate
 
   const [, setSocketRoomId] = useRecoilState(roomState);
+  const [imageUploageLoading, setImageUploadLoading] = useState<boolean>(false);
   const [newMessages, setNewMeesages] = useState<MessageBody[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
   const [roomStatus, setRoomStatus] = useState<string | undefined>(roomPreview?.roomStatus);
@@ -276,24 +278,32 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   // 카메라로 이미지 고르기
   const selectImageFromCamera = async (): Promise<void> => {
-    const image = await openCamera();
+    setImageUploadLoading(true);
 
     closeSelectImageModal();
+
+    const image = await openCamera();
 
     if (image) {
       sendImage(image);
     }
+
+    setImageUploadLoading(false);
   };
 
   // 앨범에서 이미지 고르기
   const selectImageFromAlbum = async (): Promise<void> => {
-    const image = await openAlbum();
+    setImageUploadLoading(true);
 
     closeSelectImageModal();
+
+    const image = await openAlbum();
 
     if (image) {
       sendImage(image);
     }
+
+    setImageUploadLoading(false);
   };
 
   // 이미지 뷰 모달 열기
@@ -414,6 +424,8 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         <TransparentLoadingComponent />
       )}
 
+      {imageUploageLoading && <ImageUploadtLoadingComponent />}
+
       <ChatHeaderComponent myRoom={myRoom} openExitModal={openExitModal} />
 
       {!readonly && roomPreview && (
@@ -425,9 +437,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
           toPaymentScreen={toPaymentScreen}
         />
       )}
-
-      {/* 방 정보 Component */}
-      {/* {roomPreview && <RoomInfoComponent roomPreview={roomPreview} />} */}
 
       <KeyboardAvoidingView className="flex-1 bg-white" behavior="padding">
         {/* 메세지 Component */}
