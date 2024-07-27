@@ -145,7 +145,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         <UserSummaryComponent
           navigation={navigation}
           histories={histories}
-          month={date.getMonth()}
+          month={date.getMonth() + 1}
           userInfo={userInfo}
         />
       </ScrollView>
