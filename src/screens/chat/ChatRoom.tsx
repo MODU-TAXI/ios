@@ -3,6 +3,7 @@ import TextEncodingPolyfill from 'text-encoding';
 import StompJs, { Message } from '@stomp/stompjs';
 import ImageView from 'react-native-image-viewing';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, AppState, KeyboardAvoidingView } from 'react-native';
 import React, { useRef, Suspense, useState, useEffect, useCallback } from 'react';
@@ -67,6 +68,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [userInfo, setUserInfo] = useState<UserPreview>();
   const [accessToken, setNewAccessToken] = useAccessToken(); // socket을 위한 token hook
   const [refresh, setRefresh] = useState(false);
+  const [isFirstRender, setIsFirstRender] = useState(true);
   const myInfo = useRecoilValue(userInfoState);
   const myRoom = readonly ? false : roomPreview!.managerId == myInfo.id;
 
@@ -181,6 +183,9 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         connectHeaders: {
           token: accessToken,
         },
+        // debug: (a) => {
+        //   console.log(a);
+        // },
         reconnectDelay: 500,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
@@ -233,22 +238,39 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     }
   };
 
-  // 들어왔을때 socket 연결
-  useEffect(() => {
-    connect();
+  // 방 정보 다시 로딩
+  const reloadRoomInfo = async () => {
+    await Promise.all([clearMessages(), messagesRefetch(), roomPreviewRefetch()]);
+  };
 
+  // refocus시에 socket connect
+  useFocusEffect(
+    useCallback(() => {
+      connect();
+    }, [accessToken]),
+  );
+
+  // refocus되었을때 다른 정보 loading
+  useFocusEffect(
+    useCallback(() => {
+      reloadRoomInfo();
+    }, []),
+  );
+
+  // 나갈때 socket disconnect
+  useEffect(() => {
     return () => {
       disConnect();
       clearMessages();
     };
-  }, [accessToken]);
+  }, []);
 
   // 화면을 다시켰을때 socket 연결
   useEffect(() => {
     const subscription = AppState.addEventListener('change', async (nextAppState) => {
       if (appState.match(/inactive|background/) && nextAppState === 'active') {
         setRefresh(true);
-        await Promise.all([clearMessages(), messagesRefetch(), roomPreviewRefetch(), connect()]);
+        await Promise.all([reloadRoomInfo(), connect()]);
         setRefresh(false);
       }
       setAppState(nextAppState);
@@ -257,7 +279,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     return () => {
       subscription.remove();
     };
-  }, []);
+  }, [accessToken]);
 
   // 이미지 채팅 보내기
   const sendImage = (imageUrl: string | null) => {
