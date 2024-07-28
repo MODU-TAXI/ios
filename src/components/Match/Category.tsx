@@ -29,7 +29,7 @@ const CategoryComponent: React.FC<CategoryComponentProps> = ({
   };
 
   return (
-    <View>
+    <View className="mr-6">
       {checked ? (
         <Pressable
           onPress={() => selectCategory(index)}

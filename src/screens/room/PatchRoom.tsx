@@ -184,7 +184,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
 
                 <Text className="ml-4 text-sm font-normal text-gray700">출발지</Text>
               </View>
-            
+
               <View className="my-2 ml-[6px] flex-row">
                 <View className="h-[46px] w-px bg-main" />
 
@@ -197,7 +197,6 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
                     {departure.name}
                   </Text>
                 )}
-
               </View>
             </Pressable>
 
@@ -289,24 +288,14 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
           <DescriptionComponent description="카테고리를 선택해주세요" />
 
           <View className="mt-4 flex-row">
-            {userInfo.email ? (
+            {userInfo.email && (
               <CategoryComponent
                 index={0}
                 category={'학생인증'}
                 checkedCategories={checkedCategories}
                 setCheckedCategories={setCheckedCategories}
               />
-            ) : (
-              <Pressable
-                disabled
-                className="flex-row items-center justify-center rounded-xl border-2 border-gray200 px-3 py-2"
-              >
-                <CheckBox className="mr-2" />
-                <Text className="text-sm font-normal text-gray700">학생인증</Text>
-              </Pressable>
             )}
-
-            <View className="mr-6" />
 
             <CategoryComponent
               index={1}

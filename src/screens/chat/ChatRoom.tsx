@@ -301,15 +301,17 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const selectImageFromCamera = async (): Promise<void> => {
     setImageUploadLoading(true);
 
-    closeSelectImageModal();
-
     try {
       const image = await openCamera();
+
+      closeSelectImageModal();
 
       if (image) {
         sendImage(image);
       }
     } finally {
+      closeSelectImageModal();
+
       setImageUploadLoading(false);
     }
   };
