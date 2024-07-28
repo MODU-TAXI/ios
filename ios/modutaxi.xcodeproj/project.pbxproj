@@ -10,7 +10,6 @@
 		0004FD602BF290120007A5EA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0004FD5F2BF290120007A5EA /* GoogleService-Info.plist */; };
 		0004FD612BF290120007A5EA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0004FD5F2BF290120007A5EA /* GoogleService-Info.plist */; };
 		00E356F31AD99517003FC87E /* modutaxiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* modutaxiTests.m */; };
-		03A12ED32C4F76A100AE5760 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 03A12ED22C4F76A100AE5760 /* main.jsbundle */; };
 		10FE15BC399A4ED68583C110 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 781981A8739F45B3BE96568D /* Pretendard-Bold.otf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -45,7 +44,6 @@
 		00E356EE1AD99517003FC87E /* modutaxiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = modutaxiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* modutaxiTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = modutaxiTests.m; sourceTree = "<group>"; };
-		03A12ED22C4F76A100AE5760 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* modutaxi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = modutaxi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = modutaxi/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = modutaxi/AppDelegate.mm; sourceTree = "<group>"; };
@@ -142,7 +140,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				03A12ED22C4F76A100AE5760 /* main.jsbundle */,
 				0004FD5F2BF290120007A5EA /* GoogleService-Info.plist */,
 				00C1C1B32B9B2031005C350F /* Config.xcconfig */,
 				13B07FAE1A68108700A75B9A /* modutaxi */,
@@ -290,7 +287,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03A12ED32C4F76A100AE5760 /* main.jsbundle in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				0004FD602BF290120007A5EA /* GoogleService-Info.plist in Resources */,
