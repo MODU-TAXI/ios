@@ -18,7 +18,7 @@ const AlarmComponent = ({ navigation }: AlarmScreenProps) => {
   const { fetchNextPage, hasNextPage, ...result } = useGetAlarms();
 
   const toMatchingRoom = (roomId: number, roomType: string) => {
-    if (roomType !== 'REPORT_SUCCESS') {
+    if (roomType !== 'REPORT_SUCCESS' && roomId) {
       navigation.navigate('RoomDetailScreen', { roomId: roomId });
     }
   };

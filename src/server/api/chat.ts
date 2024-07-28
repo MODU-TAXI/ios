@@ -1,7 +1,4 @@
-import {
-  GetAxiosInstance,
-  DeleteAxiosInstance,
-} from '@axios/axios.method';
+import { GetAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
 
 import { GetChatInfoResponse, GetChatMessagesResponse } from '@server/responseTypes/chat';
 

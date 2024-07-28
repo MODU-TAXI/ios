@@ -3,6 +3,7 @@ import TextEncodingPolyfill from 'text-encoding';
 import StompJs, { Message } from '@stomp/stompjs';
 import ImageView from 'react-native-image-viewing';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, AppState, KeyboardAvoidingView } from 'react-native';
 import React, { useRef, Suspense, useState, useEffect, useCallback } from 'react';
@@ -16,6 +17,7 @@ import RoomStatusComponent from '@components/Chat/RoomStatus';
 import SelectImageModal from '@components/Common/SelectImageModal';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
+import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';
 
 import { MessageBody } from '@recoil/type';
 import { roomState, userInfoState } from '@recoil/recoil';
@@ -55,6 +57,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     useExitParticipateRoom(); // 현재 내가 참여하고 있는 방 퇴장 mutate
 
   const [, setSocketRoomId] = useRecoilState(roomState);
+  const [imageUploageLoading, setImageUploadLoading] = useState<boolean>(false);
   const [newMessages, setNewMeesages] = useState<MessageBody[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
   const [roomStatus, setRoomStatus] = useState<string | undefined>(roomPreview?.roomStatus);
@@ -130,8 +133,8 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   // 방에서 내쫓기
   const expelRoom = () => {
     Alert.alert(
-      '에러',
-      '일시적 에러',
+      'ROOM ERROR',
+      '종료된 매칭입니다.',
       [
         {
           text: 'OK',
@@ -179,6 +182,9 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         connectHeaders: {
           token: accessToken,
         },
+        // debug: (a) => {
+        //   console.log(a);
+        // },
         reconnectDelay: 500,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
@@ -231,22 +237,39 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     }
   };
 
-  // 들어왔을때 socket 연결
-  useEffect(() => {
-    connect();
+  // 방 정보 다시 로딩
+  const reloadRoomInfo = async () => {
+    await Promise.all([clearMessages(), messagesRefetch(), roomPreviewRefetch()]);
+  };
 
+  // refocus시에 socket connect
+  useFocusEffect(
+    useCallback(() => {
+      connect();
+    }, [accessToken]),
+  );
+
+  // refocus되었을때 다른 정보 loading
+  useFocusEffect(
+    useCallback(() => {
+      reloadRoomInfo();
+    }, []),
+  );
+
+  // 나갈때 socket disconnect
+  useEffect(() => {
     return () => {
       disConnect();
       clearMessages();
     };
-  }, [accessToken]);
+  }, []);
 
   // 화면을 다시켰을때 socket 연결
   useEffect(() => {
     const subscription = AppState.addEventListener('change', async (nextAppState) => {
       if (appState.match(/inactive|background/) && nextAppState === 'active') {
         setRefresh(true);
-        await Promise.all([clearMessages(), messagesRefetch(), roomPreviewRefetch(), connect()]);
+        await Promise.all([reloadRoomInfo(), connect()]);
         setRefresh(false);
       }
       setAppState(nextAppState);
@@ -255,7 +278,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
     return () => {
       subscription.remove();
     };
-  }, []);
+  }, [accessToken]);
 
   // 이미지 채팅 보내기
   const sendImage = (imageUrl: string | null) => {
@@ -276,23 +299,35 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   // 카메라로 이미지 고르기
   const selectImageFromCamera = async (): Promise<void> => {
-    const image = await openCamera();
+    setImageUploadLoading(true);
 
     closeSelectImageModal();
 
-    if (image) {
-      sendImage(image);
+    try {
+      const image = await openCamera();
+
+      if (image) {
+        sendImage(image);
+      }
+    } finally {
+      setImageUploadLoading(false);
     }
   };
 
   // 앨범에서 이미지 고르기
   const selectImageFromAlbum = async (): Promise<void> => {
-    const image = await openAlbum();
+    setImageUploadLoading(true);
 
     closeSelectImageModal();
 
-    if (image) {
-      sendImage(image);
+    try {
+      const image = await openAlbum();
+
+      if (image) {
+        sendImage(image);
+      }
+    } finally {
+      setImageUploadLoading(false);
     }
   };
 
@@ -414,6 +449,8 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         <TransparentLoadingComponent />
       )}
 
+      {imageUploageLoading && <ImageUploadtLoadingComponent />}
+
       <ChatHeaderComponent myRoom={myRoom} openExitModal={openExitModal} />
 
       {!readonly && roomPreview && (
@@ -425,9 +462,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
           toPaymentScreen={toPaymentScreen}
         />
       )}
-
-      {/* 방 정보 Component */}
-      {/* {roomPreview && <RoomInfoComponent roomPreview={roomPreview} />} */}
 
       <KeyboardAvoidingView className="flex-1 bg-white" behavior="padding">
         {/* 메세지 Component */}

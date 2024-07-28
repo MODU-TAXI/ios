@@ -10,7 +10,6 @@ import { useGetMemberInfo } from '@hooks/api/member';
 import { UserPreview } from '@type/entity/user';
 
 import Question from '@assets/images/Chat/Question.svg';
-import UserImage from '@assets/images/Chat/UserImage.svg';
 import Declaration from '@assets/images/Chat/Declaration.svg';
 import SchoolBadge from '@assets/images/Chat/SchoolBadge.svg';
 
@@ -18,7 +17,7 @@ interface UserModalComponentProps {
   userInfo: UserPreview;
   modalVisible: boolean;
   closeUserInfoModal: () => void;
-  toDeclarationScreen: () => void;
+  toDeclarationScreen?: () => void;
 }
 
 const UserModalComponent: React.FC<UserModalComponentProps> = ({
@@ -55,12 +54,12 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
           </View>
 
           <View className="flex-row items-center">
-            {memberInfo.certified && 
+            {memberInfo.certified && (
               <View className="mr-2 flex-row items-center">
                 <SchoolBadge className="mr-1" />
                 <Text className="text-gray700">학생인증 완료</Text>
               </View>
-            }
+            )}
 
             <View className="flex-row items-center">
               <Question className="mr-1" />

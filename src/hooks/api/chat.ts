@@ -28,7 +28,7 @@ export const useChatDetail = (roomId: number, readonly: boolean) => {
   return useSuspenseQueries({
     queries: [
       {
-        retry: 1,
+        retry: 0,
         queryKey: [`/api/rooms/preview/${roomId}`],
         queryFn: () => {
           if (!readonly) {
@@ -38,7 +38,7 @@ export const useChatDetail = (roomId: number, readonly: boolean) => {
         },
       },
       {
-        retry: 1,
+        retry: 0,
         queryKey: [`/api/chat-messages/${roomId}`],
         queryFn: () => getChatMessages(roomId),
       },

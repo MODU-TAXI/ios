@@ -74,19 +74,19 @@ const HomeHeaderComponent: React.FC<HomeHeaderComponentProps> = ({
       <View className={isOldiPhone ? `mt-2 flex-row` : `mt-5 flex-row`}>
         {blocked ? (
           <View className="flex-row items-center justify-center">
-            <Text className="text-[18px] font-semibold text-white">{userInfo.name}님,</Text>
+            <Text className="text-[18px] font-semibold text-white">{userInfo.nickname}님,</Text>
             <Text className="text-[18px] font-medium text-white">현재 이용정지 상태입니다.</Text>
           </View>
         ) : roomIn ? (
           <View className="flex-row items-center justify-center">
-            <Text className="text-[18px] font-semibold text-white">{userInfo.name}님, </Text>
+            <Text className="text-[18px] font-semibold text-white">{userInfo.nickname}님, </Text>
             <Text className="text-[18px] font-medium text-white">택시 이용중이에요!</Text>
           </View>
         ) : (
           <View className="flex-row items-center justify-center">
             <Text className="text-[18px] font-medium text-white">반가워요, </Text>
 
-            <Text className="text-[18px] font-semibold text-white">{userInfo.name}님!</Text>
+            <Text className="text-[18px] font-semibold text-white">{userInfo.nickname}님!</Text>
           </View>
         )}
       </View>
