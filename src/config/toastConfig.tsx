@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { ToastConfig, ToastConfigParams } from 'react-native-toast-message';
 
 import Card from '@assets/images/Toast/Card.svg';
@@ -23,6 +24,35 @@ interface ErrorToastProps extends ToastConfigParams<any> {
 }
 
 export const toastConfig: ToastConfig = {
+  fcmChatToast: ({ props }: InfoToastProps) => (
+    <View
+      className="h-[80px] w-[360px] flex-row items-center rounded-2xl px-3 py-4"
+      style={{ backgroundColor: 'rgba(75,75,75,0.55)' }}
+    >
+      <FastImage
+        className="mr-2 h-[40px] w-[40px] rounded-xl"
+        source={{
+          uri: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD',
+        }}
+      />
+
+      <View className="flex-col">
+        <Text className="text-[16px] font-semibold tracking-tight text-white">박재범</Text>
+
+        <Text className="mt-1 font-medium tracking-tight text-white">안녕 정현이?</Text>
+      </View>
+    </View>
+  ),
+
+  fcmToast: ({ props }: InfoToastProps) => (
+    <View
+      className="h-[60px] w-[360px] flex-row items-center justify-center rounded-2xl px-3 py-4"
+      style={{ backgroundColor: 'rgba(75,75,75,0.55)' }}
+    >
+      <Text className="text-center font-medium tracking-tight text-white">{props.content}</Text>
+    </View>
+  ),
+
   infoToast: ({ props }: InfoToastProps) => (
     <View
       className="w-[326px] flex-row items-center justify-center rounded-2xl px-2 py-4"

@@ -1,5 +1,25 @@
 import Toast from 'react-native-toast-message';
 
+// fcm인앱 알림 토스트 메세지
+export const fcmChatToastMessage = (content: string): void => {
+  return Toast.show({
+    type: 'fcmChatToast',
+    props: { content: content },
+    position: 'top',
+    visibilityTime: 2000,
+  });
+};
+
+// fcm인앱 알림 토스트 메세지
+export const fcmToastMessage = (content: string): void => {
+  return Toast.show({
+    type: 'fcmToast',
+    props: { content: content },
+    position: 'top',
+    visibilityTime: 2000,
+  });
+};
+
 // 알림용 상단 토스트 메세지
 export const InfoTopToastMessage = (content: string): void => {
   return Toast.show({
@@ -16,6 +36,17 @@ export const InfoToastMessage = (content: string): void => {
   return Toast.show({
     type: 'infoToast',
     props: { content: content },
+    position: 'bottom',
+    bottomOffset: 30,
+    visibilityTime: 2000,
+  });
+};
+
+// 바텀 에러 토스트 메세지
+export const BottomErrorToastMessage = (message: string): void => {
+  return Toast.show({
+    type: 'errorToast',
+    props: { message: message },
     position: 'bottom',
     bottomOffset: 30,
     visibilityTime: 2000,

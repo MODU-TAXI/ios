@@ -26,9 +26,9 @@ const SelectImageModal: React.FC<SelectImageModalProps> = ({
           className="mx-2 mb-8 rounded-[13px] "
           style={{ backgroundColor: 'rgba(245, 245, 245, 0.90)' }}
         >
-          {/* <Pressable className="px-4 py-[18px]" onPress={selectImageFromCamera}>
+          <Pressable className="px-4 py-[18px]" onPress={selectImageFromCamera}>
             <Text className="text-center text-[20px] text-[#007AFF]">사진으로 찍기</Text>
-          </Pressable> */}
+          </Pressable>
 
           <View className="border-b-[1px] border-[#3C3C43] opacity-30" />
 
