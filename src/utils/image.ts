@@ -63,7 +63,7 @@ export const handleUpload = async (image: Asset): Promise<string> => {
   return imageUrl;
 };
 
-// 카메라로 사진 선택
+// 카메라로 사진 선택 (카메라 선택 이미지는 리사이징)
 export const openCamera = async (): Promise<string | null> => {
   const options: CameraOptions = {
     mediaType: 'photo',
@@ -77,22 +77,20 @@ export const openCamera = async (): Promise<string | null> => {
   }
 
   if (result?.assets) {
-    // const resizedImage = await resizeImage(result.assets[0]);
+    const resizedImage = await resizeImage(result.assets[0]);
 
-    // if (resizedImage) {
-    //   const resizedAsset: Asset = {
-    //     uri: resizedImage.uri,
-    //     type: 'image/jpeg',
-    //     fileName: resizedImage.name,
-    //     fileSize: resizedImage.size,
-    //     width: resizedImage.width,
-    //     height: resizedImage.height,
-    //   };
+    if (resizedImage) {
+      const resizedAsset: Asset = {
+        uri: resizedImage.uri,
+        type: 'image/jpeg',
+        fileName: resizedImage.name,
+        fileSize: resizedImage.size,
+        width: resizedImage.width,
+        height: resizedImage.height,
+      };
 
-    //   return handleUpload(resizedAsset);
-    // }
-
-    return handleUpload(result.assets[0]);
+      return handleUpload(resizedAsset);
+    }
   }
 
   return null;
@@ -111,21 +109,6 @@ export const openAlbum = async (): Promise<string | null> => {
   }
 
   if (result?.assets) {
-    // const resizedImage = await resizeImage(result.assets[0]);
-
-    // if (resizedImage) {
-    //   const resizedAsset: Asset = {
-    //     uri: resizedImage.uri,
-    //     type: 'image/jpeg',
-    //     fileName: resizedImage.name,
-    //     fileSize: resizedImage.size,
-    //     width: resizedImage.width,
-    //     height: resizedImage.height,
-    //   };
-
-    //   return handleUpload(resizedAsset);
-    // }
-
     return handleUpload(result.assets[0]);
   }
 
