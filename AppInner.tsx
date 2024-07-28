@@ -1,7 +1,6 @@
 import { useRecoilState } from 'recoil';
 import React, { useState } from 'react';
 import LottieView from 'lottie-react-native';
-import messaging from '@react-native-firebase/messaging';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -61,13 +60,8 @@ import { useFcmMessage } from '@hooks/fcm';
 import { useCheckLogin } from '@hooks/login';
 import { useNotifee, useDeleteAllNotifee } from '@hooks/notifee';
 
-import { onMessageReceivedBackground } from '@utils/fcm';
-
 import { RootStackParamList } from '@type/param/rootStack';
 import { LoginStackParamList } from '@type/param/loginStack';
-
-// Background에서 FCM Message 수신
-messaging().setBackgroundMessageHandler(onMessageReceivedBackground);
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();

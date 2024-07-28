@@ -303,13 +303,15 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
     closeSelectImageModal();
 
-    const image = await openCamera();
+    try {
+      const image = await openCamera();
 
-    if (image) {
-      sendImage(image);
+      if (image) {
+        sendImage(image);
+      }
+    } finally {
+      setImageUploadLoading(false);
     }
-
-    setImageUploadLoading(false);
   };
 
   // 앨범에서 이미지 고르기
@@ -318,13 +320,15 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
     closeSelectImageModal();
 
-    const image = await openAlbum();
+    try {
+      const image = await openAlbum();
 
-    if (image) {
-      sendImage(image);
+      if (image) {
+        sendImage(image);
+      }
+    } finally {
+      setImageUploadLoading(false);
     }
-
-    setImageUploadLoading(false);
   };
 
   // 이미지 뷰 모달 열기
