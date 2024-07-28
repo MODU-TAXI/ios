@@ -138,7 +138,7 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
           <DescriptionComponent description="출발지, 도착지를 생성해주세요" />
 
           <View className="mt-6">
-            <View>
+            <Pressable onPress={handleDeparture}>
               <View className="flex-row items-center">
                 {departure.name !== '' ? (
                   <StartCircle width={12} />
@@ -148,34 +148,33 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
 
                 <Text className="ml-4 text-sm font-normal text-gray700">출발지</Text>
               </View>
-            </View>
-
-            <View className="my-2 ml-[6px] flex-row">
-              {departure.name !== '' && arrival.name !== '' ? (
-                <View className="h-[43px] w-px bg-main" />
-              ) : (
-                <View className="h-[43px] w-px bg-gray300" />
-              )}
-              <Pressable onPress={handleDeparture}>
-                {departure.name === '' ? (
-                  <Text className="ml-[21px] text-[16px] font-semibold text-gray300">
-                    출발지를 입력해주세요
-                  </Text>
+              
+              <View className="my-2 ml-[6px] flex-row">
+                {departure.name !== '' && arrival.name !== '' ? (
+                  <View className="h-[43px] w-px bg-main" />
                 ) : (
-                  <Text className="ml-[21px] text-[16px] font-semibold text-gray900">
-                    {departure.name}
-                  </Text>
+                  <View className="h-[43px] w-px bg-gray300" />
                 )}
-              </Pressable>
-            </View>
+                <View>
+                  {departure.name === '' ? (
+                    <Text className="ml-[21px] text-[16px] font-semibold text-gray300">
+                      출발지를 입력해주세요
+                    </Text>
+                  ) : (
+                    <Text className="ml-[21px] text-[16px] font-semibold text-gray900">
+                      {departure.name}
+                    </Text>
+                  )}
+                </View>
+              </View>
+            </Pressable>
 
-            <View>
+            <Pressable onPress={handleArrival}>
               <View className="flex-row items-center">
                 {arrival.name !== '' ? <EndCircle width={12} /> : <EndGrayCircle width={12} />}
                 <Text className="ml-4 text-sm font-normal text-gray700">도착지</Text>
               </View>
-
-              <Pressable onPress={handleArrival}>
+              <View>
                 {arrival.name === '' ? (
                   <Text className="ml-7 pt-2 text-[16px] font-semibold text-gray300">
                     도착지를 입력해주세요
@@ -185,8 +184,8 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
                     {arrival.name}
                   </Text>
                 )}
-              </Pressable>
-            </View>
+              </View>
+            </Pressable>
           </View>
         </View>
 
