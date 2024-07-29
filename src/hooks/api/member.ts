@@ -9,7 +9,13 @@ import { loggedInState, userInfoState, signUpUserState } from '@recoil/recoil';
 
 import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 import { PatchMemberRequest, RegisterNicknameRequest } from '@server/requestTypes/member';
-import { socialLogin, patchMember, deleteMember, getMemberInfo, registerNickname } from '@server/api/member';
+import {
+  socialLogin,
+  patchMember,
+  deleteMember,
+  getMemberInfo,
+  registerNickname,
+} from '@server/api/member';
 import {
   SocialLoginError,
   AppleLoginResponse,
@@ -21,6 +27,7 @@ import {
 
 import { useFcmToken } from '@hooks/fcm';
 
+import { LoginErrorToastMessage } from '@utils/toastMessage';
 import { setAccessToken, setRefreshToken } from '@utils/token';
 
 import { MemberInfo } from '@type/entity/user';
@@ -65,10 +72,10 @@ export const useKakaoLogin = (
           ...prevState,
           key: key,
         }));
-      
+
         navigation.navigate('CheckPermissionScreen');
       } else {
-        mutateErrorHandler(error, setLoggedIn);
+        LoginErrorToastMessage('로그인 실패 다시시도하세요');
       }
     },
   });
@@ -82,7 +89,7 @@ export const useAppleLogin = (
   const [, setUserInfo] = useRecoilState(userInfoState);
   const [, setLoggedIn] = useRecoilState(loggedInState);
   const [, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
-  
+
   return useMutation({
     mutationFn: () => appleLoginAuth(),
     onSuccess: async (response: AppleLoginResponse) => {
@@ -114,10 +121,10 @@ export const useAppleLogin = (
           ...prevState,
           key: key,
         }));
-      
+
         navigation.navigate('CheckPermissionScreen');
       } else {
-        mutateErrorHandler(error, setLoggedIn);
+        LoginErrorToastMessage('로그인 실패 다시시도하세요');
       }
     },
   });
@@ -185,16 +192,14 @@ export const useDeleteMember = (): UseMutationResult<void, void, void> => {
   });
 };
 
-export const useGetMemberInfo = (
-  userId: number,
-): { data: MemberInfo; refetch: () => void } => {
+export const useGetMemberInfo = (userId: number): { data: MemberInfo; refetch: () => void } => {
   const { data, refetch } = useSuspenseQuery({
     queryKey: ['memberInfo', userId],
     queryFn: () => getMemberInfo(userId),
     select: (response: GetMemberInfoResponse) => {
       return response;
-    }
+    },
   });
-  
+
   return { data, refetch };
-}
+};

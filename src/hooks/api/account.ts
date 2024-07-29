@@ -39,7 +39,7 @@ export const useDeleteAccount = () => {
     mutationFn: (accountId: number) => deleteAccount(accountId),
 
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setLoggedIn, undefined, true);
     },
   });
 };

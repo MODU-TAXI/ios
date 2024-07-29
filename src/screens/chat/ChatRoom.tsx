@@ -133,7 +133,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const expelRoom = () => {
     Alert.alert(
       'ROOM ERROR',
-      '종료된 매칭입니다.',
+      '일시적 에러',
       [
         {
           text: 'OK',

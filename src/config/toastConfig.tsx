@@ -1,22 +1,50 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { ToastConfig, ToastConfigParams } from 'react-native-toast-message';
+import { View, Text, Linking, Pressable } from 'react-native';
+import Toast, { ToastConfig, ToastConfigParams } from 'react-native-toast-message';
 
 import Card from '@assets/images/Toast/Card.svg';
 import Chat from '@assets/images/Toast/Chat.svg';
 import Check from '@assets/images/Toast/Check.svg';
 import Error from '@assets/images/Toast/Error.svg';
+import ModutaxiBotImage from '@assets/images/Common/ModutaxiBotImage.svg';
 import CompleteMatchText from '@assets/images/Toast/CompleteMatchText.svg';
 import RegisterAdvanceText from '@assets/images/Toast/RegisterAdvanceText.svg';
 
-// Custom props type for tomatoToast
+// 모두의 택시 봇 토스트 메세지
+interface fcmChatBotToastProps extends ToastConfigParams<any> {
+  props: {
+    body: string;
+    deeplink: string;
+  };
+}
+
+// fcm 채팅 토스트 메세지
+interface fcmChatToastProps extends ToastConfigParams<any> {
+  props: {
+    title: string;
+    body: string;
+    imageUrl: string;
+    deeplink: string;
+  };
+}
+
+// fcm 토스트 메세지
+interface fcmToastProps extends ToastConfigParams<any> {
+  props: {
+    message: string;
+    deeplink: string;
+  };
+}
+
+// 인포 토스트 메세지
 interface InfoToastProps extends ToastConfigParams<any> {
   props: {
     content: string;
   };
 }
 
+// 에러 토스트 메세지
 interface ErrorToastProps extends ToastConfigParams<any> {
   props: {
     message: string;
@@ -24,33 +52,64 @@ interface ErrorToastProps extends ToastConfigParams<any> {
 }
 
 export const toastConfig: ToastConfig = {
-  fcmChatToast: ({ props }: InfoToastProps) => (
-    <View
-      className="h-[80px] w-[360px] flex-row items-center rounded-2xl px-3 py-4"
-      style={{ backgroundColor: 'rgba(75,75,75,0.55)' }}
+  fcmChatBotToast: ({ props }: fcmChatBotToastProps) => (
+    <Pressable
+      onPress={async () => {
+        await Linking.openURL(props.deeplink);
+        Toast.hide();
+      }}
+      className="w-[360px] flex-row items-center rounded-2xl p-4"
+      style={{ backgroundColor: 'rgba(42, 34, 34, 0.62)' }}
+    >
+      <ModutaxiBotImage className="mr-4" />
+
+      <View className="flex-col">
+        <Text className="text-[16px] font-semibold tracking-tight text-white">모두의택시 봇</Text>
+
+        <Text className="mt-1 text-[16px] font-semibold tracking-tight text-white">
+          {props.body}
+        </Text>
+      </View>
+    </Pressable>
+  ),
+
+  fcmChatToast: ({ props }: fcmChatToastProps) => (
+    <Pressable
+      onPress={async () => {
+        await Linking.openURL(props.deeplink);
+        Toast.hide();
+      }}
+      className="w-[360px] flex-row items-center rounded-2xl p-4"
+      style={{ backgroundColor: 'rgba(42, 34, 34, 0.62)' }}
     >
       <FastImage
-        className="mr-2 h-[40px] w-[40px] rounded-xl"
+        className="mr-4 h-[42px] w-[42px] rounded-full"
         source={{
-          uri: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD',
+          uri: props.imageUrl,
         }}
       />
 
       <View className="flex-col">
-        <Text className="text-[16px] font-semibold tracking-tight text-white">박재범</Text>
+        <Text className="text-[16px] font-semibold tracking-tight text-white">{props.title}</Text>
 
-        <Text className="mt-1 font-medium tracking-tight text-white">안녕 정현이?</Text>
+        <Text className="mt-1 text-[16px] font-semibold tracking-tight text-white">
+          {props.body}
+        </Text>
       </View>
-    </View>
+    </Pressable>
   ),
 
-  fcmToast: ({ props }: InfoToastProps) => (
-    <View
-      className="h-[60px] w-[360px] flex-row items-center justify-center rounded-2xl px-3 py-4"
-      style={{ backgroundColor: 'rgba(75,75,75,0.55)' }}
+  fcmToast: ({ props }: fcmToastProps) => (
+    <Pressable
+      onPress={async () => {
+        await Linking.openURL(props.deeplink);
+        Toast.hide();
+      }}
+      className="w-[343px] flex-row items-center justify-center rounded-xl p-4"
+      style={{ backgroundColor: 'rgba(42, 34, 34, 0.62)' }}
     >
-      <Text className="text-center font-medium tracking-tight text-white">{props.content}</Text>
-    </View>
+      <Text className="text-[16px] font-semibold tracking-tight text-white">{props.message}</Text>
+    </Pressable>
   ),
 
   infoToast: ({ props }: InfoToastProps) => (

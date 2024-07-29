@@ -4,7 +4,7 @@ import { View, Text, Pressable } from 'react-native';
 
 import { ChatMessage } from '@type/entity/chat';
 
-import ProfileImage from '@assets/images/Chat/ProfileImage.svg';
+import ModutaxiBotImage from '@assets/images/Chat/ModutaxiBotChatImage.svg';
 
 interface CallTaxiMessageBoxComponentProps {
   message: ChatMessage;
@@ -15,7 +15,7 @@ const CallTaxiMessageBoxComponent: React.FC<CallTaxiMessageBoxComponentProps> = 
     <View className="my-4 flex-col">
       <View className="flex-row items-center">
         <View className="mr-2 h-6 w-6 flex-row items-center justify-center rounded-full bg-gray-600">
-          <ProfileImage className="" />
+          <ModutaxiBotImage />
         </View>
 
         <View>

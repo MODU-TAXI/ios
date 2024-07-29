@@ -359,7 +359,7 @@ export const useDeleteRoom = (roomId: number) => {
       InfoToastMessage('택시팟 삭제에 성공하였습니다!');
     },
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setLoggedIn, undefined, true);
     },
   });
 };
@@ -390,7 +390,7 @@ export const useApproveJoinRoom = (
   return useMutation({
     mutationFn: (memberId: number) => approveJoinRoom(roomId, memberId),
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setLoggedIn, undefined, true);
     },
   });
 };
@@ -402,7 +402,7 @@ export const useMatchComplete = (roomId: number) => {
   return useMutation({
     mutationFn: () => completeMatch(roomId),
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setLoggedIn, undefined, true);
     },
   });
 };
@@ -417,7 +417,7 @@ export const useExitParticipateRoom = () => {
       InfoToastMessage('택시팟 퇴장에 성공하였습니다!');
     },
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setLoggedIn, undefined, true);
     },
   });
 };
