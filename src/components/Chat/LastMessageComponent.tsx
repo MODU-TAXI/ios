@@ -4,12 +4,17 @@ import { View, Text, Pressable } from 'react-native';
 
 import { MessageBody } from '@recoil/type';
 
+import ScrollBottomButton from '@assets/images/Chat/ScrollBottomButton.svg';
+
 interface LastMessageComponentProps {
   lastMessage: MessageBody;
   toBottom: () => void;
 }
 
 const LastMessageComponent: React.FC<LastMessageComponentProps> = ({ lastMessage, toBottom }) => {
+  if (lastMessage.messageType !== 'CHAT' && lastMessage.messageType !== 'IMAGE')
+    return <ScrollBottomButton onPress={toBottom} className="absolute bottom-0 right-3 p-4" />;
+
   return (
     <View className="absolute bottom-0 max-h-10 w-full ">
       <Pressable
