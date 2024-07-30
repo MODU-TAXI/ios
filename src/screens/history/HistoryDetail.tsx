@@ -173,6 +173,7 @@ const HistoryDetailComponent = ({ navigation, route }: HistoryDetailScreenProps)
           modalVisible={userModalVisible}
           closeUserInfoModal={closeUserInfoModal}
           toDeclarationScreen={toDeclarationScreen}
+          canReport={true}
         />
       )}
     </SafeAreaView>

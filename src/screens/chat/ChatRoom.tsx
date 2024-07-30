@@ -491,6 +491,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
           modalVisible={modalVisible}
           closeUserInfoModal={closeUserInfoModal}
           toDeclarationScreen={toDeclarationScreen}
+          canReport={true}
         />
       )}
 

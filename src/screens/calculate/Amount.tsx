@@ -47,7 +47,7 @@ const AmountScreen = ({ navigation, route }: AmountScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white ">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       <HeaderComponent title="도착완료 정산하기" />
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -81,7 +81,7 @@ const AmountScreen = ({ navigation, route }: AmountScreenProps) => {
             )}
           </View>
 
-          <View className="mb-4 px-3">
+          <View className="mb-10 px-5">
             <ButtonComponent
               color={'bg-main'}
               borderColor={'border-main'}

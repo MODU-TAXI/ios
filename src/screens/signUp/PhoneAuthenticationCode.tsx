@@ -116,7 +116,7 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
             <View className="flex-1"></View>
 
             {/* 확인 버튼 */}
-            <View className="mx-3 mb-11">
+            <View className="mx-3 mb-10">
               <ButtonComponent
                 color={'bg-main'}
                 borderColor={'border-main'}

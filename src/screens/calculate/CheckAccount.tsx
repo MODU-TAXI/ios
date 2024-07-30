@@ -54,7 +54,7 @@ const CheckAccountScreen = ({ navigation, route }: CheckAccountScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {registerAccountPending && <TransparentLoadingComponent />}
 
       <HeaderComponent title="도착완료 정산하기" />
@@ -125,7 +125,7 @@ const CheckAccountScreen = ({ navigation, route }: CheckAccountScreenProps) => {
         </View>
       </Pressable>
 
-      <View className="mb-4 px-7">
+      <View className="mb-10 px-9">
         <ButtonComponent
           color={'bg-main'}
           borderColor={'border-main'}

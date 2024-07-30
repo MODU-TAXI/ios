@@ -25,7 +25,6 @@ import { ErrorToastMessage } from '@utils/toastMessage';
 
 import { CreateRoomScreenProps } from '@type/param/loginStack';
 
-import CheckBox from '@assets/images/Match/CheckBox.svg';
 import EndCircle from '@assets/images/Match/EndCircle.svg';
 import DottedLine from '@assets/images/Match/DottedLine.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
