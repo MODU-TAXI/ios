@@ -37,7 +37,7 @@ const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({
         >
           <Receipt width={32} />
           <View className="ml-1 flex truncate">
-            <Text className="text-xs text-gray700">{month}월 한달동안</Text>
+            <Text className="text-xs text-gray700">{month}월 아낀금액</Text>
             <View className="flex flex-row items-center">
               <Text className="text-sm font-semibold text-success">
                 {(
@@ -45,7 +45,7 @@ const UserSummaryComponent: React.FC<UserSummaryComponentProps> = ({
                 ).toLocaleString('ko-KR')}
                 원
               </Text>
-              <Text className="text-xs text-gray700"> 아꼈어요!</Text>
+              {/* <Text className="text-xs text-gray700"> 아꼈어요!</Text> */}
             </View>
           </View>
         </Pressable>

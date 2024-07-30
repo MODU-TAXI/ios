@@ -402,7 +402,7 @@ export const useMatchComplete = (roomId: number) => {
   return useMutation({
     mutationFn: () => completeMatch(roomId),
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn, undefined, true);
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };

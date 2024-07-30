@@ -64,7 +64,7 @@ const AlaramComponent: React.FC<AlaramComponentProps> = ({ alarm, toMatchingRoom
 
       <View className="flex-col justify-center">
         <Text className="mb-[2px] font-medium tracking-tight text-[#3E3E3E]">{alarm.message}</Text>
-        <Text className="text-[10px] tracking-tight text-[#9C9C9C]">
+        <Text className="text-[12px] tracking-tight text-[#9C9C9C]">
           {getRelativeTime(alarm.dateTime)}
         </Text>
       </View>

@@ -133,7 +133,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const expelRoom = () => {
     Alert.alert(
       'ROOM ERROR',
-      '일시적 에러',
+      '연결이 끊어졌습니다.',
       [
         {
           text: 'OK',
@@ -449,7 +449,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
       {imageUploageLoading && <ImageUploadtLoadingComponent />}
 
-      <ChatHeaderComponent myRoom={myRoom} openExitModal={openExitModal} />
+      <ChatHeaderComponent myRoom={myRoom} openExitModal={openExitModal} readonly={readonly} />
 
       {!readonly && roomPreview && (
         <RoomStatusComponent

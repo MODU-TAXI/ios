@@ -172,7 +172,7 @@ export const usePatchMember = (): UseMutationResult<
   return useMutation({
     mutationFn: (patchMemberRequest: PatchMemberRequest) => patchMember(patchMemberRequest),
     onError: (error) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setLoggedIn, undefined, true);
     },
   });
 };

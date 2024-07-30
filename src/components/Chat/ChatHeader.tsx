@@ -8,9 +8,14 @@ import HeaderDots from '@assets/images/Header/HeaderDots.svg';
 interface ChatHeaderComponentProps {
   openExitModal: () => Promise<void>;
   myRoom: boolean;
+  readonly: boolean;
 }
 
-const ChatHeaderComponent: React.FC<ChatHeaderComponentProps> = ({ openExitModal, myRoom }) => {
+const ChatHeaderComponent: React.FC<ChatHeaderComponentProps> = ({
+  openExitModal,
+  myRoom,
+  readonly,
+}) => {
   const navigation = useNavigation();
 
   const goBack = () => {
@@ -23,8 +28,11 @@ const ChatHeaderComponent: React.FC<ChatHeaderComponentProps> = ({ openExitModal
         <BackButton />
       </Pressable>
 
-      <Text className="text-lg font-semibold text-black">채팅 페이지</Text>
-      {/* 방장인 경우에만 수정/삭제 버튼 visible */}
+      {readonly ? (
+        <Text className="text-lg font-semibold text-black">채팅 기록</Text>
+      ) : (
+        <Text className="text-lg font-semibold text-black">채팅 페이지</Text>
+      )}
 
       {myRoom ? (
         <View className="h-10 w-10 bg-white" />

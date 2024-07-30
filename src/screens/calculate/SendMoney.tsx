@@ -57,7 +57,6 @@ const SendMoneyScreen = ({ navigation, route }: SendMoneyScreenProps) => {
 
       {
         text: '정산 했어요',
-
         onPress: completePay,
       },
     ]);
