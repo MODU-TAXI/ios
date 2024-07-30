@@ -18,6 +18,7 @@ interface UserModalComponentProps {
   modalVisible: boolean;
   closeUserInfoModal: () => void;
   toDeclarationScreen?: () => void;
+  canReport: boolean;
 }
 
 const UserModalComponent: React.FC<UserModalComponentProps> = ({
@@ -25,6 +26,7 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
   modalVisible,
   closeUserInfoModal,
   toDeclarationScreen,
+  canReport,
 }) => {
   const myInfo = useRecoilValue(userInfoState);
   const { data: memberInfo, refetch } = useGetMemberInfo(userInfo.memberId);
@@ -69,8 +71,7 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
           </View>
 
           {/* 신고하기 */}
-
-          {myInfo.id !== userInfo.memberId ? (
+          {canReport && myInfo.id !== userInfo.memberId ? (
             <Pressable className="mb-8 mt-4 p-4" onPress={toDeclarationScreen}>
               <Declaration />
             </Pressable>

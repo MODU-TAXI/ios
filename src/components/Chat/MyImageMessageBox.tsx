@@ -24,7 +24,7 @@ const MyImageMessageBoxComponent: React.FC<MyImageMessageBoxComponentProps> = ({
           : 'flex-row my-2';
 
   return (
-    <Pressable className={messageMargin} onPress={() => openImageModal(message.content)}>
+    <View className={messageMargin}>
       <View className="mr-1 flex-1 flex-col items-end justify-end ">
         {message.last && (
           <Text className="text-[10px] text-gray-300">
@@ -34,13 +34,15 @@ const MyImageMessageBoxComponent: React.FC<MyImageMessageBoxComponentProps> = ({
       </View>
 
       {/* 이미지 */}
-      <FastImage
-        className="h-[200px] w-[200px] rounded-xl"
-        source={{
-          uri: message.content,
-        }}
-      />
-    </Pressable>
+      <Pressable onPress={() => openImageModal(message.content)}>
+        <FastImage
+          className="h-[200px] w-[200px] rounded-xl"
+          source={{
+            uri: message.content,
+          }}
+        />
+      </Pressable>
+    </View>
   );
 };
 

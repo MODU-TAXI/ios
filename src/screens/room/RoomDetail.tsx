@@ -360,6 +360,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
             userInfo={userInfo}
             modalVisible={modalVisible}
             closeUserInfoModal={closeUserInfoModal}
+            canReport={false}
           />
         )}
 

@@ -1,13 +1,5 @@
-import FastImage from 'react-native-fast-image';
 import React, { useRef, useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  Pressable,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-} from 'react-native';
+import { View, FlatList, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 
 import LastMessageComponent from './LastMessageComponent';
 

@@ -2,7 +2,12 @@ import axios from 'axios';
 import Config from 'react-native-config';
 
 import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
-import { GetAxiosInstance, PostAxiosInstance, PatchAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
+import {
+  GetAxiosInstance,
+  PostAxiosInstance,
+  PatchAxiosInstance,
+  DeleteAxiosInstance,
+} from '@axios/axios.method';
 
 import {
   SignUpRequest,
@@ -57,13 +62,13 @@ export const checkMembership = async (
 export const socialLogin = async (
   type: 'KAKAO' | 'APPLE',
   data: SocialLoginRequest,
-): Promise<{data: SocialLoginResponse, status: number}> => {
+): Promise<{ data: SocialLoginResponse; status: number }> => {
   const response = await GuestPostAxiosInstance<SocialLoginResponse>(
     `/api/members/${type}/login`,
     data,
   );
 
-  return {data: response.data, status: response.status};
+  return { data: response.data, status: response.status };
 };
 
 // [소셜 회원가입] /api/members/sign-up
@@ -87,10 +92,8 @@ export const deleteMember = async () => {
   return response.data;
 };
 
-export const getMemberInfo = async (
-  userId: number,
-): Promise<GetMemberInfoResponse> => {
+export const getMemberInfo = async (userId: number): Promise<GetMemberInfoResponse> => {
   const response = await GetAxiosInstance(`/api/members/${userId}`);
 
   return response.data;
-}
+};

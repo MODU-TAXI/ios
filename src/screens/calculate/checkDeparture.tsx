@@ -43,7 +43,7 @@ const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) 
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white ">
+    <SafeAreaView className="flex-1 bg-white " edges={['top', 'left', 'right']}>
       <HeaderComponent title="출발완료 확인하기" />
 
       <View className="flex-1 px-4 pt-8">
@@ -62,7 +62,7 @@ const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) 
         />
       </View>
 
-      <View className="mb-4 px-8">
+      <View className="mb-10 px-9">
         <ButtonComponent
           color={'bg-main'}
           borderColor={'border-main'}

@@ -52,7 +52,8 @@ const AlaramComponent: React.FC<AlaramComponentProps> = ({ alarm, toMatchingRoom
   if (!AlarmIcon) return <View></View>;
 
   return (
-    <View
+    <Pressable
+      onPress={() => toMatchingRoom(alarm.resourceId, alarm.type)}
       className={
         !alarm.checked
           ? 'flex-row items-center border-b-[1px] border-b-gray-100 bg-[#F5F8FF] px-7 py-6'
@@ -61,16 +62,13 @@ const AlaramComponent: React.FC<AlaramComponentProps> = ({ alarm, toMatchingRoom
     >
       <AlarmIcon className="mr-3" />
 
-      <Pressable
-        className="flex-col justify-center"
-        onPress={() => toMatchingRoom(alarm.resourceId, alarm.type)}
-      >
+      <View className="flex-col justify-center">
         <Text className="mb-[2px] font-medium tracking-tight text-[#3E3E3E]">{alarm.message}</Text>
-        <Text className="text-[10px] tracking-tight text-[#9C9C9C]">
+        <Text className="text-[12px] tracking-tight text-[#9C9C9C]">
           {getRelativeTime(alarm.dateTime)}
         </Text>
-      </Pressable>
-    </View>
+      </View>
+    </Pressable>
   );
 };
 

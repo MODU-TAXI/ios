@@ -6,7 +6,6 @@ import { Text, View, Alert, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import LoadingComponent from '@components/Common/Loading';
-import SelectImageModal from '@components/Common/SelectImageModal';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';
 
@@ -33,7 +32,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
   const { mutateAsync: patchMemberMutate, isPending: patchMemberPending } = usePatchMember();
   const [profileImage, setProfileImage] = useState<string>(userInfo.imageUrl);
-  const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
+
   const [imageUploageLoading, setImageUploadLoading] = useState<boolean>(false);
   const [, setLoggedIn] = useRecoilState(loggedInState);
 
@@ -56,19 +55,24 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
   // 이미지 선택 모달 띄우기
   const openSelectImageModal = () => {
-    setSelectImageModalVisible(true);
-  };
-
-  // 이미지 선택 모달 내리기
-  const closeSelectImageModal = () => {
-    setSelectImageModalVisible(false);
+    Alert.alert(
+      '프로필 사진 수정',
+      '',
+      [
+        {
+          text: '앨범에서 선택',
+          onPress: selectImageFromAlbum,
+        },
+        { text: '카메라로 찍기', onPress: selectImageFromCamera },
+        { text: '취소' },
+      ],
+      { cancelable: false },
+    );
   };
 
   // 카메라로 이미지 고르기
   const selectImageFromCamera = async (): Promise<void> => {
     setImageUploadLoading(true);
-
-    closeSelectImageModal();
 
     const imageUrl = await openCamera();
 
@@ -88,8 +92,6 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   // 앨범에서 이미지 고르기
   const selectImageFromAlbum = async (): Promise<void> => {
     setImageUploadLoading(true);
-
-    closeSelectImageModal();
 
     const imageUrl = await openAlbum();
 
@@ -130,11 +132,6 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   // 계좌 관리 페이지 이동
   const toManageAccountScreen = () => {
     navigation.navigate('ManageAccountScreen');
-  };
-
-  // 알림 설정 페이지 이동
-  const toManageAlarmScreen = () => {
-    navigation.navigate('ManageAlarmScreen');
   };
 
   // 문의하기 페이지 이동
@@ -227,14 +224,6 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             <NextButton />
           </Pressable>
 
-          {/* <Pressable
-            className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
-            onPress={toManageAlarmScreen}
-          >
-            <Text className="font-semibold tracking-tight text-[#3E3E3E]">알림설정</Text>
-            <NextButton />
-          </Pressable> */}
-
           <Pressable
             className="flex-row items-center justify-between py-4"
             onPress={toInquiryScreen}
@@ -257,13 +246,6 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
           </Pressable>
         </View>
       </ScrollView>
-
-      <SelectImageModal
-        modalVisible={selectImageModalVisible}
-        closeSelectImageModal={closeSelectImageModal}
-        selectImageFromCamera={selectImageFromCamera}
-        selectImageFromAlbum={selectImageFromAlbum}
-      />
     </SafeAreaView>
   );
 };

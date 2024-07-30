@@ -91,7 +91,7 @@ const CheckPermissionScreen = ({ navigation }: CheckPermissionScreenProps) => {
           />
         </View>
 
-        <View className="mx-3 mb-11">
+        <View className="mx-3 mb-10">
           <ButtonComponent
             color={'bg-main'}
             borderColor={'border-main'}

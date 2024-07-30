@@ -54,7 +54,7 @@ const DeclarationScreen = ({ navigation, route }: DeclarationScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {/* 신고 시 로딩 */}
       {reportPending && <TransparentLoadingComponent />}
 

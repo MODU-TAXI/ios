@@ -62,7 +62,6 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
   const [roomStatus, setRoomStatus] = useState<string | undefined>(roomPreview?.roomStatus);
   const [imageModalVisible, setImageModalVisible] = useState(false); // 이미지 뷰 모달
-  const [selectImageModalVisible, setSelectImageModalVisible] = useState<boolean>(false); // 이미지 보내기 모달 뷰
   const [exitModalVisible, setExitModalVisible] = useState<boolean>(false); // 퇴장 모달 뷰
   const [viewImages, setViewImages] = useState([{ uri: '' }]);
   const [userInfo, setUserInfo] = useState<UserPreview>();
@@ -134,7 +133,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const expelRoom = () => {
     Alert.alert(
       'ROOM ERROR',
-      '종료된 매칭입니다.',
+      '연결이 끊어졌습니다.',
       [
         {
           text: 'OK',
@@ -289,46 +288,45 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
   // 이미지 선택 모달 띄우기
   const openSelectImageModal = () => {
-    setSelectImageModalVisible(true);
-  };
-
-  // 이미지 선택 모달 내리기
-  const closeSelectImageModal = () => {
-    setSelectImageModalVisible(false);
+    Alert.alert(
+      '사진 업로드',
+      '',
+      [
+        {
+          text: '앨범에서 업로드',
+          onPress: selectImageFromAlbum,
+        },
+        { text: '카메라로 찍기', onPress: selectImageFromCamera },
+        { text: '취소' },
+      ],
+      { cancelable: false },
+    );
   };
 
   // 카메라로 이미지 고르기
   const selectImageFromCamera = async (): Promise<void> => {
     setImageUploadLoading(true);
 
-    closeSelectImageModal();
+    const image = await openCamera();
 
-    try {
-      const image = await openCamera();
-
-      if (image) {
-        sendImage(image);
-      }
-    } finally {
-      setImageUploadLoading(false);
+    if (image) {
+      sendImage(image);
     }
+
+    setImageUploadLoading(false);
   };
 
   // 앨범에서 이미지 고르기
   const selectImageFromAlbum = async (): Promise<void> => {
     setImageUploadLoading(true);
 
-    closeSelectImageModal();
+    const image = await openAlbum();
 
-    try {
-      const image = await openAlbum();
-
-      if (image) {
-        sendImage(image);
-      }
-    } finally {
-      setImageUploadLoading(false);
+    if (image) {
+      sendImage(image);
     }
+
+    setImageUploadLoading(false);
   };
 
   // 이미지 뷰 모달 열기
@@ -451,7 +449,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
       {imageUploageLoading && <ImageUploadtLoadingComponent />}
 
-      <ChatHeaderComponent myRoom={myRoom} openExitModal={openExitModal} />
+      <ChatHeaderComponent myRoom={myRoom} openExitModal={openExitModal} readonly={readonly} />
 
       {!readonly && roomPreview && (
         <RoomStatusComponent
@@ -493,15 +491,9 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
           modalVisible={modalVisible}
           closeUserInfoModal={closeUserInfoModal}
           toDeclarationScreen={toDeclarationScreen}
+          canReport={true}
         />
       )}
-
-      <SelectImageModal
-        modalVisible={selectImageModalVisible}
-        closeSelectImageModal={closeSelectImageModal}
-        selectImageFromCamera={selectImageFromCamera}
-        selectImageFromAlbum={selectImageFromAlbum}
-      />
 
       <ImageView
         images={viewImages}

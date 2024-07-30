@@ -1,4 +1,5 @@
 import React from 'react';
+import LottieView from 'lottie-react-native';
 import { View, Text, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -24,7 +25,7 @@ const CompleteCalculateScreen = ({ navigation, route }: CompleteCalculateScreenP
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       <View className="flex flex-1 items-center justify-center">
         <Image source={require('../../assets/images/Common/Complete.gif')} />
 
@@ -36,7 +37,7 @@ const CompleteCalculateScreen = ({ navigation, route }: CompleteCalculateScreenP
         <Text className="tracking-tight text-[#5D5D5D]">푸시알림을 보내드릴게요!</Text>
       </View>
 
-      <View className="mb-4 px-7">
+      <View className="mb-10 px-9">
         <ButtonComponent
           color={'bg-main'}
           borderColor={'border-main'}

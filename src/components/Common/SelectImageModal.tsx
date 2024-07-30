@@ -15,7 +15,7 @@ const SelectImageModal: React.FC<SelectImageModalProps> = ({
   selectImageFromAlbum,
 }) => {
   return (
-    <Modal animationType="fade" transparent={true} visible={modalVisible}>
+    <Modal animationType="fade" transparent={true} visible={modalVisible} className="z-19">
       <View
         className="flex-1 flex-col justify-end"
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}

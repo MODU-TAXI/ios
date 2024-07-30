@@ -60,7 +60,7 @@ const WithdrawCheckScreen = ({ navigation }: WithdrawCheckScreenProps) => {
         </View>
       </View>
 
-      <View className={`px-6 ${isOldiPhone && "mb-4"}`}>
+      <View className={`px-9 ${isOldiPhone && 'mb-4'}`}>
         <ButtonComponent
           color={'bg-main'}
           borderColor={'border-main'}

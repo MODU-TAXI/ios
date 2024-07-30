@@ -75,7 +75,7 @@ const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) 
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {paymentPending && <TransparentLoadingComponent />}
 
       <HeaderComponent title="도착완료 정산하기" />
@@ -152,17 +152,17 @@ const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) 
               addUser={addUser}
             />
           )}
+        </View>
 
-          <View className="mb-4 px-3">
-            <ButtonComponent
-              color={'bg-main'}
-              borderColor={'border-main'}
-              textColor={'white'}
-              text={'정산 요청하기'}
-              disabled={participateMembers.length === 0}
-              onPress={toCompleteCalculateScreen}
-            />
-          </View>
+        <View className="mb-10 px-5">
+          <ButtonComponent
+            color={'bg-main'}
+            borderColor={'border-main'}
+            textColor={'white'}
+            text={'정산 요청하기'}
+            disabled={participateMembers.length === 0}
+            onPress={toCompleteCalculateScreen}
+          />
         </View>
       </View>
     </SafeAreaView>

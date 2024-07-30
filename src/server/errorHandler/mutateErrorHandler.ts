@@ -1,12 +1,13 @@
 import { Alert } from 'react-native';
 import { SetterOrUpdater } from 'recoil';
 
-import { ErrorToastMessage } from '@utils/toastMessage';
+import { ErrorToastMessage, BottomErrorToastMessage } from '@utils/toastMessage';
 
 export const mutateErrorHandler = async (
   error: any,
   setLoggedIn: SetterOrUpdater<boolean>,
   setErrorMessage?: React.Dispatch<React.SetStateAction<string>>,
+  bottom?: boolean,
 ): Promise<void> => {
   // 토큰 관련 에러 -> 모두 로그아웃 처리
   if (error.code === 'TOKEN_ERROR') {
@@ -27,9 +28,18 @@ export const mutateErrorHandler = async (
         return setErrorMessage(error.response?.data?.message);
       }
 
+      // 밑에 표시애야 하는 에러들
+      if (bottom) {
+        return BottomErrorToastMessage(error.response?.data?.message);
+      }
+
       // 나머지는 toast message로 대체
       return ErrorToastMessage(error.response?.data?.message);
     }
+  }
+
+  if (bottom) {
+    return BottomErrorToastMessage('문제가 발생하였습니다. 다시 시도하세요');
   }
 
   // 나머지 서버 에러들 status 500~

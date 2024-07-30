@@ -51,14 +51,17 @@ const OthersImageMessageBoxComponent: React.FC<OthersImageMessageBoxComponentPro
         </View>
       )}
 
-      <Pressable className="ml-4 mt-2 flex-row" onPress={() => openImageModal(message.content)}>
+      <View className="ml-4 mt-2 flex-row">
         {/* 이미지 */}
-        <FastImage
-          className="h-[200px] w-[200px] rounded-xl"
-          source={{
-            uri: message.content,
-          }}
-        />
+
+        <Pressable onPress={() => openImageModal(message.content)}>
+          <FastImage
+            className="h-[200px] w-[200px] rounded-xl"
+            source={{
+              uri: message.content,
+            }}
+          />
+        </Pressable>
 
         <View className="ml-1 flex-1 flex-col items-start justify-end">
           {message.last && (
@@ -67,7 +70,7 @@ const OthersImageMessageBoxComponent: React.FC<OthersImageMessageBoxComponentPro
             </Text>
           )}
         </View>
-      </Pressable>
+      </View>
     </View>
   );
 };

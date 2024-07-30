@@ -67,7 +67,7 @@ const AccountComponent = ({ navigation, route }: AccountScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       <HeaderComponent title="도착완료 정산하기" />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1 px-4 pt-8">
@@ -106,7 +106,7 @@ const AccountComponent = ({ navigation, route }: AccountScreenProps) => {
             />
           </View>
 
-          <View className="mb-4 px-3">
+          <View className="mb-10 px-5">
             <ButtonComponent
               color={'bg-main'}
               borderColor={'border-main'}

@@ -25,7 +25,6 @@ import { ErrorToastMessage } from '@utils/toastMessage';
 
 import { CreateRoomScreenProps } from '@type/param/loginStack';
 
-import CheckBox from '@assets/images/Match/CheckBox.svg';
 import EndCircle from '@assets/images/Match/EndCircle.svg';
 import DottedLine from '@assets/images/Match/DottedLine.svg';
 import StartCircle from '@assets/images/Match/StartCircle.svg';
@@ -148,7 +147,7 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
 
                 <Text className="ml-4 text-sm font-normal text-gray700">출발지</Text>
               </View>
-              
+
               <View className="my-2 ml-[6px] flex-row">
                 {departure.name !== '' && arrival.name !== '' ? (
                   <View className="h-[43px] w-px bg-main" />
@@ -256,24 +255,14 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
           <DescriptionComponent description="카테고리를 선택해주세요" />
 
           <View className="mt-4 flex-row">
-            {userInfo.email ? (
+            {userInfo.email && (
               <CategoryComponent
                 index={0}
                 category={'학생인증'}
                 checkedCategories={checkedCategories}
                 setCheckedCategories={setCheckedCategories}
               />
-            ) : (
-              <Pressable
-                disabled
-                className="flex-row items-center justify-center rounded-xl border-2 border-gray200 px-3 py-2"
-              >
-                <CheckBox className="mr-2" />
-                <Text className="text-sm font-normal text-gray700">학생인증</Text>
-              </Pressable>
             )}
-
-            <View className="mr-6" />
 
             <CategoryComponent
               index={1}

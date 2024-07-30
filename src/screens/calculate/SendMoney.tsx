@@ -1,6 +1,7 @@
 import React from 'react';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { Text, View, Alert, Pressable, SafeAreaView } from 'react-native';
+import { Text, View, Alert, Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ButtonComponent from '@components/Button';
 import { GetBankComponent } from '@components/Calculate/GetBank';
@@ -10,7 +11,7 @@ import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useCompletePayment, useGetPaymentDetail } from '@hooks/api/payment';
 
 import { payWithToss } from '@utils/pay';
-import { InfoToastMessage, InfoTopToastMessage } from '@utils/toastMessage';
+import { InfoTopToastMessage } from '@utils/toastMessage';
 
 import { banks } from '@type/entity/account';
 import { SendMoneyScreenProps } from '@type/param/loginStack';
@@ -57,14 +58,13 @@ const SendMoneyScreen = ({ navigation, route }: SendMoneyScreenProps) => {
 
       {
         text: '정산 했어요',
-
         onPress: completePay,
       },
     ]);
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {completePaymentPending && <TransparentLoadingComponent />}
 
       <View className="flex-1 px-7 pt-8">
@@ -125,7 +125,7 @@ const SendMoneyScreen = ({ navigation, route }: SendMoneyScreenProps) => {
           </Pressable>
         </View>
 
-        <View className="mb-4">
+        <View className="mx-2 mb-10">
           <ButtonComponent
             color={'bg-main'}
             borderColor={'border-main'}
