@@ -31,7 +31,7 @@ import {
   useExitWaitingRoom,
 } from '@hooks/api/rooms';
 
-import { vibration } from '@utils/effect';
+import { refreshVibration } from '@utils/effect';
 
 import { UserPreview } from '@type/entity/user';
 import { RoomWaitingMember } from '@type/entity/room';
@@ -90,7 +90,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
 
-    vibration();
+    refreshVibration();
 
     await Promise.all([refetchRoomDetail(), refetchParticipateMembers(), refetchWaitingMembers()]);
 

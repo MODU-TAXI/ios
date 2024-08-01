@@ -67,7 +67,7 @@ const InputBoxComponent: React.FC<InputBoxComponentProps> = ({
         />
 
         {/* timer 있을때만 TimerComponent 적용 */}
-        {timer && setTime && <TimerComponent time={time!} setTime={setTime} />}
+        {/* {timer && setTime && <TimerComponent time={time!} setTime={setTime} />} */}
       </View>
     </Pressable>
   );

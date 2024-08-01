@@ -23,7 +23,7 @@ import { useGetAlarmsCount } from '@hooks/api/alarms';
 import { useGetHistoriesByMonth } from '@hooks/api/history';
 import { useGetRoomList, useGetRoomPreview } from '@hooks/api/rooms';
 
-import { vibration } from '@utils/effect';
+import { refreshVibration } from '@utils/effect';
 
 import { HomeScreenProps } from '@type/param/loginStack';
 
@@ -73,7 +73,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
 
-    vibration();
+    refreshVibration();
 
     refetchRoomList();
     refetchHistories();

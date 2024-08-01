@@ -11,12 +11,15 @@ import HomeTabComponent from '@components/BottomTab/HomeTab';
 import MyPageTabComponent from '@components/BottomTab/MyPageTab';
 
 import { useIsOldiPhone } from '@hooks/device';
+import { useCheckPermissions } from '@hooks/permission/checkPermissions';
 
 import { TabNavigatorParamList } from '@type/param/loginStack';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
 const MainScreen = () => {
+  useCheckPermissions();
+
   const isOldiPhone = useIsOldiPhone();
 
   return (

@@ -8,12 +8,12 @@ import messaging from '@react-native-firebase/messaging';
 import App from './App';
 import { name as appName } from './app.json';
 
-import { backgroundVibration } from '@utils/effect';
+import { fcmVibration } from '@utils/effect';
 import { onMessageReceivedBackground } from '@utils/fcm';
 
 // Background에서 FCM Message 수신
 messaging().setBackgroundMessageHandler((message) => {
-  backgroundVibration();
+  fcmVibration();
 
   onMessageReceivedBackground(message);
 });

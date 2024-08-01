@@ -1,7 +1,11 @@
 import Toast from 'react-native-toast-message';
 
+import { fcmVibration } from './effect';
+
 // 모두의택시 봇 토스트 메세지
 export const fcmChatBotToastMessage = (body: string, deeplink: string): void => {
+  fcmVibration();
+
   return Toast.show({
     type: 'fcmChatBotToast',
     props: { body: body, deeplink: deeplink },
@@ -17,6 +21,8 @@ export const fcmChatToastMessage = (
   imageUrl: string,
   deeplink: string,
 ): void => {
+  fcmVibration();
+
   return Toast.show({
     type: 'fcmChatToast',
     props: { title: title, body: body, imageUrl: imageUrl, deeplink: deeplink },
@@ -27,6 +33,8 @@ export const fcmChatToastMessage = (
 
 // fcm 인앱 알림 토스트 메세지
 export const fcmToastMessage = (message: string, deeplink: string): void => {
+  fcmVibration();
+
   return Toast.show({
     type: 'fcmToast',
     props: { message: message, deeplink: deeplink },
