@@ -73,9 +73,9 @@ export const useKakaoLogin = (
           key: key,
         }));
 
-        navigation.navigate('CheckPermissionScreen');
+        navigation.navigate('AuthenticationScreen');
       } else {
-        LoginErrorToastMessage('로그인 실패 다시시도하세요');
+        LoginErrorToastMessage('로그인 실패 다시 시도하세요');
       }
     },
   });
@@ -122,9 +122,9 @@ export const useAppleLogin = (
           key: key,
         }));
 
-        navigation.navigate('CheckPermissionScreen');
+        navigation.navigate('AuthenticationScreen');
       } else {
-        LoginErrorToastMessage('로그인 실패 다시시도하세요');
+        LoginErrorToastMessage('로그인 실패 다시 시도하세요');
       }
     },
   });
