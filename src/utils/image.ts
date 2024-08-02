@@ -9,6 +9,8 @@ import {
 
 import { uploadImage } from '@server/api/s3';
 
+import { checkAlbumPermission, checkCameraPermission } from '@hooks/permission/checkPermissions';
+
 type ResizedImage = {
   path: string;
   uri: string;
@@ -65,6 +67,10 @@ export const handleUpload = async (image: Asset): Promise<string> => {
 
 // 카메라로 사진 선택 (카메라 선택 이미지는 리사이징)
 export const openCamera = async (): Promise<string | null> => {
+  const permission = await checkCameraPermission();
+
+  if (!permission) return null;
+
   const options: CameraOptions = {
     mediaType: 'photo',
     cameraType: 'back',
@@ -98,6 +104,10 @@ export const openCamera = async (): Promise<string | null> => {
 
 // 앨범에서 사진 선택
 export const openAlbum = async (): Promise<string | null> => {
+  const permission = await checkAlbumPermission();
+
+  if (!permission) return null;
+
   const options: ImageLibraryOptions = {
     mediaType: 'photo',
   };

@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
-import messaging from '@react-native-firebase/messaging';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ButtonComponent from '@components/Button';
-
-import checkPermissions from '@hooks/permission/checkPermissions';
 
 import { CheckPermissionScreenProps } from '@type/param/rootStack';
 
@@ -21,16 +18,7 @@ interface PermissionItemProps {
 }
 
 const CheckPermissionScreen = ({ navigation }: CheckPermissionScreenProps) => {
-  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
-
-  const checkFcmPermission = async () => {
-    await messaging().requestPermission();
-  };
-
   const toNext = async (): Promise<void> => {
-    await checkPermissions();
-    await checkFcmPermission();
-    setButtonDisabled(true);
     navigation.navigate('AuthenticationScreen');
   };
 
@@ -97,7 +85,7 @@ const CheckPermissionScreen = ({ navigation }: CheckPermissionScreenProps) => {
             borderColor={'border-main'}
             textColor={'white'}
             text={'확인'}
-            disabled={buttonDisabled}
+            disabled={false}
             onPress={toNext}
           />
         </View>

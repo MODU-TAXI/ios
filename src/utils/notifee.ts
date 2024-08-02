@@ -1,4 +1,4 @@
-import { Linking, Vibration } from 'react-native';
+import { Linking } from 'react-native';
 import notifee, { EventDetail } from '@notifee/react-native';
 
 // notifee 모두 삭제
@@ -13,17 +13,7 @@ export const handleFirebaseMessage = async (
   messageType: string,
   roomId?: string,
 ): Promise<string> => {
-  Vibration.vibrate(1);
-
   if (roomId) {
-    if (messageType === 'CHAT' || messageType === 'IMAGE') {
-      return notifee.displayNotification({
-        title: title,
-        body: content,
-        data: { messageType: messageType, roomId: roomId },
-      });
-    }
-
     return notifee.displayNotification({
       title: title,
       body: content,
