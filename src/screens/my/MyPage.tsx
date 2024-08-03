@@ -189,7 +189,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
           </Pressable> */}
 
           <Pressable
-            className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
+            className="flex-row items-center justify-between py-4"
             onPress={toPatchSchoolEmailScreen}
           >
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">학교 인증</Text>
@@ -202,7 +202,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
         {/* 아랫 부분 */}
         <View className="mt-4 rounded-xl border-[1px] border-[#EBEBEB] px-4">
           <Pressable
-            className="flex-row items-center justify-between py-4"
+            className="flex-row items-center justify-between  border-b-[1px] border-b-[#F3F3F3] py-4"
             onPress={toPatchUserInfoScreen}
           >
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">개인정보 수정</Text>
