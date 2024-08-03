@@ -182,10 +182,11 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             <Text className="font-medium tracking-tight text-[#7C7C7C]">{userInfo.nickname}</Text>
           </Pressable>
 
+          {/* 
           <Pressable className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4">
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">이름</Text>
             <Text className="font-medium tracking-tight text-[#7C7C7C]">{userInfo.name}</Text>
-          </Pressable>
+          </Pressable> */}
 
           <Pressable
             className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
@@ -196,7 +197,10 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
               {userInfo.email ? '인증' : '미인증'}
             </Text>
           </Pressable>
+        </View>
 
+        {/* 아랫 부분 */}
+        <View className="mt-4 rounded-xl border-[1px] border-[#EBEBEB] px-4">
           <Pressable
             className="flex-row items-center justify-between py-4"
             onPress={toPatchUserInfoScreen}
@@ -204,10 +208,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">개인정보 수정</Text>
             <NextButton />
           </Pressable>
-        </View>
 
-        {/* 아랫 부분 */}
-        <View className="mt-4 rounded-xl border-[1px] border-[#EBEBEB] px-4">
           <Pressable
             className="flex-row items-center justify-between border-b-[1px] border-b-[#F3F3F3] py-4"
             onPress={toManageAccountScreen}
