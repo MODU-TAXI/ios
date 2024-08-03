@@ -79,7 +79,7 @@ export const toastConfig: ToastConfig = {
         await Linking.openURL(props.deeplink);
         Toast.hide();
       }}
-      className="mt-2 w-[360px] flex-row items-center rounded-2xl p-4"
+      className="mt-2 max-h-[74px] w-[360px] flex-row items-center rounded-2xl p-4 "
       style={{ backgroundColor: 'rgba(42, 34, 34, 0.8)' }}
     >
       <FastImage
@@ -89,7 +89,7 @@ export const toastConfig: ToastConfig = {
         }}
       />
 
-      <View className="flex-col">
+      <View className="shrink flex-col">
         <Text className="text-[16px] font-semibold tracking-tight text-white">{props.title}</Text>
 
         <Text className="mt-1 text-[16px] font-semibold tracking-tight text-white">

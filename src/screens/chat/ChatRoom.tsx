@@ -14,7 +14,6 @@ import ExitModalComponent from '@components/Chat/ExitModal';
 import UserModalComponent from '@components/Common/UserModal';
 import ChatHeaderComponent from '@components/Chat/ChatHeader';
 import RoomStatusComponent from '@components/Chat/RoomStatus';
-import SelectImageModal from '@components/Common/SelectImageModal';
 import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';

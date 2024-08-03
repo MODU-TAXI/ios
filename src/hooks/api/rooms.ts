@@ -390,7 +390,7 @@ export const useApproveJoinRoom = (
   return useMutation({
     mutationFn: (memberId: number) => approveJoinRoom(roomId, memberId),
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn, undefined, true);
+      mutateErrorHandler(error, setLoggedIn);
     },
   });
 };

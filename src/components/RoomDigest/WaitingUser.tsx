@@ -5,8 +5,6 @@ import { View, Text, Pressable } from 'react-native';
 import { UserPreview } from '@type/entity/user';
 import { RoomWaitingMember } from '@type/entity/room';
 
-// import UserBasicImage from '@assets/images/Match/UserBasicImage.svg';
-
 interface WaitingUserComponentProps {
   myRoom: boolean;
   roomWaitingMember: RoomWaitingMember;
@@ -27,7 +25,7 @@ const WaitingUserComponent: React.FC<WaitingUserComponentProps> = ({
       >
         <FastImage
           source={{ uri: roomWaitingMember.imageUrl }}
-          className="mr-2 h-[24px] w-[24px] rounded-full"
+          className="mr-2 h-[24px] w-[24px] rounded-full "
         />
 
         <Text className="mr-1 font-normal text-base">{roomWaitingMember.nickname}</Text>

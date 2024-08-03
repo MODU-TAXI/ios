@@ -48,6 +48,7 @@ const MessageInputBoxComponent: React.FC<MessageInputBoxComponentProps> = ({
             onChangeText={setInputMessage}
             placeholder="메시지를 입력하세요"
             multiline={true}
+            maxLength={200}
             placeholderTextColor="#AFAFAF"
             style={{
               paddingTop: 0,

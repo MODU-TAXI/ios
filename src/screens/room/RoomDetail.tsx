@@ -1,7 +1,7 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
-import React, { useState, Suspense } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import React, { useRef, useState, Suspense } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Alert, RefreshControl } from 'react-native';
@@ -48,6 +48,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
 
   const { roomId } = route.params;
 
+  const scrollViewRef = useRef<ScrollView>(null);
   const [, setSocketRoomId] = useRecoilState(roomState);
   const [refreshing, setRefreshing] = useState(false); // 새로고침시 필요한 변수
 
@@ -72,6 +73,13 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<UserPreview>();
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
+
+  // 밑으로 내리기
+  const toBottom = () => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: false });
+    }
+  };
 
   // 방장
   const manager = participateMembers.inList.filter(
@@ -120,6 +128,8 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     await joinRoomMutate(roomId);
 
     await Promise.all([refetchParticipateMembers(), refetchWaitingMembers()]);
+
+    toBottom();
   };
 
   // 대기열에서 퇴장
@@ -241,6 +251,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
       <RoomHeaderComponent openUpdateModal={openUpdateModal} myRoom={roomDetail.myRoom} />
 
       <ScrollView
+        ref={scrollViewRef}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         className="mt-8 flex-1 px-4"
       >
