@@ -4,6 +4,7 @@ import { Text, View, Alert, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ButtonComponent from '@components/Button';
+import HeaderComponent from '@components/Header';
 import { GetBankComponent } from '@components/Calculate/GetBank';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
@@ -66,6 +67,8 @@ const SendMoneyScreen = ({ navigation, route }: SendMoneyScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       {completePaymentPending && <TransparentLoadingComponent />}
+
+      <HeaderComponent title="정산하기" />
 
       <View className="flex-1 px-7 pt-8">
         <View className="flex-1">

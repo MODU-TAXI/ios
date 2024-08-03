@@ -238,6 +238,8 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   // 방 정보 다시 로딩
   const reloadRoomInfo = async () => {
     await Promise.all([clearMessages(), messagesRefetch(), roomPreviewRefetch()]);
+
+    setRoomStatus(roomPreview?.roomStatus);
   };
 
   // refocus시에 socket connect
