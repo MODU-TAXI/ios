@@ -19,12 +19,14 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   disabled,
 }) => {
   const buttonStyle = disabled
-    ? `bg-disabled px-[96px] py-4 border-2 border-disabled rounded-[61px]`
-    : `${color} px-[96px] py-4 border-2 ${borderColor} rounded-[61px]`;
+    ? `bg-disabled py-5 border-2 border-disabled rounded-[61px]`
+    : `${color} py-5 border-2 ${borderColor} rounded-[61px]`;
 
   return (
     <Pressable className={buttonStyle} onPress={onPress} disabled={disabled}>
-      <Text className={`text-${textColor} text-center font-semibold tracking-tight text-base`}>
+      <Text
+        className={`text-${textColor} text-center text-[16px] font-semibold tracking-tight`}
+      >
         {text}
       </Text>
     </Pressable>

@@ -5,7 +5,6 @@ import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
-import RadioBoxComponent from '@components/RadioBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
@@ -21,13 +20,9 @@ import { AuthenticationScreenProps } from '@type/param/rootStack';
 const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
   const [signUpUser, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [name, setName] = useState<string>('');
-  const [gender, setGender] = useState<string>('남자');
+  const [name, setName] = useState<string>(signUpUser.name);
+  const [gender] = useState<string>('남자');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
-  // const [items, setItems] = useState([
-  //   { index: 1, item: '남자', select: false },
-  //   { index: 2, item: '여자', select: false },
-  // ]);
 
   const { mutateAsync: smsAuthentication, isPending: smsAuthenticationPending } =
     useSmsAuthentication(setErrorMessage);
@@ -64,8 +59,8 @@ const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
           <View className="mx-6 flex-1">
             {/* 입력란 설명 */}
             <View className="mt-14 flex">
-              <Text className="text-xl font-bold">모두의 택시에서</Text>
-              <Text className="text-xl font-bold">사용할 닉네임을 입력해주세요!</Text>
+              <Text className="text-xl font-bold">본인의</Text>
+              <Text className="text-xl font-bold">개인정보를 입력해주세요!</Text>
             </View>
 
             {/* 이름 입력란 */}

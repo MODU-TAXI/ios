@@ -76,9 +76,9 @@ export const MessageBoxComponent: React.FC<MessageBoxComponentProps> = ({
   }
 
   // 택시 부르러 가기
-  if (message.messageType === 'CALL_TAXI' && memberId == managerId) {
-    return <CallTaxiMessageBoxComponent message={message} />;
-  }
+  // if (message.messageType === 'CALL_TAXI' && memberId == managerId) {
+  //   return <CallTaxiMessageBoxComponent message={message} />;
+  // }
 
   // 매칭 완료
   if (message.messageType === 'MATCHING_COMPLETE' && memberId == managerId) {

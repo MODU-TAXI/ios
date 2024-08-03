@@ -1,5 +1,4 @@
 import React from 'react';
-import LottieView from 'lottie-react-native';
 import { View, Text, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -8,6 +7,8 @@ import ButtonComponent from '@components/Button';
 import { useDeleteAllNotifee } from '@hooks/notifee';
 
 import { CompleteCalculateScreenProps } from '@type/param/loginStack';
+
+import Complete from '@assets/images/Common/Complete.svg';
 
 const CompleteCalculateScreen = ({ navigation, route }: CompleteCalculateScreenProps) => {
   useDeleteAllNotifee();
@@ -27,7 +28,7 @@ const CompleteCalculateScreen = ({ navigation, route }: CompleteCalculateScreenP
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
       <View className="flex flex-1 items-center justify-center">
-        <Image source={require('../../assets/images/Common/Complete.gif')} />
+        <Complete />
 
         <Text className="mt-4 text-[20px] font-bold tracking-tight text-[#1F1F1F]">
           정산 내용 설정이 완료되었어요!

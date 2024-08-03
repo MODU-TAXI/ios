@@ -44,7 +44,10 @@ const RegisterNicknameScreen = ({ navigation }: RegisterNicknameScreenProps) => 
       blocked: userInfo.blocked,
     });
 
-    navigation.navigate('SchoolAuthenticationScreen');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'SchoolAuthenticationScreen' }],
+    });
   };
 
   return (

@@ -8,6 +8,8 @@ import ProgressBarComponent from '@components/ProgressBar';
 
 import { loggedInState } from '@recoil/recoil';
 
+import ModutaxiCar from '@assets/images/SignUp/ModutaxiCar.svg';
+
 const CompleteSignUpScreen = () => {
   const [, setLoggedIn] = useRecoilState(loggedInState);
 
@@ -25,19 +27,23 @@ const CompleteSignUpScreen = () => {
       <View className="mx-6 flex-1">
         {/* 설명 */}
         <View className="mt-14 flex">
-          <Text className="text-xl font-bold">가입완료!</Text>
-          <Text className="text-xl font-bold">지금바로 탑승하러 가볼까요?</Text>
+          <Text className="text-xl font-bold tracking-tight text-main">가입완료!</Text>
+          <Text className="text-xl font-bold tracking-tight">지금바로 탑승하러 가볼까요?</Text>
         </View>
 
         {/* 버튼을 아래로 내리기 위한 View */}
         <View className="flex-1"></View>
 
+        <View className="items-center justify-center">
+          <ModutaxiCar />
+        </View>
+
         {/* 확인 버튼 */}
-        <View className="mx-3 mb-10">
+        <View className="mx-3 mb-10 mt-6">
           <ButtonComponent
             color={'bg-main'}
             borderColor={'border-main'}
-            text={'확인'}
+            text={'모두의택시 바로가기'}
             textColor={'white'}
             onPress={toNext}
             disabled={false}

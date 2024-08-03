@@ -11,6 +11,7 @@ import { loggedInState } from '@recoil/recoil';
 import { LoginStackParamList } from '@type/param/loginStack';
 
 import Reload from '@assets/images/Common/Reload.svg';
+import ModutaxiCar from '@assets/images/SignUp/ModutaxiCar.svg';
 
 // error-boundary까지 온 에러들 분기 처리
 const ErrorFallback = ({
@@ -57,17 +58,24 @@ const ErrorFallback = ({
   // 나머지는 재시도 화면 보여주기
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 flex-col items-center justify-center">
-        <Text className="text-[16px] font-semibold tracking-tight text-[#1F1F1F]">
-          화면을 불러오지 못했어요
-        </Text>
-        <Pressable
-          onPress={resetErrorBoundary}
-          className="mt-4 flex-row items-center rounded-3xl bg-main px-6 py-4"
-        >
-          <Reload className="mr-1" />
-          <Text className="font-semibold tracking-tight text-white">다시 시도하기</Text>
-        </Pressable>
+      <View className="mb-14 mt-28 flex-1 flex-col items-center justify-between">
+        <View>
+          <Text className="mt-8 text-[18px] font-semibold tracking-tight text-[#1F1F1F]">
+            화면을 불러오지 못했어요
+          </Text>
+
+          <Pressable
+            onPress={resetErrorBoundary}
+            className="mt-4 flex-row items-center justify-center rounded-3xl bg-main px-6 py-4"
+          >
+            <Reload className="mr-1" />
+            <Text className="font-semibold tracking-tight text-white">다시 시도하기</Text>
+          </Pressable>
+        </View>
+
+        <View className="items-center justify-center">
+          <ModutaxiCar />
+        </View>
       </View>
     </SafeAreaView>
   );

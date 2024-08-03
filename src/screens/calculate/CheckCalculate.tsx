@@ -71,7 +71,11 @@ const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) 
         return { id: unParticipateMember.memberId };
       }),
     });
-    navigation.navigate('CompleteCalculateScreen', { roomPreview: roomPreview });
+
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'CompleteCalculateScreen', params: { roomPreview: roomPreview } }],
+    });
   };
 
   return (

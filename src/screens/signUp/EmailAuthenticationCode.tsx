@@ -56,12 +56,17 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
     navigation.navigate('SurveyFirstScreen');
   };
 
+  // 다시 입력
+  const goBack = () => {
+    navigation.goBack();
+  };
+
   // 인증번호 만료시 에러 메세지 생성
-  useEffect(() => {
-    if (time == 0) {
-      setErrorMessage('인증번호가 만료되었습니다!');
-    }
-  }, [time]);
+  // useEffect(() => {
+  //   if (time == 0) {
+  //     setErrorMessage('인증번호가 만료되었습니다!');
+  //   }
+  // }, [time]);
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -105,6 +110,17 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
 
             {/* 버튼을 아래로 내리기 위한 View */}
             <View className="flex-1"></View>
+
+            <View className="mx-3 mb-3">
+              <ButtonComponent
+                color={'bg-white'}
+                borderColor={'border-disabled'}
+                text={'이메일 다시입력'}
+                textColor={'disabled'}
+                onPress={goBack}
+                disabled={false}
+              />
+            </View>
 
             {/* 확인 버튼 */}
             <View className="mx-3 mb-10">

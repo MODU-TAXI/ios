@@ -58,8 +58,8 @@ export const toastConfig: ToastConfig = {
         await Linking.openURL(props.deeplink);
         Toast.hide();
       }}
-      className="w-[360px] flex-row items-center rounded-2xl p-4"
-      style={{ backgroundColor: 'rgba(42, 34, 34, 0.62)' }}
+      className="mt-2 w-[360px] flex-row items-center rounded-2xl p-4"
+      style={{ backgroundColor: 'rgba(42, 34, 34, 0.8)' }}
     >
       <ModutaxiBotImage className="mr-4" />
 
@@ -79,8 +79,8 @@ export const toastConfig: ToastConfig = {
         await Linking.openURL(props.deeplink);
         Toast.hide();
       }}
-      className="w-[360px] flex-row items-center rounded-2xl p-4"
-      style={{ backgroundColor: 'rgba(42, 34, 34, 0.62)' }}
+      className="mt-2 w-[360px] flex-row items-center rounded-2xl p-4"
+      style={{ backgroundColor: 'rgba(42, 34, 34, 0.8)' }}
     >
       <FastImage
         className="mr-4 h-[42px] w-[42px] rounded-full"
@@ -105,8 +105,8 @@ export const toastConfig: ToastConfig = {
         await Linking.openURL(props.deeplink);
         Toast.hide();
       }}
-      className="w-[343px] flex-row items-center justify-center rounded-xl p-4"
-      style={{ backgroundColor: 'rgba(42, 34, 34, 0.62)' }}
+      className="mt-2 w-[343px] flex-row items-center justify-center rounded-xl p-4"
+      style={{ backgroundColor: 'rgba(42, 34, 34, 0.8)' }}
     >
       <Text className="text-[16px] font-semibold tracking-tight text-white">{props.message}</Text>
     </Pressable>
@@ -115,7 +115,7 @@ export const toastConfig: ToastConfig = {
   infoToast: ({ props }: InfoToastProps) => (
     <View
       className="w-[326px] flex-row items-center justify-center rounded-2xl px-2 py-4"
-      style={{ backgroundColor: 'rgba(75,75,75,0.55)' }}
+      style={{ backgroundColor: 'rgba(75,75,75,0.8)' }}
     >
       <Check className="mr-2" />
       <Text className="text-center font-medium tracking-tight text-white">{props.content}</Text>
@@ -125,7 +125,7 @@ export const toastConfig: ToastConfig = {
   errorToast: ({ props }: ErrorToastProps) => (
     <View
       className="w-[326px] flex-row items-center justify-center rounded-2xl px-2 py-4"
-      style={{ backgroundColor: 'rgba(75,75,75,0.55)' }}
+      style={{ backgroundColor: 'rgba(75,75,75,0.8)' }}
     >
       <Error className="mr-2" />
       <Text className="text-center font-medium tracking-tight text-white">{props.message}</Text>
@@ -135,7 +135,7 @@ export const toastConfig: ToastConfig = {
   startChatToast: () => (
     <View
       className="w-[326px] flex-row items-center justify-center rounded-2xl px-2 py-4"
-      style={{ backgroundColor: 'rgba(75,75,75,0.55)' }}
+      style={{ backgroundColor: 'rgba(75,75,75,0.8)' }}
     >
       <Chat className="mr-2" />
       <Text className="text-center font-medium tracking-tight text-white">
@@ -147,7 +147,7 @@ export const toastConfig: ToastConfig = {
   registerAccountToast: () => (
     <View
       className="w-[326px] flex-row items-center justify-center rounded-2xl px-2 py-4"
-      style={{ backgroundColor: 'rgba(75,75,75,0.55)' }}
+      style={{ backgroundColor: 'rgba(75,75,75,0.8)' }}
     >
       <Card className="mr-2" />
       <Text className="text-center font-medium tracking-tight text-white">정산계좌를 </Text>
@@ -159,7 +159,7 @@ export const toastConfig: ToastConfig = {
   completeRegisterAccountToast: () => (
     <View
       className="w-[326px] flex-row items-center justify-center rounded-2xl px-2 py-4"
-      style={{ backgroundColor: 'rgba(75,75,75,0.55)' }}
+      style={{ backgroundColor: 'rgba(75,75,75,0.8)' }}
     >
       <Card className="mr-2" />
       <Text className="text-center font-medium tracking-tight text-white">
@@ -171,7 +171,7 @@ export const toastConfig: ToastConfig = {
   completeMatchToast: () => (
     <View
       className="w-[326px] flex-row items-center justify-center rounded-2xl px-2 py-4"
-      style={{ backgroundColor: 'rgba(75,75,75,0.55)' }}
+      style={{ backgroundColor: 'rgba(75,75,75,0.8)' }}
     >
       <Card className="mr-2" />
       <CompleteMatchText />
