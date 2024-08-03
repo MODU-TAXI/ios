@@ -71,24 +71,27 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
   );
 
   const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
+    try {
+      setRefreshing(true);
 
-    refreshVibration();
+      refreshVibration();
 
-    refetchRoomList();
-    refetchHistories();
+      refetchRoomList();
+      refetchHistories();
+      const response = await getMyChatInfo();
 
-    const response = await getMyChatInfo();
+      const { roomId } = response;
 
-    const { roomId } = response;
+      setSocketRoomId(roomId);
 
-    setSocketRoomId(roomId);
+      if (roomId > 0) {
+        await refetchRoomPreview();
+      }
 
-    if (roomId > 0) {
-      await refetchRoomPreview();
+      setRefreshing(false);
+    } catch (error) {
+      setRefreshing(false);
     }
-
-    setRefreshing(false);
   }, [refetchRoomPreview, refetchRoomList]);
 
   const toCreateRoomScreen = () => {

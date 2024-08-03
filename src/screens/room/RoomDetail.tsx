@@ -88,13 +88,21 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
 
   // 방정보 새로고침
   const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
+    try {
+      setRefreshing(true);
 
-    refreshVibration();
+      refreshVibration();
 
-    await Promise.all([refetchRoomDetail(), refetchParticipateMembers(), refetchWaitingMembers()]);
+      await Promise.all([
+        refetchRoomDetail(),
+        refetchParticipateMembers(),
+        refetchWaitingMembers(),
+      ]);
 
-    setRefreshing(false);
+      setRefreshing(false);
+    } catch (error) {
+      setRefreshing(false);
+    }
   }, [refetchRoomDetail]);
 
   // 수정, 삭제 모달창 열기
