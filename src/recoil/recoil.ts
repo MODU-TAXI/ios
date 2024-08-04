@@ -10,6 +10,7 @@ import {
   SearchParam,
 } from '@recoil/type';
 
+// 회원가입 유저 임시저장
 export const signUpUserState = atom<SignUpUser>({
   key: 'tempUser',
   default: {

@@ -28,7 +28,11 @@ const WithdrawLastScreen = ({ navigation }: WithdrawLastScreenProps) => {
   const toWithdrawCompleteScreen = async () => {
     await deleteMemberMutate();
     await deleteToken();
-    navigation.navigate('WithdrawCompleteScreen');
+
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'WithdrawCompleteScreen' }],
+    });
   };
 
   return (

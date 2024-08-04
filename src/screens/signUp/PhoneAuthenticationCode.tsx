@@ -28,7 +28,7 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [time, setTime] = useState(300); // 타이머 시간
-  const [fcmToken] = useFcmToken();
+  const [fcmToken, setFcmToken] = useFcmToken();
 
   const { mutateAsync: smsConfirm, isPending: smsConfirmPending } = useSmsConfirm(setErrorMessage);
 
@@ -36,11 +36,11 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
     useSmsAuthentication(setErrorMessage);
 
   // 인증번호 만료시 에러 메세지 생성
-  useEffect(() => {
-    if (time == 0) {
-      setErrorMessage('인증번호가 만료되었습니다!');
-    }
-  }, [time]);
+  // useEffect(() => {
+  //   if (time == 0) {
+  //     setErrorMessage('인증번호가 만료되었습니다!');
+  //   }
+  // }, [time]);
 
   // 회원가입
   const sendCode = async (): Promise<void> => {
@@ -59,7 +59,10 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
     await setAccessToken(accessToken);
     await setRefreshToken(refreshToken);
 
-    navigation.navigate('RegisterNicknameScreen');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'RegisterNicknameScreen' }],
+    });
   };
 
   // 인증번호 재전송
@@ -70,6 +73,11 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
     });
     InfoToastMessage('인증번호가 재전송 되었습니다');
     setTime(300); // 재전송시 timer 재설정
+  };
+
+  // 다시 입력
+  const goBack = () => {
+    navigation.goBack();
   };
 
   return (
@@ -114,6 +122,17 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
 
             {/* 버튼을 아래로 내리기 위한 View */}
             <View className="flex-1"></View>
+
+            <View className="mx-3 mb-3">
+              <ButtonComponent
+                color={'bg-white'}
+                borderColor={'border-disabled'}
+                text={'전화번호 다시입력'}
+                textColor={'disabled'}
+                onPress={goBack}
+                disabled={false}
+              />
+            </View>
 
             {/* 확인 버튼 */}
             <View className="mx-3 mb-10">

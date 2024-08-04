@@ -68,6 +68,7 @@ export const useKakaoLogin = (
     onError: (error: AxiosError<SocialLoginError>) => {
       if (error.response?.data?.code === 'MEMBER_004') {
         const key = error.response?.data?.message;
+
         setSignUpUser((prevState) => ({
           ...prevState,
           key: key,
@@ -93,6 +94,20 @@ export const useAppleLogin = (
   return useMutation({
     mutationFn: () => appleLoginAuth(),
     onSuccess: async (response: AppleLoginResponse) => {
+      const fullName = response.fullName;
+
+      if (fullName) {
+        const familyName = fullName.familyName ? fullName.familyName : '';
+        const givenName = fullName.givenName ? fullName.givenName : '';
+
+        const userName = familyName + givenName;
+
+        setSignUpUser((prevState) => ({
+          ...prevState,
+          name: userName,
+        }));
+      }
+
       const { authorizationCode: appleAuthCode } = response;
 
       const socialResponse = await socialLogin('APPLE', {
@@ -117,6 +132,7 @@ export const useAppleLogin = (
     onError: (error: AxiosError<SocialLoginError>) => {
       if (error.response?.data?.code === 'MEMBER_004') {
         const key = error.response?.data?.message;
+
         setSignUpUser((prevState) => ({
           ...prevState,
           key: key,
@@ -137,7 +153,10 @@ export const appleLoginAuth = async (): Promise<AppleLoginResponse> => {
     requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
   });
 
+  console.log('appleAuthRequestResponse:', appleAuthRequestResponse);
+
   const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+
   if (credentialState === appleAuth.State.AUTHORIZED) {
     return appleAuthRequestResponse;
   } else {
@@ -185,9 +204,6 @@ export const useDeleteMember = (): UseMutationResult<void, void, void> => {
     mutationFn: deleteMember,
     onError: (error) => {
       mutateErrorHandler(error, setLoggedIn);
-    },
-    onSuccess: () => {
-      // TODO: 카카오 연결 끊기
     },
   });
 };
