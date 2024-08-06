@@ -47,7 +47,7 @@ export const checkCameraPermission = async () => {
 export const checkAlbumPermission = async () => {
   const result = await check(PERMISSIONS.IOS.PHOTO_LIBRARY);
 
-  if (result === RESULTS.GRANTED) return;
+  if (result === RESULTS.GRANTED) return true;
 
   if (result === RESULTS.DENIED || result === RESULTS.LIMITED) {
     checkNotifications().then(({ status, settings }) => {

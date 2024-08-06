@@ -141,7 +141,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
   // 회원탈퇴 페이지 이동
   const toWithdarwScreen = () => {
-    navigation.navigate('WithdrawCheckScreen');
+    navigation.navigate('WithdrawSurveyScreen');
   };
 
   if (!userInfo) return <LoadingComponent />;
