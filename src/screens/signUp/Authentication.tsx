@@ -9,8 +9,8 @@ import ProgressBarComponent from '@components/ProgressBar';
 import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { SignUpUser } from '@recoil/type';
-import { signUpUserState } from '@recoil/recoil';
+import { TempUserRecoil } from '@recoil/type';
+import { tempUserRecoilState } from '@recoil/recoil';
 
 import { useSmsAuthentication } from '@hooks/api/member.sms';
 
@@ -18,9 +18,9 @@ import { AuthenticationScreenProps } from '@type/param/rootStack';
 
 // 이름, 성별, 전화번호 입력 스크린
 const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
-  const [signUpUser, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
+  const [tempUserRecoil, setTempUserRecoil] = useRecoilState<TempUserRecoil>(tempUserRecoilState);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [name, setName] = useState<string>(signUpUser.name);
+  const [name, setName] = useState<string>(tempUserRecoil.name);
   const [gender] = useState<string>('남자');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
 
@@ -29,7 +29,7 @@ const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
 
   // 다음으로
   const toNext = async (): Promise<void> => {
-    setSignUpUser((prevState: SignUpUser) => ({
+    setTempUserRecoil((prevState: TempUserRecoil) => ({
       ...prevState,
       name: name,
       gender: gender === '남자' ? 'MALE' : 'FEMALE',
@@ -37,7 +37,7 @@ const AuthenticationScreen = ({ navigation }: AuthenticationScreenProps) => {
     }));
 
     await smsAuthentication({
-      key: signUpUser.key,
+      key: tempUserRecoil.key,
       phoneNumber: phoneNumber,
     });
 

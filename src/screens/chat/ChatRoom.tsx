@@ -177,12 +177,13 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
       stompClient.current = new StompJs.Client({
         brokerURL: Config.SOCKET_URL,
+
         connectHeaders: {
           token: accessToken,
         },
-        // debug: (a) => {
-        //   console.log(a);
-        // },
+        debug: (a) => {
+          console.log(a);
+        },
         reconnectDelay: 500,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,

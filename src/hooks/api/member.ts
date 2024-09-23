@@ -4,8 +4,8 @@ import appleAuth from '@invertase/react-native-apple-authentication';
 import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
-import { SignUpUser } from '@recoil/type';
-import { loggedInState, userInfoState, signUpUserState } from '@recoil/recoil';
+import { TempUserRecoil } from '@recoil/type';
+import { loggedInState, userInfoState, tempUserRecoilState } from '@recoil/recoil';
 
 import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 import { PatchMemberRequest, RegisterNicknameRequest } from '@server/requestTypes/member';
@@ -39,7 +39,7 @@ export const useKakaoLogin = (
   const [fcmToken] = useFcmToken();
   const [, setUserInfo] = useRecoilState(userInfoState);
   const [, setLoggedIn] = useRecoilState(loggedInState);
-  const [, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
+  const [, setTempUserRecoil] = useRecoilState<TempUserRecoil>(tempUserRecoilState);
 
   return useMutation({
     mutationFn: () => login(),
@@ -69,7 +69,7 @@ export const useKakaoLogin = (
       if (error.response?.data?.code === 'MEMBER_004') {
         const key = error.response?.data?.message;
 
-        setSignUpUser((prevState) => ({
+        setTempUserRecoil((prevState) => ({
           ...prevState,
           key: key,
         }));
@@ -89,7 +89,7 @@ export const useAppleLogin = (
   const [fcmToken] = useFcmToken();
   const [, setUserInfo] = useRecoilState(userInfoState);
   const [, setLoggedIn] = useRecoilState(loggedInState);
-  const [, setSignUpUser] = useRecoilState<SignUpUser>(signUpUserState);
+  const [, setTempUserRecoil] = useRecoilState<TempUserRecoil>(tempUserRecoilState);
 
   return useMutation({
     mutationFn: () => appleLoginAuth(),
@@ -102,7 +102,7 @@ export const useAppleLogin = (
 
         const userName = familyName + givenName;
 
-        setSignUpUser((prevState) => ({
+        setTempUserRecoil((prevState) => ({
           ...prevState,
           name: userName,
         }));
@@ -133,7 +133,7 @@ export const useAppleLogin = (
       if (error.response?.data?.code === 'MEMBER_004') {
         const key = error.response?.data?.message;
 
-        setSignUpUser((prevState) => ({
+        setTempUserRecoil((prevState) => ({
           ...prevState,
           key: key,
         }));

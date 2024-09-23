@@ -1,7 +1,7 @@
 import { Bank } from '@type/entity/account';
 import { UserPreview } from '@type/entity/user';
 
-export type SignUpUser = {
+export type TempUserRecoil = {
   key: string;
   name: string;
   gender: string;

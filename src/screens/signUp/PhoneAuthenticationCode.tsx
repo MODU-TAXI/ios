@@ -8,7 +8,8 @@ import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { userInfoState, signUpUserState } from '@recoil/recoil';
+import { TempUserRecoil } from '@recoil/type';
+import { userInfoState, tempUserRecoilState } from '@recoil/recoil';
 
 import { signUp } from '@server/api/member';
 
@@ -23,7 +24,7 @@ import { PhoneAuthenticationCodeScreenProps } from '@type/param/rootStack';
 import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 
 const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeScreenProps) => {
-  const signUpUser = useRecoilValue(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
+  const tempUserRecoil = useRecoilValue<TempUserRecoil>(tempUserRecoilState); // 앞에서 받아온 회원가입 유저 정보
   const [, setUserInfo] = useRecoilState(userInfoState);
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
@@ -45,12 +46,12 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
   // 회원가입
   const sendCode = async (): Promise<void> => {
     await smsConfirm({
-      key: signUpUser.key,
-      phoneNumber: signUpUser.phoneNumber,
+      key: tempUserRecoil.key,
+      phoneNumber: tempUserRecoil.phoneNumber,
       certificationCode: code,
     });
 
-    const response = await signUp({ ...signUpUser, fcmToken: fcmToken });
+    const response = await signUp({ ...tempUserRecoil, fcmToken: fcmToken });
 
     const { accessToken, refreshToken } = response.tokenResponse;
 
@@ -68,8 +69,8 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
   // 인증번호 재전송
   const resendCode = async () => {
     await smsAuthentication({
-      key: signUpUser.key,
-      phoneNumber: signUpUser.phoneNumber,
+      key: tempUserRecoil.key,
+      phoneNumber: tempUserRecoil.phoneNumber,
     });
     InfoToastMessage('인증번호가 재전송 되었습니다');
     setTime(300); // 재전송시 timer 재설정
