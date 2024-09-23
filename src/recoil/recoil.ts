@@ -60,12 +60,6 @@ export const emailState = atom<string>({
   default: '',
 });
 
-// 유저 정보 관리
-export const memberIdState = atom<number>({
-  key: 'memberId',
-  default: -1,
-});
-
 // 참여하고 있는 방정보 관리
 export const roomState = atom<number>({
   key: 'socketRoomId',
