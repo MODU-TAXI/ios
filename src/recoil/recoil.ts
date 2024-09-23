@@ -19,6 +19,7 @@ import {
   MessageBody,
   SearchParam,
   TempUserRecoil,
+  IsChatInRecoil,
   TempEmailRecoil,
   IsLoggedInRecoil,
 } from '@recoil/type';
@@ -36,13 +37,19 @@ export const tempUserRecoilState = atom<TempUserRecoil>({
 
 // 회원가입 중 이메일 정보 관리
 export const tempEmailRecoilState = atom<TempEmailRecoil>({
-  key: 'email',
+  key: 'tempEmailRecoilState',
   default: '',
 });
 
 // 로그인 여부 관리
 export const isLoggedInRecoilState = atom<IsLoggedInRecoil>({
   key: 'isLoggedInRecoilState',
+  default: false,
+});
+
+// 채팅방 입장 여부 관리
+export const isChatInRecoilState = atom<IsChatInRecoil>({
+  key: 'isChatInRecoilState',
   default: false,
 });
 
@@ -66,12 +73,6 @@ export const userInfoState = atom<UserInfo>({
 export const roomState = atom<number>({
   key: 'socketRoomId',
   default: 0,
-});
-
-// 채팅방 입장 여부 관리
-export const chatInState = atom<boolean>({
-  key: 'isChatIn',
-  default: false,
 });
 
 // 채팅 메세지 관리
