@@ -1,7 +1,8 @@
 import { useRecoilState } from 'recoil';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 
-import { loggedInState } from '@recoil/recoil';
+import { IsLoggedInRecoil } from '@recoil/type';
+import { isLoggedInRecoilState } from '@recoil/recoil';
 
 import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 import {
@@ -21,13 +22,13 @@ import {
 export const useSmsAuthentication = (
   setErrorMessage?: React.Dispatch<React.SetStateAction<string>>,
 ): UseMutationResult<void, void, SmsAuthenticationRequest> => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: (smsAuthenticationRequest: SmsAuthenticationRequest) =>
       smsAuthentication(smsAuthenticationRequest),
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn, setErrorMessage);
+      mutateErrorHandler(error, setIsLoggedInRecoil, setErrorMessage);
     },
   });
 };
@@ -36,12 +37,12 @@ export const useSmsAuthentication = (
 export const useSmsConfirm = (
   setErrorMessage?: React.Dispatch<React.SetStateAction<string>>,
 ): UseMutationResult<void, void, SmsConfirmRequest> => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: (smsConfirmRequest: SmsConfirmRequest) => smsConfirm(smsConfirmRequest),
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn, setErrorMessage);
+      mutateErrorHandler(error, setIsLoggedInRecoil, setErrorMessage);
     },
   });
 };
@@ -50,13 +51,13 @@ export const useSmsConfirm = (
 export const useSmsChangeAuthentication = (
   setErrorMessage?: React.Dispatch<React.SetStateAction<string>>,
 ): UseMutationResult<void, void, SmsChangeAuthenticationRequest> => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: (smsChangeAuthenticationRequest: SmsChangeAuthenticationRequest) =>
       smsChangeAuthentication(smsChangeAuthenticationRequest),
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn, setErrorMessage);
+      mutateErrorHandler(error, setIsLoggedInRecoil, setErrorMessage);
     },
   });
 };
@@ -65,13 +66,13 @@ export const useSmsChangeAuthentication = (
 export const useSmsChangeConfirm = (
   setErrorMessage?: React.Dispatch<React.SetStateAction<string>>,
 ): UseMutationResult<void, void, SmsChangeConfirmRequest> => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: (smsChangeConfirmRequest: SmsChangeConfirmRequest) =>
       smsChangeConfirm(smsChangeConfirmRequest),
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn, setErrorMessage);
+      mutateErrorHandler(error, setIsLoggedInRecoil, setErrorMessage);
     },
   });
 };

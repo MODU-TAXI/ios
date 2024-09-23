@@ -1,7 +1,8 @@
 import { useRecoilState } from 'recoil';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 
-import { loggedInState } from '@recoil/recoil';
+import { IsLoggedInRecoil } from '@recoil/type';
+import { isLoggedInRecoilState } from '@recoil/recoil';
 
 import { RegisterAccountRequest } from '@server/requestTypes/account';
 import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
@@ -19,27 +20,27 @@ export const useGetAccounts = () => {
 
 // 계좌 등록
 export const useRegisterAccount = () => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: (registerAccountRequest: RegisterAccountRequest) =>
       registerAccount(registerAccountRequest),
 
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setIsLoggedInRecoil);
     },
   });
 };
 
 // 계좌 삭제
 export const useDeleteAccount = () => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: (accountId: number) => deleteAccount(accountId),
 
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn, undefined, true);
+      mutateErrorHandler(error, setIsLoggedInRecoil, undefined, true);
     },
   });
 };

@@ -6,15 +6,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ButtonComponent from '@components/Button';
 import ProgressBarComponent from '@components/ProgressBar';
 
-import { loggedInState } from '@recoil/recoil';
+import { IsLoggedInRecoil } from '@recoil/type';
+import { isLoggedInRecoilState } from '@recoil/recoil';
 
 import ModutaxiCar from '@assets/images/SignUp/ModutaxiCar.svg';
 
 const CompleteSignUpScreen = () => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   const toNext = async (): Promise<void> => {
-    setLoggedIn(true);
+    setIsLoggedInRecoil(true);
   };
 
   return (

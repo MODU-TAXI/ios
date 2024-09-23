@@ -8,6 +8,8 @@ export type TempUserRecoil = {
   phoneNumber: string;
 };
 
+export type IsLoggedInRecoil = boolean;
+
 export type MessageBody = {
   first: boolean;
   last: boolean;

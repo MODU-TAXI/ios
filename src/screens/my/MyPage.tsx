@@ -9,7 +9,8 @@ import LoadingComponent from '@components/Common/Loading';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';
 
-import { loggedInState, userInfoState } from '@recoil/recoil';
+import { IsLoggedInRecoil } from '@recoil/type';
+import { userInfoState, isLoggedInRecoilState } from '@recoil/recoil';
 
 import { usePatchMember } from '@hooks/api/member';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -34,7 +35,8 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const [profileImage, setProfileImage] = useState<string>(userInfo.imageUrl);
 
   const [imageUploageLoading, setImageUploadLoading] = useState<boolean>(false);
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   // 로그아웃
   const logOut = () => {
@@ -47,7 +49,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
         text: '로그아웃',
         onPress: async () => {
           await deleteToken();
-          setLoggedIn(false);
+          setIsLoggedInRecoil(false);
         },
       },
     ]);

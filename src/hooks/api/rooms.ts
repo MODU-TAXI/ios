@@ -10,7 +10,8 @@ import {
   useSuspenseQueries,
 } from '@tanstack/react-query';
 
-import { loggedInState } from '@recoil/recoil';
+import { IsLoggedInRecoil } from '@recoil/type';
+import { isLoggedInRecoilState } from '@recoil/recoil';
 
 import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 import {
@@ -63,7 +64,7 @@ export const useCreateRoom = (): UseMutationResult<
   CreateRoomRequest,
   unknown
 > => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: (createRoomRequest: CreateRoomRequest) => createRoom(createRoomRequest),
@@ -71,7 +72,7 @@ export const useCreateRoom = (): UseMutationResult<
       InfoToastMessage('택시팟 생성이 완료되었어요!');
     },
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setIsLoggedInRecoil);
     },
   });
 };
@@ -336,7 +337,7 @@ export const useGetRoomIntegration = (
 export const usePatchRoom = (
   roomId: number,
 ): UseMutationResult<PatchRoomResponse, void, PatchRoomRequest, unknown> => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: (patchRoomRequest: PatchRoomRequest) => patchRoom(roomId, patchRoomRequest),
@@ -344,14 +345,14 @@ export const usePatchRoom = (
       InfoToastMessage('택시팟 수정이 성공하였습니다!');
     },
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setIsLoggedInRecoil);
     },
   });
 };
 
 // 방 삭제
 export const useDeleteRoom = (roomId: number) => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: () => deleteRoom(roomId),
@@ -359,7 +360,7 @@ export const useDeleteRoom = (roomId: number) => {
       InfoToastMessage('택시팟 삭제에 성공하였습니다!');
     },
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn, undefined, true);
+      mutateErrorHandler(error, setIsLoggedInRecoil, undefined, true);
     },
   });
 };
@@ -368,7 +369,7 @@ export const useDeleteRoom = (roomId: number) => {
 export const useJoinRoom = (
   roomId: number,
 ): UseMutationResult<JoinRoomResponse, void, number, unknown> => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: () => joinRoom(roomId),
@@ -376,7 +377,7 @@ export const useJoinRoom = (
       InfoTopToastMessage('택시팟 참여 신청이 완료되었어요!');
     },
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setIsLoggedInRecoil);
     },
   });
 };
@@ -385,31 +386,31 @@ export const useJoinRoom = (
 export const useApproveJoinRoom = (
   roomId: number,
 ): UseMutationResult<ApproveJoinRoomResponse, void, number, unknown> => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: (memberId: number) => approveJoinRoom(roomId, memberId),
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setIsLoggedInRecoil);
     },
   });
 };
 
 // 매칭완료
 export const useMatchComplete = (roomId: number) => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: () => completeMatch(roomId),
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setIsLoggedInRecoil);
     },
   });
 };
 
 // 현재 내가 참여하고 있는 방 퇴장
 export const useExitParticipateRoom = () => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: () => exitParticipateRoom(),
@@ -417,14 +418,14 @@ export const useExitParticipateRoom = () => {
       InfoToastMessage('택시팟 퇴장에 성공하였습니다!');
     },
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn, undefined, true);
+      mutateErrorHandler(error, setIsLoggedInRecoil, undefined, true);
     },
   });
 };
 
 // 대기열에서 퇴장
 export const useExitWaitingRoom = (roomId: number) => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: () => exitWaitingRoom(roomId),
@@ -432,7 +433,7 @@ export const useExitWaitingRoom = (roomId: number) => {
       InfoTopToastMessage('택시팟 참여 신청이 취소되었어요!');
     },
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setIsLoggedInRecoil);
     },
   });
 };

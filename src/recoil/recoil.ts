@@ -19,11 +19,12 @@ import {
   MessageBody,
   SearchParam,
   TempUserRecoil,
+  IsLoggedInRecoil,
 } from '@recoil/type';
 
 // 회원가입 중인 유저 정보 관리
 export const tempUserRecoilState = atom<TempUserRecoil>({
-  key: 'tempUserState',
+  key: 'tempUserRecoilState',
   default: {
     key: '',
     name: '',
@@ -33,8 +34,8 @@ export const tempUserRecoilState = atom<TempUserRecoil>({
 });
 
 // 로그인 여부 관리
-export const loggedInState = atom<boolean>({
-  key: 'isLoggedIn',
+export const isLoggedInRecoilState = atom<IsLoggedInRecoil>({
+  key: 'isLoggedInRecoilState',
   default: false,
 });
 

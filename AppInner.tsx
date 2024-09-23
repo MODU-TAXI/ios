@@ -54,7 +54,8 @@ import PhoneAuthenticationCodeScreen from './src/screens/signUp/PhoneAuthenticat
 import PatchUserInfoAuthenticationScreen from './src/screens/my/PatchUserInfoAuthentication';
 import PatchSchoolEmailAuthenticationScreen from './src/screens/my/PatchSchoolEmailAuthentication';
 
-import { loggedInState } from '@recoil/recoil';
+import { IsLoggedInRecoil } from '@recoil/type';
+import { isLoggedInRecoilState } from '@recoil/recoil';
 
 import { useFcmMessage } from '@hooks/fcm';
 import { useCheckLogin } from '@hooks/login';
@@ -67,11 +68,12 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 const LogInStack = createNativeStackNavigator<LoginStackParamList>();
 
 function AppInner() {
-  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+  const [isLoggedInRecoil, setIsLoggedInRecoil] =
+    useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
   const [appLoaded, setAppLoaded] = useState<boolean>(false);
 
   useDeleteAllNotifee();
-  useCheckLogin(setLoggedIn, setAppLoaded); // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
+  useCheckLogin(setIsLoggedInRecoil, setAppLoaded); // refresh api로 로그인 되어있는지 여부 체크후, 로그인 여부 갱신
   useFcmMessage(); // Foreground에서 FCM Message 수신
   useNotifee(); // notifeecation제어
 
@@ -94,7 +96,7 @@ function AppInner() {
 
   return (
     <GestureHandlerRootView>
-      {loggedIn ? (
+      {isLoggedInRecoil ? (
         <Animated.View style={{ flex: 1, backgroundColor: 'white' }} entering={FadeIn}>
           <LogInStack.Navigator
             initialRouteName="MainScreen"

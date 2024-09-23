@@ -5,7 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ButtonComponent from '@components/Button';
 
-import { loggedInState } from '@recoil/recoil';
+import { IsLoggedInRecoil } from '@recoil/type';
+import { isLoggedInRecoilState } from '@recoil/recoil';
 
 import { useIsOldiPhone } from '@hooks/device';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -17,12 +18,13 @@ import Complete from '@assets/images/Common/Complete.svg';
 const WithdrawCompleteScreen = ({ navigation }: WithdrawCompleteScreenProps) => {
   useDeleteAllNotifee();
 
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
+
   const isOldiPhone = useIsOldiPhone();
 
   // 회원탈퇴
   const withdrawComplete = async () => {
-    setLoggedIn(false);
+    setIsLoggedInRecoil(false);
   };
 
   return (

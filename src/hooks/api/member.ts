@@ -4,8 +4,8 @@ import appleAuth from '@invertase/react-native-apple-authentication';
 import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
-import { TempUserRecoil } from '@recoil/type';
-import { loggedInState, userInfoState, tempUserRecoilState } from '@recoil/recoil';
+import { TempUserRecoil, IsLoggedInRecoil } from '@recoil/type';
+import { userInfoState, tempUserRecoilState, isLoggedInRecoilState } from '@recoil/recoil';
 
 import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 import { PatchMemberRequest, RegisterNicknameRequest } from '@server/requestTypes/member';
@@ -38,7 +38,7 @@ export const useKakaoLogin = (
 ): UseMutationResult<KakaoOAuthToken, Error, void, unknown> => {
   const [fcmToken] = useFcmToken();
   const [, setUserInfo] = useRecoilState(userInfoState);
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
   const [, setTempUserRecoil] = useRecoilState<TempUserRecoil>(tempUserRecoilState);
 
   return useMutation({
@@ -62,7 +62,8 @@ export const useKakaoLogin = (
         await setRefreshToken(refreshToken);
 
         setUserInfo(socialResponse.data.memberInfoResponse);
-        setLoggedIn(true);
+
+        setIsLoggedInRecoil(true);
       }
     },
     onError: (error: AxiosError<SocialLoginError>) => {
@@ -88,7 +89,7 @@ export const useAppleLogin = (
 ): UseMutationResult<AppleLoginResponse, Error, void, unknown> => {
   const [fcmToken] = useFcmToken();
   const [, setUserInfo] = useRecoilState(userInfoState);
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
   const [, setTempUserRecoil] = useRecoilState<TempUserRecoil>(tempUserRecoilState);
 
   return useMutation({
@@ -126,7 +127,7 @@ export const useAppleLogin = (
         await setRefreshToken(refreshToken);
 
         setUserInfo(socialResponse.data.memberInfoResponse);
-        setLoggedIn(true);
+        setIsLoggedInRecoil(true);
       }
     },
     onError: (error: AxiosError<SocialLoginError>) => {
@@ -153,8 +154,6 @@ export const appleLoginAuth = async (): Promise<AppleLoginResponse> => {
     requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
   });
 
-  console.log('appleAuthRequestResponse:', appleAuthRequestResponse);
-
   const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
 
   if (credentialState === appleAuth.State.AUTHORIZED) {
@@ -168,14 +167,14 @@ export const appleLoginAuth = async (): Promise<AppleLoginResponse> => {
 export const useRegisterNickname = (
   setErrorMessage?: React.Dispatch<React.SetStateAction<string>>,
 ): UseMutationResult<RegisterNicknameResponse, void, RegisterNicknameRequest> => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: (registerNicknameRequest: RegisterNicknameRequest) =>
       registerNickname(registerNicknameRequest),
 
     onError: (error: any) => {
-      mutateErrorHandler(error, setLoggedIn, setErrorMessage);
+      mutateErrorHandler(error, setIsLoggedInRecoil, setErrorMessage);
     },
   });
 };
@@ -186,24 +185,24 @@ export const usePatchMember = (): UseMutationResult<
   void,
   PatchMemberRequest
 > => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: (patchMemberRequest: PatchMemberRequest) => patchMember(patchMemberRequest),
     onError: (error) => {
-      mutateErrorHandler(error, setLoggedIn, undefined, true);
+      mutateErrorHandler(error, setIsLoggedInRecoil, undefined, true);
     },
   });
 };
 
 // 회원 탈퇴
 export const useDeleteMember = (): UseMutationResult<void, void, void> => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   return useMutation({
     mutationFn: deleteMember,
     onError: (error) => {
-      mutateErrorHandler(error, setLoggedIn);
+      mutateErrorHandler(error, setIsLoggedInRecoil);
     },
   });
 };
