@@ -19,6 +19,7 @@ import {
   MessageBody,
   SearchParam,
   TempUserRecoil,
+  TempEmailRecoil,
   IsLoggedInRecoil,
 } from '@recoil/type';
 
@@ -31,6 +32,12 @@ export const tempUserRecoilState = atom<TempUserRecoil>({
     gender: '',
     phoneNumber: '',
   },
+});
+
+// 회원가입 중 이메일 정보 관리
+export const tempEmailRecoilState = atom<TempEmailRecoil>({
+  key: 'email',
+  default: '',
 });
 
 // 로그인 여부 관리
@@ -53,11 +60,6 @@ export const userInfoState = atom<UserInfo>({
     matchingCount: 0,
     blocked: false,
   },
-});
-
-export const emailState = atom<string>({
-  key: 'email',
-  default: '',
 });
 
 // 참여하고 있는 방정보 관리

@@ -8,7 +8,8 @@ import HeaderComponent from '@components/Header';
 import InputBoxComponent from '@components/InputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { emailState, userInfoState } from '@recoil/recoil';
+import { TempEmailRecoil } from '@recoil/type';
+import { userInfoState, tempEmailRecoilState } from '@recoil/recoil';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useEmailConfirm, useEmailAuthentication } from '@hooks/api/member.mail';
@@ -24,7 +25,7 @@ const PatchSchoolEmailAuthenticationScreen = ({
 }: PatchSchoolEmailAuthenticationScreenProps) => {
   useDeleteAllNotifee();
 
-  const email = useRecoilValue(emailState); // 재전송할 이메일
+  const tempEmailRecoil = useRecoilValue<TempEmailRecoil>(tempEmailRecoilState);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
@@ -37,7 +38,7 @@ const PatchSchoolEmailAuthenticationScreen = ({
 
   // 인증번호 재전송
   const resendMail = async (): Promise<void> => {
-    await emailAuthentication({ mailAddress: email });
+    await emailAuthentication({ mailAddress: tempEmailRecoil });
     InfoTopToastMessage('인증번호가 재전송 되었습니다');
     setTime(180); // 재전송시 timer 재설정
   };
@@ -52,7 +53,7 @@ const PatchSchoolEmailAuthenticationScreen = ({
       nickname: userInfo.nickname,
       gender: userInfo.gender,
       phoneNumber: userInfo.phoneNumber,
-      email: email,
+      email: tempEmailRecoil,
       imageUrl: userInfo.imageUrl,
       matchingCount: userInfo.matchingCount,
       blocked: userInfo.blocked,

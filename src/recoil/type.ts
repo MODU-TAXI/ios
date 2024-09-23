@@ -10,6 +10,8 @@ export type TempUserRecoil = {
 
 export type IsLoggedInRecoil = boolean;
 
+export type TempEmailRecoil = string;
+
 export type MessageBody = {
   first: boolean;
   last: boolean;

@@ -8,14 +8,16 @@ import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { emailState } from '@recoil/recoil';
+import { TempEmailRecoil } from '@recoil/type';
+import { tempEmailRecoilState } from '@recoil/recoil';
 
 import { useEmailAuthentication } from '@hooks/api/member.mail';
 
 import { SchoolAuthenticationScreenProps } from '@type/param/rootStack';
 
 const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenProps) => {
-  const [email, setEmail] = useRecoilState<string>(emailState); // 이메일
+  const [tempEmailRecoil, setTempEmailRecoil] =
+    useRecoilState<TempEmailRecoil>(tempEmailRecoilState);
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
 
   const { mutateAsync: emailAuthentication, isPending: emailAuthenticationPending } =
@@ -23,7 +25,7 @@ const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenPr
 
   // 인증 메일 보내기
   const sendMail = async (): Promise<void> => {
-    await emailAuthentication({ mailAddress: email });
+    await emailAuthentication({ mailAddress: tempEmailRecoil });
     navigation.navigate('EmailAuthenticationCodeScreen');
   };
 
@@ -56,8 +58,8 @@ const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenPr
             <View className="mt-6">
               <InputBoxComponent
                 title="학교 이메일"
-                value={email}
-                setValue={setEmail}
+                value={tempEmailRecoil}
+                setValue={setTempEmailRecoil}
                 placeholder="moduteam@inha.edu"
               />
             </View>
@@ -91,7 +93,7 @@ const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenPr
                 borderColor={'border-main'}
                 textColor={'white'}
                 text={'확인'}
-                disabled={!email}
+                disabled={!tempEmailRecoil}
                 onPress={sendMail}
               />
             </View>
