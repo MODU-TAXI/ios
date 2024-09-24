@@ -100,8 +100,8 @@ export const arrivalState = atom<Arrival>({
   },
 });
 
-export const searchParamState = atom<SearchParamRecoil>({
-  key: 'searchParam',
+export const searchParamRecoilState = atom<SearchParamRecoil>({
+  key: 'searchParamRecoilState',
   default: {
     title: '',
     longitude: 126.656496,

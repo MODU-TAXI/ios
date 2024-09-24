@@ -10,7 +10,7 @@ import SearchBoxComponent from '@components/Search/SearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 
-import { searchParamState } from '@recoil/recoil';
+import { searchParamRecoilState } from '@recoil/recoil';
 
 import { useNaverSearch } from '@hooks/api/search';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -37,7 +37,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
   });
 
   // 검색어 선택시 넘겨줄 값
-  const [, setSearchParam] = useRecoilState(searchParamState);
+  const [, setSearchParamRecoil] = useRecoilState(searchParamRecoilState);
 
   useEffect(() => {
     const fetchCurrentLocation = async () => {
@@ -79,7 +79,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
 
   /** 선택한 검색어를 전달하며 이동 */
   const toMainMapScreen = (title: string, latitude: number, longitude: number) => {
-    setSearchParam({
+    setSearchParamRecoil({
       title: title,
       latitude: latitude,
       longitude: longitude,

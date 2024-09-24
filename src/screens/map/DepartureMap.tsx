@@ -7,7 +7,7 @@ import { Camera, NaverMapView, NaverMapViewRef } from '@mj-studio/react-native-n
 
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 
-import { departureState, searchParamState } from '@recoil/recoil';
+import { departureState, searchParamRecoilState } from '@recoil/recoil';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useReverseGeocoding } from '@hooks/api/search';
@@ -32,7 +32,7 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
   const [isSearched, setIsSearched] = useState<boolean>(false);
 
   const [, setDeparture] = useRecoilState(departureState);
-  const [searchParams, setSearchParams] = useRecoilState(searchParamState);
+  const [searchParamRecoil, setSearchParamRecoil] = useRecoilState(searchParamRecoilState);
   const [buildingName, setBuildingName] = useState<string>('');
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
 
@@ -68,12 +68,12 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
 
     const fetchSearchLocation = () => {
       const searchLocation: Camera = {
-        latitude: searchParams.latitude,
-        longitude: searchParams.longitude,
+        latitude: searchParamRecoil.latitude,
+        longitude: searchParamRecoil.longitude,
         zoom: 16,
       };
       setCurrentCamera(searchLocation);
-      setBuildingName(searchParams.title);
+      setBuildingName(searchParamRecoil.title);
       mapRef.current?.animateCameraTo(searchLocation);
     };
 
@@ -93,20 +93,20 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
 
     if (
       locationPermission === 'granted' &&
-      searchParams.title === '' &&
+      searchParamRecoil.title === '' &&
       !route.params?.roomDetail
     ) {
       fetchCurrentLocation();
-    } else if (searchParams.title !== '') {
+    } else if (searchParamRecoil.title !== '') {
       fetchSearchLocation();
-      setSearchBoxValue(searchParams.title);
+      setSearchBoxValue(searchParamRecoil.title);
       setIsSearched(true);
     } else if (route.params?.roomDetail) {
       fetchRoomDetailLocation();
       setSearchBoxValue(route.params?.roomDetail.departureName);
       setIsSearched(true);
     }
-  }, [locationPermission, searchParams.latitude, searchParams.longitude, route.params]);
+  }, [locationPermission, searchParamRecoil.latitude, searchParamRecoil.longitude, route.params]);
 
   // timeout 정보 저장 Ref
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -139,8 +139,8 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
   useEffect(() => {
     if (isTouching) {
       setIsBlocked(true);
-      setSearchParams({
-        ...searchParams,
+      setSearchParamRecoil({
+        ...searchParamRecoil,
         title: '',
       });
     } else {
@@ -170,8 +170,8 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
 
   /** 빌딩 이름 유무에 따른 렌더링 */
   const formatBuildingName = () => {
-    if (searchParams.title !== '') {
-      setBuildingName(searchParams.title);
+    if (searchParamRecoil.title !== '') {
+      setBuildingName(searchParamRecoil.title);
       return;
     }
 
