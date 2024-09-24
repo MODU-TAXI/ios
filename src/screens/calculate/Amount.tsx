@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
@@ -7,7 +7,8 @@ import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/Calculate/InputBox';
 
-import { calculateState } from '@recoil/recoil';
+import { SettlementRecoil } from '@recoil/type';
+import { settlementRecoilState } from '@recoil/recoil';
 
 import { useGetRoomMembers } from '@hooks/api/rooms';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -20,7 +21,7 @@ const AmountScreen = ({ navigation, route }: AmountScreenProps) => {
   const { roomPreview } = route.params;
 
   const { roomMembers } = useGetRoomMembers(roomPreview.roomId); // 참여자 목록
-  const [, setCalculateData] = useRecoilState(calculateState);
+  const setSettlementRecoil = useSetRecoilState<SettlementRecoil>(settlementRecoilState);
   const [amount, setAmount] = useState<string>('');
   const [expectedAmount] = useState<number>(roomPreview.expectedCharge);
 
@@ -37,7 +38,7 @@ const AmountScreen = ({ navigation, route }: AmountScreenProps) => {
       return Alert.alert('백만원 이하의 금액만 입력해주세요');
     }
 
-    setCalculateData((prev) => ({
+    setSettlementRecoil((prev) => ({
       ...prev,
       amount: amount,
       users: roomMembers.inList,

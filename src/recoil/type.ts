@@ -51,7 +51,7 @@ export type ArrivalRecoil = {
   spotId: number;
 };
 
-export type Calculate = {
+export type SettlementRecoil = {
   name: string;
   account: string;
   accountId: number;

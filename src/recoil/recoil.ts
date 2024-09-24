@@ -2,13 +2,13 @@ import { atom } from 'recoil';
 
 import {
   UserInfo,
-  Calculate,
   MessageBody,
   ArrivalRecoil,
   TempUserRecoil,
   IsChatInRecoil,
   DepartureRecoil,
   TempEmailRecoil,
+  SettlementRecoil,
   IsLoggedInRecoil,
   SearchParamRecoil,
   CurrentRoomRecoil,
@@ -100,8 +100,8 @@ export const searchParamRecoilState = atom<SearchParamRecoil>({
 });
 
 // 정산 관련
-export const calculateState = atom<Calculate>({
-  key: 'calculate',
+export const settlementRecoilState = atom<SettlementRecoil>({
+  key: 'settlementRecoilState',
   default: {
     name: '',
     amount: '',
