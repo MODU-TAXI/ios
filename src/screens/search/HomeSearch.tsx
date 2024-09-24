@@ -10,7 +10,7 @@ import SearchBoxComponent from '@components/Search/SearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 
-import { searchParamState, searchKeywordState } from '@recoil/recoil';
+import { searchParamRecoilState } from '@recoil/recoil';
 
 import { useNaverSearch } from '@hooks/api/search';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -31,7 +31,7 @@ const HomeSearchScreen = ({ route, navigation }: HomeSearchScreenProps) => {
   useDeleteAllNotifee();
 
   /** 검색어 저장 변수 */
-  const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
+  const [keyword, setKeyword] = useState<string>('');
   const locationPermission = useLocationPermission();
 
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
@@ -42,7 +42,7 @@ const HomeSearchScreen = ({ route, navigation }: HomeSearchScreenProps) => {
   });
 
   // 검색어 선택시 넘겨줄 값
-  const [, setSearchParam] = useRecoilState(searchParamState);
+  const [, setSearchParamRecoil] = useRecoilState(searchParamRecoilState);
 
   useEffect(() => {
     const fetchCurrentLocation = async () => {
@@ -84,7 +84,7 @@ const HomeSearchScreen = ({ route, navigation }: HomeSearchScreenProps) => {
 
   /** 선택한 검색어를 전달하며 이동 */
   const toMainMapScreen = (title: string, latitude: number, longitude: number) => {
-    setSearchParam({
+    setSearchParamRecoil({
       title: title,
       latitude: latitude,
       longitude: longitude,
@@ -98,7 +98,10 @@ const HomeSearchScreen = ({ route, navigation }: HomeSearchScreenProps) => {
       <View className="mx-4 flex-1">
         {/** 검색창 */}
         <View className="mb-3 mt-2">
-          <SearchBoxComponent />
+          <SearchBoxComponent
+            keyword={keyword}
+            setKeyword={setKeyword}
+          />
         </View>
 
         {/** 추천 검색어 */}

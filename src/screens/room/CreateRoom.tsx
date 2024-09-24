@@ -14,7 +14,7 @@ import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { roomState, arrivalState, userInfoState, departureState } from '@recoil/recoil';
+import { roomState, userInfoState, arrivalRecoilState, departureRecoilState } from '@recoil/recoil';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
@@ -45,8 +45,8 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
   const { mutateAsync: createRoomMutate, isPending: createRoomPending } = useCreateRoom();
 
   const [, setSocketRoomId] = useRecoilState(roomState);
-  const [departure, setDeparture] = useRecoilState(departureState); // 출발지 이름, 좌표
-  const [arrival, setArrival] = useRecoilState(arrivalState); // 도착지 이름, 거점 id
+  const [departureRecoil, setDepartureRecoil] = useRecoilState(departureRecoilState); // 출발지 이름, 좌표
+  const [arrivalRecoil, setArrivalRecoil] = useRecoilState(arrivalRecoilState); // 도착지 이름, 거점 id
   const [departureTime, setDepartureTime] = useState<Date>(new Date()); // 설정 날짜
   const [datePicked, setDatePicked] = useState<boolean>(false); // 날짜 선택 여부
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
@@ -56,16 +56,16 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
 
   /** 출발, 도착지 초기화 */
   const resetRecoilValue = useCallback(() => {
-    setDeparture({
+    setDepartureRecoil({
       name: '',
       latitude: 0,
       longitude: 0,
     });
-    setArrival({
+    setArrivalRecoil({
       name: '',
       spotId: 0,
     });
-  }, [setDeparture, setArrival]);
+  }, [setDepartureRecoil, setArrivalRecoil]);
 
   // 파티 생성
   const createMatch = async () => {
@@ -84,12 +84,12 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
     const departureTimeForServer = new Date(departureTime.getTime() + 9 * 60 * 60 * 1000);
 
     const room = await createRoomMutate({
-      spotId: arrival.spotId,
-      departureLongitude: departure.longitude,
-      departureLatitude: departure.latitude,
+      spotId: arrivalRecoil.spotId,
+      departureLongitude: departureRecoil.longitude,
+      departureLatitude: departureRecoil.latitude,
       roomTagBitMask: filteredCategories,
       departureTime: departureTimeForServer,
-      departureName: departure.name,
+      departureName: departureRecoil.name,
       wishHeadcount: passangersNumber,
     });
 
@@ -139,7 +139,7 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
           <View className="mt-6">
             <Pressable onPress={handleDeparture}>
               <View className="flex-row items-center">
-                {departure.name !== '' ? (
+                {departureRecoil.name !== '' ? (
                   <StartCircle width={12} />
                 ) : (
                   <StartGrayCircle width={12} />
@@ -149,19 +149,19 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
               </View>
 
               <View className="my-2 ml-[6px] flex-row">
-                {departure.name !== '' && arrival.name !== '' ? (
+                {departureRecoil.name !== '' && arrivalRecoil.name !== '' ? (
                   <View className="h-[43px] w-px bg-main" />
                 ) : (
                   <View className="h-[43px] w-px bg-gray300" />
                 )}
                 <View>
-                  {departure.name === '' ? (
+                  {departureRecoil.name === '' ? (
                     <Text className="ml-[21px] text-[16px] font-semibold text-gray300">
                       출발지를 입력해주세요
                     </Text>
                   ) : (
                     <Text className="ml-[21px] text-[16px] font-semibold text-gray900">
-                      {departure.name}
+                      {departureRecoil.name}
                     </Text>
                   )}
                 </View>
@@ -170,17 +170,17 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
 
             <Pressable onPress={handleArrival}>
               <View className="flex-row items-center">
-                {arrival.name !== '' ? <EndCircle width={12} /> : <EndGrayCircle width={12} />}
+                {arrivalRecoil.name !== '' ? <EndCircle width={12} /> : <EndGrayCircle width={12} />}
                 <Text className="ml-4 text-sm font-normal text-gray700">도착지</Text>
               </View>
               <View>
-                {arrival.name === '' ? (
+                {arrivalRecoil.name === '' ? (
                   <Text className="ml-7 pt-2 text-[16px] font-semibold text-gray300">
                     도착지를 입력해주세요
                   </Text>
                 ) : (
                   <Text className="ml-7 pt-2 text-[16px] font-semibold text-gray900">
-                    {arrival.name}
+                    {arrivalRecoil.name}
                   </Text>
                 )}
               </View>

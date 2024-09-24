@@ -38,13 +38,13 @@ export type UserInfo = {
   blocked: boolean;
 };
 
-export type Departure = {
+export type DepartureRecoil = {
   name: string;
   latitude: number;
   longitude: number;
 };
 
-export type Arrival = {
+export type ArrivalRecoil = {
   name: string;
   spotId: number;
 };
@@ -58,7 +58,7 @@ export type Calculate = {
   users: UserPreview[];
 };
 
-export type SearchParam = {
+export type SearchParamRecoil = {
   title: string;
   latitude: number;
   longitude: number;

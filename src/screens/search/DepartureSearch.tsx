@@ -8,7 +8,7 @@ import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 import DepartureSearchBoxComponent from '@components/Search/DepartureSearchBox';
 
-import { searchParamState } from '@recoil/recoil';
+import { searchParamRecoilState } from '@recoil/recoil';
 
 import { useNaverSearch } from '@hooks/api/search';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -26,7 +26,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
 
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useState<string>('');
-  const [, setSearchParams] = useRecoilState(searchParamState);
+  const [, setSearchParamRecoil] = useRecoilState(searchParamRecoilState);
   const locationPermission = useLocationPermission();
 
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
@@ -80,7 +80,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
 
   /** 선택한 검색어를 전달하며 이동 */
   const toDepartureMapScreen = (title: string, latitude: number, longitude: number) => {
-    setSearchParams({
+    setSearchParamRecoil({
       title: title,
       latitude: latitude,
       longitude: longitude,

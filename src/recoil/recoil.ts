@@ -12,16 +12,16 @@
 import { atom } from 'recoil';
 
 import {
-  Arrival,
   UserInfo,
-  Departure,
   Calculate,
   MessageBody,
-  SearchParam,
+  ArrivalRecoil,
   TempUserRecoil,
   IsChatInRecoil,
+  DepartureRecoil,
   TempEmailRecoil,
   IsLoggedInRecoil,
+  SearchParamRecoil,
 } from '@recoil/type';
 
 // 회원가입 중인 유저 정보 관리
@@ -82,8 +82,8 @@ export const messagesState = atom<MessageBody[]>({
 });
 
 // 방 생성 시 출발지
-export const departureState = atom<Departure>({
-  key: 'departure',
+export const departureRecoilState = atom<DepartureRecoil>({
+  key: 'departureRecoilState',
   default: {
     name: '',
     latitude: 0,
@@ -92,21 +92,16 @@ export const departureState = atom<Departure>({
 });
 
 // 방 생성 시 도착거점
-export const arrivalState = atom<Arrival>({
-  key: 'arrivalName',
+export const arrivalRecoilState = atom<ArrivalRecoil>({
+  key: 'arrivalRecoilState',
   default: {
     name: '',
     spotId: 0,
   },
 });
 
-export const searchKeywordState = atom<string>({
-  key: 'searchKeyword',
-  default: '',
-});
-
-export const searchParamState = atom<SearchParam>({
-  key: 'searchParam',
+export const searchParamRecoilState = atom<SearchParamRecoil>({
+  key: 'searchParamRecoilState',
   default: {
     title: '',
     longitude: 126.656496,

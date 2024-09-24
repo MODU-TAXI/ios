@@ -27,7 +27,7 @@ import SpotFilterModalScreen from '@components/Modal/SpotFilterModal';
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDigest';
 
-import { userInfoState, searchParamState } from '@recoil/recoil';
+import { userInfoState, searchParamRecoilState } from '@recoil/recoil';
 
 import { useIsOldiPhone } from '@hooks/device';
 import { useGetSpotMap } from '@hooks/api/spot';
@@ -112,15 +112,15 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   // 현재 줌에서의 탐색 범위
   const [radius, setRadius] = useState<number>(5000);
 
-  const searchParams = useRecoilValue(searchParamState);
-  const resetSearchParams = useResetRecoilState(searchParamState);
+  const searchParamRecoil = useRecoilValue(searchParamRecoilState);
+  const resetSearchParamRecoil = useResetRecoilState(searchParamRecoilState);
 
   // 검색 후 좌표설정
   useEffect(() => {
-    if (searchParams && searchParams.title !== '') {
+    if (searchParamRecoil && searchParamRecoil.title !== '') {
       const location = {
-        latitude: searchParams.latitude,
-        longitude: searchParams.longitude,
+        latitude: searchParamRecoil.latitude,
+        longitude: searchParamRecoil.longitude,
         zoom: 16,
       };
       setCurrentCamera({
@@ -130,7 +130,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
       });
       mapRef.current?.animateCameraTo(location);
     }
-  }, [searchParams]);
+  }, [searchParamRecoil]);
 
   // 필터링 상태값
   const [filterParam, setFilterParam] = useState<RoomFilterParam>({
@@ -249,7 +249,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
 
   /** 검색창 이동 */
   const toSearchScreen = () => {
-    resetSearchParams();
+    resetSearchParamRecoil();
     navigation.navigate('SearchScreen');
   };
 
@@ -337,8 +337,8 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
         }}
       >
         <Pressable onPress={toSearchScreen}>
-          {searchParams.title !== '' ? (
-            <TransparentSearchBoxComponent value={searchParams.title} isSearched={true} />
+          {searchParamRecoil.title !== '' ? (
+            <TransparentSearchBoxComponent value={searchParamRecoil.title} isSearched={true} />
           ) : (
             <TransparentSearchBoxComponent
               value={`${userInfo.name}님 우리 어디로 떠날까요?`}
