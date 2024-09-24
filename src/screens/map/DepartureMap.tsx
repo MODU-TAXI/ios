@@ -7,7 +7,7 @@ import { Camera, NaverMapView, NaverMapViewRef } from '@mj-studio/react-native-n
 
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 
-import { departureState, searchParamRecoilState } from '@recoil/recoil';
+import { departureRecoilState, searchParamRecoilState } from '@recoil/recoil';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useReverseGeocoding } from '@hooks/api/search';
@@ -31,7 +31,7 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
   const [searchBoxValue, setSearchBoxValue] = useState<string>('출발지를 입력하세요');
   const [isSearched, setIsSearched] = useState<boolean>(false);
 
-  const [, setDeparture] = useRecoilState(departureState);
+  const [, setDepartureRecoil] = useRecoilState(departureRecoilState);
   const [searchParamRecoil, setSearchParamRecoil] = useRecoilState(searchParamRecoilState);
   const [buildingName, setBuildingName] = useState<string>('');
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
@@ -212,7 +212,7 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
   /** 출발지 저장 로직 */
   const handleSearch = () => {
     if (buildingName === '건물 정보 없음') {
-      setDeparture({
+      setDepartureRecoil({
         name: formatAddress(),
         longitude: currentCamera.longitude,
         latitude: currentCamera.latitude,
@@ -221,7 +221,7 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
     } else if (buildingName === '주소 정보 없음') {
       setIsSearched(false);
     } else {
-      setDeparture({
+      setDepartureRecoil({
         name: buildingName,
         longitude: currentCamera.longitude,
         latitude: currentCamera.latitude,

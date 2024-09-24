@@ -12,13 +12,13 @@
 import { atom } from 'recoil';
 
 import {
-  Arrival,
   UserInfo,
-  Departure,
   Calculate,
   MessageBody,
+  ArrivalRecoil,
   TempUserRecoil,
   IsChatInRecoil,
+  DepartureRecoil,
   TempEmailRecoil,
   IsLoggedInRecoil,
   SearchParamRecoil,
@@ -82,7 +82,7 @@ export const messagesState = atom<MessageBody[]>({
 });
 
 // 방 생성 시 출발지
-export const departureState = atom<Departure>({
+export const departureRecoilState = atom<DepartureRecoil>({
   key: 'departure',
   default: {
     name: '',
@@ -92,7 +92,7 @@ export const departureState = atom<Departure>({
 });
 
 // 방 생성 시 도착거점
-export const arrivalState = atom<Arrival>({
+export const arrivalState = atom<ArrivalRecoil>({
   key: 'arrivalName',
   default: {
     name: '',
