@@ -13,7 +13,8 @@ import HomeHeaderComponent from '@components/Home/HomeHeader';
 import UserSummaryComponent from '@components/Home/UserSummary';
 import HomeMainPanelComponent from '@components/Home/HomeMainPanel';
 
-import { roomState, userInfoState } from '@recoil/recoil';
+import { CurrentRoomRecoil } from '@recoil/type';
+import { userInfoState, currentRoomRecoilState } from '@recoil/recoil';
 
 import { getMyChatInfo } from '@server/api/chat';
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
@@ -34,13 +35,14 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
   const userInfo = useRecoilValue(userInfoState);
 
-  const [socketRoomId, setSocketRoomId] = useRecoilState(roomState);
+  const [currentRoomRecoil, setCurrentRoomRecoil] =
+    useRecoilState<CurrentRoomRecoil>(currentRoomRecoilState);
 
   const [refreshing, setRefreshing] = useState(false);
 
   const { data: alarmsCount, refetch: alarmsCountRefetch } = useGetAlarmsCount();
 
-  const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(socketRoomId);
+  const { data: roomPreview, refetch: refetchRoomPreview } = useGetRoomPreview(currentRoomRecoil);
 
   const { rooms: recentRooms, refetch: refetchRoomList } = useGetRoomList({
     page: 0,
@@ -60,7 +62,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
     const response = await getMyChatInfo();
     const { roomId } = response;
 
-    setSocketRoomId(roomId);
+    setCurrentRoomRecoil(roomId);
   };
 
   useFocusEffect(
@@ -82,7 +84,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
       const { roomId } = response;
 
-      setSocketRoomId(roomId);
+      setCurrentRoomRecoil(roomId);
 
       if (roomId > 0) {
         await refetchRoomPreview();
@@ -103,14 +105,14 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
   };
 
   const toChatRoomScreen = () => {
-    navigation.navigate('RoomDetailScreen', { roomId: socketRoomId });
+    navigation.navigate('RoomDetailScreen', { roomId: currentRoomRecoil });
   };
 
   const toAlarmScreen = () => {
     navigation.navigate('AlarmScreen');
   };
 
-  if (!userInfo || !socketRoomId || !histories) return <LoadingComponent />;
+  if (!userInfo || !currentRoomRecoil || !histories) return <LoadingComponent />;
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['left', 'right']}>
@@ -120,7 +122,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
         toMapScreen={toMapScreen}
         toAlarmScreen={toAlarmScreen}
         alarmsCount={alarmsCount?.counts}
-        roomId={socketRoomId}
+        roomId={currentRoomRecoil}
         navigation={navigation}
       />
 

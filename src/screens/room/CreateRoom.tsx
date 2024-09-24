@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import { useRecoilState } from 'recoil';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, Suspense, useCallback } from 'react';
 
@@ -14,7 +14,13 @@ import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { roomState, userInfoState, arrivalRecoilState, departureRecoilState } from '@recoil/recoil';
+import { CurrentRoomRecoil } from '@recoil/type';
+import {
+  userInfoState,
+  arrivalRecoilState,
+  departureRecoilState,
+  currentRoomRecoilState,
+} from '@recoil/recoil';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
@@ -44,7 +50,7 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
 
   const { mutateAsync: createRoomMutate, isPending: createRoomPending } = useCreateRoom();
 
-  const [, setSocketRoomId] = useRecoilState(roomState);
+  const setCurrentRoomRecoil = useSetRecoilState<CurrentRoomRecoil>(currentRoomRecoilState);
   const [departureRecoil, setDepartureRecoil] = useRecoilState(departureRecoilState); // 출발지 이름, 좌표
   const [arrivalRecoil, setArrivalRecoil] = useRecoilState(arrivalRecoilState); // 도착지 이름, 거점 id
   const [departureTime, setDepartureTime] = useState<Date>(new Date()); // 설정 날짜
@@ -93,7 +99,7 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
       wishHeadcount: passangersNumber,
     });
 
-    setSocketRoomId(room.roomId);
+    setCurrentRoomRecoil(room.roomId);
 
     // 출발지, 도착지 초기화
     resetRecoilValue();
@@ -170,7 +176,11 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
 
             <Pressable onPress={handleArrival}>
               <View className="flex-row items-center">
-                {arrivalRecoil.name !== '' ? <EndCircle width={12} /> : <EndGrayCircle width={12} />}
+                {arrivalRecoil.name !== '' ? (
+                  <EndCircle width={12} />
+                ) : (
+                  <EndGrayCircle width={12} />
+                )}
                 <Text className="ml-4 text-sm font-normal text-gray700">도착지</Text>
               </View>
               <View>

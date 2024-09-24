@@ -14,6 +14,8 @@ export type TempEmailRecoil = string;
 
 export type IsChatInRecoil = boolean;
 
+export type CurrentRoomRecoil = number;
+
 export type MessageBody = {
   first: boolean;
   last: boolean;

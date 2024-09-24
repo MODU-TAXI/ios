@@ -1,10 +1,10 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import React, { useRef, useState, Suspense } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Alert, RefreshControl } from 'react-native';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import ButtonComponent from '@components/Button';
 import LoadingComponent from '@components/Common/Loading';
@@ -18,7 +18,8 @@ import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
 import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { roomState, userInfoState } from '@recoil/recoil';
+import { CurrentRoomRecoil } from '@recoil/type';
+import { userInfoState, currentRoomRecoilState } from '@recoil/recoil';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
@@ -49,7 +50,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const { roomId } = route.params;
 
   const scrollViewRef = useRef<ScrollView>(null);
-  const [, setSocketRoomId] = useRecoilState(roomState);
+  const setCurrentRoomRecoil = useSetRecoilState<CurrentRoomRecoil>(currentRoomRecoilState);
   const [refreshing, setRefreshing] = useState(false); // 새로고침시 필요한 변수
 
   const {
@@ -180,7 +181,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     await deleteRoomMutate();
 
     // socket RoomId도 -1로 초기화
-    setSocketRoomId(-1);
+    setCurrentRoomRecoil(-1);
 
     // stack을 지우며 해당 roomDetail로 이동
     navigation.reset({

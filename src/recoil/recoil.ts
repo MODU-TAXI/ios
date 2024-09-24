@@ -1,14 +1,3 @@
-/*
-[recoil 변수명 규칙]
-1. recoil를 뒤에 붙힌다. (그냥 state와 헷갈리기 때문)
-2. state를 뒤에 붙힌다
-3. recoil의 type명에도 뒤에 recoil 명시한다. entity와 겹칠 수 있기 때문
-4. key는 state명과 똑같이 사용한다.
-5. 가져다 사용할때에도 항상 똑같이 fullname을 사용한다. 사용하는 곳 모두 변수 통일
-   const [tempUserRecoil, setTempUserRecoil] = useRecoilState<TempUserRecoil>(tempUserRecoilState) 
-6. 타입이 단일이여도 변수명을 꼭 붙혀주기 atom<boolean> 이렇게 하면 x
-*/
-
 import { atom } from 'recoil';
 
 import {
@@ -22,6 +11,7 @@ import {
   TempEmailRecoil,
   IsLoggedInRecoil,
   SearchParamRecoil,
+  CurrentRoomRecoil,
 } from '@recoil/type';
 
 // 회원가입 중인 유저 정보 관리
@@ -70,8 +60,8 @@ export const userInfoState = atom<UserInfo>({
 });
 
 // 참여하고 있는 방정보 관리
-export const roomState = atom<number>({
-  key: 'socketRoomId',
+export const currentRoomRecoilState = atom<CurrentRoomRecoil>({
+  key: 'currentRoomRecoilState',
   default: 0,
 });
 

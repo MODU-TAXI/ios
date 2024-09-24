@@ -2,10 +2,10 @@ import Config from 'react-native-config';
 import TextEncodingPolyfill from 'text-encoding';
 import StompJs, { Message } from '@stomp/stompjs';
 import ImageView from 'react-native-image-viewing';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, AppState, KeyboardAvoidingView } from 'react-native';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import React, { useRef, Suspense, useState, useEffect, useCallback } from 'react';
 
 import MessagesComponent from '@components/Chat/Messages';
@@ -18,8 +18,8 @@ import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';
 
-import { MessageBody } from '@recoil/type';
-import { roomState, userInfoState } from '@recoil/recoil';
+import { MessageBody, CurrentRoomRecoil } from '@recoil/type';
+import { userInfoState, currentRoomRecoilState } from '@recoil/recoil';
 
 import { refreshAccessToken } from '@server/api/member';
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
@@ -55,7 +55,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const { mutateAsync: exitParticipateRoomMutate, isPending: exitParticipateRoomPending } =
     useExitParticipateRoom(); // 현재 내가 참여하고 있는 방 퇴장 mutate
 
-  const [, setSocketRoomId] = useRecoilState(roomState);
+  const setCurrentRoomRecoil = useSetRecoilState<CurrentRoomRecoil>(currentRoomRecoilState);
   const [imageUploageLoading, setImageUploadLoading] = useState<boolean>(false);
   const [newMessages, setNewMeesages] = useState<MessageBody[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
@@ -427,7 +427,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
             await exitParticipateRoomMutate();
 
-            setSocketRoomId(-1);
+            setCurrentRoomRecoil(-1);
 
             navigation.reset({
               index: 0,
