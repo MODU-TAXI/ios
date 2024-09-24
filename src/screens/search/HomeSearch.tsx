@@ -10,7 +10,7 @@ import SearchBoxComponent from '@components/Search/SearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 
-import { searchParamState, searchKeywordState } from '@recoil/recoil';
+import { searchParamState } from '@recoil/recoil';
 
 import { useNaverSearch } from '@hooks/api/search';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -31,7 +31,7 @@ const HomeSearchScreen = ({ route, navigation }: HomeSearchScreenProps) => {
   useDeleteAllNotifee();
 
   /** 검색어 저장 변수 */
-  const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
+  const [keyword, setKeyword] = useState<string>('');
   const locationPermission = useLocationPermission();
 
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);
@@ -98,7 +98,10 @@ const HomeSearchScreen = ({ route, navigation }: HomeSearchScreenProps) => {
       <View className="mx-4 flex-1">
         {/** 검색창 */}
         <View className="mb-3 mt-2">
-          <SearchBoxComponent />
+          <SearchBoxComponent
+            keyword={keyword}
+            setKeyword={setKeyword}
+          />
         </View>
 
         {/** 추천 검색어 */}

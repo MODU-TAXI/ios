@@ -17,11 +17,11 @@ import {
   Departure,
   Calculate,
   MessageBody,
-  SearchParam,
   TempUserRecoil,
   IsChatInRecoil,
   TempEmailRecoil,
   IsLoggedInRecoil,
+  SearchParamRecoil,
 } from '@recoil/type';
 
 // 회원가입 중인 유저 정보 관리
@@ -100,12 +100,7 @@ export const arrivalState = atom<Arrival>({
   },
 });
 
-export const searchKeywordState = atom<string>({
-  key: 'searchKeyword',
-  default: '',
-});
-
-export const searchParamState = atom<SearchParam>({
+export const searchParamState = atom<SearchParamRecoil>({
   key: 'searchParam',
   default: {
     title: '',

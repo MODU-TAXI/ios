@@ -58,7 +58,7 @@ export type Calculate = {
   users: UserPreview[];
 };
 
-export type SearchParam = {
+export type SearchParamRecoil = {
   title: string;
   latitude: number;
   longitude: number;

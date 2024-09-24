@@ -10,15 +10,20 @@ import {
   TextInputChangeEventData,
 } from 'react-native';
 
-import { searchKeywordState } from '@recoil/recoil';
-
 import MagnifyingGlassMainSvg from '@assets/images/Search/MagnifyingGlassMain.svg';
 
+interface SearchBoxComponentProps {
+  keyword: string;
+  setKeyword: React.Dispatch<React.SetStateAction<string>>;
+}
+
 /** 검색 바 */
-const SearchBoxComponent = () => {
+const SearchBoxComponent: React.FC<SearchBoxComponentProps> = ({
+  keyword,
+  setKeyword,
+}) => {
   // focusing ref
   const inputRef = React.useRef<TextInput>(null);
-  const [keyword, setKeyword] = useRecoilState<string>(searchKeywordState);
 
   const navigate = useNavigation();
 
@@ -49,7 +54,7 @@ const SearchBoxComponent = () => {
         className="flex h-full flex-1 flex-row rounded-xl bg-gray100 p-2"
       >
         <View className="flex justify-center px-1">
-          <MagnifyingGlassMainSvg></MagnifyingGlassMainSvg>
+          <MagnifyingGlassMainSvg />
         </View>
         <View className="flex-row justify-center">
           <TextInput
