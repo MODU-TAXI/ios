@@ -8,7 +8,8 @@ import HeaderComponent from '@components/Header';
 import InputBoxComponent from '@components/InputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { userInfoState, signUpUserState } from '@recoil/recoil';
+import { TempUserRecoil } from '@recoil/type';
+import { userInfoState, tempUserRecoilState } from '@recoil/recoil';
 
 import { usePatchMember } from '@hooks/api/member';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -25,7 +26,7 @@ const PatchUserInfoAuthenticationScreen = ({
 }: PatchUserInfoAuthenticationScreenProps) => {
   useDeleteAllNotifee();
 
-  const [signUpUser] = useRecoilState(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
+  const [tempUserRecoil] = useRecoilState<TempUserRecoil>(tempUserRecoilState); // 앞에서 받아온 회원가입 유저 정보
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
@@ -50,24 +51,24 @@ const PatchUserInfoAuthenticationScreen = ({
   const patchUser = async (): Promise<void> => {
     // 번호 인증
     await smsChangeConfirm({
-      phoneNumber: signUpUser.phoneNumber,
+      phoneNumber: tempUserRecoil.phoneNumber,
       certificationCode: code,
     });
 
     // 회원 정보 수정
     await patchMemberMutate({
       imageUrl: userInfo.imageUrl,
-      name: signUpUser.name,
-      gender: signUpUser.gender,
-      phoneNumber: signUpUser.phoneNumber,
+      name: tempUserRecoil.name,
+      gender: tempUserRecoil.gender,
+      phoneNumber: tempUserRecoil.phoneNumber,
     });
 
     // recoil 데이터 수정
     setUserInfo((prevUserInfo) => ({
       ...prevUserInfo,
-      name: signUpUser.name ?? prevUserInfo.name,
-      gender: signUpUser.gender ?? prevUserInfo.gender,
-      phoneNumber: signUpUser.phoneNumber ?? prevUserInfo.phoneNumber,
+      name: tempUserRecoil.name ?? prevUserInfo.name,
+      gender: tempUserRecoil.gender ?? prevUserInfo.gender,
+      phoneNumber: tempUserRecoil.phoneNumber ?? prevUserInfo.phoneNumber,
     }));
 
     navigation.reset({
@@ -80,7 +81,7 @@ const PatchUserInfoAuthenticationScreen = ({
 
   // 인증번호 재전송
   const resendCode = async () => {
-    await smsChangeAuthentication({ phoneNumber: signUpUser.phoneNumber });
+    await smsChangeAuthentication({ phoneNumber: tempUserRecoil.phoneNumber });
 
     InfoTopToastMessage('인증번호가 재전송 되었습니다');
     setTime(300); // 재전송시 timer 재설정

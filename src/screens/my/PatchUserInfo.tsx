@@ -6,11 +6,11 @@ import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import InputBoxComponent from '@components/InputBox';
-import RadioBoxComponent from '@components/RadioBox';
 import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { userInfoState, signUpUserState } from '@recoil/recoil';
+import { TempUserRecoil } from '@recoil/type';
+import { userInfoState, tempUserRecoilState } from '@recoil/recoil';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useSmsChangeAuthentication } from '@hooks/api/member.sms';
@@ -20,16 +20,12 @@ import { PatchUserInfoScreenProps } from '@type/param/loginStack';
 const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
   useDeleteAllNotifee();
 
-  const [, setSignUpUser] = useRecoilState(signUpUserState); // 앞에서 받아온 회원가입 유저 정보
+  const [, setTempUserRecoil] = useRecoilState<TempUserRecoil>(tempUserRecoilState);
   const [userInfo] = useRecoilState(userInfoState);
 
   const [name, setName] = useState<string>(userInfo.name);
   const [gender, setGender] = useState<string>(userInfo.gender === 'MALE' ? '남자' : '여자');
   const [phoneNumber, setPhoneNumber] = useState<string>(userInfo.phoneNumber);
-  // const [items, setItems] = useState([
-  //   { index: 1, item: '남자', select: userInfo.gender === 'MALE' },
-  //   { index: 2, item: '여자', select: userInfo.gender === 'FEMALE' },
-  // ]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
@@ -38,9 +34,6 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
 
   useEffect(() => {
     const hasNameChanged = name !== userInfo.name;
-    // const hasGenderChanged =
-    //   (userInfo.gender === 'MALE' && gender !== '남자') ||
-    //   (userInfo.gender === 'FEMALE' && gender !== '여자');
     const hasPhoneNumberChanged = phoneNumber !== userInfo.phoneNumber;
     setIsButtonDisabled(!(hasNameChanged || hasPhoneNumberChanged));
   }, [name, gender, phoneNumber, userInfo]);
@@ -51,12 +44,13 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
       phoneNumber: phoneNumber,
     });
 
-    setSignUpUser({
+    setTempUserRecoil({
       key: '',
       name: name,
       gender: gender === '남자' ? 'MALE' : 'FEMALE',
       phoneNumber: phoneNumber,
     });
+
     navigation.navigate('PatchUserInfoAuthenticationScreen');
   };
 

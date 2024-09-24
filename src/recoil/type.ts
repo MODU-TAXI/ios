@@ -1,12 +1,18 @@
 import { Bank } from '@type/entity/account';
 import { UserPreview } from '@type/entity/user';
 
-export type SignUpUser = {
+export type TempUserRecoil = {
   key: string;
   name: string;
   gender: string;
   phoneNumber: string;
 };
+
+export type IsLoggedInRecoil = boolean;
+
+export type TempEmailRecoil = string;
+
+export type IsChatInRecoil = boolean;
 
 export type MessageBody = {
   first: boolean;

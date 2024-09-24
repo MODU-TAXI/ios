@@ -2,7 +2,8 @@ import { useRecoilValue } from 'recoil';
 import { useState, useEffect } from 'react';
 import messaging from '@react-native-firebase/messaging';
 
-import { chatInState } from '@recoil/recoil';
+import { IsChatInRecoil } from '@recoil/type';
+import { isChatInRecoilState } from '@recoil/recoil';
 
 import { onMessageReceivedForeground } from '@utils/fcm';
 
@@ -26,13 +27,13 @@ export const useFcmToken = (): [string, React.Dispatch<React.SetStateAction<stri
 
 // FCM Message 수신하기
 export const useFcmMessage = () => {
-  const chatIn = useRecoilValue(chatInState);
+  const isChatInRecoil = useRecoilValue<IsChatInRecoil>(isChatInRecoilState);
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage((message) => {
-      onMessageReceivedForeground(message, chatIn);
+      onMessageReceivedForeground(message, isChatInRecoil);
     });
 
     return unsubscribe;
-  }, [chatIn]);
+  }, [isChatInRecoil]);
 };

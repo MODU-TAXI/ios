@@ -6,7 +6,8 @@ import { View, Text, Alert, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 
-import { loggedInState } from '@recoil/recoil';
+import { IsLoggedInRecoil } from '@recoil/type';
+import { isLoggedInRecoilState } from '@recoil/recoil';
 
 import { LoginStackParamList } from '@type/param/loginStack';
 
@@ -23,11 +24,11 @@ const ErrorFallback = ({
   resetErrorBoundary: () => void;
   navigation: NavigationProp<LoginStackParamList>;
 }) => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
 
   // 토큰 관련 에러 -> 모두 로그아웃 처리
   if (error.code === 'TOKEN_ERROR') {
-    setLoggedIn(false);
+    setIsLoggedInRecoil(false);
 
     Alert.alert('로그아웃 되었습니다.');
   }
