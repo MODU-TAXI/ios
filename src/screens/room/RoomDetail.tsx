@@ -18,8 +18,8 @@ import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
 import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { CurrentRoomRecoil } from '@recoil/type';
-import { userInfoState, currentRoomRecoilState } from '@recoil/recoil';
+import { UserRecoil, CurrentRoomRecoil } from '@recoil/type';
+import { userRecoilState, currentRoomRecoilState } from '@recoil/recoil';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
@@ -64,7 +64,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     queryClient,
   } = useGetRoomDetail(roomId); // 방정보들 가져오기
 
-  const myInfo = useRecoilValue(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
   const { mutateAsync: joinRoomMutate, isPending: joinRoomPending } = useJoinRoom(roomId); // 방 입장 mutate
   const { mutateAsync: applyJoinRoomMutate, isPending: approveRoomPending } =
     useApproveJoinRoom(roomId); // 방 입장 수락 mutate
@@ -93,7 +93,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   );
 
   // 대기열 참여 여부
-  const isWaiting = waitingMembers.waitingList.some((member) => member.memberId === myInfo.id);
+  const isWaiting = waitingMembers.waitingList.some((member) => member.memberId === userRecoil.id);
 
   // 방정보 새로고침
   const onRefresh = React.useCallback(async () => {

@@ -1,11 +1,11 @@
 import { AxiosError } from 'axios';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import appleAuth from '@invertase/react-native-apple-authentication';
 import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
-import { TempUserRecoil, IsLoggedInRecoil } from '@recoil/type';
-import { userInfoState, tempUserRecoilState, isLoggedInRecoilState } from '@recoil/recoil';
+import { UserRecoil, TempUserRecoil, IsLoggedInRecoil } from '@recoil/type';
+import { userRecoilState, tempUserRecoilState, isLoggedInRecoilState } from '@recoil/recoil';
 
 import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 import { PatchMemberRequest, RegisterNicknameRequest } from '@server/requestTypes/member';
@@ -37,7 +37,7 @@ export const useKakaoLogin = (
   navigation: any,
 ): UseMutationResult<KakaoOAuthToken, Error, void, unknown> => {
   const [fcmToken] = useFcmToken();
-  const [, setUserInfo] = useRecoilState(userInfoState);
+  const setUserRecoil = useSetRecoilState<UserRecoil>(userRecoilState);
   const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
   const [, setTempUserRecoil] = useRecoilState<TempUserRecoil>(tempUserRecoilState);
 
@@ -61,7 +61,7 @@ export const useKakaoLogin = (
         await setAccessToken(accessToken);
         await setRefreshToken(refreshToken);
 
-        setUserInfo(socialResponse.data.memberInfoResponse);
+        setUserRecoil(socialResponse.data.memberInfoResponse);
 
         setIsLoggedInRecoil(true);
       }
@@ -88,7 +88,7 @@ export const useAppleLogin = (
   navigation: any,
 ): UseMutationResult<AppleLoginResponse, Error, void, unknown> => {
   const [fcmToken] = useFcmToken();
-  const [, setUserInfo] = useRecoilState(userInfoState);
+  const setUserRecoil = useSetRecoilState<UserRecoil>(userRecoilState);
   const [, setIsLoggedInRecoil] = useRecoilState<IsLoggedInRecoil>(isLoggedInRecoilState);
   const [, setTempUserRecoil] = useRecoilState<TempUserRecoil>(tempUserRecoilState);
 
@@ -126,7 +126,7 @@ export const useAppleLogin = (
         await setAccessToken(accessToken);
         await setRefreshToken(refreshToken);
 
-        setUserInfo(socialResponse.data.memberInfoResponse);
+        setUserRecoil(socialResponse.data.memberInfoResponse);
         setIsLoggedInRecoil(true);
       }
     },

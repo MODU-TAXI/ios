@@ -3,9 +3,9 @@ import TextEncodingPolyfill from 'text-encoding';
 import StompJs, { Message } from '@stomp/stompjs';
 import ImageView from 'react-native-image-viewing';
 import { useFocusEffect } from '@react-navigation/native';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, AppState, KeyboardAvoidingView } from 'react-native';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import React, { useRef, Suspense, useState, useEffect, useCallback } from 'react';
 
 import MessagesComponent from '@components/Chat/Messages';
@@ -18,8 +18,8 @@ import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';
 
-import { MessageBody, CurrentRoomRecoil } from '@recoil/type';
-import { userInfoState, currentRoomRecoilState } from '@recoil/recoil';
+import { userRecoilState, currentRoomRecoilState } from '@recoil/recoil';
+import { UserRecoil, MessageBody, CurrentRoomRecoil } from '@recoil/type';
 
 import { refreshAccessToken } from '@server/api/member';
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
@@ -66,8 +66,8 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [userInfo, setUserInfo] = useState<UserPreview>();
   const [accessToken, setNewAccessToken] = useAccessToken(); // socket을 위한 token hook
   const [refresh, setRefresh] = useState(false);
-  const myInfo = useRecoilValue(userInfoState);
-  const myRoom = readonly ? false : roomPreview!.managerId == myInfo.id;
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
+  const myRoom = readonly ? false : roomPreview!.managerId == userRecoil.id;
 
   useEnterChatRoom(); // 채팅스크린에 있을때는 알람안오게 해야하므로 recoil로 상태 저장
 
@@ -82,10 +82,10 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         destination: '/pub/chat',
         body: JSON.stringify({
           roomId: roomId,
-          memberId: myInfo.id,
+          memberId: userRecoil.id,
           type: type,
           content: inputMessage,
-          imageUrl: myInfo.imageUrl,
+          imageUrl: userRecoil.imageUrl,
         }),
       });
     }
@@ -466,7 +466,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
       <KeyboardAvoidingView className="flex-1 bg-white" behavior="padding">
         {/* 메세지 Component */}
         <MessagesComponent
-          memberId={myInfo.id}
+          memberId={userRecoil.id}
           managerId={readonly ? 0 : roomPreview!.managerId}
           messages={[...messages, ...newMessages].reverse()}
           openUserInfoModal={openUserInfoModal}

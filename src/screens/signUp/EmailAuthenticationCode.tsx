@@ -8,8 +8,8 @@ import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { TempEmailRecoil } from '@recoil/type';
-import { userInfoState, tempEmailRecoilState } from '@recoil/recoil';
+import { UserRecoil, TempEmailRecoil } from '@recoil/type';
+import { userRecoilState, tempEmailRecoilState } from '@recoil/recoil';
 
 import { useEmailConfirm, useEmailAuthentication } from '@hooks/api/member.mail';
 
@@ -21,7 +21,7 @@ import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 
 const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeScreenProps) => {
   const tempEmailRecoil = useRecoilValue<TempEmailRecoil>(tempEmailRecoilState);
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [userRecoil, setUserRecoil] = useRecoilState<UserRecoil>(userRecoilState);
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [time, setTime] = useState(180); // 타이머 시간
@@ -42,16 +42,16 @@ const EmailAuthenticationCodeScreen = ({ navigation }: EmailAuthenticationCodeSc
   const confirmEmail = async (): Promise<void> => {
     await emailConfirm({ certCode: code });
 
-    setUserInfo({
-      id: userInfo.id,
-      name: userInfo.name,
-      nickname: userInfo.nickname,
-      gender: userInfo.gender,
-      phoneNumber: userInfo.phoneNumber,
+    setUserRecoil({
+      id: userRecoil.id,
+      name: userRecoil.name,
+      nickname: userRecoil.nickname,
+      gender: userRecoil.gender,
+      phoneNumber: userRecoil.phoneNumber,
       email: tempEmailRecoil,
-      imageUrl: userInfo.imageUrl,
-      matchingCount: userInfo.matchingCount,
-      blocked: userInfo.blocked,
+      imageUrl: userRecoil.imageUrl,
+      matchingCount: userRecoil.matchingCount,
+      blocked: userRecoil.blocked,
     });
 
     navigation.navigate('SurveyFirstScreen');

@@ -13,8 +13,8 @@ import HomeHeaderComponent from '@components/Home/HomeHeader';
 import UserSummaryComponent from '@components/Home/UserSummary';
 import HomeMainPanelComponent from '@components/Home/HomeMainPanel';
 
-import { CurrentRoomRecoil } from '@recoil/type';
-import { userInfoState, currentRoomRecoilState } from '@recoil/recoil';
+import { UserRecoil, CurrentRoomRecoil } from '@recoil/type';
+import { userRecoilState, currentRoomRecoilState } from '@recoil/recoil';
 
 import { getMyChatInfo } from '@server/api/chat';
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
@@ -33,7 +33,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
 
   useDeleteAllNotifee();
 
-  const userInfo = useRecoilValue(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
 
   const [currentRoomRecoil, setCurrentRoomRecoil] =
     useRecoilState<CurrentRoomRecoil>(currentRoomRecoilState);
@@ -112,13 +112,13 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('AlarmScreen');
   };
 
-  if (!userInfo || !currentRoomRecoil || !histories) return <LoadingComponent />;
+  if (!userRecoil || !currentRoomRecoil || !histories) return <LoadingComponent />;
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['left', 'right']}>
       {/* 로고, 알림 */}
       <HomeHeaderComponent
-        userInfo={userInfo}
+        userInfo={userRecoil}
         toMapScreen={toMapScreen}
         toAlarmScreen={toAlarmScreen}
         alarmsCount={alarmsCount?.counts}
@@ -151,7 +151,7 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
           navigation={navigation}
           histories={histories}
           month={date.getMonth() + 1}
-          userInfo={userInfo}
+          userInfo={userRecoil}
         />
       </ScrollView>
     </SafeAreaView>

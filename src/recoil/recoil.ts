@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 
 import {
-  UserInfo,
+  UserRecoil,
   MessageBody,
   ArrivalRecoil,
   TempUserRecoil,
@@ -44,7 +44,7 @@ export const isChatInRecoilState = atom<IsChatInRecoil>({
 });
 
 // 로그인한 유저 정보 관리
-export const userInfoState = atom<UserInfo>({
+export const userRecoilState = atom<UserRecoil>({
   key: 'userInfo',
   default: {
     id: 0,

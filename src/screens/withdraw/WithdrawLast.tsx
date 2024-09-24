@@ -7,7 +7,8 @@ import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { userInfoState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/type';
+import { userRecoilState } from '@recoil/recoil';
 
 import { useIsOldiPhone } from '@hooks/device';
 import { useDeleteMember } from '@hooks/api/member';
@@ -20,7 +21,8 @@ import { WithdrawLastScreenProps } from '@type/param/loginStack';
 const WithdrawLastScreen = ({ navigation }: WithdrawLastScreenProps) => {
   useDeleteAllNotifee();
 
-  const myInfo = useRecoilValue(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
+
   const isOldiPhone = useIsOldiPhone();
 
   const { mutateAsync: deleteMemberMutate, isPending: deleteMemberPending } = useDeleteMember();
@@ -67,12 +69,12 @@ const WithdrawLastScreen = ({ navigation }: WithdrawLastScreenProps) => {
               다음에 다시 만날 때 더 좋은 서비스가 되어
             </Text>
             <Text className="text-[12px] font-medium tracking-tight text-[#7C7C7C]">
-              {myInfo.nickname}을 맞이할게요
+              {userRecoil.nickname}을 맞이할게요
             </Text>
           </View>
 
           <Text className="mt-4 text-[12px] font-medium tracking-tight text-[#7C7C7C]">
-            {myInfo.nickname}님, 그간 모두의 택시와 함께해주셔서 감사해요
+            {userRecoil.nickname}님, 그간 모두의 택시와 함께해주셔서 감사해요
           </Text>
         </View>
       </View>

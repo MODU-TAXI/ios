@@ -9,8 +9,8 @@ import LoadingComponent from '@components/Common/Loading';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';
 
-import { IsLoggedInRecoil } from '@recoil/type';
-import { userInfoState, isLoggedInRecoilState } from '@recoil/recoil';
+import { UserRecoil, IsLoggedInRecoil } from '@recoil/type';
+import { userRecoilState, isLoggedInRecoilState } from '@recoil/recoil';
 
 import { usePatchMember } from '@hooks/api/member';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -29,10 +29,10 @@ import ResignButton from '@assets/images/My/ResignButton.svg';
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   useDeleteAllNotifee();
 
-  const userInfo = useRecoilValue(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
 
   const { mutateAsync: patchMemberMutate, isPending: patchMemberPending } = usePatchMember();
-  const [profileImage, setProfileImage] = useState<string>(userInfo.imageUrl);
+  const [profileImage, setProfileImage] = useState<string>(userRecoil.imageUrl);
 
   const [imageUploageLoading, setImageUploadLoading] = useState<boolean>(false);
 
@@ -80,9 +80,9 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
     if (imageUrl) {
       patchMemberMutate({
-        name: userInfo.name,
-        gender: userInfo.gender,
-        phoneNumber: userInfo.phoneNumber,
+        name: userRecoil.name,
+        gender: userRecoil.gender,
+        phoneNumber: userRecoil.phoneNumber,
         imageUrl: imageUrl,
       });
       setProfileImage(imageUrl);
@@ -99,9 +99,9 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
     if (imageUrl) {
       patchMemberMutate({
-        name: userInfo.name,
-        gender: userInfo.gender,
-        phoneNumber: userInfo.phoneNumber,
+        name: userRecoil.name,
+        gender: userRecoil.gender,
+        phoneNumber: userRecoil.phoneNumber,
         imageUrl: imageUrl,
       });
 
@@ -146,7 +146,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('WithdrawSurveyScreen');
   };
 
-  if (!userInfo) return <LoadingComponent />;
+  if (!userRecoil) return <LoadingComponent />;
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
@@ -181,7 +181,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             onPress={toPatchNicknameScreen}
           >
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">닉네임</Text>
-            <Text className="font-medium tracking-tight text-[#7C7C7C]">{userInfo.nickname}</Text>
+            <Text className="font-medium tracking-tight text-[#7C7C7C]">{userRecoil.nickname}</Text>
           </Pressable>
 
           {/* 
@@ -196,7 +196,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
           >
             <Text className="font-semibold tracking-tight text-[#3E3E3E]">학교 인증</Text>
             <Text className="font-medium tracking-tight text-[#7C7C7C]">
-              {userInfo.email ? '인증' : '미인증'}
+              {userRecoil.email ? '인증' : '미인증'}
             </Text>
           </Pressable>
         </View>

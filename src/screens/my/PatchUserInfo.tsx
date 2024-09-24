@@ -1,5 +1,5 @@
-import { useRecoilState } from 'recoil';
 import React, { useState, useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
@@ -9,8 +9,8 @@ import InputBoxComponent from '@components/InputBox';
 import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { TempUserRecoil } from '@recoil/type';
-import { userInfoState, tempUserRecoilState } from '@recoil/recoil';
+import { UserRecoil, TempUserRecoil } from '@recoil/type';
+import { userRecoilState, tempUserRecoilState } from '@recoil/recoil';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useSmsChangeAuthentication } from '@hooks/api/member.sms';
@@ -21,11 +21,11 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
   useDeleteAllNotifee();
 
   const [, setTempUserRecoil] = useRecoilState<TempUserRecoil>(tempUserRecoilState);
-  const [userInfo] = useRecoilState(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
 
-  const [name, setName] = useState<string>(userInfo.name);
-  const [gender, setGender] = useState<string>(userInfo.gender === 'MALE' ? '남자' : '여자');
-  const [phoneNumber, setPhoneNumber] = useState<string>(userInfo.phoneNumber);
+  const [name, setName] = useState<string>(userRecoil.name);
+  const [gender, setGender] = useState<string>(userRecoil.gender === 'MALE' ? '남자' : '여자');
+  const [phoneNumber, setPhoneNumber] = useState<string>(userRecoil.phoneNumber);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
@@ -33,10 +33,10 @@ const PatchUserInfoScreen = ({ navigation }: PatchUserInfoScreenProps) => {
     useSmsChangeAuthentication(setErrorMessage);
 
   useEffect(() => {
-    const hasNameChanged = name !== userInfo.name;
-    const hasPhoneNumberChanged = phoneNumber !== userInfo.phoneNumber;
+    const hasNameChanged = name !== userRecoil.name;
+    const hasPhoneNumberChanged = phoneNumber !== userRecoil.phoneNumber;
     setIsButtonDisabled(!(hasNameChanged || hasPhoneNumberChanged));
-  }, [name, gender, phoneNumber, userInfo]);
+  }, [name, gender, phoneNumber, userRecoil]);
 
   // 다음으로
   const toNext = async (): Promise<void> => {

@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 import { View, Text, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useRecoilState, useSetRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, Suspense, useCallback } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
@@ -14,9 +14,9 @@ import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { CurrentRoomRecoil } from '@recoil/type';
+import { UserRecoil, CurrentRoomRecoil } from '@recoil/type';
 import {
-  userInfoState,
+  userRecoilState,
   arrivalRecoilState,
   departureRecoilState,
   currentRoomRecoilState,
@@ -58,7 +58,7 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
   const [passangersNumber, setPassengersNumber] = useState<number | null>(null); // 탑승 인원
   const [checkedCategories, setCheckedCategories] = useState<boolean[]>([false, false, false]); // 카테고리
-  const [userInfo] = useRecoilState(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
 
   /** 출발, 도착지 초기화 */
   const resetRecoilValue = useCallback(() => {
@@ -265,7 +265,7 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
           <DescriptionComponent description="카테고리를 선택해주세요" />
 
           <View className="mt-4 flex-row">
-            {userInfo.email && (
+            {userRecoil.email && (
               <CategoryComponent
                 index={0}
                 category={'학생인증'}

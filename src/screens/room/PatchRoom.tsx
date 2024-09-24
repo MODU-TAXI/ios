@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { useRecoilState } from 'recoil';
 import { View, Text, Pressable } from 'react-native';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, Suspense, useEffect, useCallback } from 'react';
@@ -14,7 +14,8 @@ import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { userInfoState, arrivalRecoilState, departureRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/type';
+import { userRecoilState, arrivalRecoilState, departureRecoilState } from '@recoil/recoil';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
@@ -56,7 +57,8 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
     roomDetail.wishHeadcount - 1,
   ); // 탑승 인원
   const [checkedCategories, setCheckedCategories] = useState<boolean[]>([false, false, false]); // 카테고리
-  const [userInfo] = useRecoilState(userInfoState);
+
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
 
   // 첫 렌더링 시 roomDetail 정보 저장
   useEffect(() => {
@@ -288,7 +290,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
           <DescriptionComponent description="카테고리를 선택해주세요" />
 
           <View className="mt-4 flex-row">
-            {userInfo.email && (
+            {userRecoil.email && (
               <CategoryComponent
                 index={0}
                 category={'학생인증'}

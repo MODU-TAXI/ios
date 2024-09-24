@@ -1,16 +1,16 @@
 import React, { useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { TextInput } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Keyboard, Pressable } from 'react-native';
-import { TextInput, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
 import { GetBankComponent } from '@components/Calculate/GetBank';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { SettlementRecoil } from '@recoil/type';
-import { userInfoState, settlementRecoilState } from '@recoil/recoil';
+import { UserRecoil, SettlementRecoil } from '@recoil/type';
+import { userRecoilState, settlementRecoilState } from '@recoil/recoil';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useRegisterAccount } from '@hooks/api/account';
@@ -24,11 +24,11 @@ const CheckAccountScreen = ({ navigation, route }: CheckAccountScreenProps) => {
 
   const { roomPreview } = route.params;
 
-  const myInfo = useRecoilValue(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
 
   const textInputRef = useRef<TextInput>(null);
 
-  const [name, setName] = useState<string>(myInfo.name);
+  const [name, setName] = useState<string>(userRecoil.name);
 
   const [settlementRecoil, setSettlementRecoil] =
     useRecoilState<SettlementRecoil>(settlementRecoilState);

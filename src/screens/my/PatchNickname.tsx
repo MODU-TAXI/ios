@@ -8,7 +8,8 @@ import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { userInfoState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/type';
+import { userRecoilState } from '@recoil/recoil';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useRegisterNickname } from '@hooks/api/member';
@@ -20,8 +21,8 @@ import { PatchNicknameScreenProps } from '@type/param/loginStack';
 const PatchNicknameScreen = ({ navigation }: PatchNicknameScreenProps) => {
   useDeleteAllNotifee();
 
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-  const [nickname, setNickname] = useState<string>(userInfo.nickname);
+  const [userRecoil, setUserRecoil] = useRecoilState<UserRecoil>(userRecoilState);
+  const [nickname, setNickname] = useState<string>(userRecoil.nickname);
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
 
   const { mutateAsync: registerNickname, isPending: registerNicknamePending } =
@@ -39,16 +40,16 @@ const PatchNicknameScreen = ({ navigation }: PatchNicknameScreenProps) => {
 
     setErrorMessage('');
 
-    setUserInfo({
-      id: userInfo.id,
-      name: userInfo.name,
+    setUserRecoil({
+      id: userRecoil.id,
+      name: userRecoil.name,
       nickname: trimNickname,
-      gender: userInfo.gender,
-      phoneNumber: userInfo.phoneNumber,
-      email: userInfo.email,
-      imageUrl: userInfo.imageUrl,
-      matchingCount: userInfo.matchingCount,
-      blocked: userInfo.blocked,
+      gender: userRecoil.gender,
+      phoneNumber: userRecoil.phoneNumber,
+      email: userRecoil.email,
+      imageUrl: userRecoil.imageUrl,
+      matchingCount: userRecoil.matchingCount,
+      blocked: userRecoil.blocked,
     });
 
     navigation.goBack();
@@ -92,7 +93,7 @@ const PatchNicknameScreen = ({ navigation }: PatchNicknameScreenProps) => {
                 borderColor={'border-main'}
                 textColor={'white'}
                 text={'변경하기'}
-                disabled={nickname === userInfo.nickname}
+                disabled={nickname === userRecoil.nickname}
                 onPress={checkNickname}
               />
             </View>

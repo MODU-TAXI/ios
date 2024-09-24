@@ -6,7 +6,8 @@ import { Text, View, Pressable, TextInput } from 'react-native';
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 
-import { userInfoState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/type';
+import { userRecoilState } from '@recoil/recoil';
 
 import { useIsOldiPhone } from '@hooks/device';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -16,7 +17,7 @@ import { WithdrawSurveyScreenProps } from '@type/param/loginStack';
 const WithdrawSurveyScreen = ({ navigation }: WithdrawSurveyScreenProps) => {
   useDeleteAllNotifee();
 
-  const myInfo = useRecoilValue(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
   const isOldiPhone = useIsOldiPhone();
 
   const [selectedItem, setSelectedItem] = useState<number>(-1);
@@ -41,7 +42,7 @@ const WithdrawSurveyScreen = ({ navigation }: WithdrawSurveyScreenProps) => {
       <View className="mt-8 flex-1 px-6">
         <View>
           <Text className="text-[18px] font-semibold tracking-tight text-[#1F1F1F]">
-            {myInfo.nickname}님,
+            {userRecoil.nickname}님,
           </Text>
 
           <Text className="mt-1 text-[18px] font-semibold tracking-tight text-[#1F1F1F]">

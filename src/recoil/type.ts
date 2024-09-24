@@ -28,7 +28,7 @@ export type MessageBody = {
   messageType: string;
 };
 
-export type UserInfo = {
+export type UserRecoil = {
   id: number;
   name: string;
   nickname: string;
