@@ -14,7 +14,7 @@ import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { arrivalState, userInfoState, departureRecoilState } from '@recoil/recoil';
+import { userInfoState, arrivalRecoilState, departureRecoilState } from '@recoil/recoil';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
@@ -48,7 +48,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
   );
 
   const [departureRecoil, setDepartureRecoil] = useRecoilState(departureRecoilState); // 출발지 이름, 좌표
-  const [arrival, setArrival] = useRecoilState(arrivalState); // 도착지 이름, 거점 id
+  const [arrivalRecoil, setArrivalRecoil] = useRecoilState(arrivalRecoilState); // 도착지 이름, 거점 id
   const [departureTime, setDepartureTime] = useState<Date>(new Date()); // 설정 날짜
   const [datePicked, setDatePicked] = useState<boolean>(true); // 날짜 선택 여부
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부
@@ -65,7 +65,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
       latitude: roomDetail.departureLatitude,
       longitude: roomDetail.departureLongitude,
     });
-    setArrival({
+    setArrivalRecoil({
       name: roomDetail.arrivalName,
       spotId: roomDetail.spotId,
     });
@@ -107,11 +107,11 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
       latitude: 0,
       longitude: 0,
     });
-    setArrival({
+    setArrivalRecoil({
       name: '',
       spotId: 0,
     });
-  }, [setDepartureRecoil, setArrival]);
+  }, [setDepartureRecoil, setArrivalRecoil]);
 
   // 파티 수정
   const patchMatch = async () => {
@@ -127,7 +127,7 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
     const departureTimeForServer = new Date(departureTime.getTime() + 9 * 60 * 60 * 1000);
 
     await patchRoomMutate({
-      spotId: arrival.spotId,
+      spotId: arrivalRecoil.spotId,
       departureLongitude: departureRecoil.longitude,
       departureLatitude: departureRecoil.latitude,
       roomTagBitMask: filteredCategories,
@@ -207,13 +207,13 @@ const PatchRoomComponent = ({ navigation, route }: PatchRoomScreenProps) => {
               </View>
 
               <View>
-                {arrival.name === '' ? (
+                {arrivalRecoil.name === '' ? (
                   <Text className="ml-7 mt-2 text-[16px] font-semibold text-gray900 ">
                     {roomDetail.arrivalName}
                   </Text>
                 ) : (
                   <Text className="ml-7 mt-2 text-[16px] font-semibold text-gray900 ">
-                    {arrival.name}
+                    {arrivalRecoil.name}
                   </Text>
                 )}
               </View>

@@ -83,7 +83,7 @@ export const messagesState = atom<MessageBody[]>({
 
 // 방 생성 시 출발지
 export const departureRecoilState = atom<DepartureRecoil>({
-  key: 'departure',
+  key: 'departureRecoilState',
   default: {
     name: '',
     latitude: 0,
@@ -92,8 +92,8 @@ export const departureRecoilState = atom<DepartureRecoil>({
 });
 
 // 방 생성 시 도착거점
-export const arrivalState = atom<ArrivalRecoil>({
-  key: 'arrivalName',
+export const arrivalRecoilState = atom<ArrivalRecoil>({
+  key: 'arrivalRecoilState',
   default: {
     name: '',
     spotId: 0,
