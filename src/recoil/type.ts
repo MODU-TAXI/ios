@@ -1,17 +1,6 @@
 import { Bank } from '@type/entity/account';
 import { UserPreview } from '@type/entity/user';
 
-export type TempUserRecoil = {
-  key: string;
-  name: string;
-  gender: string;
-  phoneNumber: string;
-};
-
-export type IsLoggedInRecoil = boolean;
-
-export type TempEmailRecoil = string;
-
 export type IsChatInRecoil = boolean;
 
 export type CurrentRoomRecoil = number;
@@ -26,18 +15,6 @@ export type MessageBody = {
   sender: string;
   imageUrl: string;
   messageType: string;
-};
-
-export type UserRecoil = {
-  id: number;
-  name: string;
-  nickname: string;
-  gender: string;
-  phoneNumber: string;
-  email: string;
-  imageUrl: string;
-  matchingCount: number;
-  blocked: boolean;
 };
 
 export type DepartureRecoil = {

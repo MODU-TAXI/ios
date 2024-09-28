@@ -6,8 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ButtonComponent from '@components/Button';
 import ProgressBarComponent from '@components/ProgressBar';
 
-import { IsLoggedInRecoil } from '@recoil/type';
-import { isLoggedInRecoilState } from '@recoil/recoil';
+import { IsLoggedInRecoil } from '@recoil/types/user';
+import { isLoggedInRecoilState } from '@recoil/states/user';
 
 import ModutaxiCar from '@assets/images/SignUp/ModutaxiCar.svg';
 

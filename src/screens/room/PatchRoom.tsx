@@ -14,8 +14,9 @@ import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { UserRecoil } from '@recoil/type';
-import { userRecoilState, arrivalRecoilState, departureRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { arrivalRecoilState, departureRecoilState } from '@recoil/recoil';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 

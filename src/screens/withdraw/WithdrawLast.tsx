@@ -7,8 +7,8 @@ import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { UserRecoil } from '@recoil/type';
-import { userRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
 
 import { useIsOldiPhone } from '@hooks/device';
 import { useDeleteMember } from '@hooks/api/member';

@@ -18,8 +18,10 @@ import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
 import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { UserRecoil, CurrentRoomRecoil } from '@recoil/type';
-import { userRecoilState, currentRoomRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { CurrentRoomRecoil } from '@recoil/type';
+import { userRecoilState } from '@recoil/states/user';
+import { currentRoomRecoilState } from '@recoil/recoil';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 

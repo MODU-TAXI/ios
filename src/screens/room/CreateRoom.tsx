@@ -14,13 +14,10 @@ import CategoryComponent from '@components/Match/Category';
 import PassengerComponent from '@components/Match/Passenger';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { UserRecoil, CurrentRoomRecoil } from '@recoil/type';
-import {
-  userRecoilState,
-  arrivalRecoilState,
-  departureRecoilState,
-  currentRoomRecoilState,
-} from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { CurrentRoomRecoil } from '@recoil/type';
+import { userRecoilState } from '@recoil/states/user';
+import { arrivalRecoilState, departureRecoilState, currentRoomRecoilState } from '@recoil/recoil';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 

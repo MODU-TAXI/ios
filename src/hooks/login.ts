@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 
-import { UserRecoil } from '@recoil/type';
-import { userRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
 
 import { refreshAccessToken } from '@server/api/member';
 

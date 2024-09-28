@@ -13,8 +13,10 @@ import HomeHeaderComponent from '@components/Home/HomeHeader';
 import UserSummaryComponent from '@components/Home/UserSummary';
 import HomeMainPanelComponent from '@components/Home/HomeMainPanel';
 
-import { UserRecoil, CurrentRoomRecoil } from '@recoil/type';
-import { userRecoilState, currentRoomRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { CurrentRoomRecoil } from '@recoil/type';
+import { userRecoilState } from '@recoil/states/user';
+import { currentRoomRecoilState } from '@recoil/recoil';
 
 import { getMyChatInfo } from '@server/api/chat';
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';

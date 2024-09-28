@@ -27,8 +27,9 @@ import SpotFilterModalScreen from '@components/Modal/SpotFilterModal';
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDigest';
 
-import { UserRecoil } from '@recoil/type';
-import { userRecoilState, searchParamRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { searchParamRecoilState } from '@recoil/recoil';
 
 import { useIsOldiPhone } from '@hooks/device';
 import { useGetSpotMap } from '@hooks/api/spot';

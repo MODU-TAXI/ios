@@ -8,8 +8,10 @@ import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { UserRecoil, TempUserRecoil } from '@recoil/type';
-import { userRecoilState, tempUserRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { TempUserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { tempUserRecoilState } from '@recoil/states/user';
 
 import { signUp } from '@server/api/member';
 

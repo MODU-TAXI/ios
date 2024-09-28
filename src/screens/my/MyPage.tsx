@@ -9,8 +9,10 @@ import LoadingComponent from '@components/Common/Loading';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';
 
-import { UserRecoil, IsLoggedInRecoil } from '@recoil/type';
-import { userRecoilState, isLoggedInRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { IsLoggedInRecoil } from '@recoil/types/user';
+import { isLoggedInRecoilState } from '@recoil/states/user';
 
 import { usePatchMember } from '@hooks/api/member';
 import { useDeleteAllNotifee } from '@hooks/notifee';

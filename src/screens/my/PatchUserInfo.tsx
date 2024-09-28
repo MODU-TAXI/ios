@@ -9,8 +9,10 @@ import InputBoxComponent from '@components/InputBox';
 import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { UserRecoil, TempUserRecoil } from '@recoil/type';
-import { userRecoilState, tempUserRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { TempUserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { tempUserRecoilState } from '@recoil/states/user';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useSmsChangeAuthentication } from '@hooks/api/member.sms';

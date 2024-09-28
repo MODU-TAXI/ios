@@ -6,8 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 
-import { UserRecoil } from '@recoil/type';
-import { userRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
 
 import { useIsOldiPhone } from '@hooks/device';
 import { useDeleteAllNotifee } from '@hooks/notifee';

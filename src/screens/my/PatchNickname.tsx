@@ -8,8 +8,8 @@ import ButtonComponent from '@components/Button';
 import InputBoxComponent from '@components/InputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { UserRecoil } from '@recoil/type';
-import { userRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useRegisterNickname } from '@hooks/api/member';

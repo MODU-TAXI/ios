@@ -3,8 +3,8 @@ import { useRecoilValue } from 'recoil';
 import FastImage from 'react-native-fast-image';
 import { Text, View, Modal, Pressable } from 'react-native';
 
-import { UserRecoil } from '@recoil/type';
-import { userRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
 
 import { useGetMemberInfo } from '@hooks/api/member';
 

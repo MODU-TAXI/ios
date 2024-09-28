@@ -1,62 +1,19 @@
 import { atom } from 'recoil';
 
 import {
-  UserRecoil,
   MessageBody,
   ArrivalRecoil,
-  TempUserRecoil,
   IsChatInRecoil,
   DepartureRecoil,
-  TempEmailRecoil,
   SettlementRecoil,
-  IsLoggedInRecoil,
   SearchParamRecoil,
   CurrentRoomRecoil,
 } from '@recoil/type';
-
-// 회원가입 중인 유저 정보 관리
-export const tempUserRecoilState = atom<TempUserRecoil>({
-  key: 'tempUserRecoilState',
-  default: {
-    key: '',
-    name: '',
-    gender: '',
-    phoneNumber: '',
-  },
-});
-
-// 회원가입 중 이메일 정보 관리
-export const tempEmailRecoilState = atom<TempEmailRecoil>({
-  key: 'tempEmailRecoilState',
-  default: '',
-});
-
-// 로그인 여부 관리
-export const isLoggedInRecoilState = atom<IsLoggedInRecoil>({
-  key: 'isLoggedInRecoilState',
-  default: false,
-});
 
 // 채팅방 입장 여부 관리
 export const isChatInRecoilState = atom<IsChatInRecoil>({
   key: 'isChatInRecoilState',
   default: false,
-});
-
-// 로그인한 유저 정보 관리
-export const userRecoilState = atom<UserRecoil>({
-  key: 'userInfo',
-  default: {
-    id: 0,
-    name: '',
-    nickname: '',
-    gender: '',
-    phoneNumber: '',
-    email: '',
-    imageUrl: '',
-    matchingCount: 0,
-    blocked: false,
-  },
 });
 
 // 참여하고 있는 방정보 관리

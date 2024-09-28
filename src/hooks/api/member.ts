@@ -4,8 +4,12 @@ import appleAuth from '@invertase/react-native-apple-authentication';
 import { login, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
-import { UserRecoil, TempUserRecoil, IsLoggedInRecoil } from '@recoil/type';
-import { userRecoilState, tempUserRecoilState, isLoggedInRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { TempUserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { IsLoggedInRecoil } from '@recoil/types/user';
+import { tempUserRecoilState } from '@recoil/states/user';
+import { isLoggedInRecoilState } from '@recoil/states/user';
 
 import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';
 import { PatchMemberRequest, RegisterNicknameRequest } from '@server/requestTypes/member';
