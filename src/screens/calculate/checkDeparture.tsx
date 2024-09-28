@@ -7,8 +7,8 @@ import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import MembersComponent from '@components/Calculate/Members';
 
-import { SettlementRecoil } from '@recoil/type';
-import { settlementRecoilState } from '@recoil/recoil';
+import { SettlementRecoil } from '@recoil/types/settlement';
+import { settlementRecoilState } from '@recoil/states/settlement';
 
 import { useGetRoomMembers } from '@hooks/api/rooms';
 import { useDeleteAllNotifee } from '@hooks/notifee';

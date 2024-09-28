@@ -9,8 +9,10 @@ import ButtonComponent from '@components/Button';
 import { GetBankComponent } from '@components/Calculate/GetBank';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { UserRecoil, SettlementRecoil } from '@recoil/type';
-import { userRecoilState, settlementRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { SettlementRecoil } from '@recoil/types/settlement';
+import { settlementRecoilState } from '@recoil/states/settlement';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useRegisterAccount } from '@hooks/api/account';

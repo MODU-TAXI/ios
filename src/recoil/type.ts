@@ -12,15 +12,6 @@ export type ArrivalRecoil = {
   spotId: number;
 };
 
-export type SettlementRecoil = {
-  name: string;
-  account: string;
-  accountId: number;
-  bank: Bank;
-  amount: string;
-  users: UserPreview[];
-};
-
 export type SearchParamRecoil = {
   title: string;
   latitude: number;

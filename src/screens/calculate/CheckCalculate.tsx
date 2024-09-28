@@ -10,8 +10,8 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ParticipateMembersComponent from '@components/Calculate/ParicipateMembers';
 import UnParticipateMembersComponent from '@components/Calculate/UnParticipateMembers';
 
-import { SettlementRecoil } from '@recoil/type';
-import { settlementRecoilState } from '@recoil/recoil';
+import { SettlementRecoil } from '@recoil/types/settlement';
+import { settlementRecoilState } from '@recoil/states/settlement';
 
 import { usePayment } from '@hooks/api/payment';
 import { useDeleteAllNotifee } from '@hooks/notifee';

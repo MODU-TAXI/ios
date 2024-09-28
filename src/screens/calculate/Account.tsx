@@ -11,8 +11,8 @@ import BankModalComponent from '@components/Calculate/BankModal';
 import { GetBankComponent } from '@components/Calculate/GetBank';
 import MyAccountsComponent from '@components/Calculate/MyAccounts';
 
-import { SettlementRecoil } from '@recoil/type';
-import { settlementRecoilState } from '@recoil/recoil';
+import { SettlementRecoil } from '@recoil/types/settlement';
+import { settlementRecoilState } from '@recoil/states/settlement';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
