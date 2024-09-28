@@ -7,19 +7,12 @@ import {
   DepartureRecoil,
   SettlementRecoil,
   SearchParamRecoil,
-  CurrentRoomRecoil,
 } from '@recoil/type';
 
 // 채팅방 입장 여부 관리
 export const isChatInRecoilState = atom<IsChatInRecoil>({
   key: 'isChatInRecoilState',
   default: false,
-});
-
-// 참여하고 있는 방정보 관리
-export const currentRoomRecoilState = atom<CurrentRoomRecoil>({
-  key: 'currentRoomRecoilState',
-  default: 0,
 });
 
 // 채팅 메세지 관리

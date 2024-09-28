@@ -18,10 +18,11 @@ import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';
 
+import { MessageBody } from '@recoil/type';
 import { UserRecoil } from '@recoil/types/user';
 import { userRecoilState } from '@recoil/states/user';
-import { currentRoomRecoilState } from '@recoil/recoil';
-import { MessageBody, CurrentRoomRecoil } from '@recoil/type';
+import { CurrentRoomRecoil } from '@recoil/types/room';
+import { currentRoomRecoilState } from '@recoil/states/room';
 
 import { refreshAccessToken } from '@server/api/member';
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';

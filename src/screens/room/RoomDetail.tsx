@@ -2,9 +2,9 @@ import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
 import React, { useRef, useState, Suspense } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Alert, RefreshControl } from 'react-native';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import ButtonComponent from '@components/Button';
 import LoadingComponent from '@components/Common/Loading';
@@ -19,9 +19,9 @@ import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { UserRecoil } from '@recoil/types/user';
-import { CurrentRoomRecoil } from '@recoil/type';
 import { userRecoilState } from '@recoil/states/user';
-import { currentRoomRecoilState } from '@recoil/recoil';
+import { CurrentRoomRecoil } from '@recoil/types/room';
+import { currentRoomRecoilState } from '@recoil/states/room';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 

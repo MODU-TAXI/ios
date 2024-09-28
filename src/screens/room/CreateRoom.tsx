@@ -15,9 +15,10 @@ import PassengerComponent from '@components/Match/Passenger';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { UserRecoil } from '@recoil/types/user';
-import { CurrentRoomRecoil } from '@recoil/type';
 import { userRecoilState } from '@recoil/states/user';
-import { arrivalRecoilState, departureRecoilState, currentRoomRecoilState } from '@recoil/recoil';
+import { CurrentRoomRecoil } from '@recoil/types/room';
+import { currentRoomRecoilState } from '@recoil/states/room';
+import { arrivalRecoilState, departureRecoilState } from '@recoil/recoil';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 

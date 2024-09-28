@@ -3,8 +3,6 @@ import { UserPreview } from '@type/entity/user';
 
 export type IsChatInRecoil = boolean;
 
-export type CurrentRoomRecoil = number;
-
 export type MessageBody = {
   first: boolean;
   last: boolean;
