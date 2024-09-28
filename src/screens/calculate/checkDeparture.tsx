@@ -1,13 +1,14 @@
-import { useRecoilState } from 'recoil';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
+import { useSetRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 import MembersComponent from '@components/Calculate/Members';
 
-import { calculateState } from '@recoil/recoil';
+import { SettlementRecoil } from '@recoil/types/settlement';
+import { settlementRecoilState } from '@recoil/states/settlement';
 
 import { useGetRoomMembers } from '@hooks/api/rooms';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -24,7 +25,7 @@ const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) 
 
   const [unParticipateMembers, setUnParticipateMembers] = useState<UserPreview[]>([]);
 
-  const [, setCalculateData] = useRecoilState(calculateState);
+  const setSettlementRecoil = useSetRecoilState<SettlementRecoil>(settlementRecoilState);
 
   const toAmountScreen = async () => {
     const filteredMembers = roomMembers.inList.filter(
@@ -34,7 +35,7 @@ const CheckDepartureScreen = ({ navigation, route }: CheckDepartureScreenProps) 
         ),
     );
 
-    setCalculateData((prev) => ({
+    setSettlementRecoil((prev) => ({
       ...prev,
       users: filteredMembers,
     }));

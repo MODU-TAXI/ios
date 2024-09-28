@@ -2,8 +2,8 @@ import { useRecoilValue } from 'recoil';
 import { useState, useEffect } from 'react';
 import messaging from '@react-native-firebase/messaging';
 
-import { IsChatInRecoil } from '@recoil/type';
-import { isChatInRecoilState } from '@recoil/recoil';
+import { IsChatInRecoil } from '@recoil/types/chat';
+import { isChatInRecoilState } from '@recoil/states/chat';
 
 import { onMessageReceivedForeground } from '@utils/fcm';
 

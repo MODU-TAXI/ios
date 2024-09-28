@@ -54,8 +54,8 @@ import PhoneAuthenticationCodeScreen from './src/screens/signUp/PhoneAuthenticat
 import PatchUserInfoAuthenticationScreen from './src/screens/my/PatchUserInfoAuthentication';
 import PatchSchoolEmailAuthenticationScreen from './src/screens/my/PatchSchoolEmailAuthentication';
 
-import { IsLoggedInRecoil } from '@recoil/type';
-import { isLoggedInRecoilState } from '@recoil/recoil';
+import { IsLoggedInRecoil } from '@recoil/types/user';
+import { isLoggedInRecoilState } from '@recoil/states/user';
 
 import { useFcmMessage } from '@hooks/fcm';
 import { useCheckLogin } from '@hooks/login';

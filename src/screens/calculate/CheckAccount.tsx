@@ -1,15 +1,18 @@
 import React, { useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { TextInput } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Keyboard, Pressable } from 'react-native';
-import { TextInput, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import HeaderComponent from '@components/Header';
 import ButtonComponent from '@components/Button';
 import { GetBankComponent } from '@components/Calculate/GetBank';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { userInfoState, calculateState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { SettlementRecoil } from '@recoil/types/settlement';
+import { settlementRecoilState } from '@recoil/states/settlement';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useRegisterAccount } from '@hooks/api/account';
@@ -23,13 +26,14 @@ const CheckAccountScreen = ({ navigation, route }: CheckAccountScreenProps) => {
 
   const { roomPreview } = route.params;
 
-  const myInfo = useRecoilValue(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
 
   const textInputRef = useRef<TextInput>(null);
 
-  const [name, setName] = useState<string>(myInfo.name);
+  const [name, setName] = useState<string>(userRecoil.name);
 
-  const [calculateData, setCalculateData] = useRecoilState(calculateState);
+  const [settlementRecoil, setSettlementRecoil] =
+    useRecoilState<SettlementRecoil>(settlementRecoilState);
 
   const { mutateAsync: registerAccount, isPending: registerAccountPending } = useRegisterAccount();
 
@@ -40,11 +44,11 @@ const CheckAccountScreen = ({ navigation, route }: CheckAccountScreenProps) => {
   const toNext = async () => {
     const response = await registerAccount({
       ownerName: name,
-      accountNumber: calculateData.account,
-      bank: calculateData.bank.identifier,
+      accountNumber: settlementRecoil.account,
+      bank: settlementRecoil.bank.identifier,
     });
 
-    setCalculateData((prev) => ({
+    setSettlementRecoil((prev) => ({
       ...prev,
       accountId: response.id,
       name: name,
@@ -101,13 +105,13 @@ const CheckAccountScreen = ({ navigation, route }: CheckAccountScreenProps) => {
 
             {/* 계좌 */}
             <View className="mt-4 flex-row items-center">
-              <GetBankComponent bank={calculateData.bank.identifier} />
+              <GetBankComponent bank={settlementRecoil.bank.identifier} />
 
               <Text className="ml-2 mr-1 text-[16px] font-medium tracking-tight">
-                {calculateData.bank.name}
+                {settlementRecoil.bank.name}
               </Text>
               <Text className="text-[16px] font-medium tracking-tight">
-                {calculateData.account}
+                {settlementRecoil.account}
               </Text>
             </View>
 

@@ -1,8 +1,8 @@
 import { useRecoilState } from 'recoil';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 
-import { IsLoggedInRecoil } from '@recoil/type';
-import { isLoggedInRecoilState } from '@recoil/recoil';
+import { IsLoggedInRecoil } from '@recoil/types/user';
+import { isLoggedInRecoilState } from '@recoil/states/user';
 
 import { emailConfirm, emailAuthentication } from '@server/api/member.mail';
 import { mutateErrorHandler } from '@server/errorHandler/mutateErrorHandler';

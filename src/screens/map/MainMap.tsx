@@ -27,7 +27,9 @@ import SpotFilterModalScreen from '@components/Modal/SpotFilterModal';
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDigest';
 
-import { userInfoState, searchParamRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { searchParamRecoilState } from '@recoil/recoil';
 
 import { useIsOldiPhone } from '@hooks/device';
 import { useGetSpotMap } from '@hooks/api/spot';
@@ -48,7 +50,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   const isOldiPhone = useIsOldiPhone();
 
   const insets = useSafeAreaInsets();
-  const userInfo = useRecoilValue(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
   const mapRef = useRef<NaverMapViewRef>(null);
   const [selectedRoom, setSelectedRoom] = useState<RoomIntegration | null>(null);
 
@@ -341,7 +343,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
             <TransparentSearchBoxComponent value={searchParamRecoil.title} isSearched={true} />
           ) : (
             <TransparentSearchBoxComponent
-              value={`${userInfo.name}님 우리 어디로 떠날까요?`}
+              value={`${userRecoil.name}님 우리 어디로 떠날까요?`}
               isSearched={false}
             />
           )}

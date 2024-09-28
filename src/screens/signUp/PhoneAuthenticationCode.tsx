@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React, { useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native';
 
@@ -8,8 +8,10 @@ import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { TempUserRecoil } from '@recoil/type';
-import { userInfoState, tempUserRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { TempUserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { tempUserRecoilState } from '@recoil/states/user';
 
 import { signUp } from '@server/api/member';
 
@@ -25,7 +27,7 @@ import ReSendCodeButtonSvg from '@assets/images/SignUp/ReSendCodeButton.svg';
 
 const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeScreenProps) => {
   const tempUserRecoil = useRecoilValue<TempUserRecoil>(tempUserRecoilState); // 앞에서 받아온 회원가입 유저 정보
-  const [, setUserInfo] = useRecoilState(userInfoState);
+  const setUserRecoil = useSetRecoilState<UserRecoil>(userRecoilState);
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [time, setTime] = useState(300); // 타이머 시간
@@ -35,13 +37,6 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
 
   const { mutateAsync: smsAuthentication, isPending: smsAuthenticationPending } =
     useSmsAuthentication(setErrorMessage);
-
-  // 인증번호 만료시 에러 메세지 생성
-  // useEffect(() => {
-  //   if (time == 0) {
-  //     setErrorMessage('인증번호가 만료되었습니다!');
-  //   }
-  // }, [time]);
 
   // 회원가입
   const sendCode = async (): Promise<void> => {
@@ -55,7 +50,7 @@ const PhoneAuthenticationCodeScreen = ({ navigation }: PhoneAuthenticationCodeSc
 
     const { accessToken, refreshToken } = response.tokenResponse;
 
-    setUserInfo(response.memberInfoResponse);
+    setUserRecoil(response.memberInfoResponse);
 
     await setAccessToken(accessToken);
     await setRefreshToken(refreshToken);

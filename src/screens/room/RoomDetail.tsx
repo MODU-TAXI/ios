@@ -1,8 +1,8 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import React, { useRef, useState, Suspense } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Alert, RefreshControl } from 'react-native';
 
@@ -18,7 +18,10 @@ import RoomCategoriesComponent from '@components/RoomDigest/RoomCategories';
 import ParticipateUsersComponent from '@components/RoomDigest/ParticipateUsers';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { roomState, userInfoState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { CurrentRoomRecoil } from '@recoil/types/room';
+import { currentRoomRecoilState } from '@recoil/states/room';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
@@ -49,7 +52,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   const { roomId } = route.params;
 
   const scrollViewRef = useRef<ScrollView>(null);
-  const [, setSocketRoomId] = useRecoilState(roomState);
+  const setCurrentRoomRecoil = useSetRecoilState<CurrentRoomRecoil>(currentRoomRecoilState);
   const [refreshing, setRefreshing] = useState(false); // 새로고침시 필요한 변수
 
   const {
@@ -63,7 +66,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     queryClient,
   } = useGetRoomDetail(roomId); // 방정보들 가져오기
 
-  const myInfo = useRecoilValue(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
   const { mutateAsync: joinRoomMutate, isPending: joinRoomPending } = useJoinRoom(roomId); // 방 입장 mutate
   const { mutateAsync: applyJoinRoomMutate, isPending: approveRoomPending } =
     useApproveJoinRoom(roomId); // 방 입장 수락 mutate
@@ -92,7 +95,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
   );
 
   // 대기열 참여 여부
-  const isWaiting = waitingMembers.waitingList.some((member) => member.memberId === myInfo.id);
+  const isWaiting = waitingMembers.waitingList.some((member) => member.memberId === userRecoil.id);
 
   // 방정보 새로고침
   const onRefresh = React.useCallback(async () => {
@@ -180,7 +183,7 @@ const RoomDetailComponent = ({ route, navigation }: RoomDetailScreenProps) => {
     await deleteRoomMutate();
 
     // socket RoomId도 -1로 초기화
-    setSocketRoomId(-1);
+    setCurrentRoomRecoil(-1);
 
     // stack을 지우며 해당 roomDetail로 이동
     navigation.reset({

@@ -9,8 +9,8 @@ import ProgressBarComponent from '@components/ProgressBar';
 import PhoneNumberInputBoxComponent from '@components/PhoneNumberInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { TempUserRecoil } from '@recoil/type';
-import { tempUserRecoilState } from '@recoil/recoil';
+import { TempUserRecoil } from '@recoil/types/user';
+import { tempUserRecoilState } from '@recoil/states/user';
 
 import { useSmsAuthentication } from '@hooks/api/member.sms';
 

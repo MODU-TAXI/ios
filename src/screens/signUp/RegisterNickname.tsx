@@ -8,7 +8,8 @@ import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { userInfoState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
 
 import { useRegisterNickname } from '@hooks/api/member';
 
@@ -17,7 +18,7 @@ import { RegisterNicknameScreenProps } from '@type/param/rootStack';
 const RegisterNicknameScreen = ({ navigation }: RegisterNicknameScreenProps) => {
   const [nickname, setNickname] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [userRecoil, setUserRecoil] = useRecoilState<UserRecoil>(userRecoilState);
 
   const { mutateAsync: registerNickname, isPending: registerNicknamePending } =
     useRegisterNickname(setErrorMessage);
@@ -32,16 +33,16 @@ const RegisterNicknameScreen = ({ navigation }: RegisterNicknameScreenProps) => 
 
     await registerNickname({ nickname: trimNickname });
 
-    setUserInfo({
-      id: userInfo.id,
-      name: userInfo.name,
+    setUserRecoil({
+      id: userRecoil.id,
+      name: userRecoil.name,
       nickname: trimNickname,
-      gender: userInfo.gender,
-      phoneNumber: userInfo.phoneNumber,
-      email: userInfo.email,
-      imageUrl: userInfo.imageUrl,
-      matchingCount: userInfo.matchingCount,
-      blocked: userInfo.blocked,
+      gender: userRecoil.gender,
+      phoneNumber: userRecoil.phoneNumber,
+      email: userRecoil.email,
+      imageUrl: userRecoil.imageUrl,
+      matchingCount: userRecoil.matchingCount,
+      blocked: userRecoil.blocked,
     });
 
     navigation.reset({

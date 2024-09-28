@@ -2,8 +2,8 @@ import Config from 'react-native-config';
 import TextEncodingPolyfill from 'text-encoding';
 import StompJs, { Message } from '@stomp/stompjs';
 import ImageView from 'react-native-image-viewing';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { useFocusEffect } from '@react-navigation/native';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, AppState, KeyboardAvoidingView } from 'react-native';
 import React, { useRef, Suspense, useState, useEffect, useCallback } from 'react';
@@ -18,8 +18,10 @@ import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';
 
-import { MessageBody } from '@recoil/type';
-import { roomState, userInfoState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { CurrentRoomRecoil } from '@recoil/types/room';
+import { currentRoomRecoilState } from '@recoil/states/room';
 
 import { refreshAccessToken } from '@server/api/member';
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
@@ -33,6 +35,7 @@ import { combineChatMessages } from '@utils/chat';
 import { openAlbum, openCamera } from '@utils/image';
 import { setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
 
+import { MessageBody } from '@type/entity/chat';
 import { UserPreview } from '@type/entity/user';
 import { ChatRoomScreenProps } from '@type/param/loginStack';
 
@@ -55,7 +58,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const { mutateAsync: exitParticipateRoomMutate, isPending: exitParticipateRoomPending } =
     useExitParticipateRoom(); // 현재 내가 참여하고 있는 방 퇴장 mutate
 
-  const [, setSocketRoomId] = useRecoilState(roomState);
+  const setCurrentRoomRecoil = useSetRecoilState<CurrentRoomRecoil>(currentRoomRecoilState);
   const [imageUploageLoading, setImageUploadLoading] = useState<boolean>(false);
   const [newMessages, setNewMeesages] = useState<MessageBody[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false); // 유저 인포 모달
@@ -66,8 +69,8 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
   const [userInfo, setUserInfo] = useState<UserPreview>();
   const [accessToken, setNewAccessToken] = useAccessToken(); // socket을 위한 token hook
   const [refresh, setRefresh] = useState(false);
-  const myInfo = useRecoilValue(userInfoState);
-  const myRoom = readonly ? false : roomPreview!.managerId == myInfo.id;
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
+  const myRoom = readonly ? false : roomPreview!.managerId == userRecoil.id;
 
   useEnterChatRoom(); // 채팅스크린에 있을때는 알람안오게 해야하므로 recoil로 상태 저장
 
@@ -82,10 +85,10 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
         destination: '/pub/chat',
         body: JSON.stringify({
           roomId: roomId,
-          memberId: myInfo.id,
+          memberId: userRecoil.id,
           type: type,
           content: inputMessage,
-          imageUrl: myInfo.imageUrl,
+          imageUrl: userRecoil.imageUrl,
         }),
       });
     }
@@ -427,7 +430,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
 
             await exitParticipateRoomMutate();
 
-            setSocketRoomId(-1);
+            setCurrentRoomRecoil(-1);
 
             navigation.reset({
               index: 0,
@@ -466,7 +469,7 @@ const ChatRoomComponent = ({ navigation, route }: ChatRoomScreenProps) => {
       <KeyboardAvoidingView className="flex-1 bg-white" behavior="padding">
         {/* 메세지 Component */}
         <MessagesComponent
-          memberId={myInfo.id}
+          memberId={userRecoil.id}
           managerId={readonly ? 0 : roomPreview!.managerId}
           messages={[...messages, ...newMessages].reverse()}
           openUserInfoModal={openUserInfoModal}

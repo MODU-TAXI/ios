@@ -3,7 +3,8 @@ import { useRecoilValue } from 'recoil';
 import FastImage from 'react-native-fast-image';
 import { Text, View, Modal, Pressable } from 'react-native';
 
-import { userInfoState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
 
 import { useGetMemberInfo } from '@hooks/api/member';
 
@@ -28,7 +29,7 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
   toDeclarationScreen,
   canReport,
 }) => {
-  const myInfo = useRecoilValue(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
   const { data: memberInfo, refetch } = useGetMemberInfo(userInfo.memberId);
 
   return (
@@ -71,7 +72,7 @@ const UserModalComponent: React.FC<UserModalComponentProps> = ({
           </View>
 
           {/* 신고하기 */}
-          {canReport && myInfo.id !== userInfo.memberId ? (
+          {canReport && userRecoil.id !== userInfo.memberId ? (
             <Pressable className="mb-8 mt-4 p-4" onPress={toDeclarationScreen}>
               <Declaration />
             </Pressable>

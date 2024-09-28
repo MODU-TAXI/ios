@@ -6,7 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ButtonComponent from '@components/Button';
 import HeaderComponent from '@components/Header';
 
-import { userInfoState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
 
 import { useIsOldiPhone } from '@hooks/device';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -16,7 +17,7 @@ import { WithdrawCheckScreenProps } from '@type/param/loginStack';
 const WithdrawCheckScreen = ({ navigation }: WithdrawCheckScreenProps) => {
   useDeleteAllNotifee();
 
-  const myInfo = useRecoilValue(userInfoState);
+  const userRecoil = useRecoilValue<UserRecoil>(userRecoilState);
   const isOldiPhone = useIsOldiPhone();
 
   const toWithdrawSurveyScreen = () => {
@@ -30,7 +31,7 @@ const WithdrawCheckScreen = ({ navigation }: WithdrawCheckScreenProps) => {
       <View className="mt-8 flex-1 px-6">
         <View>
           <Text className="text-[18px] font-semibold tracking-tight text-[#1F1F1F]">
-            {myInfo.nickname}님,
+            {userRecoil.nickname}님,
           </Text>
 
           <Text className="mt-1 text-[18px] font-semibold tracking-tight text-[#1F1F1F]">
@@ -44,7 +45,7 @@ const WithdrawCheckScreen = ({ navigation }: WithdrawCheckScreenProps) => {
 
         <View className="mt-4">
           <Text className="text-[12px] font-medium tracking-tight text-[#5D5D5D]">
-            • [{myInfo.nickname}]님의 데이터는 비활성화 후 30일 동안 보관돼요
+            • [{userRecoil.nickname}]님의 데이터는 비활성화 후 30일 동안 보관돼요
           </Text>
 
           <View className="mt-4 flex-row">

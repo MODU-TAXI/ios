@@ -6,8 +6,8 @@ import { View, Text, Alert, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 
-import { IsLoggedInRecoil } from '@recoil/type';
-import { isLoggedInRecoilState } from '@recoil/recoil';
+import { IsLoggedInRecoil } from '@recoil/types/user';
+import { isLoggedInRecoilState } from '@recoil/states/user';
 
 import { LoginStackParamList } from '@type/param/loginStack';
 

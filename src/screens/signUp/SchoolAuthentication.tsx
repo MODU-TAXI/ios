@@ -8,8 +8,8 @@ import InputBoxComponent from '@components/InputBox';
 import ProgressBarComponent from '@components/ProgressBar';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { TempEmailRecoil } from '@recoil/type';
-import { tempEmailRecoilState } from '@recoil/recoil';
+import { TempEmailRecoil } from '@recoil/types/user';
+import { tempEmailRecoilState } from '@recoil/states/user';
 
 import { useEmailAuthentication } from '@hooks/api/member.mail';
 

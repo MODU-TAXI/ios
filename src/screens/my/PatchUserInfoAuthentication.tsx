@@ -8,8 +8,10 @@ import HeaderComponent from '@components/Header';
 import InputBoxComponent from '@components/InputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
-import { TempUserRecoil } from '@recoil/type';
-import { userInfoState, tempUserRecoilState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { TempUserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
+import { tempUserRecoilState } from '@recoil/states/user';
 
 import { usePatchMember } from '@hooks/api/member';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -27,7 +29,7 @@ const PatchUserInfoAuthenticationScreen = ({
   useDeleteAllNotifee();
 
   const [tempUserRecoil] = useRecoilState<TempUserRecoil>(tempUserRecoilState); // 앞에서 받아온 회원가입 유저 정보
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [userRecoil, setUserRecoil] = useRecoilState<UserRecoil>(userRecoilState);
   const [code, setCode] = useState<string>(''); // 인증코드
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러메세지
   const [time, setTime] = useState(300); // 타이머 시간
@@ -57,14 +59,14 @@ const PatchUserInfoAuthenticationScreen = ({
 
     // 회원 정보 수정
     await patchMemberMutate({
-      imageUrl: userInfo.imageUrl,
+      imageUrl: userRecoil.imageUrl,
       name: tempUserRecoil.name,
       gender: tempUserRecoil.gender,
       phoneNumber: tempUserRecoil.phoneNumber,
     });
 
     // recoil 데이터 수정
-    setUserInfo((prevUserInfo) => ({
+    setUserRecoil((prevUserInfo) => ({
       ...prevUserInfo,
       name: tempUserRecoil.name ?? prevUserInfo.name,
       gender: tempUserRecoil.gender ?? prevUserInfo.gender,

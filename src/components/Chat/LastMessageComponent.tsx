@@ -2,7 +2,7 @@ import React from 'react';
 import FastImage from 'react-native-fast-image';
 import { View, Text, Pressable } from 'react-native';
 
-import { MessageBody } from '@recoil/type';
+import { MessageBody } from '@type/entity/chat';
 
 import ScrollBottomButton from '@assets/images/Chat/ScrollBottomButton.svg';
 

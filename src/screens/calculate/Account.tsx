@@ -1,4 +1,4 @@
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import React, { Suspense, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Alert, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native';
@@ -11,7 +11,8 @@ import BankModalComponent from '@components/Calculate/BankModal';
 import { GetBankComponent } from '@components/Calculate/GetBank';
 import MyAccountsComponent from '@components/Calculate/MyAccounts';
 
-import { calculateState } from '@recoil/recoil';
+import { SettlementRecoil } from '@recoil/types/settlement';
+import { settlementRecoilState } from '@recoil/states/settlement';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 
@@ -30,7 +31,7 @@ const AccountComponent = ({ navigation, route }: AccountScreenProps) => {
 
   const { accounts } = useGetAccounts(); // 계좌 정보들 가져오기
 
-  const [, setCalculateData] = useRecoilState(calculateState);
+  const setSettlementRecoil = useSetRecoilState<SettlementRecoil>(settlementRecoilState);
   const [account, setAccount] = useState<string>(''); // 계좌번호
   const [bank, setBank] = useState<Bank>({ identifier: '', name: '' }); // 은행
   const [bankModalIndex, setBankModalIndex] = useState<number>(1); // modal index
@@ -57,7 +58,7 @@ const AccountComponent = ({ navigation, route }: AccountScreenProps) => {
       return Alert.alert('계좌번호는 16자 이하여야 합니다!');
     }
 
-    setCalculateData((prev) => ({
+    setSettlementRecoil((prev) => ({
       ...prev,
       account: refinedAccount,
       bank: bank,

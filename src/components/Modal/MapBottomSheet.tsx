@@ -9,8 +9,6 @@ import FilterButtonComponent from '@components/RoomDigest/FilterButton';
 import RoomDigestBoxComponent from '@components/RoomDigest/RoomDigestBox';
 import SpotFilterButtonComponent from '@components/RoomDigest/SpotFilterButton';
 
-import { userInfoState } from '@recoil/recoil';
-
 import { SpotMap } from '@type/entity/spot';
 import { MainMapScreenProps } from '@type/param/loginStack';
 import { RoomIntegration, RoomFilterParam } from '@type/entity/room';
@@ -40,8 +38,6 @@ const MapBottomSheetScreen: React.FC<MapBottomSheetProps> = ({
   spotData,
   refetch,
 }) => {
-  const userInfo = useRecoilValue(userInfoState);
-
   // 선택된 거점 이름 저장
   const [selectedSpotName, setSelectedSpotName] = useState<string>('');
   useEffect(() => {

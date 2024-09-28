@@ -1,4 +1,4 @@
-import { MessageBody } from '@recoil/type';
+import { MessageBody } from '@type/entity/chat';
 
 const isSameMessageGroup = (type1: string, type2: string): boolean => {
   const chatTypes = ['CHAT', 'IMAGE'];

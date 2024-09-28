@@ -9,3 +9,15 @@ export type ChatMessage = {
   dateTime: Date;
   imageUrl: string;
 };
+
+export type MessageBody = {
+  first: boolean;
+  last: boolean;
+  content: string;
+  dateTime: Date;
+  memberId: number;
+  roomId: number;
+  sender: string;
+  imageUrl: string;
+  messageType: string;
+};

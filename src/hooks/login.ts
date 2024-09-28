@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import SplashScreen from 'react-native-splash-screen';
-import { useRecoilState, SetterOrUpdater } from 'recoil';
+import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 
-import { userInfoState } from '@recoil/recoil';
+import { UserRecoil } from '@recoil/types/user';
+import { userRecoilState } from '@recoil/states/user';
 
 import { refreshAccessToken } from '@server/api/member';
 
@@ -12,7 +12,7 @@ export const useCheckLogin = (
   setLoggedIn: SetterOrUpdater<boolean>,
   setAppLoaded: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
-  const [, setUserInfo] = useRecoilState(userInfoState);
+  const setUserRecoil = useSetRecoilState<UserRecoil>(userRecoilState);
 
   const start = Date.now();
 
@@ -39,7 +39,7 @@ export const useCheckLogin = (
         const { accessToken: newAccessToken, refreshToken: newRefreshToken } = tokenResponse;
 
         // 유저 정보 저장
-        setUserInfo(memberInfoResponse);
+        setUserRecoil(memberInfoResponse);
 
         // 토큰 저장
         await Promise.all([setAccessToken(newAccessToken), setRefreshToken(newRefreshToken)]);
@@ -65,5 +65,5 @@ export const useCheckLogin = (
         }
       }
     })();
-  }, [setLoggedIn, setUserInfo, setAppLoaded]);
+  }, [setLoggedIn, setUserRecoil, setAppLoaded]);
 };

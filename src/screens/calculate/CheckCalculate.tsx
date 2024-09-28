@@ -10,7 +10,8 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ParticipateMembersComponent from '@components/Calculate/ParicipateMembers';
 import UnParticipateMembersComponent from '@components/Calculate/UnParticipateMembers';
 
-import { calculateState } from '@recoil/recoil';
+import { SettlementRecoil } from '@recoil/types/settlement';
+import { settlementRecoilState } from '@recoil/states/settlement';
 
 import { usePayment } from '@hooks/api/payment';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -23,16 +24,18 @@ const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) 
 
   const { roomPreview } = route.params;
 
-  const calculateData = useRecoilValue(calculateState);
+  const settlementRecoil = useRecoilValue<SettlementRecoil>(settlementRecoilState);
 
-  const [participateMembers, setParticipateMembers] = useState<UserPreview[]>(calculateData.users);
+  const [participateMembers, setParticipateMembers] = useState<UserPreview[]>(
+    settlementRecoil.users,
+  );
   const [unParticipateMembers, setUnParticipateMembers] = useState<UserPreview[]>([]);
 
-  const amount = parseInt(calculateData.amount);
+  const amount = parseInt(settlementRecoil.amount);
   const amountPerPerson =
     participateMembers.length === 0
       ? 0
-      : parseInt(calculateData.amount) / participateMembers.length;
+      : parseInt(settlementRecoil.amount) / participateMembers.length;
 
   const { mutateAsync: payment, isPending: paymentPending } = usePayment();
 
@@ -62,8 +65,8 @@ const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) 
   const toCompleteCalculateScreen = async () => {
     await payment({
       roomId: roomPreview.roomId,
-      accountId: calculateData.accountId,
-      totalCharge: parseInt(calculateData.amount),
+      accountId: settlementRecoil.accountId,
+      totalCharge: parseInt(settlementRecoil.amount),
       participantList: participateMembers.map((participateMember) => {
         return { id: participateMember.memberId };
       }),
@@ -100,7 +103,7 @@ const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) 
             <Text className="font-medium tracking-tight text-[#5D5D5D]">예금주</Text>
 
             <Text className="text-[14px] font-medium tracking-tight text-[#1F1F1F]">
-              {calculateData.name}
+              {settlementRecoil.name}
             </Text>
           </View>
 
@@ -109,12 +112,12 @@ const CheckCalculateScreen = ({ navigation, route }: CheckCalculateScreenProps) 
             <Text className="font-medium tracking-tight text-[#5D5D5D]">계좌번호</Text>
 
             <View className="flex-row items-center">
-              <GetBankComponent bank={calculateData.bank.identifier} />
+              <GetBankComponent bank={settlementRecoil.bank.identifier} />
               <Text className="ml-2 mr-1 text-[14px] font-medium tracking-tight text-[#1F1F1F]">
-                {calculateData.bank.name}
+                {settlementRecoil.bank.name}
               </Text>
               <Text className="text-[14px] font-medium tracking-tight text-[#1F1F1F]">
-                {calculateData.account}
+                {settlementRecoil.account}
               </Text>
             </View>
           </View>
