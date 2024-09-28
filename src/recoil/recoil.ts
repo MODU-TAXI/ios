@@ -1,25 +1,6 @@
 import { atom } from 'recoil';
 
-import {
-  MessageBody,
-  ArrivalRecoil,
-  IsChatInRecoil,
-  DepartureRecoil,
-  SettlementRecoil,
-  SearchParamRecoil,
-} from '@recoil/type';
-
-// 채팅방 입장 여부 관리
-export const isChatInRecoilState = atom<IsChatInRecoil>({
-  key: 'isChatInRecoilState',
-  default: false,
-});
-
-// 채팅 메세지 관리
-export const messagesState = atom<MessageBody[]>({
-  key: 'messages',
-  default: [],
-});
+import { ArrivalRecoil, DepartureRecoil, SettlementRecoil, SearchParamRecoil } from '@recoil/type';
 
 // 방 생성 시 출발지
 export const departureRecoilState = atom<DepartureRecoil>({

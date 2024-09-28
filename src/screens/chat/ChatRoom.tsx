@@ -18,7 +18,6 @@ import MessageInputBoxComponent from '@components/Chat/MessageInputBox';
 import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 import ImageUploadtLoadingComponent from '@components/Common/ImageUploadLoading';
 
-import { MessageBody } from '@recoil/type';
 import { UserRecoil } from '@recoil/types/user';
 import { userRecoilState } from '@recoil/states/user';
 import { CurrentRoomRecoil } from '@recoil/types/room';
@@ -36,6 +35,7 @@ import { combineChatMessages } from '@utils/chat';
 import { openAlbum, openCamera } from '@utils/image';
 import { setAccessToken, getRefreshToken, setRefreshToken } from '@utils/token';
 
+import { MessageBody } from '@type/entity/chat';
 import { UserPreview } from '@type/entity/user';
 import { ChatRoomScreenProps } from '@type/param/loginStack';
 

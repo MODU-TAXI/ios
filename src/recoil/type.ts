@@ -1,20 +1,6 @@
 import { Bank } from '@type/entity/account';
 import { UserPreview } from '@type/entity/user';
 
-export type IsChatInRecoil = boolean;
-
-export type MessageBody = {
-  first: boolean;
-  last: boolean;
-  content: string;
-  dateTime: Date;
-  memberId: number;
-  roomId: number;
-  sender: string;
-  imageUrl: string;
-  messageType: string;
-};
-
 export type DepartureRecoil = {
   name: string;
   latitude: number;
