@@ -10,6 +10,7 @@ import SearchBoxComponent from '@components/Search/SearchBox';
 import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 
+import { SearchParamRecoil } from '@recoil/types/search';
 import { searchParamRecoilState } from '@recoil/states/search';
 
 import { useNaverSearch } from '@hooks/api/search';
@@ -37,7 +38,7 @@ const SearchScreen = ({ navigation }: SearchScreenProps) => {
   });
 
   // 검색어 선택시 넘겨줄 값
-  const [, setSearchParamRecoil] = useRecoilState(searchParamRecoilState);
+  const [, setSearchParamRecoil] = useRecoilState<SearchParamRecoil>(searchParamRecoilState);
 
   useEffect(() => {
     const fetchCurrentLocation = async () => {
