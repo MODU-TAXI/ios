@@ -27,9 +27,7 @@ const DepartureSearchBoxComponent: React.FC<DepartureSearchBoxProps> = ({
   const navigate = useNavigation();
 
   // input value onChange 함수
-  const valueHandleChange = (
-    e: NativeSyntheticEvent<TextInputChangeEventData>,
-  ) => {
+  const valueHandleChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     handleKeyword(e.nativeEvent.text);
   };
 
@@ -49,12 +47,12 @@ const DepartureSearchBoxComponent: React.FC<DepartureSearchBoxProps> = ({
       {/** 검색창 */}
       <Pressable
         onPress={handleFocus}
-        className="flex h-full flex-1 flex-row rounded-xl bg-gray100 p-2"
+        className="flex h-full flex-1 flex-row truncate rounded-xl bg-gray100 p-2"
       >
         <View className="flex justify-center px-1">
           <MagnifyingGlassMainSvg></MagnifyingGlassMainSvg>
         </View>
-        <View className="flex-row justify-center">
+        <View className="mr-8 flex-row justify-center">
           <TextInput
             ref={inputRef}
             value={keyword}

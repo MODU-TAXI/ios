@@ -18,19 +18,14 @@ interface SearchBoxComponentProps {
 }
 
 /** 검색 바 */
-const SearchBoxComponent: React.FC<SearchBoxComponentProps> = ({
-  keyword,
-  setKeyword,
-}) => {
+const SearchBoxComponent: React.FC<SearchBoxComponentProps> = ({ keyword, setKeyword }) => {
   // focusing ref
   const inputRef = React.useRef<TextInput>(null);
 
   const navigate = useNavigation();
 
   // input value onChange 함수
-  const valueHandleChange = (
-    e: NativeSyntheticEvent<TextInputChangeEventData>,
-  ) => {
+  const valueHandleChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setKeyword(e.nativeEvent.text);
   };
 
@@ -51,12 +46,12 @@ const SearchBoxComponent: React.FC<SearchBoxComponentProps> = ({
       {/** 검색창 */}
       <Pressable
         onPress={handleFocus}
-        className="flex h-full flex-1 flex-row rounded-xl bg-gray100 p-2"
+        className="flex h-full flex-1 flex-row truncate rounded-xl bg-gray100 p-2"
       >
-        <View className="flex justify-center px-1">
+        <View className="flex px-1">
           <MagnifyingGlassMainSvg />
         </View>
-        <View className="flex-row justify-center">
+        <View className="mr-8 flex-row justify-center">
           <TextInput
             ref={inputRef}
             value={keyword}
