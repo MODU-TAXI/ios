@@ -29,6 +29,7 @@ import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDige
 
 import { UserRecoil } from '@recoil/types/user';
 import { userRecoilState } from '@recoil/states/user';
+import { SearchParamRecoil } from '@recoil/types/search';
 import { searchParamRecoilState } from '@recoil/states/search';
 
 import { useIsOldiPhone } from '@hooks/device';
@@ -114,7 +115,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   // 현재 줌에서의 탐색 범위
   const [radius, setRadius] = useState<number>(5000);
 
-  const searchParamRecoil = useRecoilValue(searchParamRecoilState);
+  const searchParamRecoil = useRecoilValue<SearchParamRecoil>(searchParamRecoilState);
   const resetSearchParamRecoil = useResetRecoilState(searchParamRecoilState);
 
   // 검색 후 좌표설정

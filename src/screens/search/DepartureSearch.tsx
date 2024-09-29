@@ -8,6 +8,7 @@ import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 import DepartureSearchBoxComponent from '@components/Search/DepartureSearchBox';
 
+import { SearchParamRecoil } from '@recoil/types/search';
 import { searchParamRecoilState } from '@recoil/states/search';
 
 import { useNaverSearch } from '@hooks/api/search';
@@ -26,7 +27,7 @@ const DepartureSearchScreen = ({ navigation }: DepartureSearchScreenProps) => {
 
   /** 검색어 저장 변수 */
   const [keyword, setKeyword] = useState<string>('');
-  const [, setSearchParamRecoil] = useRecoilState(searchParamRecoilState);
+  const [, setSearchParamRecoil] = useRecoilState<SearchParamRecoil>(searchParamRecoilState);
   const locationPermission = useLocationPermission();
 
   const { data: items, refetch: refetchNaverSearch } = useNaverSearch(keyword);

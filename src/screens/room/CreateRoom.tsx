@@ -18,6 +18,7 @@ import { UserRecoil } from '@recoil/types/user';
 import { userRecoilState } from '@recoil/states/user';
 import { CurrentRoomRecoil } from '@recoil/types/room';
 import { currentRoomRecoilState } from '@recoil/states/room';
+import { ArrivalRecoil, DepartureRecoil } from '@recoil/types/map';
 import { arrivalRecoilState, departureRecoilState } from '@recoil/states/map';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
@@ -49,8 +50,8 @@ const CreateRoomComponent = ({ navigation }: CreateRoomScreenProps) => {
   const { mutateAsync: createRoomMutate, isPending: createRoomPending } = useCreateRoom();
 
   const setCurrentRoomRecoil = useSetRecoilState<CurrentRoomRecoil>(currentRoomRecoilState);
-  const [departureRecoil, setDepartureRecoil] = useRecoilState(departureRecoilState); // 출발지 이름, 좌표
-  const [arrivalRecoil, setArrivalRecoil] = useRecoilState(arrivalRecoilState); // 도착지 이름, 거점 id
+  const [departureRecoil, setDepartureRecoil] = useRecoilState<DepartureRecoil>(departureRecoilState); // 출발지 이름, 좌표
+  const [arrivalRecoil, setArrivalRecoil] = useRecoilState<ArrivalRecoil>(arrivalRecoilState); // 도착지 이름, 거점 id
   const [departureTime, setDepartureTime] = useState<Date>(new Date()); // 설정 날짜
   const [datePicked, setDatePicked] = useState<boolean>(false); // 날짜 선택 여부
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false); // Datepicker open 여부

@@ -7,6 +7,8 @@ import { Camera, NaverMapView, NaverMapViewRef } from '@mj-studio/react-native-n
 
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 
+import { DepartureRecoil } from '@recoil/types/map';
+import { SearchParamRecoil } from '@recoil/types/search';
 import { departureRecoilState } from '@recoil/states/map';
 import { searchParamRecoilState } from '@recoil/states/search';
 
@@ -32,8 +34,8 @@ const DepartureMapScreen = ({ route, navigation }: DepartureMapScreenProps) => {
   const [searchBoxValue, setSearchBoxValue] = useState<string>('출발지를 입력하세요');
   const [isSearched, setIsSearched] = useState<boolean>(false);
 
-  const [, setDepartureRecoil] = useRecoilState(departureRecoilState);
-  const [searchParamRecoil, setSearchParamRecoil] = useRecoilState(searchParamRecoilState);
+  const [, setDepartureRecoil] = useRecoilState<DepartureRecoil>(departureRecoilState);
+  const [searchParamRecoil, setSearchParamRecoil] = useRecoilState<SearchParamRecoil>(searchParamRecoilState);
   const [buildingName, setBuildingName] = useState<string>('');
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
 
