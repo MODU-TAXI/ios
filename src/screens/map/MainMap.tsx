@@ -19,9 +19,8 @@ import BottomSheet, {
   BottomSheetBackdropProps,
 } from '@gorhom/bottom-sheet';
 
-import MapBottomSheetScreen from '../../components/Modal/MapBottomSheet';
-
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
+import MapBottomSheetScreen from '@components/Modal/MapBottomSheet';
 import CreateRoomButtonComponent from '@components/CreateRoomButton';
 import SpotFilterModalScreen from '@components/Modal/SpotFilterModal';
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
