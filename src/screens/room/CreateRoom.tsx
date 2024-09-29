@@ -18,7 +18,7 @@ import { UserRecoil } from '@recoil/types/user';
 import { userRecoilState } from '@recoil/states/user';
 import { CurrentRoomRecoil } from '@recoil/types/room';
 import { currentRoomRecoilState } from '@recoil/states/room';
-import { arrivalRecoilState, departureRecoilState } from '@recoil/recoil';
+import { arrivalRecoilState, departureRecoilState } from '@recoil/states/map';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 

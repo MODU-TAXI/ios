@@ -8,7 +8,7 @@ import RecommendedSearchComponent from '@components/Search/RecommendedSearch';
 import EmptySearchRenderComponent from '@components/Search/EmptySearchRender';
 import DepartureSearchBoxComponent from '@components/Search/DepartureSearchBox';
 
-import { searchParamRecoilState } from '@recoil/recoil';
+import { searchParamRecoilState } from '@recoil/states/search';
 
 import { useNaverSearch } from '@hooks/api/search';
 import { useDeleteAllNotifee } from '@hooks/notifee';

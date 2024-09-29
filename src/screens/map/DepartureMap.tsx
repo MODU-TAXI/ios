@@ -7,7 +7,8 @@ import { Camera, NaverMapView, NaverMapViewRef } from '@mj-studio/react-native-n
 
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 
-import { departureRecoilState, searchParamRecoilState } from '@recoil/recoil';
+import { departureRecoilState } from '@recoil/states/map';
+import { searchParamRecoilState } from '@recoil/states/search';
 
 import { useDeleteAllNotifee } from '@hooks/notifee';
 import { useReverseGeocoding } from '@hooks/api/search';
