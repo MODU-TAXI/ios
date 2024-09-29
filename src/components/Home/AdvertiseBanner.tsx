@@ -12,8 +12,14 @@ const AdvertiseBannerComponent: React.FC = () => {
 
   // 이미지와 URL을 객체로 묶어서 배열로 설정
   const advertiseBanners = [
-    { image: AdvertiseBanner1, url: 'https://www.naver.com' },
-    { image: AdvertiseBanner2, url: 'https://www.naver.com' },
+    {
+      image: AdvertiseBanner1,
+      url: 'https://material-roquefort-92e.notion.site/18c75d54626c41cebb05838bffae800f?pvs=4',
+    },
+    {
+      image: AdvertiseBanner2,
+      url: 'https://material-roquefort-92e.notion.site/100-40f440e153a548dc9e3a6859ebedd71a?pvs=4',
+    },
   ];
 
   // 이미지 클릭 시 해당 URL로 이동
