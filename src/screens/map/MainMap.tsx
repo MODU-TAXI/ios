@@ -19,9 +19,8 @@ import BottomSheet, {
   BottomSheetBackdropProps,
 } from '@gorhom/bottom-sheet';
 
-import MapBottomSheetScreen from '../../components/Modal/MapBottomSheet';
-
 import RoomMarkerComponent from '@components/Marker/RoomMarker';
+import MapBottomSheetScreen from '@components/Modal/MapBottomSheet';
 import CreateRoomButtonComponent from '@components/CreateRoomButton';
 import SpotFilterModalScreen from '@components/Modal/SpotFilterModal';
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
@@ -29,7 +28,8 @@ import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDige
 
 import { UserRecoil } from '@recoil/types/user';
 import { userRecoilState } from '@recoil/states/user';
-import { searchParamRecoilState } from '@recoil/recoil';
+import { SearchParamRecoil } from '@recoil/types/search';
+import { searchParamRecoilState } from '@recoil/states/search';
 
 import { useIsOldiPhone } from '@hooks/device';
 import { useGetSpotMap } from '@hooks/api/spot';
@@ -114,7 +114,7 @@ const MainMapScreen = ({ route, navigation }: MainMapScreenProps) => {
   // 현재 줌에서의 탐색 범위
   const [radius, setRadius] = useState<number>(5000);
 
-  const searchParamRecoil = useRecoilValue(searchParamRecoilState);
+  const searchParamRecoil = useRecoilValue<SearchParamRecoil>(searchParamRecoilState);
   const resetSearchParamRecoil = useResetRecoilState(searchParamRecoilState);
 
   // 검색 후 좌표설정
