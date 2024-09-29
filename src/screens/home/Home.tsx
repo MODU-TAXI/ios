@@ -12,6 +12,7 @@ import LoadingComponent from '@components/Common/Loading';
 import HomeHeaderComponent from '@components/Home/HomeHeader';
 import UserSummaryComponent from '@components/Home/UserSummary';
 import HomeMainPanelComponent from '@components/Home/HomeMainPanel';
+import AdvertiseBannerComponent from '@components/Home/AdvertiseBanner';
 
 import { UserRecoil } from '@recoil/types/user';
 import { userRecoilState } from '@recoil/states/user';
@@ -129,6 +130,9 @@ const HomeComponent = ({ navigation }: HomeScreenProps) => {
       />
 
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        {/* 광고배너 */}
+        <AdvertiseBannerComponent />
+
         {/* 지도, 택시팟 */}
         <HomeMainPanelComponent toMapScreen={toMapScreen} toCreateRoomScreen={toCreateRoomScreen} />
 
