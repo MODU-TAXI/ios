@@ -16,7 +16,7 @@ import TransparentLoadingComponent from '@components/Common/TransparentLoading';
 
 import { UserRecoil } from '@recoil/types/user';
 import { userRecoilState } from '@recoil/states/user';
-import { arrivalRecoilState, departureRecoilState } from '@recoil/recoil';
+import { arrivalRecoilState, departureRecoilState } from '@recoil/states/map';
 
 import SuspenseErrorHandler from '@server/errorHandler/suspenseErrorHandler';
 

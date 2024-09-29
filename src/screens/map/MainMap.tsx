@@ -29,7 +29,7 @@ import SelectedRoomDigestComponent from '@components/RoomDigest/SelectedRoomDige
 
 import { UserRecoil } from '@recoil/types/user';
 import { userRecoilState } from '@recoil/states/user';
-import { searchParamRecoilState } from '@recoil/recoil';
+import { searchParamRecoilState } from '@recoil/states/search';
 
 import { useIsOldiPhone } from '@hooks/device';
 import { useGetSpotMap } from '@hooks/api/spot';

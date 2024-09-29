@@ -1,6 +1,6 @@
-import { atom } from 'recoil';
+import { atom } from "recoil";
 
-import { ArrivalRecoil, DepartureRecoil, SearchParamRecoil } from '@recoil/type';
+import { ArrivalRecoil, DepartureRecoil } from "@recoil/types/map";
 
 // 방 생성 시 출발지
 export const departureRecoilState = atom<DepartureRecoil>({
@@ -18,14 +18,5 @@ export const arrivalRecoilState = atom<ArrivalRecoil>({
   default: {
     name: '',
     spotId: 0,
-  },
-});
-
-export const searchParamRecoilState = atom<SearchParamRecoil>({
-  key: 'searchParamRecoilState',
-  default: {
-    title: '',
-    longitude: 126.656496,
-    latitude: 37.451062,
   },
 });
