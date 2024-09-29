@@ -13,7 +13,8 @@ import {
 import SpotMarker from '@components/Marker/SpotMarker';
 import TransparentSearchBoxComponent from '@components/Search/TransparentSearchBox';
 
-import { arrivalRecoilState } from '@recoil/recoil';
+import { ArrivalRecoil } from '@recoil/types/map';
+import { arrivalRecoilState } from '@recoil/states/map';
 
 import { useGetSpotMap } from '@hooks/api/spot';
 import { useDeleteAllNotifee } from '@hooks/notifee';
@@ -115,7 +116,7 @@ const ArrivalMapScreen = ({ route, navigation }: ArrivalMapScreenProps) => {
   };
 
   // 도착 거점을 저장하며 이동
-  const [, setArrivalRecoil] = useRecoilState(arrivalRecoilState);
+  const [, setArrivalRecoil] = useRecoilState<ArrivalRecoil>(arrivalRecoilState);
   const handleSelectArrival = () => {
     if (route.params?.isPatch) {
       navigation.pop(2);
